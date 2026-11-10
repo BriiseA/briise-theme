@@ -1,16 +1,21 @@
 /**
- * Galet Yoga : confort de navigation.
+ * Briise : confort de navigation.
  * Fonctionne sur les pages existantes, sans modifier leur contenu.
+ * Les réglages viennent de « Mon entreprise > Fonctions » (window.briiseUx).
  */
 ( function () {
 	'use strict';
 
+	var cfg = window.briiseUx || {};
+	var on = function ( key ) {
+		return cfg[ key ] !== false;
+	};
 	var reduce = window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
 	var path = window.location.pathname.replace( /\/+$/, '/' );
 
 	/* 1. En-tête qui se cache en descendant et réapparaît en remontant. */
 	var header = document.querySelector( 'header.wp-block-template-part' );
-	if ( header ) {
+	if ( header && on( 'menu' ) ) {
 		header.classList.add( 'br-smart-header' );
 		var lastY = window.scrollY;
 		var ticking = false;
@@ -90,23 +95,33 @@
 		} );
 	} );
 
-	/* 4. Planning : les cours du jour mis en avant. */
+	/* 4. Planning et horaires : la ligne du jour mise en avant. */
 	var days = [ 'dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi' ];
 	var today = days[ new Date().getDay() ];
-	document.querySelectorAll( '.br-planning tbody tr' ).forEach( function ( tr ) {
+	var isoDay = String( new Date().getDay() || 7 );
+	var addBadge = function ( el ) {
+		var badge = document.createElement( 'span' );
+		badge.className = 'br-today-badge';
+		badge.textContent = 'Aujourd’hui';
+		el.appendChild( badge );
+	};
+	document.querySelectorAll( on( 'jour' ) ? '.br-horaires-ligne' : '.br-none' ).forEach( function ( row ) {
+		if ( row.dataset.jours.split( ',' ).indexOf( isoDay ) !== -1 ) {
+			row.classList.add( 'br-today' );
+			addBadge( row.querySelector( 'dt' ) );
+		}
+	} );
+	document.querySelectorAll( on( 'jour' ) ? '.br-planning tbody tr' : '.br-none' ).forEach( function ( tr ) {
 		var cell = tr.querySelector( 'td' );
 		if ( cell && cell.textContent.trim().toLowerCase() === today ) {
 			tr.classList.add( 'br-today' );
-			var badge = document.createElement( 'span' );
-			badge.className = 'br-today-badge';
-			badge.textContent = 'Aujourd’hui';
-			cell.appendChild( badge );
+			addBadge( cell );
 		}
 	} );
 
 	/* 5. Pages de questions : sommaire cliquable des rubriques. */
 	var main = document.querySelector( 'main' );
-	if ( main && main.querySelectorAll( '.wp-block-details' ).length >= 8 ) {
+	if ( main && on( 'sommaire' ) && main.querySelectorAll( '.wp-block-details' ).length >= 8 ) {
 		var heads = Array.prototype.filter.call( main.querySelectorAll( 'h2' ), function ( h ) {
 			var section = h.closest( '.br-section' );
 			return section && section.querySelector( '.wp-block-details' );
@@ -174,7 +189,18 @@
 		}
 	}
 
-	/* 8. Liens d'ancre : défilement doux, sauf mouvement réduit. */
+	/* 8. Bandeau d'information : fermé, il ne revient que si son texte change. */
+	var bandeau = document.getElementById( 'br-bandeau' );
+	if ( bandeau ) {
+		bandeau.querySelector( '.br-bandeau-fermer' ).addEventListener( 'click', function () {
+			bandeau.hidden = true;
+			try {
+				localStorage.setItem( 'br-bandeau', bandeau.dataset.id );
+			} catch ( e ) {}
+		} );
+	}
+
+	/* 9. Liens d'ancre : défilement doux, sauf mouvement réduit. */
 	if ( ! reduce ) {
 		document.documentElement.classList.add( 'br-smooth' );
 	}

@@ -17,11 +17,37 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | `templates/` | Modèles de pages (page, article, blog, 404, page sans titre) |
 | `parts/` | En-tête et pied de page |
 | `patterns/` | Sections réutilisables (bibliothèque en construction, phase 3) |
-| `inc/entreprise.php` | Informations de l'entreprise (remplacé par une page de réglages en phase 2) |
-| `inc/seo.php` | Title, meta description, Open Graph, noindex, données structurées |
+| `inc/reglages.php` | Stockage et nettoyage des réglages de « Mon entreprise » |
+| `inc/admin.php` | Page « Mon entreprise » de l'administration |
+| `inc/entreprise.php` | Lecture des informations, horaires, coordonnées, mentions légales, codes courts |
+| `inc/fonctions.php` | Bandeau d'information, blog activable, Search Console, Matomo |
+| `inc/seo.php` | Title, meta description, Open Graph, noindex, plan du site, données structurées, encadré « Référencement » |
 | `assets/js/ux.js` | Menu intelligent, page active, téléphones cliquables, bouton fixe mobile |
 | `assets/js/motion.js` | Animations d'apparition (coupées si le visiteur le demande) |
 | `assets/fonts/` | Polices hébergées et leurs licences |
+
+## Mon entreprise
+
+Menu « Mon entreprise » de l'administration, juste sous le tableau de bord.
+
+| Onglet | Qui | Contenu |
+| --- | --- | --- |
+| Horaires et annonces | Éditeur et administrateur | Horaires par jour, fermetures exceptionnelles, bandeau d'information |
+| Entreprise | Administrateur | Nom, slogan, type d'activité, coordonnées, GPS, zone, action principale, personne, réseaux |
+| Mentions légales | Administrateur | Éditeur, hébergeur, profession réglementée, médiateur, réalisation |
+| Fonctions | Administrateur | Fonctions activables, Search Console, Matomo |
+
+Tout alimente automatiquement l'en-tête, le pied de page, le bouton fixe mobile et les données structurées.
+
+Codes courts, à placer dans un bloc « Code court » :
+
+| Code | Affiche |
+| --- | --- |
+| `[briise_horaires]` | Horaires, précision et fermetures à venir, jour en cours surligné |
+| `[briise_coordonnees]` | Adresse avec lien d'itinéraire, téléphone, e-mail |
+| `[briise_reseaux]` | Liens vers les réseaux et la fiche Google |
+| `[briise_mentions_legales]` | Mentions légales complètes ; un champ obligatoire vide apparaît en « [à compléter] » |
+| `[briise_info champ="telephone"]` | Une information seule : `name`, `telephone`, `email`, `adresse`, `city`… |
 
 ## Installer le thème sur un site
 

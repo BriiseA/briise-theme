@@ -7,8 +7,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once get_theme_file_path( 'inc/reglages.php' );
 require_once get_theme_file_path( 'inc/entreprise.php' );
+require_once get_theme_file_path( 'inc/fonctions.php' );
 require_once get_theme_file_path( 'inc/seo.php' );
+if ( is_admin() ) {
+	require_once get_theme_file_path( 'inc/admin.php' );
+}
 
 add_action( 'after_setup_theme', function () {
 	add_post_type_support( 'page', 'excerpt' );
@@ -26,14 +31,24 @@ add_action( 'init', function () {
  * a demandé à réduire les animations.
  */
 add_action( 'wp_head', function () {
+	if ( ! briise_fonction( 'animations' ) ) {
+		return;
+	}
 	wp_print_inline_script_tag( "if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){var d=document.documentElement;d.classList.add('br-motion');setTimeout(function(){if(!window.briiseMotionLoaded){d.classList.remove('br-motion');}},3000);}" );
 }, 1 );
 add_action( 'wp_enqueue_scripts', function () {
 	$version = wp_get_theme()->get( 'Version' );
-	wp_enqueue_style( 'briise-motion', get_theme_file_uri( 'assets/css/motion.css' ), array(), $version );
-	wp_enqueue_script( 'briise-motion', get_theme_file_uri( 'assets/js/motion.js' ), array(), $version, array( 'in_footer' => true, 'strategy' => 'defer' ) );
+	if ( briise_fonction( 'animations' ) ) {
+		wp_enqueue_style( 'briise-motion', get_theme_file_uri( 'assets/css/motion.css' ), array(), $version );
+		wp_enqueue_script( 'briise-motion', get_theme_file_uri( 'assets/js/motion.js' ), array(), $version, array( 'in_footer' => true, 'strategy' => 'defer' ) );
+	}
 	wp_enqueue_style( 'briise-ux', get_theme_file_uri( 'assets/css/ux.css' ), array(), $version );
 	wp_enqueue_script( 'briise-ux', get_theme_file_uri( 'assets/js/ux.js' ), array(), $version, array( 'in_footer' => true, 'strategy' => 'defer' ) );
+	wp_add_inline_script( 'briise-ux', 'window.briiseUx=' . wp_json_encode( array(
+		'menu'     => briise_fonction( 'menu_remonte' ),
+		'jour'     => briise_fonction( 'horaires_jour' ),
+		'sommaire' => briise_fonction( 'sommaire_faq' ),
+	) ) . ';', 'before' );
 } );
 
 
@@ -42,7 +57,7 @@ add_action( 'wp_enqueue_scripts', function () {
  * ne modifient que les textes et les images.
  */
 add_filter( 'block_editor_settings_all', function ( $settings, $context ) {
-	if ( empty( $context->post ) || current_user_can( 'edit_theme_options' ) ) {
+	if ( empty( $context->post ) || current_user_can( 'edit_theme_options' ) || ! briise_fonction( 'verrou' ) ) {
 		return $settings;
 	}
 	if ( (int) $context->post->ID === (int) get_option( 'page_on_front' ) ) {

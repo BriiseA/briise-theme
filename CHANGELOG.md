@@ -1,5 +1,21 @@
 # Historique des versions
 
+## 0.2.0
+
+Phase 2 : tout se règle depuis l'administration, sans toucher au code.
+
+- Page « Mon entreprise » en quatre onglets. L'éditeur ne voit que « Horaires et annonces » ; le reste est réservé aux administrateurs.
+- Horaires par jour (deux plages), précision libre et jusqu'à six fermetures exceptionnelles, qui disparaissent d'elles-mêmes une fois passées.
+- Bandeau d'information avec date de fin, refermable par le visiteur ; annonce automatique des fermetures 7 jours avant.
+- Pied de page : colonne Horaires avec le jour en cours mis en avant, liens vers les réseaux, liens légaux affichés seulement si la page existe.
+- Mentions légales générées par le code court `[briise_mentions_legales]`.
+- Neuf fonctions activables ; une fonction désactivée ne charge rien.
+- Référencement : encadré « Référencement (Google) » dans l'éditeur de page avec compteur et aperçu du résultat Google ; pages légales automatiquement hors de Google et du plan du site ; plan du site sans pages auteurs ; horaires, fermetures, carte et raison sociale dans les données structurées.
+- Image de partage : logo ou icône du site au lieu de la capture du thème.
+- Search Console (balise) et Matomo sans cookie, sans extension.
+- Correctif : le bouton de l'en-tête restait visible sur mobile.
+- Le fichier `inc/entreprise.php` ne contient plus de réglages à modifier : le filtre `briise_entreprise` reste disponible.
+
 ## 0.1.0
 
 Première version de la base, issue de Galet Yoga 1.1.0.

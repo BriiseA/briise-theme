@@ -79,3 +79,61 @@ a[href^="tel:"] { white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) {
 	.br-smart-header, .br-sticky { transition: none; }
 }
+
+/* Texte réservé aux lecteurs d'écran */
+.screen-reader-text {
+	border: 0; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden;
+	padding: 0; position: absolute; width: 1px; word-wrap: normal !important;
+}
+
+/* Bandeau d'information */
+.br-bandeau {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	background: var(--wp--preset--color--nuit);
+	color: var(--wp--preset--color--lin);
+	font-size: .92rem;
+	line-height: 1.45;
+	padding: .65rem clamp(1rem, 4vw, 2rem);
+}
+.br-bandeau[hidden] { display: none; }
+.br-bandeau-inner { flex: 1; text-align: center; }
+.br-bandeau p { margin: 0; }
+.br-bandeau p + p { margin-top: .2rem; }
+.br-bandeau a { color: inherit; font-weight: 600; text-underline-offset: 3px; }
+.br-bandeau-fermer {
+	flex: none;
+	width: 2.75rem;
+	height: 2.75rem;
+	margin: -.5rem -.75rem -.5rem 0;
+	border: 0;
+	border-radius: 50%;
+	background: transparent;
+	color: inherit;
+	font-size: 1.5rem;
+	line-height: 1;
+	cursor: pointer;
+}
+.br-bandeau-fermer:hover { background: rgba(244, 237, 227, .12); }
+.br-bandeau-fermer:focus-visible { outline: 2px solid var(--wp--preset--color--argile); outline-offset: 0; }
+
+/* Horaires */
+.br-horaires { margin: 0; display: grid; gap: .35rem; }
+.br-horaires-ligne { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 1rem; padding: .15rem 0; }
+.br-horaires dt { font-weight: 500; }
+.br-horaires dd { margin: 0; }
+.br-horaires .br-ferme dd { opacity: .7; }
+.br-horaires .br-today { font-weight: 600; }
+.br-horaires .br-today dt { font-weight: 600; }
+main .br-horaires .br-today { background: var(--wp--preset--color--mousse); border-radius: 8px; padding: .35rem .6rem; margin: 0 -.6rem; }
+.br-horaires-note, .br-fermeture { margin: .9rem 0 0; font-size: .92rem; }
+.br-fermeture { font-weight: 600; }
+.br-footer .br-today-badge { background: var(--wp--preset--color--argile); color: var(--wp--preset--color--nuit); }
+
+/* Réseaux et coordonnées */
+.br-reseaux { margin-top: 1rem; }
+.br-reseaux a { text-underline-offset: 3px; }
+
+/* Mentions légales : champ manquant bien visible */
+.br-mentions mark { background: #ffe08a; color: #262220; padding: 0 .25rem; }

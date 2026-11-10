@@ -16,7 +16,7 @@ $e = briise_entreprise();
 
 <!-- wp:buttons {"className":"br-header-cta"} -->
 <div class="wp-block-buttons br-header-cta"><!-- wp:button -->
-<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="<?php echo esc_url( home_url( '/' . $e['cta_slug'] . '/' ) ); ?>"><?php echo esc_html( $e['cta_label'] ); ?></a></div>
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="<?php echo esc_url( $e['cta_url'] ); ?>"><?php echo esc_html( $e['cta_label'] ); ?></a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons --></div>
 <!-- /wp:group --></div>
