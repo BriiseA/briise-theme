@@ -35,7 +35,7 @@ Numérotation `MAJEUR.MINEUR.CORRECTIF` :
 - mineur (0.2.0) : nouvelle fonction ou nouvelle section, compatible avec les sites existants ;
 - majeur (1.0.0) : changement qui demande une vérification sur chaque site client.
 
-Chaque version est décrite dans `CHANGELOG.md`. Pour publier une version : mettre à jour `Version:` dans `style.css` et le CHANGELOG, puis créer l'étiquette correspondante (`v0.2.0`) ; le ZIP se fabrique tout seul.
+Chaque version est décrite dans `CHANGELOG.md`. Pour publier une version : mettre à jour `Version:` dans `style.css` et le CHANGELOG, puis pousser sur `main` ; la version (`v0.2.0`) et son `briise.zip` se publient tout seuls dans **Releases**.
 
 ## Avant chaque livraison client
 

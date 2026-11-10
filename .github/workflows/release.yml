@@ -1,13 +1,16 @@
 name: Version installable
 
-# À chaque étiquette de version (v0.2.0, v1.0.0…), fabrique briise.zip
-# avec un dossier « briise » à l'intérieur, prêt à téléverser dans WordPress,
-# et l'attache à la page « Releases » du dépôt.
+# Dès que le numéro « Version: » de style.css change sur main, fabrique
+# briise.zip (avec un dossier « briise » à l'intérieur, prêt à téléverser
+# dans WordPress) et publie la version correspondante (v0.1.0, v0.2.0…)
+# dans l'onglet « Releases » du dépôt. Si cette version existe déjà, rien
+# ne se passe. Peut aussi se lancer à la main depuis l'onglet « Actions ».
 
 on:
   push:
-    tags:
-      - "v*"
+    branches: [main]
+    paths: [style.css, .github/workflows/release.yml]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -17,13 +20,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Préparer le dossier du thème
+
+      - name: Lire le numéro de version
+        id: version
+        run: |
+          V=$(grep -m1 -E '^Version:' style.css | sed -E 's/^Version:[[:space:]]*//' | tr -d '[:space:]')
+          echo "tag=v$V" >> "$GITHUB_OUTPUT"
+          echo "Version lue : $V"
+
+      - name: Vérifier si la version est déjà publiée
+        id: existe
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
+            echo "oui=1" >> "$GITHUB_OUTPUT"
+            echo "${{ steps.version.outputs.tag }} existe déjà : rien à faire."
+          fi
+
+      - name: Préparer briise.zip
+        if: steps.existe.outputs.oui != '1'
         run: |
           mkdir -p build/briise
           rsync -a --exclude ".git" --exclude ".github" --exclude "build" --exclude ".gitignore" ./ build/briise/
           cd build && zip -rq briise.zip briise
+
       - name: Publier la version
-        uses: softprops/action-gh-release@v2
-        with:
-          files: build/briise.zip
-          generate_release_notes: true
+        if: steps.existe.outputs.oui != '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" build/briise.zip \
+            --target "${{ github.sha }}" \
+            --title "Briise ${{ steps.version.outputs.tag }}" \
+            --notes "Fichier à installer : briise.zip (Apparence > Thèmes > Ajouter > Téléverser). Détail des changements : CHANGELOG.md."
