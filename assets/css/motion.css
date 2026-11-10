@@ -1,0 +1,95 @@
+/* Galet : animations (chargées uniquement sur le site public). */
+
+/* 1. Apparition au défilement */
+.br-motion .br-reveal {
+	opacity: 0;
+	transform: translateY(28px);
+	transition: opacity .9s cubic-bezier(.2, .7, .2, 1), transform .9s cubic-bezier(.2, .7, .2, 1);
+	transition-delay: var(--br-delay, 0ms);
+}
+.br-motion .br-reveal.is-in {
+	opacity: 1;
+	transform: none;
+}
+
+/* 3. Titres ligne par ligne */
+.br-motion body.home main h1:not(.br-split-title):not(.br-split-done):not(.br-reveal),
+.br-motion .br-cta h2:not(.br-split-title):not(.br-split-done):not(.br-reveal) {
+	opacity: 0;
+}
+.br-split-title .br-line {
+	display: inline-block;
+	overflow: hidden;
+	vertical-align: top;
+	padding-bottom: .08em;
+	margin-bottom: -.08em;
+}
+.br-split-title .br-line-inner {
+	display: inline-block;
+	transform: translateY(105%);
+	transition: transform 1s cubic-bezier(.2, .75, .15, 1);
+	transition-delay: calc(var(--br-i, 0) * 110ms + 80ms);
+}
+.br-split-title.is-in .br-line-inner {
+	transform: none;
+}
+
+/* 2. Galets vivants */
+.br-hero .wp-block-image {
+	animation: br-float 7s ease-in-out infinite;
+}
+.br-hero .wp-block-image img {
+	transform: translate(calc(var(--br-mx, 0) * 22px), calc(var(--br-my, 0) * 18px));
+	transition: transform .8s cubic-bezier(.2, .7, .2, 1);
+}
+.br-cta::before {
+	animation: br-drift 11s ease-in-out infinite;
+	translate: calc(var(--br-mx, 0) * -40px) calc(var(--br-my, 0) * -30px);
+	transition: translate 1s cubic-bezier(.2, .7, .2, 1);
+}
+.br-cta::after {
+	animation: br-drift-b 14s ease-in-out infinite;
+	translate: calc(var(--br-mx, 0) * 30px) calc(var(--br-my, 0) * 24px);
+	transition: translate 1.2s cubic-bezier(.2, .7, .2, 1);
+}
+.br-num {
+	transition: transform .5s cubic-bezier(.2, .7, .2, 1);
+}
+.br-expertise:hover .br-num,
+.br-steps > .wp-block-column:hover .br-num {
+	transform: rotate(-12deg) scale(1.08);
+}
+.br-logo a::after {
+	transition: transform .5s cubic-bezier(.2, .7, .2, 1);
+}
+.br-logo a:hover::after {
+	transform: rotate(16deg) translateY(-2px);
+}
+
+@keyframes br-float {
+	0%, 100% { transform: translateY(0) rotate(0deg); }
+	50% { transform: translateY(-14px) rotate(-1.2deg); }
+}
+@keyframes br-drift-b {
+	0%, 100% { transform: rotate(12deg) translate(0, 0); }
+	50% { transform: rotate(20deg) translate(16px, -10px); }
+}
+@keyframes br-drift {
+	0%, 100% { transform: rotate(-18deg) translate(0, 0); }
+	50% { transform: rotate(-10deg) translate(-14px, 12px); }
+}
+
+/* Respect du réglage « réduire les animations » */
+@media (prefers-reduced-motion: reduce) {
+	.br-hero .wp-block-image,
+	.br-cta::before,
+	.br-cta::after {
+		animation: none;
+	}
+	.br-hero .wp-block-image img,
+	.br-cta::before,
+	.br-cta::after {
+		transform: none;
+		translate: none;
+	}
+}

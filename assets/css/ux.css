@@ -1,0 +1,81 @@
+/* Galet Yoga : confort de navigation (site public uniquement). */
+
+/* En-tête intelligent */
+.br-smart-header {
+	position: sticky;
+	top: var(--wp-admin--admin-bar--height, 0px);
+	z-index: 40;
+	transition: transform .35s cubic-bezier(.2, .7, .2, 1);
+}
+.br-smart-header .br-header {
+	background: var(--wp--preset--color--lin);
+	transition: box-shadow .3s, padding .3s;
+}
+.br-smart-header.br-scrolled .br-header {
+	box-shadow: 0 10px 30px -18px rgba(38, 34, 32, .35);
+	padding-top: .8rem;
+	padding-bottom: .8rem;
+}
+.br-smart-header.br-hidden {
+	transform: translateY(calc(-100% - var(--wp-admin--admin-bar--height, 0px)));
+}
+@media (max-width: 600px) {
+	.br-smart-header { top: 0; }
+}
+
+/* Page en cours */
+.br-nav a[aria-current="page"] {
+	text-decoration: underline;
+	text-decoration-color: var(--wp--preset--color--ocre-vif);
+	text-decoration-thickness: 2px;
+	text-underline-offset: 6px;
+}
+.br-footer a[aria-current="page"] { font-weight: 600; }
+
+/* Ancres : la cible n'est pas masquée par l'en-tête */
+.br-smooth { scroll-behavior: smooth; }
+main [id] { scroll-margin-top: 6.5rem; }
+
+/* Planning du jour */
+.br-planning tr.br-today td { background: var(--wp--preset--color--mousse); }
+.br-planning tr.br-today td:first-child { box-shadow: inset 4px 0 0 var(--wp--preset--color--olive); padding-left: .9rem; }
+.br-today-badge {
+	display: inline-block;
+	margin-left: .5rem;
+	font-size: .72rem;
+	font-weight: 600;
+	letter-spacing: .06em;
+	text-transform: uppercase;
+	background: var(--wp--preset--color--olive);
+	color: var(--wp--preset--color--lin);
+	border-radius: 999px;
+	padding: .15rem .55rem;
+	vertical-align: middle;
+}
+
+/* Sommaire des rubriques */
+.br-jump { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.75rem; }
+.br-jump a {
+	font-size: .9rem;
+	font-weight: 500;
+	text-decoration: none;
+	color: var(--wp--preset--color--nuit);
+	border: 1px solid rgba(38, 34, 32, .25);
+	border-radius: 999px;
+	padding: .5rem 1rem;
+}
+.br-jump a:hover { background: var(--wp--preset--color--nuit); color: var(--wp--preset--color--lin); }
+
+/* Temps de lecture */
+.br-reading::before { content: "·"; margin: 0 .5rem; }
+
+/* Téléphones */
+a[href^="tel:"] { white-space: nowrap; }
+
+/* Bouton fixe mobile */
+.br-sticky { transition: transform .3s cubic-bezier(.2, .7, .2, 1); }
+.br-sticky.br-sticky-off { transform: translateY(110%); }
+
+@media (prefers-reduced-motion: reduce) {
+	.br-smart-header, .br-sticky { transition: none; }
+}

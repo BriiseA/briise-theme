@@ -1,0 +1,29 @@
+name: Version installable
+
+# À chaque étiquette de version (v0.2.0, v1.0.0…), fabrique briise.zip
+# avec un dossier « briise » à l'intérieur, prêt à téléverser dans WordPress,
+# et l'attache à la page « Releases » du dépôt.
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Préparer le dossier du thème
+        run: |
+          mkdir -p build/briise
+          rsync -a --exclude ".git" --exclude ".github" --exclude "build" --exclude ".gitignore" ./ build/briise/
+          cd build && zip -rq briise.zip briise
+      - name: Publier la version
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/briise.zip
+          generate_release_notes: true
