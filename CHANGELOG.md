@@ -1,5 +1,16 @@
 # Historique des versions
 
+## 0.8.0
+
+Le maillage interne.
+
+- Cartes de service de l'accueil : le nom de chaque service et un lien vers sa page (« Garde-corps en détail »), remplis à l'installation du kit ou du fichier de site (`{{SERVICE:n}}`, `{{URL:service-n}}`).
+- Nouvelle section « Pages liées (automatique) » et code court `[briise_pages_liees]` : la page des services liste chaque service, chaque page de service liste les autres. Texte du lien : le nom de la page ; résumé : sa description Google. Section masquée s'il n'y a rien à montrer ; pages exclues de Google jamais listées.
+- Nouvel onglet Mon entreprise > Contrôle : liens reçus par page, clics depuis l'accueil, pages orphelines, liens cassés, liens vers une page exclue de Google, textes de lien vagues.
+- Plus aucun « En savoir plus » seul dans les sections.
+- Les modèles de page proposés dans l'éditeur relient la page des services du kit installé.
+- Testé sur WordPress 7.1 (kit artisan, quatre services) : pages de service reliées depuis 4 à 5 pages au lieu de 0, aucun bloc invalide, contrôle conforme à une mesure faite depuis le site public.
+
 ## 0.7.0
 
 Mieux lu par les moteurs et les IA, plus accessible, prêt pour la publicité.

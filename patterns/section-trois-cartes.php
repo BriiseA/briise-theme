@@ -35,7 +35,7 @@ $briise = briise_entreprise();
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-arrow"} -->
-<p class="br-arrow"><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>">En savoir plus</a></p>
+<p class="br-arrow"><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Premier service en détail</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group --></div>
 <!-- /wp:column -->
@@ -55,7 +55,7 @@ $briise = briise_entreprise();
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-arrow"} -->
-<p class="br-arrow"><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>">En savoir plus</a></p>
+<p class="br-arrow"><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Deuxième service en détail</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group --></div>
 <!-- /wp:column -->
@@ -75,7 +75,7 @@ $briise = briise_entreprise();
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-arrow"} -->
-<p class="br-arrow"><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>">En savoir plus</a></p>
+<p class="br-arrow"><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Troisième service en détail</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group --></div>
 <!-- /wp:column --></div>

@@ -6,6 +6,8 @@ const sec = (slug) => S[slug].blocks;
 const tete = (titre, chapo, bouton = true) => [Section('br-page-head', [Head([
   Short('[briise_fil_ariane]'), H(titre, 1, null, { fontSize: 'huge' }), Lead(chapo), ...(bouton ? [MainBtns()] : []),
 ])])];
+// Sur la page des services : la liste de chaque page de service (vide tant qu'il n'y en a pas).
+const detail = [Section('br-section-liees', [L.cb('core/heading', { content: 'Chaque service en détail', level: 2 }), Short('[briise_pages_liees]')], { backgroundColor: 'surface' })];
 const page = (slug, titre, ...parts) => ({ slug, titre, markup: serialize(parts.flat()) });
 
 /* ----- Pages légales, communes aux trois kits ----- */
@@ -59,7 +61,7 @@ const KITS = {
     liens: { services: 'prestations', realisations: 'prestations', 'a-propos': 'a-propos', blog: 'blog' },
     pages: [
       page('accueil', 'Accueil', sec('hero-image'), sec('trois-cartes'), sec('etapes'), sec('temoignages'), sec('dirigeant'), sec('derniers-articles'), sec('bandeau-cta')),
-      page('prestations', 'Prestations', tete('Nos prestations', 'Une phrase qui résume l’ensemble de votre offre et à qui elle s’adresse.'), sec('service-alterne'), sec('etapes'), sec('bandeau-cta')),
+      page('prestations', 'Prestations', tete('Nos prestations', 'Une phrase qui résume l’ensemble de votre offre et à qui elle s’adresse.'), detail, sec('service-alterne'), sec('etapes'), sec('bandeau-cta')),
       page('tarifs', 'Tarifs', tete('Tarifs', 'Des prix clairs avant de réserver : choisissez la formule qui vous convient.'), sec('tarifs-cartes'), sec('tarifs-tableau'), sec('bandeau-cta')),
       page('a-propos', 'À propos', tete('À propos', 'Qui vous êtes, en une phrase : ce qui rassure un client avant de vous contacter.', false), sec('dirigeant'), sec('valeurs'), sec('chiffres-cles'), sec('bandeau-cta')),
       page('faq', 'Questions fréquentes', tete('Questions fréquentes', 'Les réponses aux questions que l’on nous pose le plus souvent.', false), sec('faq'), sec('bandeau-cta')),
@@ -74,7 +76,7 @@ const KITS = {
     liens: { services: 'savoir-faire', realisations: 'realisations', 'a-propos': 'a-propos', blog: 'realisations' },
     pages: [
       page('accueil', 'Accueil', sec('hero-banniere'), sec('trois-cartes'), sec('realisations'), sec('chiffres-cles'), sec('temoignages'), sec('zone'), sec('bandeau-cta')),
-      page('savoir-faire', 'Savoir-faire', tete('Notre savoir-faire', 'Ce que vous fabriquez ou réalisez, et pour qui : particuliers, professionnels, collectivités.'), sec('service-alterne'), sec('etapes'), sec('logos'), sec('bandeau-cta')),
+      page('savoir-faire', 'Savoir-faire', tete('Notre savoir-faire', 'Ce que vous fabriquez ou réalisez, et pour qui : particuliers, professionnels, collectivités.'), detail, sec('service-alterne'), sec('etapes'), sec('logos'), sec('bandeau-cta')),
       page('realisations', 'Réalisations', tete('Nos réalisations', 'Quelques chantiers récents, avec la demande du client et la solution apportée.'), sec('realisations'), sec('avant-apres'), sec('galerie'), sec('bandeau-cta')),
       page('zone-intervention', 'Zone d’intervention', tete('Zone d’intervention', 'Les villes et le secteur où nous intervenons, et nos délais de déplacement.'), sec('zone'), sec('contact')),
       page('a-propos', 'À propos', tete('L’entreprise', 'Votre histoire en une phrase : depuis quand, combien vous êtes, ce qui vous distingue.', false), sec('dirigeant'), sec('equipe'), sec('valeurs'), sec('bandeau-cta')),
@@ -89,7 +91,7 @@ const KITS = {
     // Pas de témoignages ni de note Google : règles de communication des professions réglementées.
     pages: [
       page('accueil', 'Accueil', sec('hero-image'), sec('trois-cartes'), sec('dirigeant'), sec('etapes'), sec('faq'), sec('contact')),
-      page('domaines-intervention', 'Domaines d’intervention', tete('Domaines d’intervention', 'Les situations dans lesquelles vous accompagnez vos clients ou patients, décrites simplement.'), sec('service-alterne'), sec('bandeau-cta')),
+      page('domaines-intervention', 'Domaines d’intervention', tete('Domaines d’intervention', 'Les situations dans lesquelles vous accompagnez vos clients ou patients, décrites simplement.'), detail, sec('service-alterne'), sec('bandeau-cta')),
       page('honoraires', 'Honoraires', tete('Honoraires', 'Des honoraires transparents, communiqués avant tout engagement.'), sec('tarifs-tableau'), sec('bandeau-cta')),
       page('le-cabinet', 'Le cabinet', tete('Le cabinet', 'Le cabinet, son équipe et sa façon de travailler.', false), sec('dirigeant'), sec('equipe'), sec('valeurs'), sec('contact')),
       page('faq', 'Questions fréquentes', tete('Questions fréquentes', 'Les réponses aux questions que l’on nous pose le plus souvent avant un premier rendez-vous.', false), sec('faq'), sec('bandeau-cta')),
@@ -102,7 +104,7 @@ const KITS = {
 
 const T = '{{TITRE}}';
 const MODELES = {
-  service: { titre: 'Page de service', desc: 'Un service en détail : présentation, déroulé, questions, appel à l’action.', markup: serialize([tete(T, 'Ce que comprend ce service, pour qui il est fait, et le résultat obtenu.'), sec('service-alterne'), sec('etapes'), sec('faq'), sec('bandeau-cta')].flat()) },
+  service: { titre: 'Page de service', desc: 'Un service en détail : présentation, déroulé, questions, appel à l’action.', markup: serialize([tete(T, 'Ce que comprend ce service, pour qui il est fait, et le résultat obtenu.'), sec('service-alterne'), sec('etapes'), sec('faq'), sec('pages-liees'), sec('bandeau-cta')].flat()) },
   simple: { titre: 'Page simple', desc: 'Titre, introduction et un bloc de texte libre.', markup: serialize([tete(T, 'Une phrase d’introduction qui résume la page.', false), Section('br-section--tight', [Box('br-legal', [P('Votre texte ici. Utilisez des intertitres pour découper le contenu.')])])].flat()) },
   tarifs: { titre: 'Page de tarifs', desc: 'Formules en cartes, tableau des prestations, appel à l’action.', markup: serialize([tete(T, 'Des prix clairs avant de réserver.'), sec('tarifs-cartes'), sec('tarifs-tableau'), sec('bandeau-cta')].flat()) },
   realisations: { titre: 'Page de réalisations', desc: 'Réalisations en grille, avant / après, galerie.', markup: serialize([tete(T, 'Quelques réalisations récentes, avec la demande du client et la solution apportée.'), sec('realisations'), sec('avant-apres'), sec('galerie'), sec('bandeau-cta')].flat()) },

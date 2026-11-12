@@ -105,7 +105,7 @@ Fichier JSON importé dans Démarrage. Seule la liste `pages` est obligatoire.
 }
 ```
 
-Dans `markup`, les repères `{{CTA}}`, `{{CTA_LABEL}}`, `{{URL:slug}}`, `{{IMG:nom}}` et `{{TITRE}}` sont remplacés à l'import. `"legales": false` évite la création des pages légales.
+Dans `markup`, les repères `{{CTA}}`, `{{CTA_LABEL}}`, `{{URL:slug}}`, `{{IMG:nom}}` et `{{TITRE}}` sont remplacés à l'import, ainsi que `{{SERVICE:n}}` (nom du n-ième service) et `{{URL:service-n}}` (sa page). Les services sont les sous-pages de la page des services, dans l'ordre du fichier. `"legales": false` évite la création des pages légales.
 
 ## Bibliothèque de sections
 
@@ -118,7 +118,7 @@ Dans l'éditeur : bouton « + » > Compositions > catégories « Sections · …
 | Confiance et preuves | Chiffres clés, Témoignages, Logos ou labels, Réalisations en grille, Avant / après, Galerie en mosaïque |
 | Parcours et FAQ | Étapes numérotées, FAQ en accordéon, Horaires et planning |
 | Personnes | Présentation du dirigeant, Équipe, Citation ou valeurs |
-| Contenu | Derniers articles |
+| Contenu | Derniers articles, Pages liées (automatique) |
 | Contact | Bandeau d'appel à l'action, Bloc contact complet, Zone d'intervention, Emplacement de formulaire ou de réservation |
 
 Règles :
@@ -137,6 +137,8 @@ Menu « Mon entreprise » de l'administration, juste sous le tableau de bord.
 | Entreprise | Administrateur | Nom, slogan, type d'activité, coordonnées, GPS, zone, action principale, personne, réseaux |
 | Mentions légales | Administrateur | Éditeur, hébergeur, profession réglementée, médiateur, réalisation |
 | Fonctions | Administrateur | Fonctions activables, Bing Webmaster Tools, Search Console, Matomo |
+| Démarrage | Administrateur | Kits et import d'un fichier de site |
+| Contrôle | Administrateur | Contrôle du maillage interne (voir plus bas) |
 
 Tout alimente automatiquement l'en-tête, le pied de page, le bouton fixe mobile et les données structurées.
 
@@ -152,7 +154,23 @@ Codes courts, à placer dans un bloc « Code court » :
 | `[briise_zone]` | Villes de la zone d'intervention, en pastilles |
 | `[briise_contact_rapide]` | Boutons « Appeler » et « Écrire un e-mail » |
 | `[briise_telephone]` | Le numéro de téléphone, cliquable |
+| `[briise_pages_liees]` | Sur une page qui a des sous-pages : ses sous-pages. Sur une sous-page : les pages sœurs (les autres services). `parent="slug"` : les sous-pages d'une page donnée |
 | `[briise_info champ="telephone"]` | Une information seule : `name`, `telephone`, `email`, `adresse`, `city`… |
+
+## Maillage interne
+
+Les liens écrits dans le texte des pages disent à Google quelles pages comptent et de quoi elles parlent. Le thème en pose une partie tout seul :
+- les cartes de service de l'accueil portent le nom de chaque service et mènent à sa page (« Garde-corps en détail ») ;
+- la page des services liste chacune de ses sous-pages, et chaque page de service liste les autres services (section « Pages liées », mise à jour automatiquement, masquée s'il n'y a rien à montrer) ;
+- le fil d'Ariane relie chaque sous-page à sa page parente.
+
+Le reste (liens dans les textes, vers les réalisations, la zone, la FAQ…) se prévoit dans le tableau des liens de la stratégie, puis se vérifie dans **Mon entreprise > Contrôle**. L'écran signale :
+- les pages qui reçoivent moins de deux liens depuis le texte d'autres pages (le menu ne compte pas) ;
+- les pages à plus de trois clics de l'accueil ;
+- les liens cassés, les liens vers une page exclue de Google (noindex, page d'atterrissage) ;
+- les textes de lien vagues (« en savoir plus », « cliquez ici »).
+
+L'analyse lit les contenus publiés : un lien ajouté par une extension ou un widget n'est pas vu.
 
 ## Robots, moteurs et IA
 

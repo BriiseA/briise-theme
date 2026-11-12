@@ -24,7 +24,13 @@ function briise_kits() {
  * Remplace les repères ({{CTA}}, {{URL:…}}, {{IMG:…}}, {{TITRE}}) par les vraies valeurs.
  */
 function briise_kit_remplir( $markup, $liens = array(), $pages = array(), $titre = '', &$manquants = array() ) {
-	$e   = briise_entreprise();
+	$e = briise_entreprise();
+	// Sans liens fournis (modèles de l'éditeur), ceux du kit installé.
+	if ( ! $liens ) {
+		$kits  = briise_kits()['kits'];
+		$kit   = get_option( 'briise_kit' );
+		$liens = isset( $kits[ $kit ] ) ? $kits[ $kit ]['liens'] : array();
+	}
 	$url = function ( $slug ) use ( $liens, $pages, &$manquants ) {
 		$cible = $liens[ $slug ] ?? $slug;
 		if ( isset( $pages[ $cible ] ) ) {
@@ -44,6 +50,16 @@ function briise_kit_remplir( $markup, $liens = array(), $pages = array(), $titre
 	};
 	$markup = preg_replace_callback( '/\{\{IMG:([a-z0-9-]+)\}\}/', function ( $m ) {
 		return esc_url( get_theme_file_uri( 'assets/images/sections/' . $m[1] . '.svg' ) );
+	}, $markup );
+	// Les services du client, dans l'ordre : {{SERVICE:n}} (nom) et {{URL:service-n}} (page).
+	$services = $liens['__services'] ?? array();
+	$markup   = preg_replace_callback( '/\{\{URL:service-(\d)\}\}/', function ( $m ) use ( $services, $pages, $url ) {
+		$s = $services[ $m[1] - 1 ] ?? null;
+		return esc_url( $s && isset( $pages[ $s['slug'] ] ) ? get_permalink( $pages[ $s['slug'] ] ) : $url( 'services' ) );
+	}, $markup );
+	$markup = preg_replace_callback( '/\{\{SERVICE:(\d)\}\}/', function ( $m ) use ( $services ) {
+		$ordinaux = array( 'Premier', 'Deuxième', 'Troisième', 'Quatrième', 'Cinquième', 'Sixième', 'Septième', 'Huitième', 'Neuvième' );
+		return esc_html( $services[ $m[1] - 1 ]['titre'] ?? ( $ordinaux[ $m[1] - 1 ] . ' service' ) );
 	}, $markup );
 	$markup = preg_replace_callback( '/\{\{URL:([a-z0-9-]*)\}\}/', function ( $m ) use ( $url ) {
 		return esc_url( '' === $m[1] ? home_url( '/' ) : $url( $m[1] ) );
@@ -117,11 +133,24 @@ function briise_plan_installer( $plan ) {
 
 	// 4. Le contenu et le référencement des pages créées.
 	$manquants = array();
+	// Les services : sous-pages de la page des services (à défaut, de la page qui a le plus de sous-pages).
+	$liens   = $plan['liens'] ?? array();
+	$parents = array_count_values( array_filter( array_column( $plan['pages'], 'parent' ) ) );
+	$p_serv  = $liens['services'] ?? ( $parents ? array_search( max( $parents ), $parents, true ) : '' );
+	$liens['__services'] = array();
+	foreach ( $plan['pages'] as $p ) {
+		if ( $p_serv && ( $p['parent'] ?? '' ) === $p_serv && ( $p['modele'] ?? '' ) !== 'atterrissage' ) {
+			$liens['__services'][] = array( 'titre' => $p['titre'], 'slug' => sanitize_title( $p['slug'] ) );
+		}
+	}
+	if ( $p_serv && empty( $liens['services'] ) ) {
+		$liens['services'] = $p_serv;
+	}
 	foreach ( $crees as $id => $p ) {
 		if ( ! empty( $p['markup'] ) ) {
 			wp_update_post( wp_slash( array(
 				'ID'           => $id,
-				'post_content' => briise_kit_remplir( $p['markup'], $plan['liens'] ?? array(), $ids, $p['titre'], $manquants ),
+				'post_content' => briise_kit_remplir( $p['markup'], $liens, $ids, $p['titre'], $manquants ),
 			) ) );
 			if ( ! empty( $p['template'] ) && in_array( $p['template'], array( 'page-sans-titre', 'page-atterrissage' ), true ) ) {
 				update_post_meta( $id, '_wp_page_template', $p['template'] );

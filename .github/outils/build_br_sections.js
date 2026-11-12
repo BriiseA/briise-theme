@@ -91,14 +91,15 @@ add('en-tete-page', 'ouverture', 'En-tête de page avec fil d’Ariane', 'Pour t
 
 /* ----- Offre ----- */
 
-const carte = (n, t) => Col([Box('br-card', [
-  Num(n), H(t, 3), Muted('Deux phrases pour décrire ce service, pour qui il est fait et ce qu’il apporte.'),
-  Arrow('En savoir plus', URL('services')),
+// {{SERVICE:n}} : nom du n-ième service du client, {{URL:service-n}} : sa page (remplis à l'installation).
+const carte = (n) => Col([Box('br-card', [
+  Num('0' + n), H(`{{SERVICE:${n}}}`, 3), Muted('Deux phrases pour décrire ce service, pour qui il est fait et ce qu’il apporte.'),
+  Arrow(`{{SERVICE:${n}}} en détail`, URL(`service-${n}`)),
 ])]);
 add('trois-cartes', 'offre', 'Trois cartes de service', 'Présenter l’offre en trois blocs, chacun menant à sa page.',
   Section('', [
     sectionHead('Ce que nous faisons', ['Tous nos services', URL('services')]),
-    Cols([carte('01', 'Premier service'), carte('02', 'Deuxième service'), carte('03', 'Troisième service')]),
+    Cols([carte(1), carte(2), carte(3)]),
   ], { backgroundColor: 'surface' }));
 
 const bloc = (titre) => [
@@ -276,6 +277,12 @@ add('derniers-articles', 'contenu', 'Derniers articles', 'Les trois derniers art
       ]),
     ]),
   ]));
+
+add('pages-liees', 'contenu', 'Pages liées (automatique)', 'Pages de service : les autres services, avec un lien vers chacun. Sur une page qui a des sous-pages : la liste de ses sous-pages. Se met à jour seule.',
+  Section('br-section-liees', [
+    sectionHead('Nos autres services', ['Tous nos services', URL('services')]),
+    Short('[briise_pages_liees]'),
+  ], { backgroundColor: 'surface' }));
 
 /* ----- Contact ----- */
 

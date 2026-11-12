@@ -16,6 +16,7 @@ function briise_onglets() {
 		'legal'    => array( 'Mentions légales', 'manage_options', 'briise_legal' ),
 		'fonctions' => array( 'Fonctions', 'manage_options', 'briise_fonctions' ),
 		'demarrage' => array( 'Démarrage', 'manage_options', '' ),
+		'controle'  => array( 'Contrôle', 'manage_options', '' ),
 	);
 	return array_filter( $onglets, function ( $o ) {
 		return current_user_can( $o[1] );
@@ -133,8 +134,8 @@ function briise_page_reglages() {
 				<?php endforeach; ?>
 			</nav>
 		<?php endif; ?>
-		<?php if ( 'demarrage' === $actif ) : ?>
-			<?php briise_onglet_demarrage(); ?>
+		<?php if ( in_array( $actif, array( 'demarrage', 'controle' ), true ) ) : ?>
+			<?php call_user_func( 'briise_onglet_' . $actif ); ?>
 		<?php else : ?>
 		<form method="post" action="options.php">
 			<?php
