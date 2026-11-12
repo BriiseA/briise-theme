@@ -13,6 +13,7 @@ require_once get_theme_file_path( 'inc/fonctions.php' );
 require_once get_theme_file_path( 'inc/seo.php' );
 if ( is_admin() ) {
 	require_once get_theme_file_path( 'inc/admin.php' );
+	require_once get_theme_file_path( 'inc/contraste.php' );
 }
 
 add_action( 'after_setup_theme', function () {

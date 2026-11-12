@@ -1,5 +1,18 @@
 # Historique des versions
 
+## 0.3.0
+
+Phase 3a : les ambiances.
+
+- Cinq nouvelles ambiances dans Styles : Lumière, Atelier, Cabinet, Comptoir, et « Charte du client » à remplir avec la charte graphique d'un client. Galet reste l'ambiance par défaut.
+- Toutes vérifiées en contraste AA (vérifiées automatiquement à chaque envoi sur GitHub) ; polices hébergées dans le thème, sous licence libre OFL.
+- Noms de couleurs génériques, communs à toutes les ambiances (`fond`, `texte`, `accent`, `sombre`…) à la place des noms propres à Galet (`lin`, `nuit`, `ocre`…). Changement incompatible avec un contenu qui utiliserait les anciens noms : aucun site client n'existe encore.
+- Polices nommées `titres` et `texte` au lieu de `bricolage` et `figtree`.
+- Arrondis et formes décoratives réglés par ambiance (anguleux pour Atelier, arches pour Lumière, rondeurs pour Comptoir).
+- Couleurs du code CSS reliées à la palette : rien n'est plus codé en dur.
+- Avertissement sur le tableau de bord si une couleur modifiée rend un texte illisible.
+- Fond sombre distinct du texte, pour le pied de page et le bandeau.
+
 ## 0.2.1
 
 - Correctif : la page de politique de confidentialité créée par WordPress (`privacy-policy`) n'était pas exclue de Google. Le thème reconnaît désormais la page déclarée dans Réglages > Confidentialité, ainsi que les adresses anglaises et les CGV.

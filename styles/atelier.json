@@ -1,0 +1,175 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Atelier",
+	"description": "Contrastée et industrielle : bâtiment, métallerie, garages.",
+	"settings": {
+		"color": {
+			"palette": [
+				{
+					"slug": "fond",
+					"name": "Fond",
+					"color": "#f1f0ec"
+				},
+				{
+					"slug": "clair",
+					"name": "Fond clair (cartes)",
+					"color": "#ffffff"
+				},
+				{
+					"slug": "surface",
+					"name": "Surface",
+					"color": "#dddbd3"
+				},
+				{
+					"slug": "nuance",
+					"name": "Nuance",
+					"color": "#e7e3d4"
+				},
+				{
+					"slug": "texte",
+					"name": "Texte",
+					"color": "#15171a"
+				},
+				{
+					"slug": "texte-doux",
+					"name": "Texte secondaire",
+					"color": "#474c52"
+				},
+				{
+					"slug": "accent",
+					"name": "Accent",
+					"color": "#a83d0c"
+				},
+				{
+					"slug": "secondaire",
+					"name": "Secondaire",
+					"color": "#2c3a46"
+				},
+				{
+					"slug": "deco",
+					"name": "Décor (formes, jamais du texte)",
+					"color": "#e86a2c"
+				},
+				{
+					"slug": "sombre",
+					"name": "Fond sombre",
+					"color": "#15171a"
+				}
+			]
+		},
+		"typography": {
+			"fontFamilies": [
+				{
+					"slug": "titres",
+					"name": "Titres : Barlow Condensed",
+					"fontFamily": "'Barlow Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+					"fontFace": [
+						{
+							"fontFamily": "Barlow Condensed",
+							"fontStyle": "normal",
+							"fontWeight": "600",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/barlow-condensed-latin-600-normal.woff2"
+							]
+						},
+						{
+							"fontFamily": "Barlow Condensed",
+							"fontStyle": "normal",
+							"fontWeight": "700",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/barlow-condensed-latin-700-normal.woff2"
+							]
+						}
+					]
+				},
+				{
+					"slug": "texte",
+					"name": "Texte : Barlow",
+					"fontFamily": "'Barlow', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+					"fontFace": [
+						{
+							"fontFamily": "Barlow",
+							"fontStyle": "normal",
+							"fontWeight": "400",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/barlow-latin-400-normal.woff2"
+							]
+						},
+						{
+							"fontFamily": "Barlow",
+							"fontStyle": "italic",
+							"fontWeight": "400",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/barlow-latin-400-italic.woff2"
+							]
+						},
+						{
+							"fontFamily": "Barlow",
+							"fontStyle": "normal",
+							"fontWeight": "500",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/barlow-latin-500-normal.woff2"
+							]
+						},
+						{
+							"fontFamily": "Barlow",
+							"fontStyle": "normal",
+							"fontWeight": "600",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/barlow-latin-600-normal.woff2"
+							]
+						}
+					]
+				}
+			]
+		},
+		"custom": {
+			"rayon": {
+				"grand": "2px",
+				"moyen": "2px",
+				"petit": "2px",
+				"bouton": "2px"
+			},
+			"forme": {
+				"blob": "0"
+			}
+		}
+	},
+	"styles": {
+		"elements": {
+			"heading": {
+				"typography": {
+					"fontWeight": "700",
+					"lineHeight": "0.98",
+					"letterSpacing": "0",
+					"textTransform": "uppercase"
+				}
+			},
+			"h3": {
+				"typography": {
+					"textTransform": "none",
+					"letterSpacing": "0"
+				}
+			},
+			"button": {
+				"color": {
+					"background": "var:preset|color|accent",
+					"text": "var:preset|color|fond"
+				},
+				":hover": {
+					"color": {
+						"background": "var:preset|color|texte",
+						"text": "var:preset|color|fond"
+					}
+				}
+			}
+		}
+	}
+}

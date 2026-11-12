@@ -1,0 +1,19 @@
+name: Vérifications
+
+# À chaque envoi : syntaxe PHP, validité des JSON et contrastes AA de chaque ambiance.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntaxe PHP
+        run: find . -name "*.php" -not -path "./.git/*" -print0 | xargs -0 -n1 php -l
+      - name: Fichiers JSON
+        run: for f in theme.json styles/*.json; do python3 -m json.tool "$f" > /dev/null || exit 1; done
+      - name: Contrastes des ambiances
+        run: python3 .github/outils/contraste.py .

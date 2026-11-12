@@ -1,0 +1,150 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Cabinet",
+	"description": "Sobre et rassurante : avocats, experts-comptables, santé.",
+	"settings": {
+		"color": {
+			"palette": [
+				{
+					"slug": "fond",
+					"name": "Fond",
+					"color": "#fbfbf9"
+				},
+				{
+					"slug": "clair",
+					"name": "Fond clair (cartes)",
+					"color": "#ffffff"
+				},
+				{
+					"slug": "surface",
+					"name": "Surface",
+					"color": "#e7ecf2"
+				},
+				{
+					"slug": "nuance",
+					"name": "Nuance",
+					"color": "#ecefe8"
+				},
+				{
+					"slug": "texte",
+					"name": "Texte",
+					"color": "#1a2332"
+				},
+				{
+					"slug": "texte-doux",
+					"name": "Texte secondaire",
+					"color": "#4b5666"
+				},
+				{
+					"slug": "accent",
+					"name": "Accent",
+					"color": "#1d4f7c"
+				},
+				{
+					"slug": "secondaire",
+					"name": "Secondaire",
+					"color": "#365646"
+				},
+				{
+					"slug": "deco",
+					"name": "Décor (formes, jamais du texte)",
+					"color": "#c3a46a"
+				},
+				{
+					"slug": "sombre",
+					"name": "Fond sombre",
+					"color": "#142033"
+				}
+			]
+		},
+		"typography": {
+			"fontFamilies": [
+				{
+					"slug": "titres",
+					"name": "Titres : Source Serif 4",
+					"fontFamily": "'Source Serif 4', Georgia, 'Times New Roman', serif",
+					"fontFace": [
+						{
+							"fontFamily": "Source Serif 4",
+							"fontStyle": "normal",
+							"fontWeight": "200 900",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/source-serif-4-latin-wght-normal.woff2"
+							]
+						},
+						{
+							"fontFamily": "Source Serif 4",
+							"fontStyle": "italic",
+							"fontWeight": "200 900",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/source-serif-4-latin-wght-italic.woff2"
+							]
+						}
+					]
+				},
+				{
+					"slug": "texte",
+					"name": "Texte : Source Sans 3",
+					"fontFamily": "'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+					"fontFace": [
+						{
+							"fontFamily": "Source Sans 3",
+							"fontStyle": "normal",
+							"fontWeight": "200 900",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/source-sans-3-latin-wght-normal.woff2"
+							]
+						},
+						{
+							"fontFamily": "Source Sans 3",
+							"fontStyle": "italic",
+							"fontWeight": "200 900",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/source-sans-3-latin-wght-italic.woff2"
+							]
+						}
+					]
+				}
+			]
+		},
+		"custom": {
+			"rayon": {
+				"grand": "10px",
+				"moyen": "8px",
+				"petit": "4px",
+				"bouton": "6px"
+			},
+			"forme": {
+				"blob": "12px"
+			}
+		}
+	},
+	"styles": {
+		"elements": {
+			"heading": {
+				"typography": {
+					"fontWeight": "600",
+					"lineHeight": "1.12",
+					"letterSpacing": "-0.01em"
+				}
+			},
+			"button": {
+				"color": {
+					"background": "var:preset|color|accent",
+					"text": "var:preset|color|fond"
+				},
+				":hover": {
+					"color": {
+						"background": "var:preset|color|texte",
+						"text": "var:preset|color|fond"
+					}
+				}
+			}
+		}
+	}
+}

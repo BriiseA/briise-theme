@@ -24,7 +24,40 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | `inc/seo.php` | Title, meta description, Open Graph, noindex, plan du site, données structurées, encadré « Référencement » |
 | `assets/js/ux.js` | Menu intelligent, page active, téléphones cliquables, bouton fixe mobile |
 | `assets/js/motion.js` | Animations d'apparition (coupées si le visiteur le demande) |
-| `assets/fonts/` | Polices hébergées et leurs licences |
+| `styles/` | Ambiances (variations de style) |
+| `inc/contraste.php` | Avertissement si une couleur modifiée rend un texte illisible |
+| `assets/fonts/` | Polices hébergées et leurs licences (toutes sous licence OFL) |
+
+## Ambiances (variations de style)
+
+Apparence > Éditeur > Styles > Parcourir les styles. Six ambiances, toutes vérifiées en contraste AA :
+
+| Ambiance | Pour qui | Titres / texte |
+| --- | --- | --- |
+| Galet (par défaut) | Bien-être, artisans d'art, créatifs | Bricolage Grotesque / Figtree |
+| Lumière | Photographes, esthétique, événementiel | Cormorant Garamond / DM Sans |
+| Atelier | Bâtiment, métallerie, garages | Barlow Condensed / Barlow |
+| Cabinet | Avocats, experts-comptables, santé | Source Serif 4 / Source Sans 3 |
+| Comptoir | Restaurants, commerces, loisirs | Fredoka / Nunito |
+| Charte du client | Client qui a déjà sa charte graphique | Polices système, à remplacer |
+
+Toutes les ambiances partagent les mêmes noms de couleurs, ce qui permet à chaque section de fonctionner avec chacune :
+
+| Couleur | Rôle |
+| --- | --- |
+| `fond`, `clair` | Fond de page, fond des cartes |
+| `surface`, `nuance` | Fonds de sections |
+| `texte`, `texte-doux` | Texte principal, texte secondaire |
+| `accent` | Liens au survol, boutons de certaines ambiances |
+| `secondaire` | Chiffres, badges |
+| `deco` | Formes décoratives, jamais du texte |
+| `sombre` | Pied de page et bandeau |
+
+Arrondis et formes : `--wp--custom--rayon--grand|moyen|petit|bouton` et `--wp--custom--forme--blob`, propres à chaque ambiance.
+
+**Couleur du logo du client.** Styles > Couleurs > Palette > Modifier, puis changer `accent`. Si une couleur rend un texte illisible (contraste inférieur à 4,5:1), un avertissement apparaît sur le tableau de bord.
+
+**Charte du client.** Partir de l'ambiance « Charte du client », remplacer ses couleurs par celles de la charte, puis ajouter ses polices dans Styles > Typographie > Gérer les polices (fichiers WOFF2, licence web vérifiée).
 
 ## Mon entreprise
 

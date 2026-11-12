@@ -1,0 +1,98 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Charte du client",
+	"description": "Point de départ neutre à remplir avec la charte graphique du client.",
+	"settings": {
+		"color": {
+			"palette": [
+				{
+					"slug": "fond",
+					"name": "Fond",
+					"color": "#ffffff"
+				},
+				{
+					"slug": "clair",
+					"name": "Fond clair (cartes)",
+					"color": "#ffffff"
+				},
+				{
+					"slug": "surface",
+					"name": "Surface",
+					"color": "#f0f0f0"
+				},
+				{
+					"slug": "nuance",
+					"name": "Nuance",
+					"color": "#f4f4f1"
+				},
+				{
+					"slug": "texte",
+					"name": "Texte",
+					"color": "#1a1a1a"
+				},
+				{
+					"slug": "texte-doux",
+					"name": "Texte secondaire",
+					"color": "#555555"
+				},
+				{
+					"slug": "accent",
+					"name": "Accent",
+					"color": "#0b57d0"
+				},
+				{
+					"slug": "secondaire",
+					"name": "Secondaire",
+					"color": "#333333"
+				},
+				{
+					"slug": "deco",
+					"name": "Décor (formes, jamais du texte)",
+					"color": "#cccccc"
+				},
+				{
+					"slug": "sombre",
+					"name": "Fond sombre",
+					"color": "#1a1a1a"
+				}
+			]
+		},
+		"typography": {
+			"fontFamilies": [
+				{
+					"slug": "titres",
+					"name": "Titres : police système",
+					"fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+				},
+				{
+					"slug": "texte",
+					"name": "Texte : police système",
+					"fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+				}
+			]
+		},
+		"custom": {
+			"rayon": {
+				"grand": "12px",
+				"moyen": "10px",
+				"petit": "6px",
+				"bouton": "8px"
+			},
+			"forme": {
+				"blob": "12px"
+			}
+		}
+	},
+	"styles": {
+		"elements": {
+			"heading": {
+				"typography": {
+					"fontWeight": "700",
+					"lineHeight": "1.1",
+					"letterSpacing": "-0.02em"
+				}
+			}
+		}
+	}
+}

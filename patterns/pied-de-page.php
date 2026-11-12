@@ -20,8 +20,8 @@ foreach ( array( 'mentions-legales' => 'Mentions légales', 'confidentialite' =>
 	}
 }
 ?>
-<!-- wp:group {"align":"full","className":"br-footer","backgroundColor":"nuit","textColor":"lin","layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull br-footer has-lin-color has-nuit-background-color has-text-color has-background"><!-- wp:paragraph {"className":"br-footer-mail"} -->
+<!-- wp:group {"align":"full","className":"br-footer","backgroundColor":"sombre","textColor":"fond","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull br-footer has-fond-color has-sombre-background-color has-text-color has-background"><!-- wp:paragraph {"className":"br-footer-mail"} -->
 <p class="br-footer-mail"><a href="<?php echo esc_url( $e['cta_url'] ); ?>"><?php echo esc_html( $e['cta_label'] ); ?> →</a></p>
 <!-- /wp:paragraph -->
 
