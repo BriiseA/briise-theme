@@ -307,6 +307,9 @@ add_action( 'init', function () {
 	add_shortcode( 'briise_coordonnees', 'briise_coordonnees_html' );
 	add_shortcode( 'briise_reseaux', 'briise_reseaux_html' );
 	add_shortcode( 'briise_mentions_legales', 'briise_mentions_html' );
+	add_shortcode( 'briise_fil_ariane', 'briise_fil_ariane_html' );
+	add_shortcode( 'briise_zone', 'briise_zone_html' );
+	add_shortcode( 'briise_contact_rapide', 'briise_contact_rapide_html' );
 	add_shortcode( 'briise_info', function ( $atts ) {
 		$atts = shortcode_atts( array( 'champ' => 'name' ), $atts );
 		$e    = briise_entreprise();
@@ -319,3 +322,52 @@ add_action( 'init', function () {
 		return isset( $e[ $atts['champ'] ] ) && is_string( $e[ $atts['champ'] ] ) ? esc_html( $e[ $atts['champ'] ] ) : '';
 	} );
 } );
+
+/**
+ * Fil d'Ariane de la page en cours : Accueil › parent › page.
+ */
+function briise_fil_ariane_html() {
+	$post = get_queried_object();
+	if ( ! $post instanceof WP_Post || (int) $post->ID === (int) get_option( 'page_on_front' ) ) {
+		return '';
+	}
+	$liens = array( '<a href="' . esc_url( home_url( '/' ) ) . '">Accueil</a>' );
+	if ( 'post' === $post->post_type && get_option( 'page_for_posts' ) ) {
+		$liens[] = '<a href="' . esc_url( get_permalink( get_option( 'page_for_posts' ) ) ) . '">' . esc_html( get_the_title( get_option( 'page_for_posts' ) ) ) . '</a>';
+	}
+	foreach ( array_reverse( get_post_ancestors( $post ) ) as $parent ) {
+		$liens[] = '<a href="' . esc_url( get_permalink( $parent ) ) . '">' . esc_html( get_the_title( $parent ) ) . '</a>';
+	}
+	$liens[] = '<span aria-current="page">' . esc_html( get_the_title( $post ) ) . '</span>';
+	return '<nav class="br-breadcrumb" aria-label="Fil d’Ariane">' . implode( ' <span aria-hidden="true">›</span> ', $liens ) . '</nav>';
+}
+
+/**
+ * Villes de la zone d'intervention, en pastilles.
+ */
+function briise_zone_html() {
+	$e = briise_entreprise();
+	if ( ! $e['areas'] ) {
+		return current_user_can( 'edit_pages' ) ? '<p class="br-a-remplacer">Ajoutez vos villes dans Mon entreprise &gt; Entreprise &gt; Zone d’intervention.</p>' : '';
+	}
+	$out = '<ul class="br-zone">';
+	foreach ( $e['areas'] as $ville ) {
+		$out .= '<li class="br-chip">' . esc_html( $ville ) . '</li>';
+	}
+	return $out . '</ul>';
+}
+
+/**
+ * Appeler ou écrire en un geste : solution de repli quand il n'y a pas de formulaire.
+ */
+function briise_contact_rapide_html() {
+	$e     = briise_entreprise();
+	$liens = array();
+	if ( $e['telephone'] ) {
+		$liens[] = '<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="tel:' . esc_attr( $e['telephone'] ) . '">Appeler le ' . esc_html( briise_telephone_lisible( $e['telephone'] ) ) . '</a></div>';
+	}
+	if ( $e['email'] ) {
+		$liens[] = '<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="mailto:' . esc_attr( antispambot( $e['email'] ) ) . '">Écrire un e-mail</a></div>';
+	}
+	return $liens ? '<div class="wp-block-buttons br-contact-rapide">' . implode( '', $liens ) . '</div>' : '';
+}

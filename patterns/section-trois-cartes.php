@@ -1,0 +1,83 @@
+<?php
+/**
+ * Title: Offre : Trois cartes de service
+ * Slug: briise/trois-cartes
+ * Categories: briise-offre
+ * Description: Présenter l’offre en trois blocs, chacun menant à sa page.
+ * Viewport Width: 1400
+ */
+$briise = briise_entreprise();
+?>
+<!-- wp:group {"backgroundColor":"surface","align":"full","className":"br-section","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull br-section has-surface-background-color has-background"><!-- wp:group {"className":"br-section-head","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"bottom"}} -->
+<div class="wp-block-group br-section-head"><!-- wp:heading -->
+<h2 class="wp-block-heading">Ce que nous faisons</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph {"className":"br-arrow"} -->
+<p class="br-arrow"><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Tous nos services</a></p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+
+<!-- wp:columns -->
+<div class="wp-block-columns"><!-- wp:column -->
+<div class="wp-block-column"><!-- wp:group {"className":"br-card","layout":{"type":"default"}} -->
+<div class="wp-block-group br-card"><!-- wp:paragraph {"className":"br-num"} -->
+<p class="br-num">01</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Premier service</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph {"className":"br-muted"} -->
+<p class="br-muted">Deux phrases pour décrire ce service, pour qui il est fait et ce qu’il apporte.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"className":"br-arrow"} -->
+<p class="br-arrow"><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>">En savoir plus</a></p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group --></div>
+<!-- /wp:column -->
+
+<!-- wp:column -->
+<div class="wp-block-column"><!-- wp:group {"className":"br-card","layout":{"type":"default"}} -->
+<div class="wp-block-group br-card"><!-- wp:paragraph {"className":"br-num"} -->
+<p class="br-num">02</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Deuxième service</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph {"className":"br-muted"} -->
+<p class="br-muted">Deux phrases pour décrire ce service, pour qui il est fait et ce qu’il apporte.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"className":"br-arrow"} -->
+<p class="br-arrow"><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>">En savoir plus</a></p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group --></div>
+<!-- /wp:column -->
+
+<!-- wp:column -->
+<div class="wp-block-column"><!-- wp:group {"className":"br-card","layout":{"type":"default"}} -->
+<div class="wp-block-group br-card"><!-- wp:paragraph {"className":"br-num"} -->
+<p class="br-num">03</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Troisième service</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph {"className":"br-muted"} -->
+<p class="br-muted">Deux phrases pour décrire ce service, pour qui il est fait et ce qu’il apporte.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"className":"br-arrow"} -->
+<p class="br-arrow"><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>">En savoir plus</a></p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group --></div>
+<!-- /wp:column --></div>
+<!-- /wp:columns --></div>
+<!-- /wp:group -->

@@ -22,6 +22,18 @@ add_action( 'after_setup_theme', function () {
 
 add_action( 'init', function () {
 	register_block_pattern_category( 'briise', array( 'label' => __( 'Briise', 'briise' ) ) );
+	$familles = array(
+		'ouverture' => 'Ouverture',
+		'offre'     => 'Offre et tarifs',
+		'confiance' => 'Confiance et preuves',
+		'parcours'  => 'Parcours et FAQ',
+		'personnes' => 'Personnes',
+		'contenu'   => 'Contenu',
+		'contact'   => 'Contact',
+	);
+	foreach ( $familles as $slug => $label ) {
+		register_block_pattern_category( 'briise-' . $slug, array( 'label' => 'Sections · ' . $label ) );
+	}
 	register_block_style( 'core/image', array( 'name' => 'br-arrondi', 'label' => __( 'Arrondi', 'briise' ) ) );
 	register_block_style( 'core/image', array( 'name' => 'br-galet', 'label' => __( 'Galet', 'briise' ) ) );
 	register_block_style( 'core/list', array( 'name' => 'br-tirets', 'label' => __( 'Galets', 'briise' ) ) );
@@ -76,3 +88,17 @@ add_filter( 'map_meta_cap', function ( $caps, $cap, $user_id ) {
 	}
 	return $caps;
 }, 10, 3 );
+
+/**
+ * Hero bannière : sa photo est l'élément le plus visible de la page,
+ * elle est donc chargée en priorité (meilleur temps d'affichage).
+ */
+add_filter( 'render_block_core/cover', function ( $html, $block ) {
+	static $fait = false;
+	if ( $fait || false === strpos( $block['attrs']['className'] ?? '', 'br-banniere' ) ) {
+		return $html;
+	}
+	$fait = true;
+	$html = str_replace( ' loading="lazy"', '', $html );
+	return preg_replace( '/<img (?![^>]*fetchpriority)/', '<img fetchpriority="high" ', $html, 1 );
+}, 10, 2 );

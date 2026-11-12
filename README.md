@@ -16,7 +16,8 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | `theme.json` | Couleurs, polices, tailles, espacements et styles globaux |
 | `templates/` | Modèles de pages (page, article, blog, 404, page sans titre) |
 | `parts/` | En-tête et pied de page |
-| `patterns/` | Sections réutilisables (bibliothèque en construction, phase 3) |
+| `patterns/` | Bibliothèque de 26 sections (`section-*.php`), en-tête, pied de page, blog |
+| `assets/images/sections/` | Images de remplacement des sections, à remplacer par les photos du client |
 | `inc/reglages.php` | Stockage et nettoyage des réglages de « Mon entreprise » |
 | `inc/admin.php` | Page « Mon entreprise » de l'administration |
 | `inc/entreprise.php` | Lecture des informations, horaires, coordonnées, mentions légales, codes courts |
@@ -59,6 +60,26 @@ Arrondis et formes : `--wp--custom--rayon--grand|moyen|petit|bouton` et `--wp--c
 
 **Charte du client.** Partir de l'ambiance « Charte du client », remplacer ses couleurs par celles de la charte, puis ajouter ses polices dans Styles > Typographie > Gérer les polices (fichiers WOFF2, licence web vérifiée).
 
+## Bibliothèque de sections
+
+Dans l'éditeur : bouton « + » > Compositions > catégories « Sections · … ». Chaque section fonctionne avec les six ambiances.
+
+| Famille | Sections |
+| --- | --- |
+| Ouverture | Hero avec image, Hero bannière plein écran, Hero texte seul, En-tête de page avec fil d'Ariane |
+| Offre et tarifs | Trois cartes de service, Service détaillé alterné, Tableau comparatif, Grille de tarifs en cartes, Tableau de tarifs simple |
+| Confiance et preuves | Chiffres clés, Témoignages, Logos ou labels, Réalisations en grille, Avant / après, Galerie en mosaïque |
+| Parcours et FAQ | Étapes numérotées, FAQ en accordéon, Horaires et planning |
+| Personnes | Présentation du dirigeant, Équipe, Citation ou valeurs |
+| Contenu | Derniers articles |
+| Contact | Bandeau d'appel à l'action, Bloc contact complet, Zone d'intervention, Emplacement de formulaire ou de réservation |
+
+Règles :
+- Les boutons d'action reprennent le libellé et le lien de « Mon entreprise » au moment de l'insertion.
+- Les textes d'exemple expliquent quoi écrire : chacun doit être remplacé avant la livraison.
+- Hero bannière : le voile sombre ne descend jamais sous 70 %, ce qui garantit un texte lisible sur n'importe quelle photo. Photo en WebP de 200 Ko au plus ; régler le point focal pour le recadrage mobile.
+- Témoignages : uniquement des avis réels, avec l'accord de leur auteur.
+
 ## Mon entreprise
 
 Menu « Mon entreprise » de l'administration, juste sous le tableau de bord.
@@ -80,6 +101,9 @@ Codes courts, à placer dans un bloc « Code court » :
 | `[briise_coordonnees]` | Adresse avec lien d'itinéraire, téléphone, e-mail |
 | `[briise_reseaux]` | Liens vers les réseaux et la fiche Google |
 | `[briise_mentions_legales]` | Mentions légales complètes ; un champ obligatoire vide apparaît en « [à compléter] » |
+| `[briise_fil_ariane]` | Fil d'Ariane de la page en cours |
+| `[briise_zone]` | Villes de la zone d'intervention, en pastilles |
+| `[briise_contact_rapide]` | Boutons « Appeler » et « Écrire un e-mail » |
 | `[briise_info champ="telephone"]` | Une information seule : `name`, `telephone`, `email`, `adresse`, `city`… |
 
 ## Installer le thème sur un site
