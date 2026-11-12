@@ -1,5 +1,10 @@
 # Historique des versions
 
+## 0.2.1
+
+- Correctif : la page de politique de confidentialité créée par WordPress (`privacy-policy`) n'était pas exclue de Google. Le thème reconnaît désormais la page déclarée dans Réglages > Confidentialité, ainsi que les adresses anglaises et les CGV.
+- Testé sur WordPress 7.1.4 : l'encadré « Référencement (Google) » enregistre bien titre, description et exclusion.
+
 ## 0.2.0
 
 Phase 2 : tout se règle depuis l'administration, sans toucher au code.

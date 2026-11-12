@@ -21,11 +21,28 @@ function briise_seo_actif() {
  * Pages légales : jamais dans Google, quel que soit le réglage de la page.
  */
 function briise_pages_noindex() {
-	return apply_filters( 'briise_pages_noindex', array( 'mentions-legales', 'confidentialite', 'politique-de-confidentialite', 'cookies', 'accessibilite' ) );
+	return apply_filters( 'briise_pages_noindex', array(
+		'mentions-legales', 'legal-notice',
+		'confidentialite', 'politique-de-confidentialite', 'privacy-policy',
+		'cookies', 'politique-cookies', 'politique-de-cookies',
+		'accessibilite', 'declaration-accessibilite',
+		'cgv', 'conditions-generales-de-vente',
+	) );
+}
+
+/**
+ * Page légale : adresse de la liste ci-dessus, ou page déclarée comme
+ * politique de confidentialité dans Réglages > Confidentialité.
+ */
+function briise_est_page_legale( $post ) {
+	return $post && 'page' === $post->post_type && (
+		in_array( $post->post_name, briise_pages_noindex(), true )
+		|| (int) $post->ID === (int) get_option( 'wp_page_for_privacy_policy' )
+	);
 }
 
 function briise_est_noindex( $post ) {
-	return $post && ( get_post_meta( $post->ID, '_briise_noindex', true ) || ( 'page' === $post->post_type && in_array( $post->post_name, briise_pages_noindex(), true ) ) );
+	return $post && ( get_post_meta( $post->ID, '_briise_noindex', true ) || briise_est_page_legale( $post ) );
 }
 
 function briise_current_seo_post() {
@@ -160,6 +177,9 @@ add_filter( 'wp_sitemaps_posts_query_args', function ( $args ) {
 			$exclus[] = $page->ID;
 		}
 	}
+	if ( get_option( 'wp_page_for_privacy_policy' ) ) {
+		$exclus[] = (int) get_option( 'wp_page_for_privacy_policy' );
+	}
 	$args['post__not_in'] = array_merge( isset( $args['post__not_in'] ) ? (array) $args['post__not_in'] : array(), $exclus );
 	return $args;
 } );
@@ -177,7 +197,7 @@ function briise_encadre_seo( $post ) {
 	wp_nonce_field( 'briise_seo', 'briise_seo_nonce' );
 	$titre  = get_post_meta( $post->ID, '_briise_seo_title', true );
 	$desc   = get_post_meta( $post->ID, '_briise_seo_desc', true );
-	$legal  = 'page' === $post->post_type && in_array( $post->post_name, briise_pages_noindex(), true );
+	$legal  = briise_est_page_legale( $post );
 	$exclu  = $legal || get_post_meta( $post->ID, '_briise_noindex', true );
 	$lien   = get_permalink( $post );
 	?>
