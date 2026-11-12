@@ -6,7 +6,8 @@
  *    sur une sous-page, la liste des pages sœurs (les autres services). Le texte du lien est
  *    le titre de la page, la description Google sert de résumé.
  * 2. Onglet « Contrôle » de Mon entreprise : pages sans lien dans le texte, profondeur,
- *    liens cassés, liens vers une page exclue de Google, textes de lien trop vagues.
+ *    liens cassés, liens vers une page exclue de Google, textes de lien trop vagues ;
+ *    sections voisines de même couleur de fond.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -239,8 +240,46 @@ function briise_maillage_analyse() {
 	return compact( 'pages', 'casses', 'exclues', 'flous', 'accueil' );
 }
 
+/**
+ * Rythme des couleurs : deux sections voisines d'une page ne doivent pas avoir le même fond clair
+ * (une tête de page peut précéder une section du même fond). Retourne [ [page, titre 1, titre 2, fond] ].
+ */
+function briise_rythme_analyse() {
+	$clairs = array( 'fond', 'surface', 'nuance', 'clair' );
+	$titre  = function ( $b ) {
+		if ( preg_match( '/<h[1-3][^>]*>(.*?)<\/h[1-3]>/s', serialize_block( $b ), $m ) ) {
+			return wp_trim_words( wp_strip_all_tags( $m[1] ), 8, '…' );
+		}
+		return 'section sans titre';
+	};
+	$res = array();
+	foreach ( get_posts( array( 'post_type' => 'page', 'post_status' => array( 'publish', 'draft' ), 'posts_per_page' => 500, 'no_found_rows' => true ) ) as $p ) {
+		if ( function_exists( 'briise_est_page_legale' ) && briise_est_page_legale( $p ) ) {
+			continue;
+		}
+		$prev = null;
+		foreach ( parse_blocks( $p->post_content ) as $b ) {
+			if ( ! $b['blockName'] ) {
+				continue; // Espaces entre deux blocs.
+			}
+			// Seules les sections comptent (groupes et bannières), pas un paragraphe posé seul.
+			if ( ! in_array( $b['blockName'], array( 'core/group', 'core/cover' ), true ) ) {
+				$prev = null;
+				continue;
+			}
+			$fond = 'core/cover' === $b['blockName'] ? 'photo' : ( $b['attrs']['backgroundColor'] ?? ( empty( $b['attrs']['style']['color']['background'] ) ? 'fond' : 'perso' ) );
+			if ( $prev && $prev[1] === $fond && in_array( $fond, $clairs, true ) && false === strpos( $prev[0]['attrs']['className'] ?? '', 'br-page-head' ) ) {
+				$res[] = array( $p, $titre( $prev[0] ), $titre( $b ), $fond );
+			}
+			$prev = array( $b, $fond );
+		}
+	}
+	return $res;
+}
+
 function briise_onglet_controle() {
 	$r        = briise_maillage_analyse();
+	$rythme   = briise_rythme_analyse();
 	$lien     = function ( $p ) {
 		return '<a href="' . esc_url( get_edit_post_link( $p->ID ) ) . '">' . esc_html( get_the_title( $p ) ) . '</a>';
 	};
@@ -277,8 +316,8 @@ function briise_onglet_controle() {
 	<h2>Contrôle du maillage interne</h2>
 	<p style="max-width:60em">Les liens écrits dans le texte des pages disent à Google quelles pages comptent et de quoi elles parlent. Chaque page devrait recevoir au moins deux liens depuis d’autres pages (le menu et le pied de page ne comptent pas), et se trouver à trois clics au plus de l’accueil. L’analyse lit les contenus publiés ; elle est refaite à chaque ouverture de cet onglet.</p>
 	<?php
-	$total = $alertes + count( $r['casses'] ) + count( $r['exclues'] ) + count( $r['flous'] );
-	echo '<p class="br-bilan' . ( $total ? ' br-a-voir' : '' ) . '">' . ( $total ? esc_html( $total . ' point' . ( $total > 1 ? 's' : '' ) . ' à corriger avant la mise en ligne.' ) : 'Aucun problème de maillage détecté.' ) . '</p>';
+	$total = $alertes + count( $r['casses'] ) + count( $r['exclues'] ) + count( $r['flous'] ) + count( $rythme );
+	echo '<p class="br-bilan' . ( $total ? ' br-a-voir' : '' ) . '">' . ( $total ? esc_html( $total . ' point' . ( $total > 1 ? 's' : '' ) . ' à corriger avant la mise en ligne.' ) : 'Aucun problème détecté : maillage et couleurs des sections en ordre.' ) . '</p>';
 	if ( ! $r['accueil'] ) {
 		echo '<p><strong>Aucune page d’accueil n’est définie</strong> (Réglages > Lecture) : la profondeur ne peut pas être calculée.</p>';
 	}
@@ -309,4 +348,17 @@ function briise_onglet_controle() {
 		}
 		echo '</ul>';
 	}
+	?>
+	<h2 style="margin-top:2.5em">Couleurs des sections</h2>
+	<p style="max-width:60em">Deux sections qui se suivent avec le même fond se lisent comme un seul bloc : le visiteur ne voit plus où commence le sujet suivant. Alterner le blanc et les teintes de l’ambiance (fond, surface, nuance) ; garder la bande foncée pour l’appel à l’action. Pour changer un fond : sélectionner la section dans l’éditeur, puis Styles > Couleur > Arrière-plan.</p>
+	<?php
+	if ( ! $rythme ) {
+		echo '<p>Aucune section voisine de même couleur.</p>';
+		return;
+	}
+	echo '<h3>Sections voisines de même couleur (' . count( $rythme ) . ')</h3><ul style="list-style:disc;padding-left:1.5em">';
+	foreach ( $rythme as $x ) {
+		echo '<li>' . $lien( $x[0] ) . ' : « ' . esc_html( $x[1] ) . ' » puis « ' . esc_html( $x[2] ) . ' » (fond ' . esc_html( $x[3] ) . ')</li>'; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans la fonction.
+	}
+	echo '</ul>';
 }

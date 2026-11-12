@@ -122,6 +122,7 @@ Dans l'éditeur : bouton « + » > Compositions > catégories « Sections · …
 | Contact | Bandeau d'appel à l'action, Bloc contact complet, Zone d'intervention, Emplacement de formulaire ou de réservation |
 
 Règles :
+- Rythme des couleurs : deux sections qui se suivent n'ont jamais le même fond. Alterner le blanc (`fond`) et les teintes de l'ambiance (`surface`, `nuance`) ; garder la bande foncée (`secondaire`) pour l'appel à l'action final. Une tête de page peut précéder une section du même fond. Les kits et les modèles respectent cette règle d'eux-mêmes ; une page modifiée à la main se vérifie dans Mon entreprise > Contrôle. Changer un fond : sélectionner la section, puis Styles > Couleur > Arrière-plan.
 - Les boutons d'action reprennent le libellé et le lien de « Mon entreprise » au moment de l'insertion.
 - Les textes d'exemple expliquent quoi écrire : chacun doit être remplacé avant la livraison.
 - Hero bannière : le voile sombre ne descend jamais sous 70 %, ce qui garantit un texte lisible sur n'importe quelle photo. Photo en WebP de 200 Ko au plus ; régler le point focal pour le recadrage mobile.
@@ -168,7 +169,8 @@ Le reste (liens dans les textes, vers les réalisations, la zone, la FAQ…) se 
 - les pages qui reçoivent moins de deux liens depuis le texte d'autres pages (le menu ne compte pas) ;
 - les pages à plus de trois clics de l'accueil ;
 - les liens cassés, les liens vers une page exclue de Google (noindex, page d'atterrissage) ;
-- les textes de lien vagues (« en savoir plus », « cliquez ici »).
+- les textes de lien vagues (« en savoir plus », « cliquez ici ») ;
+- les sections voisines qui ont la même couleur de fond (voir ci-dessous).
 
 L'analyse lit les contenus publiés : un lien ajouté par une extension ou un widget n'est pas vu.
 

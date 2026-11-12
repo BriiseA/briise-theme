@@ -1,5 +1,13 @@
 # Historique des versions
 
+## 0.9.0
+
+Le rythme des couleurs.
+
+- Kits et modèles de page : deux sections voisines n'ont plus jamais le même fond clair. Le fond passe à une teinte voisine de l'ambiance (blanc, surface, nuance) ; les bandes foncées et les photos ne bougent pas. Avant : 32 sections collées à une voisine de même couleur, dont trois sections blanches d'affilée sur la page Réalisations.
+- Mon entreprise > Contrôle signale les sections voisines de même couleur, page par page, avec leur titre, pour les pages modifiées à la main.
+- Testé sur WordPress 7.1 : kit artisan sans aucun doublon, détection d'un doublon ajouté à la main, aucun bloc invalide.
+
 ## 0.8.0
 
 Le maillage interne.

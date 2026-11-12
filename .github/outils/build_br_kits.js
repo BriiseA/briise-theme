@@ -3,12 +3,34 @@ const L = require('./build_br_sections.js');
 const { S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr } = L;
 
 const sec = (slug) => S[slug].blocks;
+
+/* Rythme : deux sections voisines n'ont jamais le même fond clair. Le fond de la seconde passe
+   à une teinte voisine (fond, surface, nuance) différente de ses deux voisines. Les bandes sombres
+   et les photos ne bougent pas ; une tête de page peut précéder une section du même fond. */
+const { cloneBlock } = require('@wordpress/blocks');
+const CLAIRS = ['fond', 'surface', 'nuance'];
+const fondDe = (b) => (b.name === 'core/cover' ? 'photo' : (b.attributes.backgroundColor || 'fond'));
+const rythme = (blocks) => {
+  const out = [];
+  blocks.forEach((b, i) => {
+    const prev = out[i - 1];
+    const f = fondDe(b);
+    if (prev && !/br-page-head/.test(prev.attributes.className || '') && fondDe(prev) === f && CLAIRS.includes(f)) {
+      const next = blocks[i + 1] ? fondDe(blocks[i + 1]) : null;
+      const choix = CLAIRS.find((c) => c !== f && c !== next);
+      out.push(cloneBlock(b, { backgroundColor: choix === 'fond' ? undefined : choix }));
+    } else {
+      out.push(b);
+    }
+  });
+  return out;
+};
 const tete = (titre, chapo, bouton = true) => [Section('br-page-head', [Head([
   Short('[briise_fil_ariane]'), H(titre, 1, null, { fontSize: 'huge' }), Lead(chapo), ...(bouton ? [MainBtns()] : []),
 ])])];
 // Sur la page des services : la liste de chaque page de service (vide tant qu'il n'y en a pas).
 const detail = [Section('br-section-liees', [L.cb('core/heading', { content: 'Chaque service en détail', level: 2 }), Short('[briise_pages_liees]')], { backgroundColor: 'surface' })];
-const page = (slug, titre, ...parts) => ({ slug, titre, markup: serialize(parts.flat()) });
+const page = (slug, titre, ...parts) => ({ slug, titre, markup: serialize(rythme(parts.flat())) });
 
 /* ----- Pages légales, communes aux trois kits ----- */
 
@@ -104,15 +126,15 @@ const KITS = {
 
 const T = '{{TITRE}}';
 const MODELES = {
-  service: { titre: 'Page de service', desc: 'Un service en détail : présentation, déroulé, questions, appel à l’action.', markup: serialize([tete(T, 'Ce que comprend ce service, pour qui il est fait, et le résultat obtenu.'), sec('service-alterne'), sec('etapes'), sec('faq'), sec('pages-liees'), sec('bandeau-cta')].flat()) },
-  simple: { titre: 'Page simple', desc: 'Titre, introduction et un bloc de texte libre.', markup: serialize([tete(T, 'Une phrase d’introduction qui résume la page.', false), Section('br-section--tight', [Box('br-legal', [P('Votre texte ici. Utilisez des intertitres pour découper le contenu.')])])].flat()) },
-  tarifs: { titre: 'Page de tarifs', desc: 'Formules en cartes, tableau des prestations, appel à l’action.', markup: serialize([tete(T, 'Des prix clairs avant de réserver.'), sec('tarifs-cartes'), sec('tarifs-tableau'), sec('bandeau-cta')].flat()) },
-  realisations: { titre: 'Page de réalisations', desc: 'Réalisations en grille, avant / après, galerie.', markup: serialize([tete(T, 'Quelques réalisations récentes, avec la demande du client et la solution apportée.'), sec('realisations'), sec('avant-apres'), sec('galerie'), sec('bandeau-cta')].flat()) },
-  equipe: { titre: 'Page équipe', desc: 'Présentation du dirigeant, de l’équipe et des valeurs.', markup: serialize([tete(T, 'Les personnes qui vous accompagnent.', false), sec('dirigeant'), sec('equipe'), sec('valeurs'), sec('bandeau-cta')].flat()) },
-  faq: { titre: 'Page FAQ', desc: 'Questions fréquentes en accordéon.', markup: serialize([tete(T, 'Les réponses aux questions que l’on nous pose le plus souvent.', false), sec('faq'), sec('bandeau-cta')].flat()) },
-  zone: { titre: 'Page zone d’intervention', desc: 'Villes couvertes et coordonnées.', markup: serialize([tete(T, 'Les villes et le secteur où nous intervenons.'), sec('zone'), sec('contact')].flat()) },
-  avis: { titre: 'Page avis clients', desc: 'Témoignages et chiffres clés.', markup: serialize([tete(T, 'Ce que nos clients disent de notre travail.'), sec('temoignages'), sec('chiffres-cles'), sec('bandeau-cta')].flat()) },
-  atterrissage: { titre: 'Page d’atterrissage (publicité)', desc: 'Pour Google Ads : un service, une action, sans menu. Exclue de Google automatiquement.', markup: serialize([
+  service: { titre: 'Page de service', desc: 'Un service en détail : présentation, déroulé, questions, appel à l’action.', markup: serialize(rythme([tete(T, 'Ce que comprend ce service, pour qui il est fait, et le résultat obtenu.'), sec('service-alterne'), sec('etapes'), sec('faq'), sec('pages-liees'), sec('bandeau-cta')].flat())) },
+  simple: { titre: 'Page simple', desc: 'Titre, introduction et un bloc de texte libre.', markup: serialize(rythme([tete(T, 'Une phrase d’introduction qui résume la page.', false), Section('br-section--tight', [Box('br-legal', [P('Votre texte ici. Utilisez des intertitres pour découper le contenu.')])])].flat())) },
+  tarifs: { titre: 'Page de tarifs', desc: 'Formules en cartes, tableau des prestations, appel à l’action.', markup: serialize(rythme([tete(T, 'Des prix clairs avant de réserver.'), sec('tarifs-cartes'), sec('tarifs-tableau'), sec('bandeau-cta')].flat())) },
+  realisations: { titre: 'Page de réalisations', desc: 'Réalisations en grille, avant / après, galerie.', markup: serialize(rythme([tete(T, 'Quelques réalisations récentes, avec la demande du client et la solution apportée.'), sec('realisations'), sec('avant-apres'), sec('galerie'), sec('bandeau-cta')].flat())) },
+  equipe: { titre: 'Page équipe', desc: 'Présentation du dirigeant, de l’équipe et des valeurs.', markup: serialize(rythme([tete(T, 'Les personnes qui vous accompagnent.', false), sec('dirigeant'), sec('equipe'), sec('valeurs'), sec('bandeau-cta')].flat())) },
+  faq: { titre: 'Page FAQ', desc: 'Questions fréquentes en accordéon.', markup: serialize(rythme([tete(T, 'Les réponses aux questions que l’on nous pose le plus souvent.', false), sec('faq'), sec('bandeau-cta')].flat())) },
+  zone: { titre: 'Page zone d’intervention', desc: 'Villes couvertes et coordonnées.', markup: serialize(rythme([tete(T, 'Les villes et le secteur où nous intervenons.'), sec('zone'), sec('contact')].flat())) },
+  avis: { titre: 'Page avis clients', desc: 'Témoignages et chiffres clés.', markup: serialize(rythme([tete(T, 'Ce que nos clients disent de notre travail.'), sec('temoignages'), sec('chiffres-cles'), sec('bandeau-cta')].flat())) },
+  atterrissage: { titre: 'Page d’atterrissage (publicité)', desc: 'Pour Google Ads : un service, une action, sans menu. Exclue de Google automatiquement.', markup: serialize(rythme([
     Section('br-hero br-atterrissage', [L.cb('core/columns', { verticalAlignment: 'center', className: 'br-split' }, [
       L.cb('core/column', { verticalAlignment: 'center', width: '56%' }, [
         Label('Votre ville et alentours'),
@@ -124,8 +146,8 @@ const MODELES = {
       L.cb('core/column', { verticalAlignment: 'center', width: '44%' }, [L.cb('core/image', { url: '{{IMG:portrait}}', alt: 'Photo à remplacer : le service en situation', aspectRatio: '4/5', scale: 'cover', sizeSlug: 'full', linkDestination: 'none', className: 'is-style-br-arrondi' })]),
     ])]),
     sec('chiffres-cles'), sec('etapes'), sec('temoignages'), sec('faq'), sec('formulaire'),
-  ].flat()) },
-  contact: { titre: 'Page contact', desc: 'Formulaire ou réservation, coordonnées et horaires.', markup: serialize([tete(T, 'Écrivez-nous ou appelez-nous : nous répondons rapidement.', false), sec('formulaire'), sec('contact')].flat()) },
+  ].flat())) },
+  contact: { titre: 'Page contact', desc: 'Formulaire ou réservation, coordonnées et horaires.', markup: serialize(rythme([tete(T, 'Écrivez-nous ou appelez-nous : nous répondons rapidement.', false), sec('formulaire'), sec('contact')].flat())) },
 };
 
 require('fs').writeFileSync('/home/claude/briise-theme/inc/kits.json', JSON.stringify({ kits: KITS, legales, modeles: MODELES }, null, 1));
