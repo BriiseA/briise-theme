@@ -25,13 +25,7 @@ $briise = briise_entreprise();
 
 <!-- wp:shortcode -->
 [briise_reseaux]
-<!-- /wp:shortcode -->
-
-<!-- wp:buttons -->
-<div class="wp-block-buttons"><!-- wp:button -->
-<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="<?php echo esc_url( $briise['cta_url'] ); ?>"><?php echo esc_html( $briise['cta_label'] ); ?></a></div>
-<!-- /wp:button --></div>
-<!-- /wp:buttons --></div>
+<!-- /wp:shortcode --></div>
 <!-- /wp:column -->
 
 <!-- wp:column {"width":"45%"} -->

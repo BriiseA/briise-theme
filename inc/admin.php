@@ -15,6 +15,7 @@ function briise_onglets() {
 		'identite' => array( 'Entreprise', 'manage_options', 'briise_entreprise' ),
 		'legal'    => array( 'Mentions légales', 'manage_options', 'briise_legal' ),
 		'fonctions' => array( 'Fonctions', 'manage_options', 'briise_fonctions' ),
+		'demarrage' => array( 'Démarrage', 'manage_options', '' ),
 	);
 	return array_filter( $onglets, function ( $o ) {
 		return current_user_can( $o[1] );
@@ -43,6 +44,12 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
 		.br-a-faire ul { margin: 6px 0 0 18px; list-style: disc; }
 		.br-fonction { margin: 0 0 14px; }
 		.br-fonction .description { margin: 2px 0 0 24px; }
+		.br-kits { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; max-width: 980px; margin: 16px 0; }
+		.br-kit { display: flex; flex-direction: column; gap: 6px; background: #fff; border: 1px solid #c3c4c7; border-radius: 6px; padding: 16px; cursor: pointer; }
+		.br-kit:has(input:checked) { border-color: #2271b1; box-shadow: 0 0 0 1px #2271b1; }
+		.br-kit strong { font-size: 15px; }
+		.br-kit-pages { color: #1d2327; }
+		.br-kit-cta { color: #50575e; font-style: italic; }
 	' );
 } );
 
@@ -125,6 +132,9 @@ function briise_page_reglages() {
 				<?php endforeach; ?>
 			</nav>
 		<?php endif; ?>
+		<?php if ( 'demarrage' === $actif ) : ?>
+			<?php briise_onglet_demarrage(); ?>
+		<?php else : ?>
 		<form method="post" action="options.php">
 			<?php
 			settings_fields( $option );
@@ -132,6 +142,7 @@ function briise_page_reglages() {
 			submit_button( 'Enregistrer' );
 			?>
 		</form>
+		<?php endif; ?>
 	</div>
 	<?php
 }

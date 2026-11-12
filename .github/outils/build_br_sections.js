@@ -1,0 +1,317 @@
+// Bibliothèque de sections Briise : génère le balisage des blocs (valide par construction).
+require('./validate_env.js');
+const { createBlock: cb, serialize } = require('@wordpress/blocks');
+require('@wordpress/block-library').registerCoreBlocks();
+
+const NB = ' ';
+const fr = (s) => s
+  .replace(/ ([?!:;»%€])/g, NB + '$1')
+  .replace(/« /g, '«' + NB)
+  .replace(/(\d) (h\b|min\b|ans\b|km\b|heures\b|jours\b|mois\b|m²)/g, '$1 $2')
+  .replace(/(\d) (\d{3})/g, '$1 $2')
+  .replace(/'/g, '’');
+
+const IMG = (n) => `{{IMG:${n}}}`;
+const CTA = '{{CTA}}';
+const CTA_LABEL = '{{CTA_LABEL}}';
+const URL = (s) => `{{URL:${s}}}`;
+
+const P = (t, cls, extra = {}) => cb('core/paragraph', { content: fr(t), ...(cls ? { className: cls } : {}), ...extra });
+const H = (t, level = 2, cls, extra = {}) => cb('core/heading', { content: fr(t), level, ...(cls ? { className: cls } : {}), ...extra });
+const Label = (t) => P(t, 'br-label');
+const Lead = (t) => P(t, 'br-lead');
+const Muted = (t) => P(t, 'br-muted');
+const Img = (name, ratio = '4/3', cls = 'is-style-br-arrondi', alt = 'Photo à remplacer : décrivez ce qu’elle montre') =>
+  cb('core/image', { url: IMG(name), alt: fr(alt), aspectRatio: ratio, scale: 'cover', sizeSlug: 'full', linkDestination: 'none', className: cls });
+const Btn = (text, url, cls, extra = {}) => cb('core/button', { text: text === CTA_LABEL ? text : fr(text), url, ...(cls ? { className: cls } : {}), ...extra });
+const Btns = (...b) => cb('core/buttons', {}, b);
+const MainBtns = (second) => Btns(Btn(CTA_LABEL, CTA), ...(second ? [Btn(second[0], second[1], 'is-style-outline')] : []));
+const Section = (cls, inner, extra = {}) => cb('core/group', { align: 'full', className: ('br-section ' + (cls || '')).trim(), layout: { type: 'constrained' }, ...extra }, inner);
+const Box = (cls, inner, extra = {}) => cb('core/group', { className: cls, layout: { type: 'default' }, ...extra }, inner);
+const Row = (cls, inner) => cb('core/group', { className: cls, layout: { type: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', verticalAlignment: 'bottom' } }, inner);
+const Chips = (items) => cb('core/group', { className: 'br-chips', layout: { type: 'flex', flexWrap: 'wrap' } }, items.map((i) => P(i, 'br-chip')));
+const Cols = (cols, cls, extra = {}) => cb('core/columns', { ...(cls ? { className: cls } : {}), ...extra }, cols);
+const Col = (inner, extra = {}) => cb('core/column', extra, inner);
+const List = (items, cls = 'is-style-br-tirets') => cb('core/list', { className: cls }, items.map((i) => cb('core/list-item', { content: fr(i) })));
+const Arrow = (t, url) => P(`<a href="${url}">${fr(t)}</a>`, 'br-arrow');
+const Details = (q, a) => cb('core/details', { summary: fr(q) }, [P(a)]);
+const Short = (code) => cb('core/shortcode', { text: code });
+const Table = (head, rows, cls = 'br-table') => cb('core/table', {
+  className: cls, hasFixedLayout: false,
+  head: [{ cells: head.map((c) => ({ content: fr(c), tag: 'th' })) }],
+  body: rows.map((r) => ({ cells: r.map((c) => ({ content: fr(c), tag: 'td' })) })),
+});
+const Head = (inner) => Box('br-head', inner);
+const sectionHead = (title, link) => Row('br-section-head', [H(title, 2), ...(link ? [Arrow(link[0], link[1])] : [])]);
+const Num = (n) => P(n, 'br-num');
+
+const S = {};
+const add = (slug, cat, title, desc, blocks) => { const b = Array.isArray(blocks) ? blocks : [blocks]; S[slug] = { cat, title, desc, blocks: b, markup: serialize(b) }; };
+
+/* ----- Ouverture ----- */
+
+add('hero-image', 'ouverture', 'Hero avec image', 'Ouverture de l’accueil ou d’une page de service : titre, phrase d’accroche, deux boutons, photo.',
+  Section('br-hero', [Cols([
+    Col([
+      Chips(['Atout n° 1', 'Atout n° 2', 'Votre ville']),
+      H('Le titre qui dit ce que vous faites, et où', 1, null, { fontSize: 'huge' }),
+      Lead('Une ou deux phrases pour dire à qui vous vous adressez et ce qui vous distingue. Restez concret : un visiteur décide en quelques secondes s’il est au bon endroit.'),
+      MainBtns(['Découvrir nos services', URL('services')]),
+    ], { verticalAlignment: 'center', width: '56%' }),
+    Col([Img('portrait', '4/5', 'is-style-br-galet')], { verticalAlignment: 'center', width: '44%' }),
+  ], 'br-split', { verticalAlignment: 'center' })]));
+
+add('hero-banniere', 'ouverture', 'Hero bannière plein écran', 'Grande photo pleine largeur, titre et bouton posés dessus. Le voile sombre garantit la lisibilité, quelle que soit la photo.',
+  cb('core/cover', {
+    url: IMG('banniere'), alt: '', dimRatio: 70, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 82, minHeightUnit: 'vh',
+    contentPosition: 'bottom left', align: 'full', className: 'br-banniere', layout: { type: 'constrained' },
+  }, [
+    Box('br-banniere-inner', [
+      Label('Votre activité, votre ville'),
+      H('Un titre court, qui donne envie', 1, null, { fontSize: 'huge' }),
+      Lead('Une phrase qui complète le titre. La photo doit montrer votre travail, votre lieu ou votre équipe : pas une image de banque d’images.'),
+      MainBtns(['Voir nos réalisations', URL('realisations')]),
+    ]),
+  ]));
+
+add('hero-texte', 'ouverture', 'Hero texte seul', 'Ouverture sobre, sans image : pages intérieures, pages légales, pages de contenu.',
+  Section('br-page-head', [Head([
+    Label('Rubrique'),
+    H('Le titre de la page', 1, null, { fontSize: 'huge' }),
+    Lead('Une phrase d’introduction qui résume ce que le visiteur va trouver sur cette page.'),
+  ])]));
+
+add('en-tete-page', 'ouverture', 'En-tête de page avec fil d’Ariane', 'Pour toutes les pages intérieures : fil d’Ariane automatique, titre, introduction et bouton d’action.',
+  Section('br-page-head', [Head([
+    Short('[briise_fil_ariane]'),
+    H('Le titre de la page', 1, null, { fontSize: 'huge' }),
+    Lead('Une ou deux phrases qui posent le sujet de la page et la réponse que le visiteur y trouvera.'),
+    MainBtns(),
+  ])]));
+
+/* ----- Offre ----- */
+
+const carte = (n, t) => Col([Box('br-card', [
+  Num(n), H(t, 3), Muted('Deux phrases pour décrire ce service, pour qui il est fait et ce qu’il apporte.'),
+  Arrow('En savoir plus', URL('services')),
+])]);
+add('trois-cartes', 'offre', 'Trois cartes de service', 'Présenter l’offre en trois blocs, chacun menant à sa page.',
+  Section('', [
+    sectionHead('Ce que nous faisons', ['Tous nos services', URL('services')]),
+    Cols([carte('01', 'Premier service'), carte('02', 'Deuxième service'), carte('03', 'Troisième service')]),
+  ], { backgroundColor: 'surface' }));
+
+const bloc = (titre) => [
+  Label('Service'), H(titre, 2),
+  P('Décrivez le service concrètement : comment il se déroule, combien de temps il prend, ce que le client obtient à la fin.'),
+  List(['Un bénéfice précis', 'Un deuxième bénéfice', 'Une garantie ou un engagement']),
+  Arrow('Demander un devis pour ce service', CTA),
+];
+add('service-alterne', 'offre', 'Service détaillé, image et texte alternés', 'Pages de service : chaque service avec sa photo, en alternance gauche et droite.',
+  Section('', [
+    Cols([Col([Img('paysage', '4/3')], { width: '50%' }), Col(bloc('Premier service'), { width: '50%', verticalAlignment: 'center' })], 'br-split', { verticalAlignment: 'center' }),
+    Cols([Col(bloc('Deuxième service'), { width: '50%', verticalAlignment: 'center' }), Col([Img('paysage-2', '4/3')], { width: '50%' })], 'br-split br-alterne', { verticalAlignment: 'center' }),
+  ]));
+
+add('tableau-comparatif', 'offre', 'Tableau comparatif', 'Aider à choisir entre deux ou trois formules.',
+  Section('', [
+    Head([Label('Comparer'), H('Quelle formule vous convient ?', 2), Lead('Les différences essentielles, en un coup d’œil.')]),
+    Table(['Critère', 'Formule essentielle', 'Formule complète'], [
+      ['Pour qui', 'Un besoin ponctuel', 'Un accompagnement suivi'],
+      ['Durée', '1 heure', '3 mois'],
+      ['Suivi', '—', 'Un point par mois'],
+      ['Tarif', '60 €', '450 €'],
+    ]),
+    MainBtns(),
+  ]));
+
+const tarif = (nom, prix, vedette) => Col([Box('br-card br-price' + (vedette ? ' br-price--vedette' : ''), [
+  ...(vedette ? [P('Le plus choisi', 'br-chip')] : []),
+  H(nom, 3), P(prix, 'br-stat'), Muted('Une phrase sur ce que comprend cette formule.'),
+  List(['Ce qui est inclus', 'Un deuxième élément', 'Un troisième élément']),
+  Btns(Btn('Choisir cette formule', CTA, vedette ? null : 'is-style-outline')),
+])]);
+add('tarifs-cartes', 'offre', 'Grille de tarifs en cartes', 'Deux à quatre formules avec leur prix ; celle du milieu est mise en avant.',
+  Section('', [
+    Head([Label('Tarifs'), H('Des prix clairs, sans surprise', 2)]),
+    Cols([tarif('Découverte', '40 €'), tarif('Régulière', '90 €', true), tarif('Intensive', '160 €')], 'br-prices'),
+  ], { backgroundColor: 'nuance' }));
+
+add('tarifs-tableau', 'offre', 'Tableau de tarifs simple', 'Pour une liste de prestations nombreuses : une ligne par prestation.',
+  Section('', [
+    Head([Label('Tarifs'), H('Nos prestations et leurs prix', 2)]),
+    Table(['Prestation', 'Durée', 'Prix'], [
+      ['Première prestation', '30 min', '25 €'], ['Deuxième prestation', '1 h', '45 €'],
+      ['Troisième prestation', '1 h 30', '65 €'], ['Forfait de quatre séances', '4 × 1 h', '160 €'],
+    ]),
+    Muted('Prix TTC. Une précision utile : moyens de paiement acceptés, conditions d’annulation.'),
+  ]));
+
+/* ----- Confiance ----- */
+
+const stat = (n, t) => Col([P(n, 'br-stat'), Muted(t)]);
+add('chiffres-cles', 'confiance', 'Chiffres clés', 'Quatre preuves rapides. Uniquement des chiffres vrais et vérifiables.',
+  Section('br-section--tight', [Cols([stat('15 ans', 'd’expérience dans le métier'), stat('400', 'clients accompagnés'), stat('48 h', 'pour recevoir votre devis'), stat('4,9/5', 'note moyenne sur Google')], 'br-stats-row')]));
+
+const avis = (txt) => Col([Box('br-card br-avis', [
+  cb('core/quote', { citation: fr('Prénom N., ville') }, [P(txt)]),
+])]);
+add('temoignages', 'confiance', 'Témoignages', 'Trois avis de clients. Uniquement des avis réels, avec l’accord de leur auteur.',
+  Section('', [
+    sectionHead('Ce que disent nos clients', ['Tous les avis sur Google', '#']),
+    Cols([
+      avis('Recopiez ici un avis réel, mot pour mot. Les plus convaincants racontent une situation précise et son résultat.'),
+      avis('Un deuxième avis, idéalement d’un autre type de client, pour que chacun s’y retrouve.'),
+      avis('Un troisième avis, court. Trois avis suffisent : au-delà, renvoyez vers votre fiche Google.'),
+    ]),
+  ], { backgroundColor: 'surface' }));
+
+add('logos', 'confiance', 'Logos de clients ou labels', 'Certifications, labels, partenaires ou clients connus, en une ligne.',
+  Section('br-section--tight', [
+    P('Ils nous font confiance', 'br-label br-center'),
+    cb('core/group', { className: 'br-logos', layout: { type: 'flex', flexWrap: 'wrap', justifyContent: 'center' } },
+      [1, 2, 3, 4, 5].map((i) => cb('core/image', { url: IMG('logo-' + i), alt: fr('Nom du partenaire ou du label ' + i), sizeSlug: 'full', linkDestination: 'none', width: '140px' }))),
+  ]));
+
+const projet = (n, t) => Col([Box('br-project', [Img(n, '4/3'), Chips(['Type de projet', 'Ville']), H(t, 3), Muted('Une phrase : la demande du client et ce qui a été fait.')])]);
+add('realisations', 'confiance', 'Réalisations en grille', 'Montrer son travail : artisans, créatifs, rénovation.',
+  Section('', [
+    sectionHead('Nos dernières réalisations', ['Toutes les réalisations', URL('realisations')]),
+    Cols([projet('carre', 'Première réalisation'), projet('carre-2', 'Deuxième réalisation'), projet('carre-3', 'Troisième réalisation')], 'br-projects'),
+  ]));
+
+add('avant-apres', 'confiance', 'Avant / après', 'Deux photos côte à côte pour montrer une transformation.',
+  Section('', [
+    Head([Label('Avant / après'), H('Le titre de la transformation', 2), Lead('Le contexte en une phrase : la demande, la contrainte, le délai.')]),
+    Cols([
+      Col([Box('br-avap', [Img('avant', '4/3', 'is-style-br-arrondi', 'Avant : décrivez l’état de départ'), P('Avant', 'br-chip br-avap-tag')])]),
+      Col([Box('br-avap', [Img('apres', '4/3', 'is-style-br-arrondi', 'Après : décrivez le résultat'), P('Après', 'br-chip br-avap-tag')])]),
+    ], 'br-avant-apres'),
+  ]));
+
+add('galerie', 'confiance', 'Galerie en mosaïque', 'Six photos en mosaïque : lieu, ambiance, détails du travail.',
+  Section('', [
+    Head([Label('En images'), H('Un aperçu de notre univers', 2)]),
+    cb('core/gallery', { linkTo: 'none', sizeSlug: 'large', className: 'br-mosaique', columns: 3, imageCrop: true },
+      ['paysage', 'portrait', 'carre', 'carre-2', 'paysage-2', 'carre-3'].map((n, i) => cb('core/image', { url: IMG(n), alt: fr('Photo ' + (i + 1) + ' à remplacer'), sizeSlug: 'large', linkDestination: 'none' }))),
+  ]));
+
+/* ----- Parcours ----- */
+
+const etape = (n, t, d) => Col([Num(n), H(t, 3), Muted(d)]);
+add('etapes', 'parcours', 'Étapes numérotées', 'Rassurer sur le déroulé : du premier contact au résultat.',
+  Section('', [
+    Head([Label('Comment ça se passe'), H('Trois étapes, sans surprise', 2)]),
+    Cols([
+      etape('1', 'Vous nous contactez', 'Par téléphone ou par le formulaire. Nous répondons sous 24 heures ouvrées.'),
+      etape('2', 'Nous faisons le point', 'Un échange pour comprendre votre besoin, puis un devis clair et détaillé.'),
+      etape('3', 'Nous réalisons', 'Aux dates convenues, avec un interlocuteur unique du début à la fin.'),
+    ], 'br-steps'),
+    MainBtns(),
+  ], { backgroundColor: 'nuance' }));
+
+add('faq', 'parcours', 'FAQ en accordéon', 'Lever les freins avant le contact. Sur la page choisie comme FAQ, les questions sont transmises à Google.',
+  Section('', [Cols([
+    Col([Label('Questions fréquentes'), H('Vos questions, nos réponses', 2), Muted('Vous ne trouvez pas votre réponse ?'), Arrow('Posez-nous la question', CTA)], { width: '38%' }),
+    Col([
+      Details('Une question que vos clients posent souvent ?', 'Une réponse directe en deux ou trois phrases. Commencez par oui ou par non quand c’est possible.'),
+      Details('Combien de temps faut-il compter ?', 'Donnez un délai concret, même approximatif : c’est l’une des premières choses que l’on cherche.'),
+      Details('Quels sont vos tarifs ?', 'Une fourchette honnête vaut mieux que « sur devis » seul. Renvoyez vers la page des tarifs si elle existe.'),
+      Details('Intervenez-vous dans ma ville ?', 'Citez les villes ou le rayon couvert. C’est aussi utile pour le référencement local.'),
+      Details('Comment se passe le paiement ?', 'Moyens acceptés, acompte éventuel, échéances.'),
+    ], { width: '62%' }),
+  ], 'br-split')]));
+
+add('horaires', 'parcours', 'Horaires et planning', 'Horaires d’ouverture tirés de « Mon entreprise », et un planning de rendez-vous ou de cours. Le jour en cours est surligné.',
+  Section('', [Cols([
+    Col([Label('Horaires'), H('Quand nous trouver', 2), Short('[briise_horaires]')], { width: '40%' }),
+    Col([
+      H('Planning de la semaine', 3),
+      Table(['Jour', 'Horaire', 'Activité', 'Réserver'], [
+        ['Lundi', '18 h – 19 h', 'Première activité', '<a href="' + CTA + '">Réserver</a>'],
+        ['Mercredi', '12 h 30 – 13 h 30', 'Deuxième activité', '<a href="' + CTA + '">Réserver</a>'],
+        ['Samedi', '10 h – 11 h', 'Troisième activité', '<a href="' + CTA + '">Réserver</a>'],
+      ], 'br-table br-planning'),
+    ], { width: '60%' }),
+  ], 'br-split')]));
+
+/* ----- Personnes ----- */
+
+add('dirigeant', 'personnes', 'Présentation du dirigeant', 'Professions libérales et artisans : la personne derrière l’entreprise.',
+  Section('', [Cols([
+    Col([Img('portrait', '4/5', 'is-style-br-galet', 'Portrait de [prénom nom]')], { width: '42%' }),
+    Col([
+      Label('Qui suis-je'), H('Prénom Nom, votre métier', 2),
+      P('Une phrase forte sur votre approche, celle que vous diriez à un client au premier rendez-vous.', 'br-statement'),
+      P('Votre parcours en quelques lignes : formation, années d’expérience, ce qui vous a amené à ce métier. Parlez au client : ce qui compte pour lui, c’est ce que votre parcours lui apporte.'),
+      Arrow('En savoir plus sur mon parcours', URL('a-propos')),
+    ], { width: '58%', verticalAlignment: 'center' }),
+  ], 'br-split', { verticalAlignment: 'center' })]));
+
+const membre = (img, n) => Col([Box('br-member', [Img(img, '1/1', 'is-style-br-arrondi', 'Portrait de ' + n), H(n, 3), Muted('Rôle ou spécialité')])]);
+add('equipe', 'personnes', 'Équipe', 'PME et cabinets : présenter les personnes que le client rencontrera.',
+  Section('', [
+    Head([Label('L’équipe'), H('Les personnes qui vous accompagnent', 2)]),
+    Cols([membre('carre', 'Prénom Nom'), membre('carre-2', 'Prénom Nom'), membre('carre-3', 'Prénom Nom')], 'br-team'),
+  ]));
+
+const valeur = (t) => Col([H(t, 3), Muted('Ce que cette valeur change concrètement pour le client, en une ou deux phrases.')]);
+add('valeurs', 'personnes', 'Citation ou valeurs', 'Positionnement : une phrase forte et trois engagements.',
+  Section('', [
+    P('« Une phrase qui résume votre façon de travailler, et que vos clients pourraient répéter. »', 'br-statement br-center br-narrow'),
+    Cols([valeur('Premier engagement'), valeur('Deuxième engagement'), valeur('Troisième engagement')], 'br-steps'),
+  ], { backgroundColor: 'surface' }));
+
+/* ----- Contenu ----- */
+
+add('derniers-articles', 'contenu', 'Derniers articles', 'Les trois derniers articles du blog, mis à jour automatiquement.',
+  Section('', [
+    sectionHead('Nos derniers conseils', ['Tous les articles', URL('blog')]),
+    cb('core/query', { queryId: 1, query: { perPage: 3, pages: 0, offset: 0, postType: 'post', order: 'desc', orderBy: 'date', author: '', search: '', exclude: [], sticky: '', inherit: false }, className: 'br-posts' }, [
+      cb('core/post-template', { layout: { type: 'grid', columnCount: 3 } }, [
+        Box('br-post-card', [
+          cb('core/post-featured-image', { isLink: true, aspectRatio: '4/3' }),
+          Box('br-post-body', [cb('core/post-date', { format: 'F Y', className: 'br-label' }), cb('core/post-title', { level: 3, isLink: true }), cb('core/post-excerpt', { excerptLength: 18, className: 'br-muted' })]),
+        ]),
+      ]),
+    ]),
+  ]));
+
+/* ----- Contact ----- */
+
+add('bandeau-cta', 'contact', 'Bandeau d’appel à l’action', 'Fin de page : une dernière invitation à passer à l’action.',
+  Section('br-cta', [Box('br-cta-inner', [
+    H('Une question, un projet ?', 2), Lead('Une phrase qui lève le dernier frein : devis gratuit, réponse rapide, premier échange sans engagement.'),
+    Btns(Btn(CTA_LABEL, CTA, null, { backgroundColor: 'fond', textColor: 'texte' })),
+  ])], { backgroundColor: 'secondaire', textColor: 'fond' }));
+
+add('contact', 'contact', 'Bloc contact complet', 'Coordonnées, itinéraire, horaires et réseaux, tirés de « Mon entreprise ».',
+  Section('', [Cols([
+    Col([Label('Contact'), H('Venir nous voir ou nous écrire', 2), Short('[briise_coordonnees]'), Short('[briise_reseaux]')], { width: '55%' }),
+    Col([Box('br-card', [H('Horaires', 3), Short('[briise_horaires]')])], { width: '45%' }),
+  ], 'br-split')]));
+
+add('zone', 'contact', 'Zone d’intervention', 'Artisans et services à domicile : les villes couvertes, tirées de « Mon entreprise ».',
+  Section('', [
+    Head([Label('Zone d’intervention'), H('Nous intervenons près de chez vous', 2), Lead('Une phrase sur votre secteur : rayon, délais de déplacement, frais éventuels.')]),
+    Short('[briise_zone]'),
+    Muted('Votre ville n’est pas dans la liste ? Contactez-nous, nous étudions chaque demande.'),
+  ], { backgroundColor: 'nuance' }));
+
+add('formulaire', 'contact', 'Emplacement de formulaire ou de réservation', 'Accueille le bloc de l’extension choisie (formulaire, réservation). En attendant, propose téléphone et e-mail.',
+  Section('', [Cols([
+    Col([
+      Label('Nous écrire'), H('Parlons de votre projet', 2),
+      P('Ce qui se passe après l’envoi : sous quel délai vous répondez, et par quel moyen.'),
+      List(['Réponse sous 24 heures ouvrées', 'Devis gratuit et sans engagement', 'Vos données ne servent qu’à vous répondre']),
+    ], { width: '42%' }),
+    Col([Box('br-card br-formulaire', [
+      P('Remplacez ce paragraphe par le bloc de votre extension de formulaire ou de réservation.', 'br-a-remplacer'),
+      Short('[briise_contact_rapide]'),
+    ])], { width: '58%' }),
+  ], 'br-split')]));
+
+const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
+require('fs').writeFileSync('/home/claude/validate/br_sections.json', JSON.stringify(out, null, 1));
+module.exports = { S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL };
+console.log(Object.keys(S).length, 'sections');

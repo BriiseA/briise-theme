@@ -26,7 +26,9 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | `assets/js/ux.js` | Menu intelligent, page active, téléphones cliquables, bouton fixe mobile |
 | `assets/js/motion.js` | Animations d'apparition (coupées si le visiteur le demande) |
 | `styles/` | Ambiances (variations de style) |
+| `inc/kits.php`, `inc/kits.json` | Kits de démarrage (onglet « Démarrage ») |
 | `inc/contraste.php` | Avertissement si une couleur modifiée rend un texte illisible |
+| `.github/outils/` | Scripts de fabrication des sections, kits et ambiances (hors thème) |
 | `assets/fonts/` | Polices hébergées et leurs licences (toutes sous licence OFL) |
 
 ## Ambiances (variations de style)
@@ -59,6 +61,22 @@ Arrondis et formes : `--wp--custom--rayon--grand|moyen|petit|bouton` et `--wp--c
 **Couleur du logo du client.** Styles > Couleurs > Palette > Modifier, puis changer `accent`. Si une couleur rend un texte illisible (contraste inférieur à 4,5:1), un avertissement apparaît sur le tableau de bord.
 
 **Charte du client.** Partir de l'ambiance « Charte du client », remplacer ses couleurs par celles de la charte, puis ajouter ses polices dans Styles > Typographie > Gérer les polices (fichiers WOFF2, licence web vérifiée).
+
+## Démarrer un site client
+
+1. Installer WordPress, téléverser `briise.zip`, activer le thème.
+2. Mon entreprise > **Démarrage** : choisir le kit et cliquer sur « Créer les pages ».
+3. Mon entreprise > Entreprise, Horaires, Mentions légales : tout remplir.
+4. Apparence > Éditeur > Styles : choisir l'ambiance, ajuster la couleur d'accent.
+5. Remplacer chaque texte et chaque photo d'exemple, puis suivre la checklist de livraison.
+
+| Kit | Pages | Bouton d'action |
+| --- | --- | --- |
+| Prestataire de services | Accueil, Prestations, Tarifs, À propos, Questions fréquentes, Contact, Blog | Prendre rendez-vous |
+| Artisan et entreprise locale | Accueil, Savoir-faire, Réalisations, Zone d'intervention, À propos, Devis | Demander un devis |
+| Profession libérale | Accueil, Domaines d'intervention, Honoraires, Le cabinet, Questions fréquentes, Rendez-vous | Prendre rendez-vous |
+
+Chaque kit ajoute les pages Mentions légales, Politique de confidentialité, Cookies et Accessibilité, le menu principal, et relie la page d'action, la page FAQ et la page de présentation. Une page dont l'adresse existe déjà n'est jamais modifiée. Le kit Profession libérale n'a ni témoignages ni note Google, à cause des règles de communication des professions réglementées.
 
 ## Bibliothèque de sections
 

@@ -14,6 +14,7 @@ require_once get_theme_file_path( 'inc/seo.php' );
 if ( is_admin() ) {
 	require_once get_theme_file_path( 'inc/admin.php' );
 	require_once get_theme_file_path( 'inc/contraste.php' );
+	require_once get_theme_file_path( 'inc/kits.php' );
 }
 
 add_action( 'after_setup_theme', function () {

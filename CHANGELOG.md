@@ -1,5 +1,19 @@
 # Historique des versions
 
+## 0.5.0
+
+Phase 4 : les kits de démarrage.
+
+- Nouvel onglet « Démarrage » dans Mon entreprise (administrateurs) : trois kits qui créent toutes les pages d'un site en un clic.
+- Prestataire de services (7 pages), Artisan et entreprise locale (6 pages), Profession libérale (6 pages), plus quatre pages légales prêtes à compléter (confidentialité et cookies rédigées, marquées « [à compléter] » là où il faut une information du client).
+- Le kit choisit la page d'accueil, crée le menu principal, relie le bouton d'action, la page FAQ et la page de présentation, active le blog pour le kit prestataire et déclare la page de confidentialité.
+- Une page existante n'est jamais écrasée ; relancer un kit ne crée que les pages manquantes.
+- Sur la page d'action elle-même, le pied de page et le bouton fixe mobile ne renvoient plus vers elle.
+- Le bloc contact complet ne contient plus de bouton vers la page de contact (il y figurait parfois sur cette même page).
+- Pages légales : texte aligné sur le titre, intertitres à taille de lecture.
+- Testé sur WordPress 7.1 : les trois kits installés sur un site vierge, chaque lien interne vérifié (aucune page introuvable), aucun bloc invalide.
+- Les scripts de fabrication de l'agence sont versionnés dans `.github/outils/`.
+
 ## 0.4.0
 
 Phase 3b : la bibliothèque de sections.

@@ -8,6 +8,8 @@
  * Tout vient de « Mon entreprise » : rien à modifier ici pour un client.
  */
 $e          = briise_entreprise();
+// Sur la page d'action elle-même, pas de lien qui y renvoie.
+$sur_cta    = is_singular() && untrailingslashit( get_permalink() ) === untrailingslashit( $e['cta_url'] );
 $horaires   = briise_horaires_html();
 $coord      = briise_coordonnees_html() . briise_reseaux_html();
 $largeur    = $horaires ? '40%' : '50%';
@@ -21,9 +23,9 @@ foreach ( array( 'mentions-legales' => 'Mentions légales', 'confidentialite' =>
 }
 ?>
 <!-- wp:group {"align":"full","className":"br-footer","backgroundColor":"sombre","textColor":"fond","layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull br-footer has-fond-color has-sombre-background-color has-text-color has-background"><!-- wp:paragraph {"className":"br-footer-mail"} -->
+<div class="wp-block-group alignfull br-footer has-fond-color has-sombre-background-color has-text-color has-background"><?php if ( ! $sur_cta ) : ?><!-- wp:paragraph {"className":"br-footer-mail"} -->
 <p class="br-footer-mail"><a href="<?php echo esc_url( $e['cta_url'] ); ?>"><?php echo esc_html( $e['cta_label'] ); ?> →</a></p>
-<!-- /wp:paragraph -->
+<!-- /wp:paragraph --><?php endif; ?>
 
 <!-- wp:columns {"className":"br-footer-cols"} -->
 <div class="wp-block-columns br-footer-cols"><!-- wp:column {"width":"<?php echo esc_attr( $largeur ); ?>"} -->
@@ -69,7 +71,7 @@ foreach ( array( 'mentions-legales' => 'Mentions légales', 'confidentialite' =>
 <?php endif; ?></div>
 <!-- /wp:group -->
 
-<?php if ( briise_fonction( 'bouton_mobile' ) ) : ?>
+<?php if ( briise_fonction( 'bouton_mobile' ) && ! $sur_cta ) : ?>
 <!-- wp:group {"className":"br-sticky","layout":{"type":"default"}} -->
 <div class="wp-block-group br-sticky"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button -->
