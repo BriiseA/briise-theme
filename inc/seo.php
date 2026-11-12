@@ -417,7 +417,8 @@ add_action( 'wp_head', function () {
 	if ( $post && $company['person_name'] && (int) $company['person_id'] === (int) $post->ID ) {
 		$graph[] = briise_schema_person();
 	}
-	if ( $post && 'page' === $post->post_type && (int) $company['faq_id'] === (int) $post->ID ) {
+	// Questions-réponses : sur toute page qui contient des accordéons (pages de service comprises).
+	if ( $post && 'page' === $post->post_type && has_block( 'core/details', $post ) ) {
 		$faq = briise_schema_faq( $post );
 		if ( $faq ) {
 			$graph[] = $faq;

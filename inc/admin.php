@@ -45,8 +45,9 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
 		.br-fonction { margin: 0 0 14px; }
 		.br-fonction .description { margin: 2px 0 0 24px; }
 		.br-kits { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; max-width: 980px; margin: 16px 0; }
-		.br-kit { display: flex; flex-direction: column; gap: 6px; background: #fff; border: 1px solid #c3c4c7; border-radius: 6px; padding: 16px; cursor: pointer; }
-		.br-kit:has(input:checked) { border-color: #2271b1; box-shadow: 0 0 0 1px #2271b1; }
+		.br-kit { text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 6px; background: #fff; border: 1px solid #c3c4c7; border-radius: 6px; padding: 16px; cursor: pointer; }
+		.br-kit:hover, .br-kit:focus { border-color: #2271b1; box-shadow: 0 0 0 1px #2271b1; color: inherit; }
+		.br-admin h3 { margin-top: 2em; }
 		.br-kit strong { font-size: 15px; }
 		.br-kit-pages { color: #1d2327; }
 		.br-kit-cta { color: #50575e; font-style: italic; }

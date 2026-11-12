@@ -93,3 +93,12 @@ add_action( 'wp_head', function () {
 		. 'var d=document,g=d.createElement("script"),s=d.getElementsByTagName("script")[0];g.async=true;g.src=u+"matomo.js";s.parentNode.insertBefore(g,s);})();'
 	);
 }, 3 );
+
+/* ----- Retour en haut ------------------------------------------------------ */
+
+add_action( 'wp_footer', function () {
+	if ( ! briise_fonction( 'retour_haut' ) ) {
+		return;
+	}
+	echo '<a href="#" id="br-haut" class="br-haut" aria-label="Revenir en haut de la page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>';
+}, 5 );

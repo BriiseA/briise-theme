@@ -1,9 +1,11 @@
 <?php
 /**
- * Kits de démarrage : créent en un clic les pages d'un site selon le type
- * d'activité, les pages légales, le menu et les réglages qui les relient.
- * Contenu des kits : inc/kits.json (généré par l'outil de l'agence, blocs validés).
- * Une page dont l'adresse existe déjà n'est jamais modifiée.
+ * Démarrage d'un site : kits sur mesure et import d'un fichier de site.
+ *
+ * Tout passe par un « plan » : la liste des pages (avec parent, contenu, menu,
+ * référencement) et les réglages qui les relient. Un kit réglé à l'écran ou un
+ * fichier de site préparé par l'agence produisent le même plan, installé par
+ * briise_plan_installer(). Une page dont l'adresse existe déjà n'est jamais modifiée.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -19,13 +21,26 @@ function briise_kits() {
 }
 
 /**
- * Remplace les repères du kit ({{CTA}}, {{URL:…}}, {{IMG:…}}) par les vraies adresses.
+ * Remplace les repères ({{CTA}}, {{URL:…}}, {{IMG:…}}, {{TITRE}}) par les vraies valeurs.
  */
-function briise_kit_remplir( $markup, $liens, $pages ) {
+function briise_kit_remplir( $markup, $liens = array(), $pages = array(), $titre = '', &$manquants = array() ) {
 	$e   = briise_entreprise();
-	$url = function ( $slug ) use ( $liens, $pages ) {
+	$url = function ( $slug ) use ( $liens, $pages, &$manquants ) {
 		$cible = $liens[ $slug ] ?? $slug;
-		return isset( $pages[ $cible ] ) ? get_permalink( $pages[ $cible ] ) : home_url( '/' . ( $cible ? $cible . '/' : '' ) );
+		if ( isset( $pages[ $cible ] ) ) {
+			return get_permalink( $pages[ $cible ] );
+		}
+		$existe = get_page_by_path( $cible );
+		if ( $existe && 'publish' === $existe->post_status ) {
+			return get_permalink( $existe );
+		}
+		if ( ! $pages ) {
+			return home_url( '/' . $cible . '/' );
+		}
+		// Page non retenue : le lien mène à la page des services, sinon à l'accueil.
+		$manquants[ $cible ] = true;
+		$repli               = $liens['services'] ?? '';
+		return isset( $pages[ $repli ] ) ? get_permalink( $pages[ $repli ] ) : home_url( '/' );
 	};
 	$markup = preg_replace_callback( '/\{\{IMG:([a-z0-9-]+)\}\}/', function ( $m ) {
 		return esc_url( get_theme_file_uri( 'assets/images/sections/' . $m[1] . '.svg' ) );
@@ -34,83 +49,99 @@ function briise_kit_remplir( $markup, $liens, $pages ) {
 		return esc_url( '' === $m[1] ? home_url( '/' ) : $url( $m[1] ) );
 	}, $markup );
 	return str_replace(
-		array( '{{CTA_LABEL}}', '{{CTA}}' ),
-		array( esc_html( $e['cta_label'] ), esc_url( $e['cta_url'] ) ),
+		array( '{{CTA_LABEL}}', '{{CTA}}', '{{TITRE}}' ),
+		array( esc_html( $e['cta_label'] ), esc_url( $e['cta_url'] ), esc_html( '' !== $titre ? $titre : 'Le titre de la page' ) ),
 		$markup
 	);
 }
 
+/* ----- Installation d'un plan ---------------------------------------------------- */
+
 /**
- * Installe un kit. Retourne [ 'crees' => [titres], 'gardes' => [titres] ].
+ * Installe un plan. Retourne [ 'crees' => [titres], 'gardes' => [titres] ].
  */
-function briise_kit_installer( $cle ) {
-	$data = briise_kits();
-	if ( empty( $data['kits'][ $cle ] ) ) {
-		return new WP_Error( 'kit', 'Kit inconnu.' );
-	}
-	$kit    = $data['kits'][ $cle ];
-	$toutes = array_merge( $kit['pages'], $data['legales'] );
+function briise_plan_installer( $plan ) {
+	$statut = ( $plan['statut'] ?? 'publish' ) === 'draft' ? 'draft' : 'publish';
 	$ids    = array();
 	$crees  = array();
 	$gardes = array();
 
-	// 1. Les pages, vides pour l'instant : il faut leurs adresses pour relier les liens.
-	foreach ( $toutes as $p ) {
-		$existe = get_page_by_path( $p['slug'], OBJECT, 'page' );
+	// 1. Réglages fournis par un fichier de site (passent par le nettoyage habituel).
+	foreach ( array( 'entreprise' => 'briise_entreprise', 'legal' => 'briise_legal', 'annonces' => 'briise_annonces', 'fonctions' => 'briise_fonctions' ) as $cle => $option ) {
+		if ( ! empty( $plan[ $cle ] ) && is_array( $plan[ $cle ] ) ) {
+			update_option( $option, array_merge( briise_reglage( $option ), $plan[ $cle ] ) );
+		}
+	}
+
+	// 2. Les pages, vides pour l'instant : il faut leurs adresses pour relier les liens.
+	foreach ( $plan['pages'] as $i => $p ) {
+		$slug   = sanitize_title( $p['slug'] );
+		$parent = ! empty( $p['parent'] ) ? ( $ids[ $p['parent'] ] ?? 0 ) : 0;
+		$chemin = $parent ? get_page_uri( $parent ) . '/' . $slug : $slug;
+		$existe = get_page_by_path( $chemin, OBJECT, 'page' );
 		if ( $existe && 'trash' !== $existe->post_status ) {
-			$ids[ $p['slug'] ] = $existe->ID;
-			$gardes[]          = $p['titre'];
+			$ids[ $slug ] = $existe->ID;
+			$gardes[]     = $p['titre'];
 			continue;
 		}
 		$id = wp_insert_post( array(
 			'post_type'   => 'page',
-			'post_status' => 'publish',
-			'post_title'  => $p['titre'],
-			'post_name'   => $p['slug'],
-			'menu_order'  => count( $ids ),
+			'post_status' => $statut,
+			'post_title'  => sanitize_text_field( $p['titre'] ),
+			'post_name'   => $slug,
+			'post_parent' => $parent,
+			'menu_order'  => $i,
 		), true );
 		if ( ! is_wp_error( $id ) ) {
-			$ids[ $p['slug'] ] = $id;
-			$crees[ $id ]      = $p;
+			$ids[ $slug ] = $id;
+			$crees[ $id ] = $p;
 		}
 	}
 
-	// 2. Les réglages qui relient les pages entre elles.
+	// 3. Les liens entre les pages.
 	$e = briise_reglage( 'briise_entreprise' );
-	if ( ! empty( $ids[ $kit['page_cta'] ] ) ) {
-		$e['cta_page'] = $ids[ $kit['page_cta'] ];
+	if ( ! empty( $plan['cta'] ) && ! empty( $ids[ $plan['cta'] ] ) ) {
+		$e['cta_page'] = $ids[ $plan['cta'] ];
 		$e['cta_url']  = '';
 	}
-	if ( 'Nous contacter' === $e['cta_label'] || '' === $e['cta_label'] ) {
-		$e['cta_label'] = $kit['cta'];
+	if ( ! empty( $plan['cta_label'] ) ) {
+		$e['cta_label'] = $plan['cta_label'];
 	}
-	if ( $kit['page_personne'] && ! empty( $ids[ $kit['page_personne'] ] ) ) {
-		$e['person_page'] = $ids[ $kit['page_personne'] ];
+	if ( ! empty( $plan['personne'] ) && ! empty( $ids[ $plan['personne'] ] ) ) {
+		$e['person_page'] = $ids[ $plan['personne'] ];
 	}
-	if ( $kit['page_faq'] && ! empty( $ids[ $kit['page_faq'] ] ) ) {
-		$e['faq_page'] = $ids[ $kit['page_faq'] ];
+	if ( ! empty( $plan['faq'] ) && ! empty( $ids[ $plan['faq'] ] ) ) {
+		$e['faq_page'] = $ids[ $plan['faq'] ];
 	}
 	update_option( 'briise_entreprise', $e );
 
-	// 3. Le contenu des pages créées, avec les vrais liens.
+	// 4. Le contenu et le référencement des pages créées.
+	$manquants = array();
 	foreach ( $crees as $id => $p ) {
-		if ( '' === $p['markup'] ) {
-			continue;
+		if ( ! empty( $p['markup'] ) ) {
+			wp_update_post( wp_slash( array(
+				'ID'           => $id,
+				'post_content' => briise_kit_remplir( $p['markup'], $plan['liens'] ?? array(), $ids, $p['titre'], $manquants ),
+			) ) );
+			if ( preg_match( '/br-page-head|br-banniere|br-hero/', $p['markup'] ) ) {
+				update_post_meta( $id, '_wp_page_template', 'page-sans-titre' );
+			}
 		}
-		wp_update_post( wp_slash( array(
-			'ID'           => $id,
-			'post_content' => briise_kit_remplir( $p['markup'], $kit['liens'], $ids ),
-		) ) );
-		update_post_meta( $id, '_wp_page_template', 'page-sans-titre' );
+		if ( ! empty( $p['seo_titre'] ) ) {
+			update_post_meta( $id, '_briise_seo_title', sanitize_text_field( $p['seo_titre'] ) );
+		}
+		if ( ! empty( $p['seo_description'] ) ) {
+			update_post_meta( $id, '_briise_seo_desc', sanitize_textarea_field( $p['seo_description'] ) );
+		}
 	}
 
-	// 4. Accueil, blog, confidentialité.
-	if ( ! empty( $ids['accueil'] ) ) {
+	// 5. Accueil, blog, confidentialité.
+	if ( ! empty( $plan['accueil'] ) && ! empty( $ids[ $plan['accueil'] ] ) ) {
 		update_option( 'show_on_front', 'page' );
-		update_option( 'page_on_front', $ids['accueil'] );
+		update_option( 'page_on_front', $ids[ $plan['accueil'] ] );
 	}
-	if ( $kit['blog'] && ! empty( $ids['blog'] ) ) {
-		update_option( 'page_for_posts', $ids['blog'] );
+	if ( ! empty( $plan['blog'] ) && ! empty( $ids[ $plan['blog'] ] ) ) {
+		update_option( 'page_for_posts', $ids[ $plan['blog'] ] );
 		$f         = briise_reglage( 'briise_fonctions' );
 		$f['blog'] = true;
 		update_option( 'briise_fonctions', $f );
@@ -119,43 +150,193 @@ function briise_kit_installer( $cle ) {
 		update_option( 'wp_page_for_privacy_policy', $ids['confidentialite'] );
 	}
 
-	// 5. Le menu : toutes les pages du kit sauf l'accueil (le logo y mène) et la page
-	//    d'action (déjà en bouton dans l'en-tête).
-	if ( ! get_posts( array( 'post_type' => 'wp_navigation', 'title' => 'Menu principal', 'post_status' => 'publish', 'numberposts' => 1 ) ) ) {
-		$liens = '';
-		foreach ( $kit['pages'] as $p ) {
-			if ( in_array( $p['slug'], array( 'accueil', $kit['page_cta'] ), true ) || empty( $ids[ $p['slug'] ] ) ) {
-				continue;
-			}
-			$liens .= '<!-- wp:navigation-link ' . wp_json_encode( array(
-				'label' => $p['titre'],
-				'type'  => 'page',
-				'id'    => $ids[ $p['slug'] ],
-				'url'   => get_permalink( $ids[ $p['slug'] ] ),
-				'kind'  => 'post-type',
-			), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . " /-->\n";
+	// 6. Le menu : les pages prévues au menu, dans l'ordre ; les sous-pages en sous-menu.
+	foreach ( $crees as $id => $p ) {
+		if ( empty( $p['menu'] ) ) {
+			continue;
 		}
-		wp_insert_post( wp_slash( array(
-			'post_type'    => 'wp_navigation',
-			'post_status'  => 'publish',
-			'post_title'   => 'Menu principal',
-			'post_content' => $liens,
-		) ) );
+		if ( 'publish' === $statut ) {
+			briise_menu_definir( $id, true );
+		} else {
+			update_post_meta( $id, '_briise_menu_attente', '1' );
+		}
 	}
 
-	update_option( 'briise_kit', $cle );
-	return array( 'crees' => wp_list_pluck( $crees, 'titre' ), 'gardes' => $gardes );
+	// 7. L'ambiance et ses couleurs.
+	if ( ! empty( $plan['ambiance'] ) ) {
+		briise_appliquer_ambiance( sanitize_key( $plan['ambiance'] ), (array) ( $plan['couleurs'] ?? array() ) );
+	}
+
+	if ( ! empty( $plan['kit'] ) ) {
+		update_option( 'briise_kit', sanitize_key( $plan['kit'] ) );
+	}
+	return array( 'crees' => array_values( wp_list_pluck( $crees, 'titre' ) ), 'gardes' => $gardes, 'manquants' => array_keys( $manquants ) );
 }
 
-/* ----- Onglet « Démarrage » de Mon entreprise ------------------------------- */
+/**
+ * Applique une ambiance (styles/*.json), avec d'éventuelles couleurs du client.
+ */
+function briise_appliquer_ambiance( $slug, $couleurs = array() ) {
+	$fichier = get_theme_file_path( 'styles/' . $slug . '.json' );
+	$data    = ( 'galet' === $slug || ! file_exists( $fichier ) ) ? array( 'version' => 3 ) : json_decode( file_get_contents( $fichier ), true );
+	unset( $data['$schema'], $data['description'] );
+	$theme   = json_decode( file_get_contents( get_theme_file_path( 'theme.json' ) ), true );
+	$palette = $data['settings']['color']['palette'] ?? $theme['settings']['color']['palette'];
+	foreach ( $palette as $i => $c ) {
+		if ( isset( $couleurs[ $c['slug'] ] ) && preg_match( '/^#[0-9a-f]{6}$/i', $couleurs[ $c['slug'] ] ) ) {
+			$palette[ $i ]['color'] = strtolower( $couleurs[ $c['slug'] ] );
+		}
+	}
+	$data['settings']['color']['palette'] = array( 'theme' => $palette );
+	if ( isset( $data['settings']['typography']['fontFamilies'] ) ) {
+		$data['settings']['typography']['fontFamilies'] = array( 'theme' => $data['settings']['typography']['fontFamilies'] );
+	}
+	$data['isGlobalStylesUserThemeJSON'] = true;
+	$post = WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles( wp_get_theme(), true );
+	if ( ! empty( $post['ID'] ) ) {
+		wp_update_post( wp_slash( array( 'ID' => $post['ID'], 'post_content' => wp_json_encode( $data ) ) ) );
+		if ( function_exists( 'wp_clean_theme_json_cache' ) ) {
+			wp_clean_theme_json_cache();
+		}
+	}
+}
+
+/**
+ * Plan d'un kit réglé à l'écran.
+ */
+function briise_plan_depuis_kit( $cle, $choix ) {
+	$data   = briise_kits();
+	$kit    = $data['kits'][ $cle ];
+	$titres = (array) ( $choix['titres'] ?? array() );
+	$garder = (array) ( $choix['pages'] ?? array() );
+	$plan   = array(
+		'kit'       => $cle,
+		'statut'    => $choix['statut'] ?? 'publish',
+		'cta_label' => sanitize_text_field( $choix['cta_label'] ?? '' ) ?: $kit['cta'],
+		'cta'       => $kit['page_cta'],
+		'personne'  => $kit['page_personne'],
+		'faq'       => $kit['page_faq'],
+		'accueil'   => 'accueil',
+		'blog'      => ( $kit['blog'] && in_array( 'blog', $garder, true ) ) ? 'blog' : '',
+		'liens'     => $kit['liens'],
+		'pages'     => array(),
+	);
+	foreach ( $kit['pages'] as $p ) {
+		$fixe = in_array( $p['slug'], array( 'accueil', $kit['page_cta'] ), true );
+		if ( ! $fixe && ! in_array( $p['slug'], $garder, true ) ) {
+			continue;
+		}
+		$p['titre']      = sanitize_text_field( $titres[ $p['slug'] ] ?? '' ) ?: $p['titre'];
+		$p['menu']       = ! $fixe;
+		$plan['pages'][] = $p;
+	}
+	// Pages en plus, prises dans les modèles.
+	$slugs = wp_list_pluck( $plan['pages'], 'slug' );
+	foreach ( (array) ( $choix['options'] ?? array() ) as $m ) {
+		$m = sanitize_key( $m );
+		if ( ! isset( $data['modeles'][ $m ] ) ) {
+			continue;
+		}
+		$titre = sanitize_text_field( $choix['options_titres'][ $m ] ?? '' ) ?: $data['modeles'][ $m ]['titre'];
+		$slug  = sanitize_title( $titre );
+		if ( ! in_array( $slug, $slugs, true ) ) {
+			$plan['pages'][] = array( 'slug' => $slug, 'titre' => $titre, 'markup' => $data['modeles'][ $m ]['markup'], 'menu' => true );
+			$slugs[]         = $slug;
+		}
+	}
+	// Une page par service, rangée sous la page des services.
+	$parent = $kit['liens']['services'];
+	$ville  = briise_entreprise()['city'];
+	foreach ( preg_split( '/\r\n|\r|\n/', (string) ( $choix['services'] ?? '' ) ) as $service ) {
+		$service = trim( sanitize_text_field( $service ) );
+		if ( '' === $service ) {
+			continue;
+		}
+		$plan['pages'][] = array(
+			'slug'      => sanitize_title( $service ),
+			'titre'     => $service,
+			'parent'    => in_array( $parent, $slugs, true ) ? $parent : '',
+			'markup'    => $data['modeles']['service']['markup'],
+			'menu'      => true,
+			'seo_titre' => $ville ? $service . ' à ' . $ville . ' | ' . get_bloginfo( 'name' ) : '',
+		);
+	}
+	foreach ( $data['legales'] as $p ) {
+		$p['menu']       = false;
+		$plan['pages'][] = $p;
+	}
+	return $plan;
+}
+
+/**
+ * Plan lu dans un fichier de site (JSON préparé par l'agence).
+ */
+function briise_plan_depuis_fichier( $json ) {
+	$plan = json_decode( $json, true );
+	if ( ! is_array( $plan ) || empty( $plan['pages'] ) || ! is_array( $plan['pages'] ) ) {
+		return new WP_Error( 'fichier', 'Ce fichier n’est pas un fichier de site Briise valide : la liste « pages » est absente.' );
+	}
+	$data = briise_kits();
+	foreach ( $plan['pages'] as $i => $p ) {
+		if ( empty( $p['slug'] ) || empty( $p['titre'] ) ) {
+			return new WP_Error( 'fichier', 'Chaque page doit avoir un « slug » et un « titre » (page n° ' . ( $i + 1 ) . ').' );
+		}
+		// Une page peut partir d'un modèle du thème au lieu d'un contenu complet.
+		if ( empty( $p['markup'] ) && ! empty( $p['modele'] ) && isset( $data['modeles'][ $p['modele'] ] ) ) {
+			$plan['pages'][ $i ]['markup'] = $data['modeles'][ $p['modele'] ]['markup'];
+		}
+	}
+	if ( ! isset( $plan['legales'] ) || $plan['legales'] ) {
+		foreach ( $data['legales'] as $p ) {
+			$p['menu']       = false;
+			$plan['pages'][] = $p;
+		}
+	}
+	return $plan;
+}
+
+/* ----- Modèles proposés à la création d'une nouvelle page ------------------------ */
+
+// Seulement là où l'éditeur les demande (administration et API REST), pas sur le site public.
+$briise_modeles = function () {
+	if ( WP_Block_Patterns_Registry::get_instance()->is_registered( 'briise/modele-service' ) ) {
+		return;
+	}
+	register_block_pattern_category( 'briise-modeles', array( 'label' => 'Modèles de page' ) );
+	foreach ( briise_kits()['modeles'] as $cle => $m ) {
+		register_block_pattern( 'briise/modele-' . $cle, array(
+			'title'       => $m['titre'],
+			'description' => $m['desc'],
+			'categories'  => array( 'briise-modeles' ),
+			'blockTypes'  => array( 'core/post-content' ),
+			'postTypes'   => array( 'page' ),
+			// Le titre principal suit le titre de la page : rien à retaper.
+			'content'     => briise_kit_remplir( str_replace(
+				"<!-- wp:heading {\"level\":1,\"fontSize\":\"huge\"} -->\n<h1 class=\"wp-block-heading has-huge-font-size\">{{TITRE}}</h1>\n<!-- /wp:heading -->",
+				'<!-- wp:post-title {"level":1,"fontSize":"huge","className":"br-titre"} /-->',
+				$m['markup']
+			) ),
+		) );
+	}
+};
+add_action( 'admin_init', $briise_modeles );
+add_action( 'rest_api_init', $briise_modeles );
+
+/* ----- Onglet « Démarrage » ------------------------------------------------------- */
 
 add_action( 'admin_post_briise_kit', function () {
 	if ( ! current_user_can( 'manage_options' ) || ! check_admin_referer( 'briise_kit' ) ) {
 		wp_die( 'Accès refusé.' );
 	}
-	$cle = sanitize_key( $_POST['kit'] ?? '' );
-	$r   = briise_kit_installer( $cle );
-	set_transient( 'briise_kit_resultat_' . get_current_user_id(), is_wp_error( $r ) ? array( 'erreur' => $r->get_error_message() ) : $r, 120 );
+	if ( 'fichier' === sanitize_key( $_POST['mode'] ?? '' ) ) {
+		$tmp  = $_FILES['fichier']['tmp_name'] ?? '';
+		$plan = ( $tmp && is_uploaded_file( $tmp ) ) ? briise_plan_depuis_fichier( file_get_contents( $tmp ) ) : new WP_Error( 'fichier', 'Aucun fichier reçu.' );
+	} else {
+		$cle  = sanitize_key( $_POST['kit'] ?? '' );
+		$plan = isset( briise_kits()['kits'][ $cle ] ) ? briise_plan_depuis_kit( $cle, wp_unslash( $_POST ) ) : new WP_Error( 'kit', 'Kit inconnu.' );
+	}
+	$r = is_wp_error( $plan ) ? array( 'erreur' => $plan->get_error_message() ) : briise_plan_installer( $plan );
+	set_transient( 'briise_kit_resultat_' . get_current_user_id(), $r, 120 );
 	wp_safe_redirect( admin_url( 'admin.php?page=briise-entreprise&onglet=demarrage' ) );
 	exit;
 } );
@@ -163,6 +344,7 @@ add_action( 'admin_post_briise_kit', function () {
 function briise_onglet_demarrage() {
 	$data   = briise_kits();
 	$actuel = get_option( 'briise_kit' );
+	$choisi = sanitize_key( $_GET['kit'] ?? '' ); // phpcs:ignore WordPress.Security.NonceVerification
 	$r      = get_transient( 'briise_kit_resultat_' . get_current_user_id() );
 	if ( $r ) {
 		delete_transient( 'briise_kit_resultat_' . get_current_user_id() );
@@ -173,31 +355,99 @@ function briise_onglet_demarrage() {
 			if ( $r['gardes'] ) {
 				echo '<p>Pages existantes laissées telles quelles : ' . esc_html( implode( ', ', $r['gardes'] ) ) . '.</p>';
 			}
-			echo '<p>Prochaines étapes : remplir les onglets « Entreprise » et « Mentions légales », puis remplacer les textes et les photos d’exemple de chaque page.</p></div>';
+			if ( ! empty( $r['manquants'] ) ) {
+				echo '<p>Certaines sections renvoyaient vers des pages non retenues (' . esc_html( implode( ', ', $r['manquants'] ) ) . ') : leurs liens mènent à la page des services. À revoir lors de la rédaction.</p>';
+			}
+			echo '<p>Prochaines étapes : compléter les autres onglets de Mon entreprise, puis remplacer les textes et les photos d’exemple de chaque page.</p></div>';
 		}
 	}
-	?>
-	<h2 class="title">Créer les pages du site</h2>
-	<p class="description">Choisissez le kit qui correspond à l’activité du client. Il crée les pages, les pages légales, le menu, et relie le bouton d’action, la page FAQ et la page de présentation. Une page dont l’adresse existe déjà n’est jamais modifiée.</p>
-	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-		<input type="hidden" name="action" value="briise_kit">
-		<?php wp_nonce_field( 'briise_kit' ); ?>
+	$base = admin_url( 'admin.php?page=briise-entreprise&onglet=demarrage' );
+
+	if ( ! $choisi || ! isset( $data['kits'][ $choisi ] ) ) :
+		?>
+		<h2 class="title">Partir d’un kit</h2>
+		<p class="description">Le kit propose les pages adaptées à un type d’activité ; l’écran suivant permet de les ajuster à la demande du client.</p>
 		<div class="br-kits">
 			<?php foreach ( $data['kits'] as $cle => $k ) : ?>
-				<label class="br-kit">
-					<input type="radio" name="kit" value="<?php echo esc_attr( $cle ); ?>" <?php checked( $actuel ? $actuel === $cle : 'prestataire' === $cle ); ?>>
+				<a class="br-kit" href="<?php echo esc_url( add_query_arg( 'kit', $cle, $base ) ); ?>">
 					<strong><?php echo esc_html( $k['titre'] ); ?></strong>
 					<span class="description"><?php echo esc_html( $k['pour'] ); ?></span>
 					<span class="br-kit-pages"><?php echo esc_html( implode( ' · ', wp_list_pluck( $k['pages'], 'titre' ) ) ); ?></span>
-					<span class="br-kit-cta">Bouton d’action : « <?php echo esc_html( $k['cta'] ); ?> »</span>
-				</label>
+					<span class="br-kit-cta">Ajuster ce kit →</span>
+				</a>
 			<?php endforeach; ?>
 		</div>
-		<p class="description">Dans les trois cas : Mentions légales, Politique de confidentialité, Cookies et Accessibilité.</p>
 		<?php if ( $actuel ) : ?>
-			<p><em>Kit déjà installé : <?php echo esc_html( $data['kits'][ $actuel ]['titre'] ?? $actuel ); ?>. Relancer ne crée que les pages manquantes. Choisir un autre kit ajoute ses pages sans supprimer les autres ni modifier le menu : à réserver à un site encore vide.</em></p>
+			<p><em>Un kit a déjà été installé sur ce site (<?php echo esc_html( $data['kits'][ $actuel ]['titre'] ?? $actuel ); ?>). Relancer ne crée que les pages manquantes.</em></p>
 		<?php endif; ?>
-		<?php submit_button( 'Créer les pages', 'primary', 'submit', true ); ?>
+
+		<h2 class="title">Ou importer un fichier de site</h2>
+		<p class="description">Le fichier préparé par l’agence à partir de la fiche client : pages, textes, référencement, menu, informations de l’entreprise, ambiance et couleurs.</p>
+		<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<input type="hidden" name="action" value="briise_kit"><input type="hidden" name="mode" value="fichier">
+			<?php wp_nonce_field( 'briise_kit' ); ?>
+			<p><input type="file" name="fichier" accept=".json,application/json" required aria-label="Fichier de site"></p>
+			<?php submit_button( 'Importer et créer le site', 'secondary', 'submit', false ); ?>
+		</form>
+		<?php
+		return;
+	endif;
+
+	$k     = $data['kits'][ $choisi ];
+	$fixes = array( 'accueil', $k['page_cta'] );
+	$slugs = wp_list_pluck( $k['pages'], 'slug' );
+	$sp    = array_values( array_filter( $k['pages'], function ( $p ) use ( $k ) {
+		return $p['slug'] === $k['liens']['services'];
+	} ) );
+	?>
+	<p><a href="<?php echo esc_url( $base ); ?>">← Changer de kit</a></p>
+	<h2 class="title">Ajuster le kit « <?php echo esc_html( $k['titre'] ); ?> »</h2>
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+		<input type="hidden" name="action" value="briise_kit"><input type="hidden" name="mode" value="kit">
+		<input type="hidden" name="kit" value="<?php echo esc_attr( $choisi ); ?>">
+		<?php wp_nonce_field( 'briise_kit' ); ?>
+
+		<h3>Pages prévues</h3>
+		<p class="description">Décochez ce dont le client n’a pas besoin, renommez à sa façon. L’accueil et la page d’action sont indispensables.</p>
+		<table class="br-jours" role="presentation">
+			<?php foreach ( $k['pages'] as $p ) : $fixe = in_array( $p['slug'], $fixes, true ); ?>
+				<tr>
+					<td><input type="checkbox" name="pages[]" value="<?php echo esc_attr( $p['slug'] ); ?>" checked <?php disabled( $fixe ); ?> aria-label="Créer la page <?php echo esc_attr( $p['titre'] ); ?>"></td>
+					<td><input type="text" class="regular-text" name="titres[<?php echo esc_attr( $p['slug'] ); ?>]" value="<?php echo esc_attr( $p['titre'] ); ?>" aria-label="Titre de la page <?php echo esc_attr( $p['titre'] ); ?>"></td>
+					<td class="br-ferme-txt"><?php echo $fixe ? 'indispensable' : ''; ?></td>
+				</tr>
+			<?php endforeach; ?>
+		</table>
+
+		<h3>Pages en plus</h3>
+		<table class="br-jours" role="presentation">
+			<?php
+			foreach ( $data['modeles'] as $cle => $m ) :
+				if ( 'service' === $cle ) {
+					continue;
+				}
+				?>
+				<tr>
+					<td><input type="checkbox" name="options[]" value="<?php echo esc_attr( $cle ); ?>" aria-label="Ajouter : <?php echo esc_attr( $m['titre'] ); ?>"></td>
+					<td><input type="text" class="regular-text" name="options_titres[<?php echo esc_attr( $cle ); ?>]" value="<?php echo esc_attr( ucfirst( preg_replace( '/^Page (de |d’)?/u', '', $m['titre'] ) ) ); ?>" aria-label="Titre de la page"></td>
+					<td class="br-ferme-txt"><?php echo esc_html( $m['desc'] ); ?></td>
+				</tr>
+			<?php endforeach; ?>
+		</table>
+
+		<h3>Services du client</h3>
+		<p class="description">Un service par ligne. Chacun aura sa propre page<?php echo $sp ? ', rangée sous « ' . esc_html( $sp[0]['titre'] ) . ' » et ajoutée en sous-menu' : ''; ?> : c’est ce qui fonctionne le mieux pour le référencement local.</p>
+		<textarea name="services" rows="5" class="large-text" style="max-width:46em" aria-label="Services du client, un par ligne" placeholder="Escaliers sur mesure&#10;Garde-corps&#10;Portails et clôtures"></textarea>
+
+		<h3>Finitions</h3>
+		<table class="form-table" role="presentation">
+			<tr><th scope="row"><label for="br-cta-label">Libellé du bouton d’action</label></th>
+				<td><input type="text" class="regular-text" id="br-cta-label" name="cta_label" value="<?php echo esc_attr( $k['cta'] ); ?>"></td></tr>
+			<tr><th scope="row">Pages créées</th>
+				<td><label><input type="radio" name="statut" value="publish" checked> publiées : le site est visible tout de suite</label><br>
+					<label><input type="radio" name="statut" value="draft"> en brouillon : à publier une à une</label></td></tr>
+		</table>
+		<?php submit_button( 'Créer les pages' ); ?>
 	</form>
 	<?php
 }

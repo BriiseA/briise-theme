@@ -1,5 +1,21 @@
 # Historique des versions
 
+## 0.6.0
+
+Des sites sur mesure, et un menu que le client gère seul.
+
+- Démarrage en deux temps : choisir un kit, puis l'ajuster (pages décochées ou renommées, pages en plus, services du client, libellé du bouton, pages publiées ou en brouillon).
+- Une page par service, rangée sous la page des services et ajoutée en sous-menu, avec un titre Google « Service à Ville | Nom » quand la ville est renseignée.
+- Import d'un fichier de site (JSON) : pages, sous-pages, contenus, référencement, menu, informations de l'entreprise, horaires, mentions légales, ambiance et couleurs, en une fois.
+- Si une section renvoie vers une page non retenue, son lien mène à la page des services et l'écran le signale.
+- Case « Afficher dans le menu » sur chaque page, utilisable par l'éditeur ; sous-pages en sous-menu ; libellé tenu à jour ; page mise à la corbeille retirée du menu ; brouillon coché ajouté à sa publication.
+- Modèles proposés à la création d'une nouvelle page (service, simple, tarifs, réalisations, équipe, FAQ, zone, avis, contact) ; leur titre principal suit le titre de la page.
+- Un seul titre principal par page : le titre du modèle « Pages » se masque quand la page a sa propre ouverture.
+- Bouton « retour en haut » (fonction activable) : longues pages seulement, après deux écrans, au-dessus du bouton fixe mobile, utilisable au clavier.
+- Sous-menus aux couleurs de l'ambiance.
+- Données structurées questions-réponses sur toute page qui contient des accordéons, pages de service comprises.
+- Testé sur WordPress 7.1 : kit ajusté avec trois services, création d'une page par un compte Éditeur depuis un modèle avec la case menu cochée, aucun lien cassé, aucun bloc invalide.
+
 ## 0.5.0
 
 Phase 4 : les kits de démarrage.

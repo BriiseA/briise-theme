@@ -40,6 +40,7 @@ function briise_fonctions_liste() {
 		'blog'          => array( 'Blog', 'À activer seulement si le client publiera vraiment. Désactivé, le menu « Articles » disparaît et les articles sortent du plan du site.', false ),
 		'horaires_jour' => array( 'Mise en avant du jour', 'Dans les horaires et les plannings, la ligne du jour est surlignée.', true ),
 		'sommaire_faq'  => array( 'Sommaire des longues FAQ', 'À partir de 8 questions réparties en rubriques, un sommaire cliquable apparaît en haut de la page.', true ),
+		'retour_haut'   => array( 'Bouton « retour en haut »', 'Apparaît sur les longues pages après deux écrans de défilement, au-dessus du bouton fixe mobile.', true ),
 		'bandeau'       => array( 'Bandeau d’information', 'Un message en haut du site (fermeture, nouveauté), avec date de fin. L’éditeur le gère dans l’onglet « Horaires et annonces ».', false ),
 	);
 }

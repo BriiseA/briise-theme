@@ -11,10 +11,11 @@ require_once get_theme_file_path( 'inc/reglages.php' );
 require_once get_theme_file_path( 'inc/entreprise.php' );
 require_once get_theme_file_path( 'inc/fonctions.php' );
 require_once get_theme_file_path( 'inc/seo.php' );
+require_once get_theme_file_path( 'inc/menu.php' );
+require_once get_theme_file_path( 'inc/kits.php' );
 if ( is_admin() ) {
 	require_once get_theme_file_path( 'inc/admin.php' );
 	require_once get_theme_file_path( 'inc/contraste.php' );
-	require_once get_theme_file_path( 'inc/kits.php' );
 }
 
 add_action( 'after_setup_theme', function () {
@@ -102,4 +103,18 @@ add_filter( 'render_block_core/cover', function ( $html, $block ) {
 	$fait = true;
 	$html = str_replace( ' loading="lazy"', '', $html );
 	return preg_replace( '/<img (?![^>]*fetchpriority)/', '<img fetchpriority="high" ', $html, 1 );
+}, 10, 2 );
+
+/**
+ * Une page qui a sa propre ouverture (en-tête de page, hero) n'affiche pas
+ * en plus le titre du modèle « Pages » : un seul titre principal par page.
+ */
+add_filter( 'render_block_core/post-title', function ( $html, $block ) {
+	if ( is_page() && 1 === (int) ( $block['attrs']['level'] ?? 2 ) && false === strpos( $block['attrs']['className'] ?? '', 'br-titre' ) ) {
+		$contenu = get_post_field( 'post_content', get_queried_object_id() );
+		if ( preg_match( '/br-page-head|br-banniere|br-hero/', $contenu ) ) {
+			return '';
+		}
+	}
+	return $html;
 }, 10, 2 );

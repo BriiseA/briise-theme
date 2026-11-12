@@ -26,7 +26,8 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | `assets/js/ux.js` | Menu intelligent, page active, téléphones cliquables, bouton fixe mobile |
 | `assets/js/motion.js` | Animations d'apparition (coupées si le visiteur le demande) |
 | `styles/` | Ambiances (variations de style) |
-| `inc/kits.php`, `inc/kits.json` | Kits de démarrage (onglet « Démarrage ») |
+| `inc/kits.php`, `inc/kits.json` | Démarrage : kits ajustables, import d'un fichier de site, modèles de page |
+| `inc/menu.php` | Case « Afficher dans le menu » et tenue du menu principal |
 | `inc/contraste.php` | Avertissement si une couleur modifiée rend un texte illisible |
 | `.github/outils/` | Scripts de fabrication des sections, kits et ambiances (hors thème) |
 | `assets/fonts/` | Polices hébergées et leurs licences (toutes sous licence OFL) |
@@ -65,18 +66,44 @@ Arrondis et formes : `--wp--custom--rayon--grand|moyen|petit|bouton` et `--wp--c
 ## Démarrer un site client
 
 1. Installer WordPress, téléverser `briise.zip`, activer le thème.
-2. Mon entreprise > **Démarrage** : choisir le kit et cliquer sur « Créer les pages ».
-3. Mon entreprise > Entreprise, Horaires, Mentions légales : tout remplir.
-4. Apparence > Éditeur > Styles : choisir l'ambiance, ajuster la couleur d'accent.
-5. Remplacer chaque texte et chaque photo d'exemple, puis suivre la checklist de livraison.
+2. Mon entreprise > **Démarrage**, au choix :
+   - **ajuster un kit** : choisir le kit le plus proche, décocher ou renommer ses pages, ajouter des pages en plus, saisir les services du client (une page chacun, rangée en sous-menu), régler le bouton d'action ;
+   - **importer un fichier de site** préparé par l'agence à partir de la fiche client (pages, textes, référencement, menu, informations, ambiance).
+3. Mon entreprise : compléter ce que le kit ou le fichier n'a pas rempli.
+4. Remplacer chaque texte et chaque photo d'exemple, puis suivre la checklist de livraison.
 
-| Kit | Pages | Bouton d'action |
+| Kit | Pages proposées | Bouton d'action |
 | --- | --- | --- |
 | Prestataire de services | Accueil, Prestations, Tarifs, À propos, Questions fréquentes, Contact, Blog | Prendre rendez-vous |
 | Artisan et entreprise locale | Accueil, Savoir-faire, Réalisations, Zone d'intervention, À propos, Devis | Demander un devis |
 | Profession libérale | Accueil, Domaines d'intervention, Honoraires, Le cabinet, Questions fréquentes, Rendez-vous | Prendre rendez-vous |
 
-Chaque kit ajoute les pages Mentions légales, Politique de confidentialité, Cookies et Accessibilité, le menu principal, et relie la page d'action, la page FAQ et la page de présentation. Une page dont l'adresse existe déjà n'est jamais modifiée. Le kit Profession libérale n'a ni témoignages ni note Google, à cause des règles de communication des professions réglementées.
+Pages en plus, et modèles proposés à la création de chaque nouvelle page : service, page simple, tarifs, réalisations, équipe, FAQ, zone d'intervention, avis clients, contact. Les pages légales (mentions, confidentialité, cookies, accessibilité) sont toujours créées. Une page dont l'adresse existe déjà n'est jamais modifiée.
+
+**Menu.** Chaque page a une case « Afficher dans le menu » (colonne de droite de l'éditeur), accessible au client. Une sous-page se range en sous-menu sous sa page parente. Le menu reste modifiable dans Apparence > Éditeur > Navigation.
+
+### Fichier de site
+
+Fichier JSON importé dans Démarrage. Seule la liste `pages` est obligatoire.
+
+```json
+{
+  "entreprise": { "name": "Atelier Ferrum", "type": "Locksmith", "telephone": "06 12 34 56 78", "city": "Milly-la-Forêt" },
+  "legal": { "raison_sociale": "Atelier Ferrum SARL", "siren": "123 456 789" },
+  "annonces": { "jours": { "1": { "ouvert": true, "plages": [["08:00", "12:00"], ["13:30", "18:00"]] } } },
+  "ambiance": "atelier",
+  "couleurs": { "accent": "#a83d0c" },
+  "cta": "devis", "cta_label": "Demander un devis", "accueil": "accueil", "faq": "faq", "personne": "a-propos", "blog": "",
+  "statut": "publish",
+  "pages": [
+    { "slug": "accueil", "titre": "Accueil", "markup": "<!-- wp:… -->", "seo_titre": "…", "seo_description": "…" },
+    { "slug": "savoir-faire", "titre": "Savoir-faire", "modele": "service", "menu": true },
+    { "slug": "escaliers", "titre": "Escaliers sur mesure", "parent": "savoir-faire", "modele": "service", "menu": true }
+  ]
+}
+```
+
+Dans `markup`, les repères `{{CTA}}`, `{{CTA_LABEL}}`, `{{URL:slug}}`, `{{IMG:nom}}` et `{{TITRE}}` sont remplacés à l'import. `"legales": false` évite la création des pages légales.
 
 ## Bibliothèque de sections
 

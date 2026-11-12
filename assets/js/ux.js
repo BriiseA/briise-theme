@@ -183,13 +183,40 @@
 				} );
 				sticky.classList.toggle( 'br-sticky-off', visible.size > 0 );
 			}, { threshold: 0.01 } );
-			document.querySelectorAll( '.br-hero .wp-block-buttons, .br-page-head .wp-block-buttons, .br-cta, .br-footer' ).forEach( function ( el ) {
+			document.querySelectorAll( '.br-hero .wp-block-buttons, .br-banniere .wp-block-buttons, .br-page-head .wp-block-buttons, .br-cta, .br-footer' ).forEach( function ( el ) {
 				io.observe( el );
 			} );
 		}
 	}
 
-	/* 8. Bandeau d'information : fermé, il ne revient que si son texte change. */
+	/* 8. Retour en haut : seulement sur les longues pages, après deux écrans,
+	      au-dessus du bouton fixe mobile quand celui-ci est affiché. */
+	var haut = document.getElementById( 'br-haut' );
+	if ( haut ) {
+		var majHaut = function () {
+			var longue = document.documentElement.scrollHeight > window.innerHeight * 3;
+			haut.classList.toggle( 'br-haut-visible', longue && window.scrollY > window.innerHeight * 2 );
+			var stickyVisible = sticky && ! sticky.classList.contains( 'br-sticky-off' ) && getComputedStyle( sticky ).display !== 'none';
+			haut.classList.toggle( 'br-haut-releve', !! stickyVisible );
+		};
+		window.addEventListener( 'scroll', majHaut, { passive: true } );
+		window.addEventListener( 'resize', majHaut, { passive: true } );
+		if ( sticky && 'MutationObserver' in window ) {
+			new MutationObserver( majHaut ).observe( sticky, { attributes: true, attributeFilter: [ 'class' ] } );
+		}
+		majHaut();
+		haut.addEventListener( 'click', function ( ev ) {
+			ev.preventDefault();
+			window.scrollTo( { top: 0, behavior: reduce ? 'auto' : 'smooth' } );
+			// Le clavier repart du début de la page, pas du bas.
+			var cible = document.querySelector( '.br-skip, header a' );
+			if ( cible ) {
+				cible.focus( { preventScroll: true } );
+			}
+		} );
+	}
+
+	/* 9. Bandeau d'information : fermé, il ne revient que si son texte change. */
 	var bandeau = document.getElementById( 'br-bandeau' );
 	if ( bandeau ) {
 		bandeau.querySelector( '.br-bandeau-fermer' ).addEventListener( 'click', function () {
@@ -200,7 +227,7 @@
 		} );
 	}
 
-	/* 9. Liens d'ancre : défilement doux, sauf mouvement réduit. */
+	/* 10. Liens d'ancre : défilement doux, sauf mouvement réduit. */
 	if ( ! reduce ) {
 		document.documentElement.classList.add( 'br-smooth' );
 	}

@@ -98,5 +98,20 @@ const KITS = {
   },
 };
 
-require('fs').writeFileSync('/home/claude/briise-theme/inc/kits.json', JSON.stringify({ kits: KITS, legales }, null, 1));
+/* ----- Modèles de page : catalogue du kit sur mesure et modèles proposés à la création d'une page ----- */
+
+const T = '{{TITRE}}';
+const MODELES = {
+  service: { titre: 'Page de service', desc: 'Un service en détail : présentation, déroulé, questions, appel à l’action.', markup: serialize([tete(T, 'Ce que comprend ce service, pour qui il est fait, et le résultat obtenu.'), sec('service-alterne'), sec('etapes'), sec('faq'), sec('bandeau-cta')].flat()) },
+  simple: { titre: 'Page simple', desc: 'Titre, introduction et un bloc de texte libre.', markup: serialize([tete(T, 'Une phrase d’introduction qui résume la page.', false), Section('br-section--tight', [Box('br-legal', [P('Votre texte ici. Utilisez des intertitres pour découper le contenu.')])])].flat()) },
+  tarifs: { titre: 'Page de tarifs', desc: 'Formules en cartes, tableau des prestations, appel à l’action.', markup: serialize([tete(T, 'Des prix clairs avant de réserver.'), sec('tarifs-cartes'), sec('tarifs-tableau'), sec('bandeau-cta')].flat()) },
+  realisations: { titre: 'Page de réalisations', desc: 'Réalisations en grille, avant / après, galerie.', markup: serialize([tete(T, 'Quelques réalisations récentes, avec la demande du client et la solution apportée.'), sec('realisations'), sec('avant-apres'), sec('galerie'), sec('bandeau-cta')].flat()) },
+  equipe: { titre: 'Page équipe', desc: 'Présentation du dirigeant, de l’équipe et des valeurs.', markup: serialize([tete(T, 'Les personnes qui vous accompagnent.', false), sec('dirigeant'), sec('equipe'), sec('valeurs'), sec('bandeau-cta')].flat()) },
+  faq: { titre: 'Page FAQ', desc: 'Questions fréquentes en accordéon.', markup: serialize([tete(T, 'Les réponses aux questions que l’on nous pose le plus souvent.', false), sec('faq'), sec('bandeau-cta')].flat()) },
+  zone: { titre: 'Page zone d’intervention', desc: 'Villes couvertes et coordonnées.', markup: serialize([tete(T, 'Les villes et le secteur où nous intervenons.'), sec('zone'), sec('contact')].flat()) },
+  avis: { titre: 'Page avis clients', desc: 'Témoignages et chiffres clés.', markup: serialize([tete(T, 'Ce que nos clients disent de notre travail.'), sec('temoignages'), sec('chiffres-cles'), sec('bandeau-cta')].flat()) },
+  contact: { titre: 'Page contact', desc: 'Formulaire ou réservation, coordonnées et horaires.', markup: serialize([tete(T, 'Écrivez-nous ou appelez-nous : nous répondons rapidement.', false), sec('formulaire'), sec('contact')].flat()) },
+};
+
+require('fs').writeFileSync('/home/claude/briise-theme/inc/kits.json', JSON.stringify({ kits: KITS, legales, modeles: MODELES }, null, 1));
 console.log(Object.keys(KITS).map((k) => k + ':' + KITS[k].pages.length).join(' '), '+', legales.length, 'légales');

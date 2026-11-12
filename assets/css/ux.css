@@ -137,3 +137,33 @@ main .br-horaires .br-today { background: var(--wp--preset--color--nuance); bord
 
 /* Mentions légales : champ manquant bien visible */
 .br-mentions mark { background: #ffe08a; color: #262220; padding: 0 .25rem; }
+
+/* Retour en haut */
+.br-haut {
+	position: fixed;
+	right: clamp(1rem, 3vw, 2rem);
+	bottom: calc(1.25rem + env(safe-area-inset-bottom));
+	z-index: 60;
+	width: 3rem;
+	height: 3rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 0;
+	border-radius: var(--wp--custom--rayon--bouton);
+	background: var(--wp--preset--color--texte);
+	color: var(--wp--preset--color--fond);
+	box-shadow: 0 8px 24px -10px color-mix(in srgb, var(--wp--preset--color--texte) 50%, transparent);
+	cursor: pointer;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(.75rem);
+	transition: opacity .25s, transform .25s, visibility .25s, bottom .25s;
+}
+.br-haut.br-haut-visible { opacity: 1; visibility: visible; transform: none; }
+.br-haut.br-haut-releve { bottom: calc(5.75rem + env(safe-area-inset-bottom)); }
+.br-haut:hover { background: var(--wp--preset--color--accent); }
+.br-haut:focus-visible { outline: 3px solid var(--wp--preset--color--accent); outline-offset: 3px; }
+.br-haut svg { width: 1.25rem; height: 1.25rem; }
+@media (prefers-reduced-motion: reduce) { .br-haut { transition: none; } }
+@media print { .br-haut { display: none; } }
