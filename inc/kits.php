@@ -123,7 +123,9 @@ function briise_plan_installer( $plan ) {
 				'ID'           => $id,
 				'post_content' => briise_kit_remplir( $p['markup'], $plan['liens'] ?? array(), $ids, $p['titre'], $manquants ),
 			) ) );
-			if ( preg_match( '/br-page-head|br-banniere|br-hero/', $p['markup'] ) ) {
+			if ( ! empty( $p['template'] ) && in_array( $p['template'], array( 'page-sans-titre', 'page-atterrissage' ), true ) ) {
+				update_post_meta( $id, '_wp_page_template', $p['template'] );
+			} elseif ( preg_match( '/br-page-head|br-banniere|br-hero/', $p['markup'] ) ) {
 				update_post_meta( $id, '_wp_page_template', 'page-sans-titre' );
 			}
 		}
@@ -285,6 +287,10 @@ function briise_plan_depuis_fichier( $json ) {
 		if ( empty( $p['markup'] ) && ! empty( $p['modele'] ) && isset( $data['modeles'][ $p['modele'] ] ) ) {
 			$plan['pages'][ $i ]['markup'] = $data['modeles'][ $p['modele'] ]['markup'];
 		}
+		if ( ( $p['modele'] ?? '' ) === 'atterrissage' && empty( $p['template'] ) ) {
+			$plan['pages'][ $i ]['template'] = 'page-atterrissage';
+			$plan['pages'][ $i ]['menu']     = false;
+		}
 	}
 	if ( ! isset( $plan['legales'] ) || $plan['legales'] ) {
 		foreach ( $data['legales'] as $p ) {
@@ -423,7 +429,7 @@ function briise_onglet_demarrage() {
 		<table class="br-jours" role="presentation">
 			<?php
 			foreach ( $data['modeles'] as $cle => $m ) :
-				if ( 'service' === $cle ) {
+				if ( in_array( $cle, array( 'service', 'atterrissage' ), true ) ) {
 					continue;
 				}
 				?>
@@ -451,3 +457,16 @@ function briise_onglet_demarrage() {
 	</form>
 	<?php
 }
+
+/**
+ * Une page créée depuis le modèle « Page d'atterrissage » prend d'elle-même
+ * le gabarit sans menu (et donc l'exclusion de Google), tant qu'aucun gabarit n'a été choisi.
+ */
+add_action( 'save_post_page', function ( $post_id, $post ) {
+	if ( wp_is_post_revision( $post_id ) || '' !== (string) get_page_template_slug( $post_id ) ) {
+		return;
+	}
+	if ( false !== strpos( $post->post_content, 'br-atterrissage' ) ) {
+		update_post_meta( $post_id, '_wp_page_template', 'page-atterrissage' );
+	}
+}, 20, 2 );

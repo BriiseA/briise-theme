@@ -397,6 +397,7 @@ function briise_onglet_fonctions( $o, $v ) {
 	<h2 class="title">Mesure d’audience et Search Console</h2>
 	<table class="form-table" role="presentation">
 		<?php
+		briise_texte( $o, $v, 'bing', 'Bing Webmaster Tools', 'Collez la balise de validation Bing (msvalidate.01), ou importez le site depuis la Search Console. Bing alimente une partie des réponses de ChatGPT et de Copilot.' );
 		briise_texte( $o, $v, 'gsc', 'Search Console', 'Collez la balise HTML de validation fournie par Google (ou seulement son code). Inutile si le domaine est validé par DNS.' );
 		briise_texte( $o, $v, 'matomo_url', 'Adresse de Matomo', 'Ex. : https://stats.exemple.fr/. Matomo est chargé sans cookie : réglez aussi l’instance en mode « exemption » de la CNIL.' );
 		briise_texte( $o, $v, 'matomo_id', 'Identifiant du site dans Matomo', '', 'inputmode="numeric" style="width:6em"' );

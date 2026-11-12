@@ -1,5 +1,18 @@
 # Historique des versions
 
+## 0.7.0
+
+Mieux lu par les moteurs et les IA, plus accessible, prêt pour la publicité.
+
+- `robots.txt` : moteurs et robots de recherche des IA (OAI-SearchBot, PerplexityBot, Claude-SearchBot…) explicitement autorisés ; nouvelle fonction pour bloquer les seuls robots d'entraînement.
+- Champ de validation Bing Webmaster Tools.
+- IndexNow : chaque page publiée ou modifiée est signalée à Bing et aux moteurs partenaires (site en ligne uniquement).
+- Nouveau gabarit « Page d'atterrissage (publicité) » : en-tête sans menu avec téléphone et bouton, pied de page réduit, bouton d'appel fixe sur mobile, noindex et hors plan du site. Disponible comme modèle dans le fichier de site (`"modele": "atterrissage"`).
+- Code court `[briise_telephone]`.
+- Événement `briise_contact` (téléphone, e-mail, formulaire) pour Tag Manager et Matomo.
+- WCAG 2.2 : flèches de sous-menu à 24 × 24 px minimum, élément ciblé au clavier jamais masqué par l'en-tête fixe ou le bouton fixe mobile.
+- Testé sur WordPress 7.1 : page d'atterrissage valide dans l'éditeur (93 blocs), aucun lien cassé, aucun élément masqué au clavier.
+
 ## 0.6.0
 
 Des sites sur mesure, et un menu que le client gère seul.

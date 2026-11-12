@@ -167,3 +167,12 @@ main .br-horaires .br-today { background: var(--wp--preset--color--nuance); bord
 .br-haut svg { width: 1.25rem; height: 1.25rem; }
 @media (prefers-reduced-motion: reduce) { .br-haut { transition: none; } }
 @media print { .br-haut { display: none; } }
+
+/* WCAG 2.2 : un élément qui reçoit le focus n'est jamais caché sous l'en-tête
+   fixe ni sous le bouton fixe mobile (critère 2.4.11). */
+html { scroll-padding-top: 6.5rem; }
+@media (max-width: 781px) { html { scroll-padding-bottom: 6rem; } }
+
+/* WCAG 2.2 : zone cliquable d'au moins 24 × 24 px (critère 2.5.8). */
+.br-nav .wp-block-navigation__submenu-icon { width: 24px; height: 24px; padding: 6px; margin-left: 0; }
+.br-nav .wp-block-navigation__submenu-icon svg { width: 12px; height: 12px; }

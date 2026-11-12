@@ -110,6 +110,19 @@ const MODELES = {
   faq: { titre: 'Page FAQ', desc: 'Questions fréquentes en accordéon.', markup: serialize([tete(T, 'Les réponses aux questions que l’on nous pose le plus souvent.', false), sec('faq'), sec('bandeau-cta')].flat()) },
   zone: { titre: 'Page zone d’intervention', desc: 'Villes couvertes et coordonnées.', markup: serialize([tete(T, 'Les villes et le secteur où nous intervenons.'), sec('zone'), sec('contact')].flat()) },
   avis: { titre: 'Page avis clients', desc: 'Témoignages et chiffres clés.', markup: serialize([tete(T, 'Ce que nos clients disent de notre travail.'), sec('temoignages'), sec('chiffres-cles'), sec('bandeau-cta')].flat()) },
+  atterrissage: { titre: 'Page d’atterrissage (publicité)', desc: 'Pour Google Ads : un service, une action, sans menu. Exclue de Google automatiquement.', markup: serialize([
+    Section('br-hero br-atterrissage', [L.cb('core/columns', { verticalAlignment: 'center', className: 'br-split' }, [
+      L.cb('core/column', { verticalAlignment: 'center', width: '56%' }, [
+        Label('Votre ville et alentours'),
+        H(T, 1, null, { fontSize: 'huge' }),
+        Lead('Reprenez la promesse de l’annonce mot pour mot : le visiteur doit retrouver tout de suite ce qu’il a cliqué.'),
+        MainBtns(),
+        P('Ou appelez directement le [briise_telephone].', 'br-muted'),
+      ]),
+      L.cb('core/column', { verticalAlignment: 'center', width: '44%' }, [L.cb('core/image', { url: '{{IMG:portrait}}', alt: 'Photo à remplacer : le service en situation', aspectRatio: '4/5', scale: 'cover', sizeSlug: 'full', linkDestination: 'none', className: 'is-style-br-arrondi' })]),
+    ])]),
+    sec('chiffres-cles'), sec('etapes'), sec('temoignages'), sec('faq'), sec('formulaire'),
+  ].flat()) },
   contact: { titre: 'Page contact', desc: 'Formulaire ou réservation, coordonnées et horaires.', markup: serialize([tete(T, 'Écrivez-nous ou appelez-nous : nous répondons rapidement.', false), sec('formulaire'), sec('contact')].flat()) },
 };
 

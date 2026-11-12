@@ -80,6 +80,8 @@ Arrondis et formes : `--wp--custom--rayon--grand|moyen|petit|bouton` et `--wp--c
 
 Pages en plus, et modèles proposés à la création de chaque nouvelle page : service, page simple, tarifs, réalisations, équipe, FAQ, zone d'intervention, avis clients, contact. Les pages légales (mentions, confidentialité, cookies, accessibilité) sont toujours créées. Une page dont l'adresse existe déjà n'est jamais modifiée.
 
+**Page d'atterrissage pour la publicité.** Modèle de page « Page d'atterrissage (publicité) », ou `"modele": "atterrissage"` dans le fichier de site. En-tête réduit (nom, téléphone, bouton d'action, sans menu), pied de page réduit (coordonnées et pages légales), bouton d'appel fixe sur mobile. La page est exclue de Google (noindex) et du plan du site : elle sert aux annonces, pas au référencement naturel. Une page dont le contenu reprend le modèle passe d'elle-même sur ce gabarit.
+
 **Menu.** Chaque page a une case « Afficher dans le menu » (colonne de droite de l'éditeur), accessible au client. Une sous-page se range en sous-menu sous sa page parente. Le menu reste modifiable dans Apparence > Éditeur > Navigation.
 
 ### Fichier de site
@@ -134,7 +136,7 @@ Menu « Mon entreprise » de l'administration, juste sous le tableau de bord.
 | Horaires et annonces | Éditeur et administrateur | Horaires par jour, fermetures exceptionnelles, bandeau d'information |
 | Entreprise | Administrateur | Nom, slogan, type d'activité, coordonnées, GPS, zone, action principale, personne, réseaux |
 | Mentions légales | Administrateur | Éditeur, hébergeur, profession réglementée, médiateur, réalisation |
-| Fonctions | Administrateur | Fonctions activables, Search Console, Matomo |
+| Fonctions | Administrateur | Fonctions activables, Bing Webmaster Tools, Search Console, Matomo |
 
 Tout alimente automatiquement l'en-tête, le pied de page, le bouton fixe mobile et les données structurées.
 
@@ -149,7 +151,19 @@ Codes courts, à placer dans un bloc « Code court » :
 | `[briise_fil_ariane]` | Fil d'Ariane de la page en cours |
 | `[briise_zone]` | Villes de la zone d'intervention, en pastilles |
 | `[briise_contact_rapide]` | Boutons « Appeler » et « Écrire un e-mail » |
+| `[briise_telephone]` | Le numéro de téléphone, cliquable |
 | `[briise_info champ="telephone"]` | Une information seule : `name`, `telephone`, `email`, `adresse`, `city`… |
+
+## Robots, moteurs et IA
+
+Le thème complète le fichier `robots.txt` virtuel de WordPress (un fichier `robots.txt` réel à la racine du site le remplace et rend ces réglages sans effet).
+
+- Moteurs et robots de recherche des IA toujours autorisés : Googlebot, Bingbot, Applebot, DuckDuckBot, OAI-SearchBot, ChatGPT-User, PerplexityBot, Perplexity-User, Claude-SearchBot, Claude-User. Ce sont eux qui permettent d'apparaître dans les réponses de ChatGPT, Perplexity ou Claude.
+- Robots d'entraînement des IA (GPTBot, ClaudeBot, Google-Extended, Applebot-Extended, CCBot, Meta, Bytespider) : autorisés par défaut ; la fonction « Autoriser l'entraînement des IA » permet de les bloquer sans toucher à la visibilité dans les réponses.
+- **Bing Webmaster Tools** : coller la balise ou le code de validation dans Fonctions. ChatGPT s'appuie en partie sur l'index de Bing.
+- **IndexNow** (fonction activée par défaut) : chaque page publiée ou modifiée est signalée immédiatement à Bing, Yandex, Seznam et Naver. Actif seulement sur le site en ligne (site public, hors adresse locale, environnement de production). Les pages en noindex ne sont pas signalées.
+
+**Mesure des contacts.** Un clic sur un téléphone ou une adresse e-mail, et l'envoi d'un formulaire, envoient l'événement `briise_contact` (champ `briise_type` : `telephone`, `email` ou `formulaire`) dans `dataLayer` pour Google Tag Manager, et dans Matomo s'il est installé. Pour Google Ads, il reste à créer la conversion dans Tag Manager, derrière le consentement (Consent Mode v2).
 
 ## Installer le thème sur un site
 

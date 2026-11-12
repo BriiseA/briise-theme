@@ -41,8 +41,16 @@ function briise_est_page_legale( $post ) {
 	);
 }
 
+/**
+ * Page d'atterrissage publicitaire : hors de Google, pour ne pas concurrencer
+ * la page de service équivalente (Google Ads la visite quand même).
+ */
+function briise_est_atterrissage( $post ) {
+	return $post && 'page-atterrissage' === get_page_template_slug( $post );
+}
+
 function briise_est_noindex( $post ) {
-	return $post && ( get_post_meta( $post->ID, '_briise_noindex', true ) || briise_est_page_legale( $post ) );
+	return $post && ( get_post_meta( $post->ID, '_briise_noindex', true ) || briise_est_page_legale( $post ) || briise_est_atterrissage( $post ) );
 }
 
 function briise_current_seo_post() {
@@ -177,6 +185,13 @@ add_filter( 'wp_sitemaps_posts_query_args', function ( $args ) {
 			$exclus[] = $page->ID;
 		}
 	}
+	$exclus = array_merge( $exclus, get_posts( array(
+		'post_type'      => 'page',
+		'posts_per_page' => 200,
+		'fields'         => 'ids',
+		'meta_key'       => '_wp_page_template', // phpcs:ignore WordPress.DB.SlowDBQuery
+		'meta_value'     => 'page-atterrissage', // phpcs:ignore WordPress.DB.SlowDBQuery
+	) ) );
 	if ( get_option( 'wp_page_for_privacy_policy' ) ) {
 		$exclus[] = (int) get_option( 'wp_page_for_privacy_policy' );
 	}
@@ -227,6 +242,8 @@ function briise_encadre_seo( $post ) {
 		<p style="margin-top:14px">
 			<?php if ( $legal ) : ?>
 				<em>Page légale : elle est automatiquement exclue de Google.</em>
+			<?php elseif ( briise_est_atterrissage( $post ) ) : ?>
+				<em>Page d’atterrissage publicitaire : elle est exclue de Google pour ne pas concurrencer la page de service. Google Ads la visite quand même.</em>
 			<?php else : ?>
 				<label style="font-weight:400;display:inline"><input type="checkbox" name="briise_noindex" value="1" <?php checked( $exclu ); ?>> Ne pas afficher cette page dans Google</label>
 			<?php endif; ?>

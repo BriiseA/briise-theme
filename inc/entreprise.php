@@ -310,6 +310,10 @@ add_action( 'init', function () {
 	add_shortcode( 'briise_fil_ariane', 'briise_fil_ariane_html' );
 	add_shortcode( 'briise_zone', 'briise_zone_html' );
 	add_shortcode( 'briise_contact_rapide', 'briise_contact_rapide_html' );
+	add_shortcode( 'briise_telephone', function () {
+		$e = briise_entreprise();
+		return $e['telephone'] ? '<a href="tel:' . esc_attr( $e['telephone'] ) . '">' . esc_html( briise_telephone_lisible( $e['telephone'] ) ) . '</a>' : '';
+	} );
 	add_shortcode( 'briise_info', function ( $atts ) {
 		$atts = shortcode_atts( array( 'champ' => 'name' ), $atts );
 		$e    = briise_entreprise();

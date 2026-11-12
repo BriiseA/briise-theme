@@ -41,6 +41,8 @@ function briise_fonctions_liste() {
 		'horaires_jour' => array( 'Mise en avant du jour', 'Dans les horaires et les plannings, la ligne du jour est surlignée.', true ),
 		'sommaire_faq'  => array( 'Sommaire des longues FAQ', 'À partir de 8 questions réparties en rubriques, un sommaire cliquable apparaît en haut de la page.', true ),
 		'retour_haut'   => array( 'Bouton « retour en haut »', 'Apparaît sur les longues pages après deux écrans de défilement, au-dessus du bouton fixe mobile.', true ),
+		'indexnow'      => array( 'Signaler les nouvelles pages à Bing (IndexNow)', 'Chaque page publiée ou modifiée est signalée aussitôt à Bing et aux moteurs qui partagent IndexNow. Bing alimente une partie des réponses de ChatGPT.', true ),
+		'ia_entrainement' => array( 'Autoriser l’entraînement des IA', 'Décoché : les robots qui collectent des textes pour entraîner les IA (GPTBot, ClaudeBot, Google-Extended…) sont refusés. Les robots des moteurs de recherche IA restent toujours autorisés, sinon le site ne serait plus cité.', true ),
 		'bandeau'       => array( 'Bandeau d’information', 'Un message en haut du site (fermeture, nouveauté), avec date de fin. L’éditeur le gère dans l’onglet « Horaires et annonces ».', false ),
 	);
 }
@@ -120,6 +122,7 @@ function briise_defauts( $option ) {
 				'matomo_url' => '',
 				'matomo_id'  => '',
 				'gsc'        => '',
+				'bing'       => '',
 			);
 	}
 	return array();
@@ -307,6 +310,11 @@ function briise_nettoie_fonctions( $in ) {
 		$gsc = $m[1];
 	}
 	$out['gsc'] = preg_replace( '/[^A-Za-z0-9_\-]/', '', $gsc );
+	$bing = (string) ( $in['bing'] ?? '' );
+	if ( preg_match( '/content=["\']([^"\']+)["\']/', $bing, $m ) ) {
+		$bing = $m[1];
+	}
+	$out['bing'] = preg_replace( '/[^A-Za-z0-9]/', '', $bing );
 	return $out;
 }
 
