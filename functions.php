@@ -15,6 +15,7 @@ require_once get_theme_file_path( 'inc/menu.php' );
 require_once get_theme_file_path( 'inc/kits.php' );
 require_once get_theme_file_path( 'inc/robots.php' );
 require_once get_theme_file_path( 'inc/maillage.php' );
+require_once get_theme_file_path( 'inc/performance.php' );
 if ( is_admin() ) {
 	require_once get_theme_file_path( 'inc/admin.php' );
 	require_once get_theme_file_path( 'inc/contraste.php' );

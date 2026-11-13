@@ -1,5 +1,15 @@
 # Historique des versions
 
+## 0.9.1
+
+Corrections trouvées pendant le test complet du process sur un client fictif (Métallerie Delaunay).
+
+- Bannière plein écran : sur mobile, le texte touchait le bord de l'écran ; il s'aligne désormais sur les autres sections.
+- Vitesse : les polices des titres et du texte de l'ambiance active sont préchargées. Le grand titre ne change plus de hauteur au chargement (décalage de mise en page ramené de 0,16 à 0 sur une page de service).
+- Vitesse : le grand titre de l'accueil n'est plus masqué puis animé au chargement. C'est l'élément que Google mesure pour la vitesse d'affichage ; seuls les titres plus bas dans la page s'animent encore.
+- Type d'activité : « Locksmith » est présenté comme « Serrurier (dépannage, serrures) » ; un métallier choisit « Bâtiment et habitat ».
+- README : `name` et `slogan` du fichier de site documentés (nom du site, logo, pied de page).
+
 ## 0.9.0
 
 Le rythme des couleurs.

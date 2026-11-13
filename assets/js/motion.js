@@ -93,7 +93,7 @@
 		}
 	} );
 
-	var titles = Array.prototype.slice.call( document.querySelectorAll( '.home main h1, .br-cta h2' ) );
+	var titles = Array.prototype.slice.call( document.querySelectorAll( '.br-cta h2' ) );
 
 	function show( el ) {
 		if ( titles.indexOf( el ) !== -1 ) {

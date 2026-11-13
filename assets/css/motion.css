@@ -13,7 +13,8 @@
 }
 
 /* 3. Titres ligne par ligne */
-.br-motion body.home main h1:not(.br-split-title):not(.br-split-done):not(.br-reveal),
+/* Le grand titre de l'accueil n'est jamais masqué : c'est l'élément que Google mesure
+   pour la vitesse d'affichage (LCP). Seuls les titres plus bas dans la page s'animent. */
 .br-motion .br-cta h2:not(.br-split-title):not(.br-split-done):not(.br-reveal) {
 	opacity: 0;
 }

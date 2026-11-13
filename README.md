@@ -86,11 +86,11 @@ Pages en plus, et modèles proposés à la création de chaque nouvelle page : s
 
 ### Fichier de site
 
-Fichier JSON importé dans Démarrage. Seule la liste `pages` est obligatoire.
+Fichier JSON importé dans Démarrage. Seule la liste `pages` est obligatoire. Dans `entreprise`, `name` et `slogan` deviennent le nom et le slogan du site (logo, onglet du navigateur, pied de page) : ne pas les oublier.
 
 ```json
 {
-  "entreprise": { "name": "Atelier Ferrum", "type": "Locksmith", "telephone": "06 12 34 56 78", "city": "Milly-la-Forêt" },
+  "entreprise": { "name": "Atelier Ferrum", "slogan": "Métallier à Milly-la-Forêt", "type": "HomeAndConstructionBusiness", "telephone": "06 12 34 56 78", "city": "Milly-la-Forêt" },
   "legal": { "raison_sociale": "Atelier Ferrum SARL", "siren": "123 456 789" },
   "annonces": { "jours": { "1": { "ouvert": true, "plages": [["08:00", "12:00"], ["13:30", "18:00"]] } } },
   "ambiance": "atelier",
