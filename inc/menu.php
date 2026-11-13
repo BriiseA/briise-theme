@@ -38,8 +38,10 @@ function briise_menu_lien( $page_id, $enfants = array() ) {
 }
 
 function briise_menu_blocs( $menu_id ) {
+	// Le menu automatique que WordPress crée sur un site neuf (bloc « Liste des pages ») affiche
+	// toutes les pages, légales comprises : le thème le remplace par les pages cochées une à une.
 	return array_values( array_filter( parse_blocks( get_post_field( 'post_content', $menu_id ) ), function ( $b ) {
-		return ! empty( $b['blockName'] );
+		return ! empty( $b['blockName'] ) && 'core/page-list' !== $b['blockName'];
 	} ) );
 }
 

@@ -1,5 +1,10 @@
 # Historique des versions
 
+## 0.9.2
+
+- Menu : sur un WordPress neuf (Playground, nouvel hébergement), WordPress crée un menu automatique qui liste toutes les pages, légales comprises. L'import et la case « Afficher dans le menu » le remplacent désormais par les seules pages prévues, y compris lors d'une réimportation sur un site déjà importé.
+- En-tête : le bouton d'action ne se coupe plus sur plusieurs lignes quand le menu est long.
+
 ## 0.9.1
 
 Corrections trouvées pendant le test complet du process sur un client fictif (Métallerie Delaunay).

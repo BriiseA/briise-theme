@@ -182,6 +182,12 @@ function briise_plan_installer( $plan ) {
 	}
 
 	// 6. Le menu : les pages prévues au menu, dans l'ordre ; les sous-pages en sous-menu.
+	// D'abord, retirer le menu automatique de WordPress (liste de toutes les pages), y compris
+	// sur un site déjà importé.
+	if ( array_filter( array_column( $plan['pages'], 'menu' ) ) ) {
+		$menu_id = briise_menu_id( true );
+		briise_menu_enregistrer( $menu_id, briise_menu_blocs( $menu_id ) );
+	}
 	foreach ( $crees as $id => $p ) {
 		if ( empty( $p['menu'] ) ) {
 			continue;
