@@ -1,9 +1,9 @@
 <?php
 /**
- * Title: Contact : Emplacement de formulaire ou de réservation
+ * Title: Contact : Formulaire de demande de devis
  * Slug: briise/formulaire
  * Categories: briise-contact
- * Description: Accueille le bloc de l’extension choisie (formulaire, réservation). En attendant, propose téléphone et e-mail.
+ * Description: Le formulaire de devis (Fluent Forms, créé dans Mon entreprise > Fonctions), avec ce qui se passe après l’envoi. Sans formulaire : téléphone et e-mail.
  * Viewport Width: 1400
  */
 $briise = briise_theme_entreprise();
@@ -12,7 +12,7 @@ $briise = briise_theme_entreprise();
 <div class="wp-block-group alignfull br-section"><!-- wp:columns {"className":"br-split"} -->
 <div class="wp-block-columns br-split"><!-- wp:column {"width":"42%"} -->
 <div class="wp-block-column" style="flex-basis:42%"><!-- wp:paragraph {"className":"br-label"} -->
-<p class="br-label">Nous écrire</p>
+<p class="br-label">Votre demande</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading -->
@@ -40,12 +40,8 @@ $briise = briise_theme_entreprise();
 
 <!-- wp:column {"width":"58%"} -->
 <div class="wp-block-column" style="flex-basis:58%"><!-- wp:group {"className":"br-card br-formulaire","layout":{"type":"default"}} -->
-<div class="wp-block-group br-card br-formulaire"><!-- wp:paragraph {"className":"br-a-remplacer"} -->
-<p class="br-a-remplacer">Remplacez ce paragraphe par le bloc de votre extension de formulaire ou de réservation.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:shortcode -->
-[briise_contact_rapide]
+<div class="wp-block-group br-card br-formulaire"><!-- wp:shortcode -->
+[briise_formulaire type="devis"]
 <!-- /wp:shortcode --></div>
 <!-- /wp:group --></div>
 <!-- /wp:column --></div>

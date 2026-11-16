@@ -1,5 +1,15 @@
 # Historique des versions
 
+## 1.4.0
+
+- **En-tête de page avec photo** (nouvelle section) : bandeau avec la photo de la page (son image mise en avant), dégradé sous le texte, ouvrage visible à droite ; voile uniforme sur tablette et mobile. Contraste vérifié dans le pire cas (photo blanche). Utilisé par défaut pour les pages de service des kits.
+- **Formulaires de devis et de contact** (extension, avec Fluent Forms gratuit) : création en un clic dans Mon entreprise > Fonctions, ou automatique à l'import ; champs réduits à l'utile, messages en français, e-mail à l'entreprise avec réponse directe au visiteur, confirmation au visiteur (photos en réponse), champ piège contre les robots, styles de l'ambiance. Sans Fluent Forms, la section propose d'appeler ou d'écrire.
+- Mesure des contacts : un formulaire Fluent Forms n'est compté qu'une fois envoyé avec succès.
+- Vitesse : styles de Fluent Forms chargés sans bloquer l'affichage, jQuery en bas de page et sans jQuery Migrate.
+- Fin de collaboration : le formulaire figé reste un vrai formulaire Fluent Forms.
+- Politique de confidentialité (kits) : données des formulaires et outil utilisé.
+- 34 sections. Vérifié sur Delaunay : 0 bloc invalide, demande réelle envoyée (enregistrée, e-mail à l'entreprise avec « Répondre » au visiteur, confirmation au visiteur), accessibilité, bonnes pratiques et SEO à 100 sur la page Devis.
+
 ## 1.3.0
 
 - **Réalisations dynamiques** (extension) : menu « Réalisations » pour publier une fiche par réalisation (photo principale, galerie agrandie au clic, demande, solution, ville, date, service, catégorie). Grilles automatiques sur l'accueil, la page des réalisations (filtres par catégorie, sans rechargement) et chaque page de service ; chaque fiche a sa page, renvoie vers son service et propose d'autres réalisations du même service. Nom réglable : Réalisations, Portfolio, Chantiers ou Projets.

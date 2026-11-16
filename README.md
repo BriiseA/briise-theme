@@ -21,7 +21,7 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | `theme.json` | Couleurs, polices, tailles, espacements et styles globaux |
 | `templates/` | Modèles de pages (page, article, blog, 404, page sans titre, fiche de réalisation) |
 | `parts/` | En-tête et pied de page |
-| `patterns/` | Bibliothèque de 32 sections (`section-*.php`), en-tête, pied de page, blog |
+| `patterns/` | Bibliothèque de 34 sections (`section-*.php`), en-tête, pied de page, blog |
 | `assets/images/sections/` | Images de remplacement des sections, à remplacer par les photos du client |
 | `assets/js/ux.js` | Menu intelligent, page active, téléphones cliquables, bouton fixe mobile, retour en haut |
 | `assets/js/motion.js` | Animations d'apparition (coupées si le visiteur le demande) |
@@ -38,6 +38,7 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | `extension/briise-socle/inc/menu.php` | Case « Afficher dans le menu » et tenue du menu principal |
 | `extension/briise-socle/inc/maillage.php` | Pages liées et onglet Contrôle |
 | `extension/briise-socle/inc/cartes.php` | Cartes Coordonnées et Zone, icônes |
+| `extension/briise-socle/inc/formulaire.php` | Formulaires de devis et de contact (Fluent Forms) |
 | `extension/briise-socle/inc/realisations.php` | Réalisations : fiches, grilles automatiques, filtres, import et export |
 | `extension/briise-socle/inc/mises-a-jour.php` | Mises à jour du thème et de l'extension depuis les versions GitHub |
 | `extension/briise-socle/inc/depart.php` | Onglet « Fin de collaboration » |
@@ -75,6 +76,10 @@ Arrondis et formes : `--wp--custom--rayon--grand|moyen|petit|bouton` et `--wp--c
 **Couleur du logo du client.** Styles > Couleurs > Palette > Modifier, puis changer `accent`. Si une couleur rend un texte illisible (contraste inférieur à 4,5:1), un avertissement apparaît sur le tableau de bord.
 
 **Réalisations.** Menu « Réalisations » de l'administration (Éditeur compris) : une fiche par réalisation, avec photo principale, galerie (agrandie au clic), « La demande », « Ce que nous avons fait », ville, date, service concerné et catégorie. Les grilles se mettent à jour seules : accueil (trois dernières), page des réalisations (toutes, avec boutons de filtre par catégorie), pages de service (les réalisations du service, section masquée s'il n'y en a pas). Chaque fiche a sa page (`/realisations/escalier-droit-a-etampes/`), renvoie vers son service et propose d'autres réalisations du même service. Une fiche de moins de 150 mots reste dans les grilles mais sort de Google et du plan du site ; l'onglet Contrôle la signale. Le nom se règle dans Mon entreprise > Fonctions : Réalisations, Portfolio, Chantiers ou Projets (l'adresse des fiches suit ; la page qui les liste doit porter la même adresse, `/portfolio/` par exemple). Codes courts : `[briise_realisations nombre="3" service="auto" categorie="escalier" filtres="1"]`.
+
+**En-tête de page avec photo.** Bandeau de 420 px (320 px sur mobile) avec fil d'Ariane, titre, introduction et bouton, sur la photo de la page : c'est son **image mise en avant**, que le client change sans toucher à la mise en page. Dégradé sombre sous le texte et ouvrage visible à droite sur grand écran, voile uniforme en dessous de 1280 px ; contraste au moins 8,5:1 même sur une photo blanche. Sans image, bandeau foncé uni. Photo chargée en priorité. Modèle « Page de service » et kits : en-tête avec photo par défaut.
+
+**Formulaires.** Avec l'extension gratuite Fluent Forms : Mon entreprise > Fonctions > Formulaires > « Créer le formulaire » (devis, contact), ou automatiquement à l'import d'un fichier de site qui utilise la section. Devis : nom, téléphone, e-mail facultatif, commune, projet (liste des services du site, plus « Autre »), description obligatoire ; contact : nom, téléphone, e-mail facultatif, message. Pas de case à cocher : une phrase d'information avec le lien vers la politique de confidentialité. Champ piège contre les robots. E-mail à l'adresse de Mon entreprise (« Répondre » écrit au visiteur), confirmation au visiteur qui l'invite à répondre avec ses photos (l'envoi de fichiers est payant dans Fluent Forms). Les pages utilisent `[briise_formulaire type="devis"]` : sans Fluent Forms, le visiteur voit les boutons Appeler et Écrire. Mesure `briise_contact` à l'envoi réussi seulement. Les feuilles de style du formulaire ne bloquent pas l'affichage, et jQuery passe en bas de page. Pour la remise des e-mails : FluentSMTP relié à la boîte du domaine (SPF, DKIM, DMARC). Les demandes restent enregistrées dans Fluent Forms : les supprimer au-delà de la durée annoncée dans la politique de confidentialité (3 ans).
 
 **Réseaux sociaux.** Instagram, Facebook, LinkedIn, fiche Google, TikTok, YouTube et Pinterest (Mon entreprise > Entreprise) s'affichent en icônes dans le pied de page, avec leur nom pour les lecteurs d'écran (Fonctions : « Réseaux sociaux en icônes », décocher pour du texte).
 
@@ -153,13 +158,13 @@ Dans l'éditeur : bouton « + » > Compositions > catégories « Sections · …
 
 | Famille | Sections |
 | --- | --- |
-| Ouverture | Hero avec image, Hero bannière plein écran, Hero texte seul, En-tête de page avec fil d'Ariane |
+| Ouverture | Hero avec image, Hero bannière plein écran, Hero texte seul, En-tête de page avec photo, En-tête de page avec fil d'Ariane |
 | Offre et tarifs | Trois cartes de service, Service détaillé alterné, Tableau comparatif, Grille de tarifs en cartes, Tableau de tarifs simple |
 | Confiance et preuves | Chiffres clés, Témoignages, Logos ou labels, Dernières réalisations, Toutes les réalisations avec filtres, Réalisations de ce service (les trois automatiques), Réalisations en grille (à la main), Avant / après, Galerie en mosaïque |
 | Parcours et FAQ | Étapes numérotées, FAQ en accordéon, Horaires et planning |
 | Personnes | Présentation du dirigeant, Équipe, Citation ou valeurs |
 | Contenu | Derniers articles, Pages liées (automatique) |
-| Contact | Bandeau d'appel à l'action, Bloc contact complet, Coordonnées (carte), Zone d'intervention, Zone d'intervention (carte), Emplacement de formulaire ou de réservation |
+| Contact | Bandeau d'appel à l'action, Bloc contact complet, Coordonnées (carte), Zone d'intervention, Zone d'intervention (carte), Formulaire de demande de devis, Formulaire de contact |
 
 Règles :
 - Rythme des couleurs : deux sections qui se suivent n'ont jamais le même fond. Alterner le blanc (`fond`) et les teintes de l'ambiance (`surface`, `nuance`) ; garder la bande foncée (`secondaire`) pour l'appel à l'action final. Une tête de page peut précéder une section du même fond. Les kits et les modèles respectent cette règle d'eux-mêmes ; une page modifiée à la main se vérifie dans Mon entreprise > Contrôle. Changer un fond en un clic : sélectionner la section (bouton « Sélectionner le parent » ou vue en liste), puis onglet Styles > « Fond clair », « Fond teinté », « Fond nuancé » ou « Fond foncé ». Ces quatre styles suivent l'ambiance : si l'ambiance change, les sections suivent. En « Fond foncé », les textes, étiquettes, boutons et tableaux passent en clair et les cartes gardent leur fond clair ; le contraste AA est vérifié dans les ambiances Acier, Galet et Cabinet. Le client (compte Éditeur) y a accès comme l'administrateur : c'est la façon simple et sûre de lui laisser la main sur les couleurs, sans sortir de la charte.

@@ -205,7 +205,17 @@ function briise_plan_installer( $plan ) {
 		$realisations = briise_realisations_importer( $plan['realisations'], $statut );
 	}
 
-	// 8. L'ambiance et ses couleurs.
+	// 8. Formulaires (Fluent Forms) : créés d'office si une page les utilise et que l'extension est là.
+	if ( function_exists( 'briise_formulaire_creer' ) && briise_fluentforms_actif() ) {
+		$tout = implode( ' ', array_column( $plan['pages'], 'markup' ) );
+		foreach ( array( 'devis', 'contact' ) as $type ) {
+			if ( false !== strpos( $tout, '[briise_formulaire type="' . $type . '"]' ) ) {
+				briise_formulaire_creer( $type );
+			}
+		}
+	}
+
+	// 9. L'ambiance et ses couleurs.
 	if ( ! empty( $plan['ambiance'] ) ) {
 		briise_appliquer_ambiance( sanitize_key( $plan['ambiance'] ), (array) ( $plan['couleurs'] ?? array() ) );
 	}

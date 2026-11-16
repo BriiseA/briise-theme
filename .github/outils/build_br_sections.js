@@ -81,6 +81,19 @@ add('hero-texte', 'ouverture', 'Hero texte seul', 'Ouverture sobre, sans image :
     Lead('Une phrase d’introduction qui résume ce que le visiteur va trouver sur cette page.'),
   ])]));
 
+add('en-tete-photo', 'ouverture', 'En-tête de page avec photo', 'Pages de service : la photo de l’ouvrage en bandeau, avec fil d’Ariane, titre, introduction et bouton. La photo est l’image mise en avant de la page ; sans elle, le bandeau reste foncé et lisible.',
+  cb('core/cover', {
+    useFeaturedImage: true, dimRatio: 100, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 420, minHeightUnit: 'px',
+    contentPosition: 'center left', align: 'full', className: 'br-banniere br-tete-photo', layout: { type: 'constrained' },
+  }, [
+    Box('br-banniere-inner', [
+      Short('[briise_fil_ariane]'),
+      H('Le titre de la page', 1, null, { fontSize: 'huge' }),
+      Lead('Une ou deux phrases qui posent le sujet de la page et la réponse que le visiteur y trouvera.'),
+      MainBtns(),
+    ]),
+  ]));
+
 add('en-tete-page', 'ouverture', 'En-tête de page avec fil d’Ariane', 'Pour toutes les pages intérieures : fil d’Ariane automatique, titre, introduction et bouton d’action.',
   Section('br-page-head', [Head([
     Short('[briise_fil_ariane]'),
@@ -322,17 +335,23 @@ add('zone', 'contact', 'Zone d’intervention', 'Artisans et services à domicil
     Muted('Votre ville n’est pas dans la liste ? Contactez-nous, nous étudions chaque demande.'),
   ], { backgroundColor: 'nuance' }));
 
-add('formulaire', 'contact', 'Emplacement de formulaire ou de réservation', 'Accueille le bloc de l’extension choisie (formulaire, réservation). En attendant, propose téléphone et e-mail.',
+add('formulaire', 'contact', 'Formulaire de demande de devis', 'Le formulaire de devis (Fluent Forms, créé dans Mon entreprise > Fonctions), avec ce qui se passe après l’envoi. Sans formulaire : téléphone et e-mail.',
   Section('', [Cols([
     Col([
-      Label('Nous écrire'), H('Parlons de votre projet', 2),
+      Label('Votre demande'), H('Parlons de votre projet', 2),
       P('Ce qui se passe après l’envoi : sous quel délai vous répondez, et par quel moyen.'),
       List(['Réponse sous 24 heures ouvrées', 'Devis gratuit et sans engagement', 'Vos données ne servent qu’à vous répondre']),
     ], { width: '42%' }),
-    Col([Box('br-card br-formulaire', [
-      P('Remplacez ce paragraphe par le bloc de votre extension de formulaire ou de réservation.', 'br-a-remplacer'),
-      Short('[briise_contact_rapide]'),
-    ])], { width: '58%' }),
+    Col([Box('br-card br-formulaire', [Short('[briise_formulaire type="devis"]')])], { width: '58%' }),
+  ], 'br-split')]));
+add('formulaire-contact', 'contact', 'Formulaire de contact', 'Le formulaire de contact (Fluent Forms, créé dans Mon entreprise > Fonctions). Sans formulaire : téléphone et e-mail.',
+  Section('', [Cols([
+    Col([
+      Label('Nous écrire'), H('Une question ? Écrivez-nous', 2),
+      P('Ce qui se passe après l’envoi : sous quel délai vous répondez, et par quel moyen.'),
+      List(['Réponse sous 24 heures ouvrées', 'Vos données ne servent qu’à vous répondre']),
+    ], { width: '42%' }),
+    Col([Box('br-card br-formulaire', [Short('[briise_formulaire type="contact"]')])], { width: '58%' }),
   ], 'br-split')]));
 
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };

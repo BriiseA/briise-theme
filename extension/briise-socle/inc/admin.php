@@ -175,6 +175,7 @@ function briise_page_reglages() {
 			?>
 		</form>
 		<?php endif; ?>
+		<?php do_action( 'briise_onglet_apres', $actif ); // Réglages qui ont leurs propres boutons (formulaires…). ?>
 	</div>
 	<?php
 }

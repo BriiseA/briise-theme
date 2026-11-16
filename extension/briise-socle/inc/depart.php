@@ -41,6 +41,12 @@ function briise_depart_contenus() {
  */
 function briise_depart_rendre( $texte ) {
 	return preg_replace_callback( '/\[(briise_[a-z_]+)[^\]]*\]/', function ( $m ) {
+		// Un formulaire reste un formulaire vivant : on garde le code de Fluent Forms.
+		if ( 'briise_formulaire' === $m[1] ) {
+			$atts = shortcode_parse_atts( $m[0] );
+			$id   = function_exists( 'briise_formulaire_id' ) ? briise_formulaire_id( $atts['type'] ?? 'devis' ) : 0;
+			return $id ? '[fluentform id="' . $id . '"]' : ( function_exists( 'briise_contact_rapide_html' ) ? briise_contact_rapide_html() : '' );
+		}
 		return shortcode_exists( $m[1] ) ? do_shortcode( $m[0] ) : $m[0];
 	}, $texte );
 }

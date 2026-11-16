@@ -28,6 +28,11 @@ const rythme = (blocks) => {
 const tete = (titre, chapo, bouton = true) => [Section('br-page-head', [Head([
   Short('[briise_fil_ariane]'), H(titre, 1, null, { fontSize: 'huge' }), Lead(chapo), ...(bouton ? [MainBtns()] : []),
 ])])];
+// Pages de service : en-tête avec la photo de la page (image mise en avant), en dégradé.
+const teteP = (titre, chapo) => [L.cb('core/cover', {
+  useFeaturedImage: true, dimRatio: 100, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 420, minHeightUnit: 'px',
+  contentPosition: 'center left', align: 'full', className: 'br-banniere br-tete-photo', layout: { type: 'constrained' },
+}, [Box('br-banniere-inner', [Short('[briise_fil_ariane]'), H(titre, 1, null, { fontSize: 'huge' }), Lead(chapo), MainBtns()])])];
 // Sur la page des services : la liste de chaque page de service (vide tant qu'il n'y en a pas).
 const detail = [Section('br-section-liees', [L.cb('core/heading', { content: 'Chaque service en détail', level: 2 }), Short('[briise_pages_liees]')], { backgroundColor: 'surface' })];
 const page = (slug, titre, ...parts) => ({ slug, titre, markup: serialize(rythme(parts.flat())) });
@@ -45,8 +50,8 @@ const legales = [
   { slug: 'confidentialite', titre: 'Politique de confidentialité', markup: texte('Politique de confidentialité', 'Quelles données sont collectées sur ce site, pourquoi, et comment exercer vos droits. Dernière mise à jour : [à compléter : date].', [
     H('Responsable du traitement', 2), P(NOM + ', ' + MAIL + '.'),
     H('Données collectées', 2), List([
-      'Lorsque vous nous écrivez : votre nom, votre adresse e-mail, votre téléphone si vous le donnez, et le contenu de votre message.',
-      'Lorsque vous prenez rendez-vous ou demandez un devis : les informations nécessaires à votre demande. [à compléter : outil utilisé]',
+      'Lorsque vous remplissez un formulaire (contact ou demande de devis) : votre nom, votre téléphone, votre commune, votre adresse e-mail si vous la donnez, et la description de votre demande. Ces informations sont enregistrées sur le site (extension Fluent Forms) et envoyées par e-mail à ' + NOM + ' pour vous répondre.',
+      'Lorsque vous prenez rendez-vous en ligne : les informations nécessaires au rendez-vous. [à compléter : outil de réservation, ou supprimer cette ligne]',
       'Lorsque vous visitez le site : des statistiques de fréquentation anonymes (voir la page Cookies).',
     ]),
     H('Pourquoi et sur quelle base', 2), List([
@@ -59,7 +64,7 @@ const legales = [
       'Devis non signés : 3 ans. Factures et pièces comptables : 10 ans.',
       'Statistiques de fréquentation : 25 mois au plus.',
     ]),
-    H('Destinataires', 2), P('Vos données ne sont ni vendues ni cédées. Seuls y ont accès ' + NOM + ' et les prestataires techniques strictement nécessaires (hébergeur, [à compléter : outil de formulaire ou de réservation]), qui agissent pour son compte.'),
+    H('Destinataires', 2), P('Vos données ne sont ni vendues ni cédées. Seuls y ont accès ' + NOM + ' et les prestataires techniques strictement nécessaires (hébergeur, [à compléter : Fluent Forms, sur le serveur du site]), qui agissent pour son compte.'),
     H('Vos droits', 2), P('Vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation, d’opposition et de portabilité. Pour les exercer, écrivez à ' + MAIL + '. Vous pouvez aussi adresser une réclamation à la CNIL (cnil.fr).'),
   ]) },
   { slug: 'cookies', titre: 'Cookies', markup: texte('Cookies', 'Ce que ce site dépose, ou ne dépose pas, sur votre appareil.', [
@@ -87,7 +92,7 @@ const KITS = {
       page('tarifs', 'Tarifs', tete('Tarifs', 'Des prix clairs avant de réserver : choisissez la formule qui vous convient.'), sec('tarifs-cartes'), sec('tarifs-tableau'), sec('bandeau-cta')),
       page('a-propos', 'À propos', tete('À propos', 'Qui vous êtes, en une phrase : ce qui rassure un client avant de vous contacter.', false), sec('dirigeant'), sec('valeurs'), sec('chiffres-cles'), sec('bandeau-cta')),
       page('faq', 'Questions fréquentes', tete('Questions fréquentes', 'Les réponses aux questions que l’on nous pose le plus souvent.', false), sec('faq'), sec('bandeau-cta')),
-      page('contact', 'Contact', tete('Prendre rendez-vous', 'Écrivez-nous ou appelez-nous : nous répondons sous 24 heures ouvrées.', false), sec('formulaire'), sec('coordonnees-carte')),
+      page('contact', 'Contact', tete('Prendre rendez-vous', 'Écrivez-nous ou appelez-nous : nous répondons sous 24 heures ouvrées.', false), sec('formulaire-contact'), sec('coordonnees-carte')),
       { slug: 'blog', titre: 'Blog', markup: '' },
     ],
   },
@@ -117,7 +122,7 @@ const KITS = {
       page('honoraires', 'Honoraires', tete('Honoraires', 'Des honoraires transparents, communiqués avant tout engagement.'), sec('tarifs-tableau'), sec('bandeau-cta')),
       page('le-cabinet', 'Le cabinet', tete('Le cabinet', 'Le cabinet, son équipe et sa façon de travailler.', false), sec('dirigeant'), sec('equipe'), sec('valeurs'), sec('contact')),
       page('faq', 'Questions fréquentes', tete('Questions fréquentes', 'Les réponses aux questions que l’on nous pose le plus souvent avant un premier rendez-vous.', false), sec('faq'), sec('bandeau-cta')),
-      page('rendez-vous', 'Rendez-vous', tete('Prendre rendez-vous', 'En ligne, par téléphone ou par e-mail : choisissez ce qui vous convient.', false), sec('formulaire'), sec('coordonnees-carte')),
+      page('rendez-vous', 'Rendez-vous', tete('Prendre rendez-vous', 'En ligne, par téléphone ou par e-mail : choisissez ce qui vous convient.', false), sec('formulaire-contact'), sec('coordonnees-carte')),
     ],
   },
 };
@@ -126,7 +131,7 @@ const KITS = {
 
 const T = '{{TITRE}}';
 const MODELES = {
-  service: { titre: 'Page de service', desc: 'Un service en détail : présentation, déroulé, questions, appel à l’action.', markup: serialize(rythme([tete(T, 'Ce que comprend ce service, pour qui il est fait, et le résultat obtenu.'), sec('service-alterne'), sec('etapes'), sec('realisations-service'), sec('faq'), sec('pages-liees'), sec('bandeau-cta')].flat())) },
+  service: { titre: 'Page de service', desc: 'Un service en détail : en-tête avec la photo de la page, présentation, déroulé, réalisations, questions, appel à l’action.', markup: serialize(rythme([teteP(T, 'Ce que comprend ce service, pour qui il est fait, et le résultat obtenu.'), sec('service-alterne'), sec('etapes'), sec('realisations-service'), sec('faq'), sec('pages-liees'), sec('bandeau-cta')].flat())) },
   simple: { titre: 'Page simple', desc: 'Titre, introduction et un bloc de texte libre.', markup: serialize(rythme([tete(T, 'Une phrase d’introduction qui résume la page.', false), Section('br-section--tight', [Box('br-legal', [P('Votre texte ici. Utilisez des intertitres pour découper le contenu.')])])].flat())) },
   tarifs: { titre: 'Page de tarifs', desc: 'Formules en cartes, tableau des prestations, appel à l’action.', markup: serialize(rythme([tete(T, 'Des prix clairs avant de réserver.'), sec('tarifs-cartes'), sec('tarifs-tableau'), sec('bandeau-cta')].flat())) },
   realisations: { titre: 'Page de réalisations', desc: 'Toutes les réalisations publiées, avec filtres par catégorie, puis un avant / après.', markup: serialize(rythme([tete(T, 'Quelques réalisations récentes, avec la demande du client et la solution apportée.'), sec('realisations-toutes'), sec('avant-apres'), sec('bandeau-cta')].flat())) },
@@ -147,7 +152,7 @@ const MODELES = {
     ])]),
     sec('chiffres-cles'), sec('etapes'), sec('temoignages'), sec('faq'), sec('formulaire'),
   ].flat())) },
-  contact: { titre: 'Page contact', desc: 'Formulaire ou réservation, coordonnées et horaires.', markup: serialize(rythme([tete(T, 'Écrivez-nous ou appelez-nous : nous répondons rapidement.', false), sec('formulaire'), sec('coordonnees-carte')].flat())) },
+  contact: { titre: 'Page contact', desc: 'Formulaire de contact, coordonnées et horaires.', markup: serialize(rythme([tete(T, 'Écrivez-nous ou appelez-nous : nous répondons rapidement.', false), sec('formulaire-contact'), sec('coordonnees-carte')].flat())) },
 };
 
 require('fs').writeFileSync('/home/claude/briise-theme/inc/kits.json', JSON.stringify({ kits: KITS, legales, modeles: MODELES }, null, 1));

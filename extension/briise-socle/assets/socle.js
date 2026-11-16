@@ -56,9 +56,15 @@
 			mesurer( lien.href.indexOf( 'tel:' ) === 0 ? 'telephone' : 'email', location.pathname );
 		}
 	} );
+	// Formulaire envoyé. Fluent Forms : seulement quand l'envoi a réussi (pas les essais refusés).
 	document.addEventListener( 'submit', function ( ev ) {
-		if ( ev.target && ev.target.tagName === 'FORM' && ! ev.target.closest( '.wp-block-search' ) ) {
+		if ( ev.target && ev.target.tagName === 'FORM' && ! ev.target.closest( '.wp-block-search' ) && ! ev.target.classList.contains( 'frm-fluent-form' ) ) {
 			mesurer( 'formulaire', location.pathname );
 		}
 	}, true );
+	if ( window.jQuery ) {
+		window.jQuery( document.body ).on( 'fluentform_submission_success', function () {
+			mesurer( 'formulaire', location.pathname );
+		} );
+	}
 }() );
