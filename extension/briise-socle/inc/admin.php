@@ -319,6 +319,7 @@ function briise_onglet_identite( $o, $v ) {
 		briise_texte( $o, $v, 'city', 'Ville' );
 		briise_texte( $o, array( 'telephone' => briise_telephone_lisible( $v['telephone'] ) ), 'telephone', 'Téléphone', 'Format libre : 06 12 34 56 78.', 'inputmode="tel"' );
 		briise_texte( $o, $v, 'email', 'E-mail de contact', 'Affiché sur le site, protégé contre les robots collecteurs.', 'inputmode="email"' );
+		briise_zone( $o, $v, 'destinataires', 'Autres adresses qui reçoivent les demandes', 'Une adresse par ligne. Elles reçoivent aussi les demandes des formulaires de devis et de contact, en plus de l’e-mail de contact. Non affichées sur le site.', 2 );
 		$gps_aide = 'Facultatif. Sur Google Maps, clic droit sur l’emplacement exact, puis clic sur les chiffres pour les copier.';
 		if ( $v['street'] ) {
 			$gps_aide .= ' <a href="' . esc_url( 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode( briise_adresse_ligne() ) ) . '" target="_blank" rel="noopener">Ouvrir l’adresse dans Google Maps</a>';

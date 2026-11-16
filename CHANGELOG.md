@@ -1,5 +1,12 @@
 # Historique des versions
 
+## 1.5.0
+
+- Formulaires : **autres adresses qui reçoivent les demandes**, dans Mon entreprise > Entreprise (une par ligne, adresses invalides ignorées), ajoutées à l'e-mail de l'entreprise pour tous les formulaires Briise.
+- **Fluent Forms et FluentSMTP installés et activés en un clic** depuis Mon entreprise > Fonctions > Formulaires.
+- En-tête avec photo aussi pour les pages À propos, Le cabinet et le modèle « Page équipe ».
+- Vérifié : installation en un clic, demande envoyée à trois adresses, accessibilité 100.
+
 ## 1.4.0
 
 - **En-tête de page avec photo** (nouvelle section) : bandeau avec la photo de la page (son image mise en avant), dégradé sous le texte, ouvrage visible à droite ; voile uniforme sur tablette et mobile. Contraste vérifié dans le pire cas (photo blanche). Utilisé par défaut pour les pages de service des kits.

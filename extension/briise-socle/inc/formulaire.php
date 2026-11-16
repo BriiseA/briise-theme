@@ -285,11 +285,87 @@ function briise_formulaire_html( $atts = array() ) {
 }
 
 /**
+ * Autres destinataires (Mon entreprise > Entreprise) ajoutés à l'e-mail envoyé à l'entreprise,
+ * pour tous les formulaires Briise, sans toucher aux réglages de Fluent Forms.
+ */
+add_filter( 'fluentform/email_to', function ( $adresses, $notification ) {
+	if ( 0 !== strpos( (string) ( $notification['name'] ?? '' ), 'Briise : demande reçue' ) ) {
+		return $adresses;
+	}
+	$autres = (array) ( briise_reglage( 'briise_entreprise' )['destinataires'] ?? array() );
+	if ( ! $autres ) {
+		return $adresses;
+	}
+	$liste = is_array( $adresses ) ? $adresses : array_map( 'trim', explode( ',', (string) $adresses ) );
+	return implode( ', ', array_values( array_unique( array_filter( array_merge( $liste, $autres ) ) ) ) );
+}, 10, 2 );
+
+/**
  * Champ piège contre les robots, toujours actif ; rien à cocher pour le visiteur.
  */
 add_filter( 'fluentform/honeypot_status', '__return_true' );
 
 /* ----- Réglage dans Mon entreprise > Fonctions ------------------------------------- */
+
+/* ----- Extensions recommandées : installées et activées en un clic ------------------ */
+
+function briise_extensions_recommandees() {
+	return array(
+		'fluentform'  => array( 'Fluent Forms', 'fluentform/fluentform.php' ),
+		'fluent-smtp' => array( 'FluentSMTP', 'fluent-smtp/fluent-smtp.php' ),
+	);
+}
+
+function briise_extensions_manquantes() {
+	if ( ! function_exists( 'is_plugin_active' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	}
+	return array_filter( briise_extensions_recommandees(), function ( $e ) {
+		return ! is_plugin_active( $e[1] );
+	} );
+}
+
+add_action( 'admin_post_briise_installer_extensions', function () {
+	if ( ! current_user_can( 'install_plugins' ) || ! current_user_can( 'activate_plugins' ) || ! check_admin_referer( 'briise_installer_extensions' ) ) {
+		wp_die( 'Accès refusé.' );
+	}
+	require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+	require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+	$bilan = array();
+	foreach ( briise_extensions_manquantes() as $slug => $e ) {
+		if ( ! file_exists( WP_PLUGIN_DIR . '/' . $e[1] ) ) {
+			$info = plugins_api( 'plugin_information', array( 'slug' => $slug, 'fields' => array( 'sections' => false ) ) );
+			if ( is_wp_error( $info ) || empty( $info->download_link ) ) {
+				$bilan[] = $e[0] . ' : téléchargement impossible depuis WordPress.org' . ( is_wp_error( $info ) ? ' (' . $info->get_error_message() . ')' : '' ) . '. L’installer depuis Extensions > Ajouter.';
+				continue;
+			}
+			$installe = ( new Plugin_Upgrader( new Automatic_Upgrader_Skin() ) )->install( $info->download_link );
+			if ( true !== $installe ) {
+				$bilan[] = $e[0] . ' : installation impossible' . ( is_wp_error( $installe ) ? ' (' . $installe->get_error_message() . ')' : '' ) . '.';
+				continue;
+			}
+		}
+		$actif   = activate_plugin( $e[1] );
+		$bilan[] = is_wp_error( $actif ) ? $e[0] . ' : activation impossible (' . $actif->get_error_message() . ').' : $e[0] . ' : installé et activé.';
+	}
+	set_transient( 'briise_extensions_' . get_current_user_id(), $bilan, 120 );
+	wp_safe_redirect( admin_url( 'admin.php?page=briise-entreprise&onglet=fonctions#br-formulaires' ) );
+	exit;
+} );
+
+function briise_extensions_bouton() {
+	$manquantes = briise_extensions_manquantes();
+	if ( ! $manquantes || ! current_user_can( 'install_plugins' ) ) {
+		return '';
+	}
+	$noms = implode( ' et ', wp_list_pluck( $manquantes, 0 ) );
+	return '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" style="margin:8px 0 0">' . wp_nonce_field( 'briise_installer_extensions', '_wpnonce', true, false )
+		. '<input type="hidden" name="action" value="briise_installer_extensions">'
+		. '<button type="submit" class="button button-primary">Installer et activer ' . esc_html( $noms ) . '</button>'
+		. ' <span class="description">Extensions gratuites, depuis WordPress.org ; elles se mettent ensuite à jour comme les autres.</span></form>';
+}
 
 add_action( 'admin_post_briise_formulaire_creer', function () {
 	if ( ! current_user_can( 'manage_options' ) || ! check_admin_referer( 'briise_formulaire_creer' ) ) {
@@ -318,9 +394,15 @@ function briise_formulaires_encadre() {
 			? '<div class="notice notice-success inline"><p>Formulaire créé (n° ' . (int) $r . '). Il apparaît sur les pages qui contiennent la section « Formulaire ».</p></div>'
 			: '<div class="notice notice-error inline"><p>' . esc_html( $r ) . '</p></div>';
 	}
+	$bilan = get_transient( 'briise_extensions_' . get_current_user_id() );
+	if ( $bilan ) {
+		delete_transient( 'briise_extensions_' . get_current_user_id() );
+		echo '<div class="notice notice-info inline"><p>' . implode( '<br>', array_map( 'esc_html', (array) $bilan ) ) . '</p></div>';
+	}
 	echo '<h2 class="title" id="br-formulaires">Formulaires</h2>';
 	if ( ! briise_fluentforms_actif() ) {
-		echo '<p class="description">Les formulaires de devis et de contact utilisent l’extension gratuite <strong>Fluent Forms</strong> : <a href="' . esc_url( admin_url( 'plugin-install.php?s=fluent+forms&tab=search&type=term' ) ) . '">l’installer</a>, puis revenir ici. En attendant, les pages affichent le téléphone et l’e-mail.</p>';
+		echo '<p class="description">Les formulaires de devis et de contact utilisent l’extension gratuite <strong>Fluent Forms</strong>, et <strong>FluentSMTP</strong> pour que les e-mails arrivent. En attendant, les pages affichent le téléphone et l’e-mail.</p>';
+		echo briise_extensions_bouton(); // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans la fonction.
 		return;
 	}
 	echo '<table class="form-table" role="presentation">';
@@ -334,11 +416,12 @@ function briise_formulaires_encadre() {
 				. '<button type="submit" class="button">Créer le formulaire</button></form>';
 		}
 		briise_ligne( $nom, $champ, 'devis' === $type
-			? 'Nom, téléphone, e-mail (facultatif), commune, projet (liste des services du site) et description. E-mail à l’adresse de Mon entreprise, avec « Répondre » vers le visiteur ; confirmation au visiteur, qui peut y joindre ses photos.'
+			? 'Nom, téléphone, e-mail (facultatif), commune, projet (liste des services du site) et description. E-mail à l’adresse de Mon entreprise (et aux autres adresses réglées dans l’onglet Entreprise), avec « Répondre » vers le visiteur ; confirmation au visiteur, qui peut y joindre ses photos.'
 			: 'Nom, téléphone, e-mail (facultatif) et message. Mêmes e-mails que pour le devis.' );
 	}
 	echo '</table>';
 	$smtp = defined( 'FLUENTMAIL' ) || class_exists( '\FluentMail\App\Services\Mailer\Manager' );
+	echo briise_extensions_bouton(); // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans la fonction.
 	echo '<div class="br-a-faire' . ( $smtp ? ' br-ok' : '' ) . '">' . ( $smtp
 		? 'FluentSMTP est actif : vérifiez qu’une connexion d’envoi est réglée (Réglages > FluentSMTP) et envoyez un e-mail de test.'
 		: 'Pour que les demandes n’arrivent pas en indésirables, installez <strong>FluentSMTP</strong> et reliez-le à la boîte e-mail du domaine du client (avec SPF, DKIM et DMARC réglés chez l’hébergeur).' ) . '</div>';
