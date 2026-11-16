@@ -29,7 +29,7 @@ foreach ( array( 'mentions-legales' => 'Mentions légales', 'confidentialite' =>
 
 <!-- wp:columns {"className":"br-footer-cols"} -->
 <div class="wp-block-columns br-footer-cols"><!-- wp:column {"width":"<?php echo esc_attr( $largeur ); ?>"} -->
-<div class="wp-block-column" style="flex-basis:<?php echo esc_attr( $largeur ); ?>"><!-- wp:site-title {"level":0,"className":"br-logo"} /-->
+<div class="wp-block-column" style="flex-basis:<?php echo esc_attr( $largeur ); ?>"><!-- wp:site-title {"level":0,"className":"br-logo br-logo--pied"} /-->
 
 <!-- wp:site-tagline {"className":"br-footer-text"} /--></div>
 <!-- /wp:column -->

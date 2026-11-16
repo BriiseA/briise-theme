@@ -375,3 +375,25 @@ function briise_contact_rapide_html() {
 	}
 	return $liens ? '<div class="wp-block-buttons br-contact-rapide">' . implode( '', $liens ) . '</div>' : '';
 }
+
+/**
+ * Logo : dans l'en-tête, le bloc Logo remplace le nom en texte dès qu'un logo est choisi
+ * (Mon entreprise > Entreprise). Dans le pied de page, sombre, le logo pour fond foncé
+ * remplace le nom s'il existe ; sinon le nom reste en texte.
+ */
+add_filter( 'render_block_core/site-title', function ( $html, $block ) {
+	$cls = $block['attrs']['className'] ?? '';
+	if ( false === strpos( $cls, 'br-logo' ) ) {
+		return $html;
+	}
+	if ( false !== strpos( $cls, 'br-logo--pied' ) ) {
+		$id = (int) ( briise_reglage( 'briise_entreprise' )['logo_clair'] ?? 0 );
+		if ( ! $id || ! wp_attachment_is_image( $id ) ) {
+			return $html;
+		}
+		$img = wp_get_attachment_image( $id, 'medium', false, array( 'alt' => get_bloginfo( 'name' ), 'loading' => 'lazy' ) );
+		return '<div class="br-logo-clair"><a href="' . esc_url( home_url( '/' ) ) . '" rel="home">' . $img . '</a></div>';
+	}
+	return has_custom_logo() ? '' : $html;
+}, 10, 2 );
+

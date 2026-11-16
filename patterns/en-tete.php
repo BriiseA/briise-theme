@@ -9,7 +9,9 @@ $e = briise_entreprise();
 ?>
 <!-- wp:group {"align":"full","className":"br-header","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-header"><!-- wp:group {"className":"br-header-inner","layout":{"type":"flex","justifyContent":"space-between","flexWrap":"nowrap"}} -->
-<div class="wp-block-group br-header-inner"><!-- wp:site-title {"level":0,"className":"br-logo"} /-->
+<div class="wp-block-group br-header-inner"><!-- wp:site-logo {"width":220,"shouldSyncIcon":false,"className":"br-logo-img"} /-->
+
+<!-- wp:site-title {"level":0,"className":"br-logo"} /-->
 
 <!-- wp:group {"className":"br-header-right","layout":{"type":"flex","flexWrap":"nowrap"}} -->
 <div class="wp-block-group br-header-right"><!-- wp:navigation {"overlayMenu":"mobile","className":"br-nav","layout":{"type":"flex","justifyContent":"right"}} /-->

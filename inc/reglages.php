@@ -91,6 +91,7 @@ function briise_defauts( $option ) {
 				'person_job'  => '',
 				'person_page' => 0,
 				'faq_page'    => 0,
+				'logo_clair'  => 0,
 			);
 		case 'briise_legal':
 			return array(
@@ -236,6 +237,16 @@ function briise_nettoie_entreprise( $in ) {
 	if ( isset( $in['name'] ) && '' !== trim( $in['name'] ) ) {
 		update_option( 'blogname', sanitize_text_field( $in['name'] ) );
 	}
+	if ( isset( $in['logo'] ) ) {
+		$logo = absint( $in['logo'] );
+		if ( $logo && wp_attachment_is_image( $logo ) ) {
+			set_theme_mod( 'custom_logo', $logo );
+			update_option( 'site_logo', $logo );
+		} else {
+			remove_theme_mod( 'custom_logo' );
+			delete_option( 'site_logo' );
+		}
+	}
 	if ( isset( $in['slogan'] ) ) {
 		update_option( 'blogdescription', sanitize_text_field( $in['slogan'] ) );
 	}
@@ -273,6 +284,7 @@ function briise_nettoie_entreprise( $in ) {
 		'person_job'  => sanitize_text_field( $in['person_job'] ?? '' ),
 		'person_page' => absint( $in['person_page'] ?? 0 ),
 		'faq_page'    => absint( $in['faq_page'] ?? 0 ),
+		'logo_clair'  => absint( $in['logo_clair'] ?? 0 ),
 	);
 }
 

@@ -34,13 +34,14 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 
 ## Ambiances (variations de style)
 
-Apparence > Éditeur > Styles > Parcourir les styles. Six ambiances, toutes vérifiées en contraste AA :
+Apparence > Éditeur > Styles > Parcourir les styles. Sept ambiances, toutes vérifiées en contraste AA :
 
 | Ambiance | Pour qui | Titres / texte |
 | --- | --- | --- |
 | Galet (par défaut) | Bien-être, artisans d'art, créatifs | Bricolage Grotesque / Figtree |
 | Lumière | Photographes, esthétique, événementiel | Cormorant Garamond / DM Sans |
-| Atelier | Bâtiment, métallerie, garages | Barlow Condensed / Barlow |
+| Atelier | Bâtiment, garages, artisans du bois | Barlow Condensed / Barlow |
+| Acier | Métallerie, serrurerie, chaudronnerie : gris acier, graphite, rouille | Barlow Condensed / Barlow |
 | Cabinet | Avocats, experts-comptables, santé | Source Serif 4 / Source Sans 3 |
 | Comptoir | Restaurants, commerces, loisirs | Fredoka / Nunito |
 | Charte du client | Client qui a déjà sa charte graphique | Polices système, à remplacer |
@@ -60,6 +61,8 @@ Toutes les ambiances partagent les mêmes noms de couleurs, ce qui permet à cha
 Arrondis et formes : `--wp--custom--rayon--grand|moyen|petit|bouton` et `--wp--custom--forme--blob`, propres à chaque ambiance.
 
 **Couleur du logo du client.** Styles > Couleurs > Palette > Modifier, puis changer `accent`. Si une couleur rend un texte illisible (contraste inférieur à 4,5:1), un avertissement apparaît sur le tableau de bord.
+
+**Logo.** Mon entreprise > Entreprise > Logo : il remplace le nom en texte dans l'en-tête (le nom reste lu par Google et les lecteurs d'écran). Le pied de page étant sombre, un « logo pour fond foncé » facultatif l'y remplace aussi ; sans lui, le nom reste en texte. Sans logo, rien ne change.
 
 **Charte du client.** Partir de l'ambiance « Charte du client », remplacer ses couleurs par celles de la charte, puis ajouter ses polices dans Styles > Typographie > Gérer les polices (fichiers WOFF2, licence web vérifiée).
 
@@ -109,7 +112,7 @@ Dans `markup`, les repères `{{CTA}}`, `{{CTA_LABEL}}`, `{{URL:slug}}`, `{{IMG:n
 
 ## Bibliothèque de sections
 
-Dans l'éditeur : bouton « + » > Compositions > catégories « Sections · … ». Chaque section fonctionne avec les six ambiances.
+Dans l'éditeur : bouton « + » > Compositions > catégories « Sections · … ». Chaque section fonctionne avec les sept ambiances.
 
 | Famille | Sections |
 | --- | --- |
@@ -135,7 +138,7 @@ Menu « Mon entreprise » de l'administration, juste sous le tableau de bord.
 | Onglet | Qui | Contenu |
 | --- | --- | --- |
 | Horaires et annonces | Éditeur et administrateur | Horaires par jour, fermetures exceptionnelles, bandeau d'information |
-| Entreprise | Administrateur | Nom, slogan, type d'activité, coordonnées, GPS, zone, action principale, personne, réseaux |
+| Entreprise | Administrateur | Nom, slogan, logo (et logo pour fond foncé), type d'activité, coordonnées, GPS, zone, action principale, personne, réseaux |
 | Mentions légales | Administrateur | Éditeur, hébergeur, profession réglementée, médiateur, réalisation |
 | Fonctions | Administrateur | Fonctions activables, Bing Webmaster Tools, Search Console, Matomo |
 | Démarrage | Administrateur | Kits et import d'un fichier de site |

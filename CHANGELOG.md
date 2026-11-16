@@ -1,5 +1,13 @@
 # Historique des versions
 
+## 0.10.0
+
+Retours sur le site test Métallerie Delaunay.
+
+- Logo : nouveau champ dans Mon entreprise > Entreprise (médiathèque). Il remplace le nom en texte dans l'en-tête, page d'atterrissage comprise ; un logo pour fond foncé facultatif remplace le nom dans le pied de page. Le logo sert aussi d'image de partage et dans les données structurées.
+- Bande d'appel à l'action plus compacte : marges divisées par deux, titre une taille en dessous, texte à gauche et bouton à droite sur ordinateur (hauteur divisée par 2,5). Le lien « Demander un devis » du pied de page s'efface quand la page a déjà sa bande.
+- Nouvelle ambiance « Acier » pour les métiers du métal : gris acier froids, graphite, rouille en accent. « Atelier » reste l'ambiance du bâtiment et des artisans du bois.
+
 ## 0.9.2
 
 - Menu : sur un WordPress neuf (Playground, nouvel hébergement), WordPress crée un menu automatique qui liste toutes les pages, légales comprises. L'import et la case « Afficher dans le menu » le remplacent désormais par les seules pages prévues, y compris lors d'une réimportation sur un site déjà importé.

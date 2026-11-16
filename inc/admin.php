@@ -31,12 +31,35 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
 	if ( 'toplevel_page_briise-entreprise' !== $hook ) {
 		return;
 	}
+	wp_enqueue_media();
+	wp_add_inline_script( 'media-editor', "
+		document.addEventListener( 'click', function ( e ) {
+			var choisir = e.target.closest( '.br-media-choisir' ), retirer = e.target.closest( '.br-media-retirer' );
+			if ( ! choisir && ! retirer ) { return; }
+			e.preventDefault();
+			var bloc = ( choisir || retirer ).closest( '.br-media' );
+			var champ = bloc.querySelector( 'input[type=hidden]' ), apercu = bloc.querySelector( '.br-media-apercu' );
+			if ( retirer ) { champ.value = '0'; apercu.innerHTML = ''; bloc.classList.remove( 'br-media-rempli' ); return; }
+			var cadre = wp.media( { title: 'Choisir le logo', button: { text: 'Utiliser ce logo' }, library: { type: 'image' }, multiple: false } );
+			cadre.on( 'select', function () {
+				var img = cadre.state().get( 'selection' ).first().toJSON();
+				champ.value = img.id;
+				apercu.innerHTML = '<img src=\"' + ( img.sizes && img.sizes.medium ? img.sizes.medium.url : img.url ) + '\" alt=\"\">';
+				bloc.classList.add( 'br-media-rempli' );
+			} );
+			cadre.open();
+		} );
+	" );
 	wp_add_inline_style( 'common', '
 		.br-admin .form-table th { width: 220px; }
 		.br-admin .description { max-width: 46em; }
 		.br-admin h2.title { margin-top: 2.2em; padding-top: 1.2em; border-top: 1px solid #dcdcde; }
 		.br-admin h2.title:first-of-type { border-top: 0; padding-top: 0; margin-top: 1em; }
-		.br-jours td, .br-jours th { padding: 6px 10px 6px 0; vertical-align: middle; }
+.br-media-apercu img { max-height: 70px; max-width: 260px; display: block; margin: 0 0 8px; padding: 8px; background: #fff; border: 1px solid #dcdcde; }
+		.br-media-apercu.br-fonce img { background: #1d2327; }
+		.br-media .br-media-retirer { display: none; margin-left: 6px; }
+		.br-media.br-media-rempli .br-media-retirer { display: inline-block; }
+				.br-jours td, .br-jours th { padding: 6px 10px 6px 0; vertical-align: middle; }
 		.br-jours input[type=time] { width: 9em; }
 		.br-jours th { text-align: left; white-space: nowrap; }
 		.br-jours .br-ferme-txt { color: #646970; }
@@ -209,6 +232,19 @@ function briise_onglet_annonces( $o, $v ) {
 
 /* ----- Onglet Entreprise -------------------------------------------------------- */
 
+/**
+ * Choix d'une image de la médiathèque (logo).
+ */
+function briise_media( $option, $cle, $id, $label, $aide = '', $fonce = false ) {
+	$img  = $id ? wp_get_attachment_image_url( $id, 'medium' ) : '';
+	$html = '<div class="br-media' . ( $img ? ' br-media-rempli' : '' ) . '">'
+		. '<div class="br-media-apercu' . ( $fonce ? ' br-fonce' : '' ) . '">' . ( $img ? '<img src="' . esc_url( $img ) . '" alt="">' : '' ) . '</div>'
+		. '<input type="hidden" name="' . briise_nom( $option, $cle ) . '" value="' . (int) $id . '">'
+		. '<button type="button" class="button br-media-choisir">Choisir une image</button>'
+		. '<button type="button" class="button-link br-media-retirer">Retirer</button></div>';
+	briise_ligne( $label, $html, $aide );
+}
+
 function briise_onglet_identite( $o, $v ) {
 	$manque = array();
 	if ( ! $v['telephone'] && ! $v['email'] ) {
@@ -247,6 +283,8 @@ function briise_onglet_identite( $o, $v ) {
 		<?php
 		briise_texte( $o, array( 'name' => get_bloginfo( 'name' ) ), 'name', 'Nom commercial', 'Le nom affiché partout, identique à la fiche Google. C’est aussi le titre du site dans WordPress.' );
 		briise_texte( $o, array( 'slogan' => get_bloginfo( 'description' ) ), 'slogan', 'Slogan', 'Une phrase courte sous le nom, dans le pied de page.' );
+		briise_media( $o, 'logo', (int) get_theme_mod( 'custom_logo' ), 'Logo', 'Affiché dans l’en-tête à la place du nom (le nom reste lu par Google et les lecteurs d’écran). Format conseillé : PNG transparent ou SVG converti en PNG, au moins 400 px de large. Sans logo, le nom s’affiche en texte.' );
+		briise_media( $o, 'logo_clair', (int) $v['logo_clair'], 'Logo pour fond foncé', 'Facultatif : version claire du logo pour le pied de page, qui est sombre. Sans elle, le pied de page affiche le nom en texte.', true );
 		?>
 	</table>
 
