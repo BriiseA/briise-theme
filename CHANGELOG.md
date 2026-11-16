@@ -1,5 +1,15 @@
 # Historique des versions
 
+## 1.3.0
+
+- **Réalisations dynamiques** (extension) : menu « Réalisations » pour publier une fiche par réalisation (photo principale, galerie agrandie au clic, demande, solution, ville, date, service, catégorie). Grilles automatiques sur l'accueil, la page des réalisations (filtres par catégorie, sans rechargement) et chaque page de service ; chaque fiche a sa page, renvoie vers son service et propose d'autres réalisations du même service. Nom réglable : Réalisations, Portfolio, Chantiers ou Projets.
+- Fiche de moins de 150 mots : visible sur le site, mais hors de Google et du plan du site ; signalée dans Contrôle (et dans la fiche, avec le nombre de mots).
+- Contrôle : les fiches comptent dans le maillage (grilles et lien vers le service).
+- Fichier de site : liste `realisations` à l'import ; export complet et conversion des fiches en pages ordinaires (même adresse) dans Fin de collaboration.
+- Thème : gabarit de fiche, trois sections automatiques (Dernières réalisations, Toutes les réalisations avec filtres, Réalisations de ce service), l'ancienne grille reste disponible « à la main » ; kits mis à jour (32 sections).
+- **Réseaux sociaux en icônes** dans le pied de page, avec TikTok, YouTube et Pinterest en plus ; nom lu par les lecteurs d'écran, zone cliquable de 44 px.
+- Vérifié sur Delaunay (9 fiches) : 0 bloc invalide, Lighthouse accessibilité, bonnes pratiques et SEO à 100 sur l'accueil, la page des réalisations, une fiche et une page de service ; export puis réimport sans écart ; site figé lisible sans l'extension, adresses des fiches conservées ; extension seule avec Twenty Twenty-Five.
+
 ## 1.2.0
 
 Briise devient un thème et une extension. **À l'installation ou à la mise à jour : installer et activer `briise-socle.zip`, puis mettre à jour le thème.** Les réglages existants sont conservés tels quels.

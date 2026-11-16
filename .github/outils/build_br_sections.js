@@ -175,7 +175,19 @@ add('logos', 'confiance', 'Logos de clients ou labels', 'Certifications, labels,
   ]));
 
 const projet = (n, t) => Col([Box('br-project', [Img(n, '4/3'), Chips(['Type de projet', 'Ville']), H(t, 3), Muted('Une phrase : la demande du client et ce qui a été fait.')])]);
-add('realisations', 'confiance', 'Réalisations en grille', 'Montrer son travail : artisans, créatifs, rénovation.',
+add('realisations', 'confiance', 'Dernières réalisations (automatique)', 'Accueil : les trois dernières réalisations publiées (menu Réalisations), avec un lien vers toutes. Se met à jour seule ; disparaît s’il n’y en a aucune.',
+  Section('br-section-realisations', [
+    sectionHead('Nos dernières réalisations', ['Toutes les réalisations', URL('realisations')]),
+    Short('[briise_realisations nombre="3"]'),
+  ]));
+add('realisations-toutes', 'confiance', 'Toutes les réalisations, avec filtres (automatique)', 'Page des réalisations : toutes les fiches publiées, avec des boutons pour filtrer par catégorie. Se met à jour seule.',
+  Section('br-section-realisations', [Short('[briise_realisations filtres="1"]')]));
+add('realisations-service', 'confiance', 'Réalisations de ce service (automatique)', 'Page de service : les réalisations rattachées à ce service. Disparaît tant qu’il n’y en a aucune.',
+  Section('br-section-realisations', [
+    sectionHead('Nos réalisations pour ce service', ['Toutes les réalisations', URL('realisations')]),
+    Short('[briise_realisations service="auto" nombre="3"]'),
+  ]));
+add('realisations-manuelle', 'confiance', 'Réalisations en grille (à la main)', 'Trois réalisations écrites dans la page, sans fiche. Pour un site sans la fonction Réalisations.',
   Section('', [
     sectionHead('Nos dernières réalisations', ['Toutes les réalisations', URL('realisations')]),
     Cols([projet('carre', 'Première réalisation'), projet('carre-2', 'Deuxième réalisation'), projet('carre-3', 'Troisième réalisation')], 'br-projects'),

@@ -17,7 +17,7 @@ for slug,s in d.items():
  * Description: {s['desc']}
  * Viewport Width: 1400
  */
-$briise = briise_entreprise();
+$briise = briise_theme_entreprise();
 ?>
 """
     open(R+f'patterns/section-{slug}.php','w').write(head+m+'\n')

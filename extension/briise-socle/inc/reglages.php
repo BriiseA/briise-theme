@@ -43,8 +43,17 @@ function briise_fonctions_liste() {
 		'retour_haut'   => array( 'Bouton « retour en haut »', 'Apparaît sur les longues pages après deux écrans de défilement, au-dessus du bouton fixe mobile.', true ),
 		'indexnow'      => array( 'Signaler les nouvelles pages à Bing (IndexNow)', 'Chaque page publiée ou modifiée est signalée aussitôt à Bing et aux moteurs qui partagent IndexNow. Bing alimente une partie des réponses de ChatGPT.', true ),
 		'ia_entrainement' => array( 'Autoriser l’entraînement des IA', 'Décoché : les robots qui collectent des textes pour entraîner les IA (GPTBot, ClaudeBot, Google-Extended…) sont refusés. Les robots des moteurs de recherche IA restent toujours autorisés, sinon le site ne serait plus cité.', true ),
+		'realisations'  => array( 'Réalisations', 'Le client publie ses réalisations (photos, ville, service) depuis le menu du même nom : la page des réalisations, l’accueil et les pages de service se mettent à jour seules. Le nom affiché se règle plus bas.', true ),
+		'reseaux_icones' => array( 'Réseaux sociaux en icônes', 'Dans le pied de page, les réseaux s’affichent en icônes (nom lu par les lecteurs d’écran). Décoché : en texte.', true ),
 		'bandeau'       => array( 'Bandeau d’information', 'Un message en haut du site (fermeture, nouveauté), avec date de fin. L’éditeur le gère dans l’onglet « Horaires et annonces ».', false ),
 	);
+}
+
+/**
+ * Noms proposés pour les réalisations (menu, page, adresse des fiches).
+ */
+function briise_realisations_noms() {
+	return array( 'Réalisations', 'Portfolio', 'Chantiers', 'Projets' );
 }
 
 function briise_defauts( $option ) {
@@ -83,6 +92,9 @@ function briise_defauts( $option ) {
 				'facebook'    => '',
 				'linkedin'    => '',
 				'google'      => '',
+				'tiktok'      => '',
+				'youtube'     => '',
+				'pinterest'   => '',
 				'autres'      => array(),
 				'cta_label'   => 'Nous contacter',
 				'cta_page'    => 0,
@@ -129,6 +141,7 @@ function briise_defauts( $option ) {
 				$out[ $cle ] = $f[2];
 			}
 			return $out + array(
+				'realisations_nom' => 'Réalisations',
 				'matomo_url' => '',
 				'matomo_id'  => '',
 				'gsc'        => '',
@@ -285,6 +298,9 @@ function briise_nettoie_entreprise( $in ) {
 		'facebook'    => esc_url_raw( $in['facebook'] ?? '' ),
 		'linkedin'    => esc_url_raw( $in['linkedin'] ?? '' ),
 		'google'      => esc_url_raw( $in['google'] ?? '' ),
+		'tiktok'      => esc_url_raw( $in['tiktok'] ?? '' ),
+		'youtube'     => esc_url_raw( $in['youtube'] ?? '' ),
+		'pinterest'   => esc_url_raw( $in['pinterest'] ?? '' ),
 		'autres'      => array_values( array_filter( array_map( 'esc_url_raw', briise_nettoie_lignes( $in['autres'] ?? array() ) ) ) ),
 		'cta_label'   => sanitize_text_field( $in['cta_label'] ?? '' ) ?: 'Nous contacter',
 		'cta_page'    => absint( $in['cta_page'] ?? 0 ),
@@ -332,6 +348,7 @@ function briise_nettoie_fonctions( $in ) {
 	foreach ( briise_fonctions_liste() as $cle => $f ) {
 		$out[ $cle ] = ! empty( $in[ $cle ] );
 	}
+	$out['realisations_nom'] = in_array( $in['realisations_nom'] ?? '', briise_realisations_noms(), true ) ? $in['realisations_nom'] : 'Réalisations';
 	$url = esc_url_raw( trim( (string) ( $in['matomo_url'] ?? '' ) ) );
 	$out['matomo_url'] = $url ? trailingslashit( preg_replace( '#/(matomo|piwik)\.(php|js)$#', '', $url ) ) : '';
 	$out['matomo_id']  = absint( $in['matomo_id'] ?? 0 ) ?: '';

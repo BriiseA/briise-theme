@@ -134,6 +134,11 @@ main .br-horaires .br-today { background: var(--wp--preset--color--nuance); bord
 /* Réseaux et coordonnées */
 .br-reseaux { margin-top: 1rem; }
 .br-reseaux a { text-underline-offset: 3px; }
+.br-reseaux--icones { list-style: none; padding: 0; margin: .75rem 0 0 -10px; display: flex; flex-wrap: wrap; gap: .25rem; }
+.br-reseaux--icones li { margin: 0; }
+.br-reseaux--icones a { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; color: inherit; transition: background-color .2s; }
+.br-reseaux--icones a:hover, .br-reseaux--icones a:focus-visible { background: color-mix(in srgb, currentColor 14%, transparent); }
+.br-reseaux--icones svg { width: 22px; height: 22px; }
 
 /* Mentions légales : champ manquant bien visible */
 .br-mentions mark { background: #ffe08a; color: #262220; padding: 0 .25rem; }

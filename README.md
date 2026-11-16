@@ -19,9 +19,9 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | Dossier ou fichier | Rôle |
 | --- | --- |
 | `theme.json` | Couleurs, polices, tailles, espacements et styles globaux |
-| `templates/` | Modèles de pages (page, article, blog, 404, page sans titre) |
+| `templates/` | Modèles de pages (page, article, blog, 404, page sans titre, fiche de réalisation) |
 | `parts/` | En-tête et pied de page |
-| `patterns/` | Bibliothèque de 29 sections (`section-*.php`), en-tête, pied de page, blog |
+| `patterns/` | Bibliothèque de 32 sections (`section-*.php`), en-tête, pied de page, blog |
 | `assets/images/sections/` | Images de remplacement des sections, à remplacer par les photos du client |
 | `assets/js/ux.js` | Menu intelligent, page active, téléphones cliquables, bouton fixe mobile, retour en haut |
 | `assets/js/motion.js` | Animations d'apparition (coupées si le visiteur le demande) |
@@ -37,7 +37,8 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | `extension/briise-socle/inc/seo.php`, `robots.php` | Title, description, Open Graph, noindex, plan du site, données structurées ; robots.txt, IndexNow |
 | `extension/briise-socle/inc/menu.php` | Case « Afficher dans le menu » et tenue du menu principal |
 | `extension/briise-socle/inc/maillage.php` | Pages liées et onglet Contrôle |
-| `extension/briise-socle/inc/cartes.php` | Cartes Coordonnées et Zone |
+| `extension/briise-socle/inc/cartes.php` | Cartes Coordonnées et Zone, icônes |
+| `extension/briise-socle/inc/realisations.php` | Réalisations : fiches, grilles automatiques, filtres, import et export |
 | `extension/briise-socle/inc/mises-a-jour.php` | Mises à jour du thème et de l'extension depuis les versions GitHub |
 | `extension/briise-socle/inc/depart.php` | Onglet « Fin de collaboration » |
 | `.github/outils/` | Scripts de fabrication des sections, kits et ambiances (hors thème) |
@@ -72,6 +73,10 @@ Toutes les ambiances partagent les mêmes noms de couleurs, ce qui permet à cha
 Arrondis et formes : `--wp--custom--rayon--grand|moyen|petit|bouton` et `--wp--custom--forme--blob`, propres à chaque ambiance.
 
 **Couleur du logo du client.** Styles > Couleurs > Palette > Modifier, puis changer `accent`. Si une couleur rend un texte illisible (contraste inférieur à 4,5:1), un avertissement apparaît sur le tableau de bord.
+
+**Réalisations.** Menu « Réalisations » de l'administration (Éditeur compris) : une fiche par réalisation, avec photo principale, galerie (agrandie au clic), « La demande », « Ce que nous avons fait », ville, date, service concerné et catégorie. Les grilles se mettent à jour seules : accueil (trois dernières), page des réalisations (toutes, avec boutons de filtre par catégorie), pages de service (les réalisations du service, section masquée s'il n'y en a pas). Chaque fiche a sa page (`/realisations/escalier-droit-a-etampes/`), renvoie vers son service et propose d'autres réalisations du même service. Une fiche de moins de 150 mots reste dans les grilles mais sort de Google et du plan du site ; l'onglet Contrôle la signale. Le nom se règle dans Mon entreprise > Fonctions : Réalisations, Portfolio, Chantiers ou Projets (l'adresse des fiches suit ; la page qui les liste doit porter la même adresse, `/portfolio/` par exemple). Codes courts : `[briise_realisations nombre="3" service="auto" categorie="escalier" filtres="1"]`.
+
+**Réseaux sociaux.** Instagram, Facebook, LinkedIn, fiche Google, TikTok, YouTube et Pinterest (Mon entreprise > Entreprise) s'affichent en icônes dans le pied de page, avec leur nom pour les lecteurs d'écran (Fonctions : « Réseaux sociaux en icônes », décocher pour du texte).
 
 **Cartes Coordonnées et Zone.** Deux sections de la catégorie Contact, colorées par l'ambiance. Elles lisent Mon entreprise : rien n'est tapé deux fois. Champs facultatifs (Mon entreprise > Entreprise, « Cartes Coordonnées et Zone d'intervention ») : une précision sous le téléphone, l'e-mail et l'adresse, un badge par carte, et les secteurs de la zone :
 
@@ -132,6 +137,16 @@ Fichier JSON importé dans Démarrage. Seule la liste `pages` est obligatoire. D
 
 Dans `markup`, les repères `{{CTA}}`, `{{CTA_LABEL}}`, `{{URL:slug}}`, `{{IMG:nom}}` et `{{TITRE}}` sont remplacés à l'import, ainsi que `{{SERVICE:n}}` (nom du n-ième service) et `{{URL:service-n}}` (sa page). Les services sont les sous-pages de la page des services, dans l'ordre du fichier. `"legales": false` évite la création des pages légales.
 
+Fiches de réalisation : liste `realisations`, créées après les pages (chacune retrouve son service par son adresse) ; les photos s'ajoutent ensuite dans chaque fiche.
+
+```json
+"realisations": [
+  { "titre": "Escalier droit à limon central à Étampes", "ville": "Étampes", "date": "2024-11",
+    "service": "escaliers-metalliques", "categories": ["Escalier"], "resume": "Un limon central en acier anthracite pour un loft.",
+    "demande": ["Ce que voulait le client…"], "solution": ["Ce qui a été fait…", "Deuxième paragraphe…"] }
+]
+```
+
 ## Bibliothèque de sections
 
 Dans l'éditeur : bouton « + » > Compositions > catégories « Sections · … ». Chaque section fonctionne avec les sept ambiances.
@@ -140,7 +155,7 @@ Dans l'éditeur : bouton « + » > Compositions > catégories « Sections · …
 | --- | --- |
 | Ouverture | Hero avec image, Hero bannière plein écran, Hero texte seul, En-tête de page avec fil d'Ariane |
 | Offre et tarifs | Trois cartes de service, Service détaillé alterné, Tableau comparatif, Grille de tarifs en cartes, Tableau de tarifs simple |
-| Confiance et preuves | Chiffres clés, Témoignages, Logos ou labels, Réalisations en grille, Avant / après, Galerie en mosaïque |
+| Confiance et preuves | Chiffres clés, Témoignages, Logos ou labels, Dernières réalisations, Toutes les réalisations avec filtres, Réalisations de ce service (les trois automatiques), Réalisations en grille (à la main), Avant / après, Galerie en mosaïque |
 | Parcours et FAQ | Étapes numérotées, FAQ en accordéon, Horaires et planning |
 | Personnes | Présentation du dirigeant, Équipe, Citation ou valeurs |
 | Contenu | Derniers articles, Pages liées (automatique) |
@@ -220,7 +235,7 @@ Ne pas utiliser « Code > Download ZIP ». Dans l'onglet **Releases** du dépôt
 
 **Mises à jour.** L'extension interroge GitHub (au plus toutes les 6 heures) et propose les nouvelles versions du thème et de l'extension dans Tableau de bord > Mises à jour, comme pour n'importe quelle extension. Dépôt public : rien à régler. Dépôt privé : ajouter dans `wp-config.php` une clé GitHub en lecture seule, limitée à ce dépôt (`define( 'BRIISE_GITHUB_TOKEN', '…' );`). Une clé placée sur un site client peut être lue par quiconque a accès à ses fichiers : un dépôt public est plus simple et plus sûr.
 
-**Fin de collaboration.** Mon entreprise > Fin de collaboration (administrateurs) : exporter le fichier de site (réglages et pages, au format d'import), figer les contenus (chaque code `[briise_…]` devient des blocs ordinaires, pour que le site reste lisible sans l'extension ; une révision de chaque page est gardée), liste des comptes et accès à remettre.
+**Fin de collaboration.** Mon entreprise > Fin de collaboration (administrateurs) : exporter le fichier de site (réglages, pages et fiches de réalisation, au format d'import), figer les contenus (chaque code `[briise_…]` devient des blocs ordinaires et chaque fiche de réalisation devient une page, à la même adresse, pour que le site reste complet sans l'extension ; une révision de chaque page est gardée), liste des comptes et accès à remettre.
 
 ## Versions
 

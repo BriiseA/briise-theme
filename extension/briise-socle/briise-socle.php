@@ -3,7 +3,7 @@
  * Plugin Name: Briise Socle
  * Plugin URI: https://briise.fr
  * Description: Le fonctionnement des sites Briise, indépendant du thème : Mon entreprise (coordonnées, horaires, annonces, mentions légales), contrôle du maillage, référencement et données structurées, robots.txt, cartes Coordonnées et Zone, mesure des contacts, mises à jour et fin de collaboration.
- * Version: 1.2.0
+ * Version: 1.3.0
  * Requires at least: 6.6
  * Requires PHP: 7.4
  * Author: Briise
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BRIISE_SOCLE_VERSION', '1.2.0' );
+define( 'BRIISE_SOCLE_VERSION', '1.3.0' );
 define( 'BRIISE_SOCLE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BRIISE_SOCLE_URL', plugin_dir_url( __FILE__ ) );
 
@@ -30,11 +30,25 @@ require_once BRIISE_SOCLE_DIR . 'inc/menu.php';
 require_once BRIISE_SOCLE_DIR . 'inc/robots.php';
 require_once BRIISE_SOCLE_DIR . 'inc/maillage.php';
 require_once BRIISE_SOCLE_DIR . 'inc/cartes.php';
+require_once BRIISE_SOCLE_DIR . 'inc/realisations.php';
 require_once BRIISE_SOCLE_DIR . 'inc/mises-a-jour.php';
 if ( is_admin() ) {
 	require_once BRIISE_SOCLE_DIR . 'inc/admin.php';
 	require_once BRIISE_SOCLE_DIR . 'inc/depart.php';
 }
+
+// À l'activation : refaire les adresses (fiches de réalisations).
+register_activation_hook( __FILE__, function () {
+	update_option( 'briise_refaire_adresses', 1 );
+} );
+
+// À la désactivation : les adresses des fiches disparaissent avec l'extension.
+register_deactivation_hook( __FILE__, function () {
+	if ( post_type_exists( 'briise_realisation' ) ) {
+		unregister_post_type( 'briise_realisation' );
+	}
+	flush_rewrite_rules( false );
+} );
 
 /**
  * Le thème Briise est-il actif (directement ou comme parent d'un thème enfant) ?

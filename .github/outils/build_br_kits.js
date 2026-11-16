@@ -99,7 +99,7 @@ const KITS = {
     pages: [
       page('accueil', 'Accueil', sec('hero-banniere'), sec('trois-cartes'), sec('realisations'), sec('chiffres-cles'), sec('temoignages'), sec('zone'), sec('bandeau-cta')),
       page('savoir-faire', 'Savoir-faire', tete('Notre savoir-faire', 'Ce que vous fabriquez ou réalisez, et pour qui : particuliers, professionnels, collectivités.'), detail, sec('service-alterne'), sec('etapes'), sec('logos'), sec('bandeau-cta')),
-      page('realisations', 'Réalisations', tete('Nos réalisations', 'Quelques chantiers récents, avec la demande du client et la solution apportée.'), sec('realisations'), sec('avant-apres'), sec('galerie'), sec('bandeau-cta')),
+      page('realisations', 'Réalisations', tete('Nos réalisations', 'Quelques chantiers récents, avec la demande du client et la solution apportée.'), sec('realisations-toutes'), sec('avant-apres'), sec('bandeau-cta')),
       page('zone-intervention', 'Zone d’intervention', tete('Zone d’intervention', 'Les villes et le secteur où nous intervenons, et nos délais de déplacement.'), sec('zone-carte'), sec('bandeau-cta')),
       page('a-propos', 'À propos', tete('L’entreprise', 'Votre histoire en une phrase : depuis quand, combien vous êtes, ce qui vous distingue.', false), sec('dirigeant'), sec('equipe'), sec('valeurs'), sec('bandeau-cta')),
       page('devis', 'Devis', tete('Demander un devis', 'Décrivez votre projet en quelques lignes : nous revenons vers vous sous 48 heures avec une première estimation.', false), sec('formulaire'), sec('coordonnees-carte')),
@@ -126,10 +126,10 @@ const KITS = {
 
 const T = '{{TITRE}}';
 const MODELES = {
-  service: { titre: 'Page de service', desc: 'Un service en détail : présentation, déroulé, questions, appel à l’action.', markup: serialize(rythme([tete(T, 'Ce que comprend ce service, pour qui il est fait, et le résultat obtenu.'), sec('service-alterne'), sec('etapes'), sec('faq'), sec('pages-liees'), sec('bandeau-cta')].flat())) },
+  service: { titre: 'Page de service', desc: 'Un service en détail : présentation, déroulé, questions, appel à l’action.', markup: serialize(rythme([tete(T, 'Ce que comprend ce service, pour qui il est fait, et le résultat obtenu.'), sec('service-alterne'), sec('etapes'), sec('realisations-service'), sec('faq'), sec('pages-liees'), sec('bandeau-cta')].flat())) },
   simple: { titre: 'Page simple', desc: 'Titre, introduction et un bloc de texte libre.', markup: serialize(rythme([tete(T, 'Une phrase d’introduction qui résume la page.', false), Section('br-section--tight', [Box('br-legal', [P('Votre texte ici. Utilisez des intertitres pour découper le contenu.')])])].flat())) },
   tarifs: { titre: 'Page de tarifs', desc: 'Formules en cartes, tableau des prestations, appel à l’action.', markup: serialize(rythme([tete(T, 'Des prix clairs avant de réserver.'), sec('tarifs-cartes'), sec('tarifs-tableau'), sec('bandeau-cta')].flat())) },
-  realisations: { titre: 'Page de réalisations', desc: 'Réalisations en grille, avant / après, galerie.', markup: serialize(rythme([tete(T, 'Quelques réalisations récentes, avec la demande du client et la solution apportée.'), sec('realisations'), sec('avant-apres'), sec('galerie'), sec('bandeau-cta')].flat())) },
+  realisations: { titre: 'Page de réalisations', desc: 'Toutes les réalisations publiées, avec filtres par catégorie, puis un avant / après.', markup: serialize(rythme([tete(T, 'Quelques réalisations récentes, avec la demande du client et la solution apportée.'), sec('realisations-toutes'), sec('avant-apres'), sec('bandeau-cta')].flat())) },
   equipe: { titre: 'Page équipe', desc: 'Présentation du dirigeant, de l’équipe et des valeurs.', markup: serialize(rythme([tete(T, 'Les personnes qui vous accompagnent.', false), sec('dirigeant'), sec('equipe'), sec('valeurs'), sec('bandeau-cta')].flat())) },
   faq: { titre: 'Page FAQ', desc: 'Questions fréquentes en accordéon.', markup: serialize(rythme([tete(T, 'Les réponses aux questions que l’on nous pose le plus souvent.', false), sec('faq'), sec('bandeau-cta')].flat())) },
   zone: { titre: 'Page zone d’intervention', desc: 'Villes couvertes et coordonnées.', markup: serialize(rythme([tete(T, 'Les villes et le secteur où nous intervenons.'), sec('zone-carte'), sec('bandeau-cta')].flat())) },

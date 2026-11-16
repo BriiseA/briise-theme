@@ -50,8 +50,11 @@ function briise_entreprise() {
 			'Facebook'  => $e['facebook'],
 			'LinkedIn'  => $e['linkedin'],
 			'Google'    => $e['google'],
+			'TikTok'    => $e['tiktok'],
+			'YouTube'   => $e['youtube'],
+			'Pinterest' => $e['pinterest'],
 		) ),
-		'same_as'     => array_values( array_filter( array_merge( array( $e['instagram'], $e['facebook'], $e['linkedin'], $e['google'] ), $e['autres'] ) ) ),
+		'same_as'     => array_values( array_filter( array_merge( array( $e['instagram'], $e['facebook'], $e['linkedin'], $e['google'], $e['tiktok'], $e['youtube'], $e['pinterest'] ), $e['autres'] ) ) ),
 		'cta_label'   => $e['cta_label'],
 		'cta_url'     => $cta_url ? $cta_url : home_url( '/' ),
 		'person_name' => $e['person_name'],
@@ -243,9 +246,19 @@ function briise_reseaux_html() {
 	if ( ! $e['reseaux'] ) {
 		return '';
 	}
-	$liens = array();
+	$icones = briise_fonction( 'reseaux_icones' );
+	$liens  = array();
 	foreach ( $e['reseaux'] as $nom => $url ) {
-		$liens[] = '<a href="' . esc_url( $url ) . '" rel="me noopener" target="_blank">' . esc_html( $nom ) . '<span class="screen-reader-text"> (nouvel onglet)</span></a>';
+		if ( $icones ) {
+			// Nom lu par les lecteurs d'écran, infobulle au survol, zone cliquable de 44 px.
+			$liens[] = '<li><a href="' . esc_url( $url ) . '" rel="me noopener" target="_blank" title="' . esc_attr( $nom ) . '">'
+				. briise_icone( 'brand-' . strtolower( $nom ) ) . '<span class="screen-reader-text">' . esc_html( $nom ) . ' (nouvel onglet)</span></a></li>';
+		} else {
+			$liens[] = '<a href="' . esc_url( $url ) . '" rel="me noopener" target="_blank">' . esc_html( $nom ) . '<span class="screen-reader-text"> (nouvel onglet)</span></a>';
+		}
+	}
+	if ( $icones ) {
+		return '<ul class="br-reseaux br-reseaux--icones" aria-label="Réseaux sociaux">' . implode( '', $liens ) . '</ul>';
 	}
 	return '<p class="br-reseaux">' . implode( ' · ', $liens ) . '</p>';
 }
@@ -338,6 +351,9 @@ function briise_fil_ariane_html() {
 	$liens = array( '<a href="' . esc_url( home_url( '/' ) ) . '">Accueil</a>' );
 	if ( 'post' === $post->post_type && get_option( 'page_for_posts' ) ) {
 		$liens[] = '<a href="' . esc_url( get_permalink( get_option( 'page_for_posts' ) ) ) . '">' . esc_html( get_the_title( get_option( 'page_for_posts' ) ) ) . '</a>';
+	}
+	if ( 'briise_realisation' === $post->post_type && function_exists( 'briise_realisations_page' ) && briise_realisations_page() ) {
+		$liens[] = '<a href="' . esc_url( get_permalink( briise_realisations_page() ) ) . '">' . esc_html( get_the_title( briise_realisations_page() ) ) . '</a>';
 	}
 	foreach ( array_reverse( get_post_ancestors( $post ) ) as $parent ) {
 		$liens[] = '<a href="' . esc_url( get_permalink( $parent ) ) . '">' . esc_html( get_the_title( $parent ) ) . '</a>';

@@ -199,7 +199,13 @@ function briise_plan_installer( $plan ) {
 		}
 	}
 
-	// 7. L'ambiance et ses couleurs.
+	// 7. Réalisations (extension Briise Socle), après les pages : chacune retrouve son service.
+	$realisations = array();
+	if ( ! empty( $plan['realisations'] ) && function_exists( 'briise_realisations_importer' ) ) {
+		$realisations = briise_realisations_importer( $plan['realisations'], $statut );
+	}
+
+	// 8. L'ambiance et ses couleurs.
 	if ( ! empty( $plan['ambiance'] ) ) {
 		briise_appliquer_ambiance( sanitize_key( $plan['ambiance'] ), (array) ( $plan['couleurs'] ?? array() ) );
 	}
@@ -207,7 +213,7 @@ function briise_plan_installer( $plan ) {
 	if ( ! empty( $plan['kit'] ) ) {
 		update_option( 'briise_kit', sanitize_key( $plan['kit'] ) );
 	}
-	return array( 'crees' => array_values( wp_list_pluck( $crees, 'titre' ) ), 'gardes' => $gardes, 'manquants' => array_keys( $manquants ) );
+	return array( 'crees' => array_values( wp_list_pluck( $crees, 'titre' ) ), 'gardes' => $gardes, 'manquants' => array_keys( $manquants ), 'realisations' => $realisations );
 }
 
 /**
@@ -399,6 +405,9 @@ function briise_onglet_demarrage() {
 			echo '<div class="notice notice-error"><p>' . esc_html( $r['erreur'] ) . '</p></div>';
 		} else {
 			echo '<div class="notice notice-success"><p><strong>' . count( $r['crees'] ) . ' pages créées</strong>' . ( $r['crees'] ? ' : ' . esc_html( implode( ', ', $r['crees'] ) ) : '' ) . '.</p>';
+			if ( ! empty( $r['realisations'] ) ) {
+				echo '<p><strong>' . count( $r['realisations'] ) . ' fiches de réalisation créées</strong> : ' . esc_html( implode( ', ', $r['realisations'] ) ) . '. Ajoutez leurs photos (photo principale et galerie).</p>';
+			}
 			if ( $r['gardes'] ) {
 				echo '<p>Pages existantes laissées telles quelles : ' . esc_html( implode( ', ', $r['gardes'] ) ) . '.</p>';
 			}

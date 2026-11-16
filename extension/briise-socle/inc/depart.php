@@ -105,6 +105,65 @@ function briise_depart_figer( WP_Post $p ) {
 }
 
 /**
+ * Fiches de réalisation : deviennent des pages ordinaires, sous la page des réalisations
+ * (même adresse quand cette page existe), avec leurs informations écrites en tête.
+ * Retourne le nombre de fiches converties.
+ */
+function briise_depart_realisations() {
+	if ( ! post_type_exists( 'briise_realisation' ) ) {
+		return 0;
+	}
+	$parent = function_exists( 'briise_realisations_page' ) ? briise_realisations_page() : null;
+	$fiches = get_posts( array( 'post_type' => 'briise_realisation', 'post_status' => array( 'publish', 'draft', 'private', 'pending', 'future' ), 'posts_per_page' => -1 ) );
+	$avant  = array();
+	foreach ( $fiches as $f ) {
+		$avant[ $f->ID ] = get_permalink( $f );
+		$tete            = '';
+		if ( has_post_thumbnail( $f ) ) {
+			$img   = get_post_thumbnail_id( $f );
+			$tete .= '<!-- wp:image {"id":' . (int) $img . ',"sizeSlug":"large","linkDestination":"none","className":"is-style-br-arrondi"} -->' . "\n"
+				. '<figure class="wp-block-image size-large is-style-br-arrondi">' . wp_get_attachment_image( $img, 'large', false, array( 'class' => 'wp-image-' . (int) $img ) ) . '</figure>' . "\n<!-- /wp:image -->\n\n";
+		}
+		$infos = briise_realisation_infos_html( $f );
+		if ( $infos ) {
+			$tete .= "<!-- wp:html -->\n" . $infos . "\n<!-- /wp:html -->\n\n";
+		}
+		wp_save_post_revision( $f->ID );
+		wp_update_post( wp_slash( array(
+			'ID'           => $f->ID,
+			'post_type'    => 'page',
+			'post_parent'  => $parent ? $parent->ID : 0,
+			'post_content' => $tete . $f->post_content,
+		) ) );
+	}
+	// Une adresse qui change (pas de page des réalisations) : les liens du site suivent.
+	$remplacer = array();
+	foreach ( $avant as $id => $url ) {
+		clean_post_cache( $id );
+		$nouvelle = get_permalink( $id );
+		if ( $nouvelle && $nouvelle !== $url ) {
+			$remplacer[ $url ] = $nouvelle;
+		}
+	}
+	if ( $remplacer ) {
+		foreach ( get_posts( array( 'post_type' => array( 'page', 'post' ), 'post_status' => 'any', 'posts_per_page' => -1 ) ) as $p ) {
+			$c = strtr( $p->post_content, $remplacer );
+			if ( $c !== $p->post_content ) {
+				wp_update_post( wp_slash( array( 'ID' => $p->ID, 'post_content' => $c ) ) );
+			}
+		}
+	}
+	// Les fiches sont devenues des pages : la fonction Réalisations est coupée, et les adresses
+	// /realisations/… mènent désormais à ces pages.
+	$f                 = get_option( 'briise_fonctions', array() );
+	$f['realisations'] = false;
+	update_option( 'briise_fonctions', $f );
+	unregister_post_type( 'briise_realisation' );
+	flush_rewrite_rules( false );
+	return count( $fiches );
+}
+
+/**
  * Fichier de site au format d'import (Démarrage > Importer un fichier de site).
  */
 function briise_depart_fichier() {
@@ -166,6 +225,7 @@ function briise_depart_fichier() {
 		'blog'       => $slug( get_option( 'page_for_posts' ) ),
 		'faq'        => $slug( $pages_e['faq_page'] ),
 		'personne'   => $slug( $pages_e['person_page'] ),
+		'realisations' => function_exists( 'briise_realisations_exporter' ) ? briise_realisations_exporter() : array(),
 		'legales'    => false, // Les pages légales sont déjà dans la liste.
 		'statut'     => 'draft',
 		'pages'      => $pages,
@@ -197,6 +257,10 @@ add_action( 'admin_post_briise_depart_figer', function () {
 				$faites[] = $c[0]->post_title;
 			}
 		}
+		$n = briise_depart_realisations();
+		if ( $n ) {
+			$faites[] = $n . ' fiche' . ( $n > 1 ? 's' : '' ) . ' de réalisation devenue' . ( $n > 1 ? 's' : '' ) . ' des pages';
+		}
 	}
 	set_transient( 'briise_depart_' . get_current_user_id(), empty( $_POST['confirme'] ) ? 'non' : $faites, 120 );
 	wp_safe_redirect( admin_url( 'admin.php?page=briise-entreprise&onglet=depart' ) );
@@ -217,6 +281,7 @@ function briise_onglet_depart() {
 	}
 	$contenus = briise_depart_contenus();
 	$total    = array_sum( array_column( $contenus, 1 ) );
+	$fiches   = post_type_exists( 'briise_realisation' ) ? count( get_posts( array( 'post_type' => 'briise_realisation', 'post_status' => 'any', 'posts_per_page' => -1, 'fields' => 'ids' ) ) ) : 0;
 	?>
 	<h2>Fin de collaboration</h2>
 	<p style="max-width:60em">Le site appartient au client. Cet onglet prépare son départ, vers un autre prestataire ou en autonomie : il garde tout son site, ses contenus et ses réglages, sans dépendre de Briise. Suivre les trois étapes dans l’ordre.</p>
@@ -230,10 +295,13 @@ function briise_onglet_depart() {
 	</form>
 
 	<h3>2. Figer les contenus</h3>
-	<?php if ( ! $contenus ) : ?>
+	<?php if ( ! $contenus && ! $fiches ) : ?>
 		<p class="br-a-faire br-ok">Aucun code Briise dans les pages : le site s’affichera correctement même sans l’extension Briise Socle.</p>
 	<?php else : ?>
 		<p style="max-width:60em">Les pages contiennent <strong><?php echo (int) $total; ?> code<?php echo $total > 1 ? 's' : ''; ?> Briise</strong> (fil d’Ariane, coordonnées, horaires, cartes, pages liées…). Ils se mettent à jour seuls tant que l’extension est active ; si elle est retirée, ils s’afficheraient en texte brut entre crochets. Figer les remplace par leur contenu du moment, en blocs WordPress ordinaires. À faire juste avant le départ : ensuite, un changement d’horaires ou de téléphone se corrige à la main dans chaque page.</p>
+		<?php if ( $fiches ) : ?>
+			<p style="max-width:60em"><strong><?php echo (int) $fiches; ?> fiche<?php echo $fiches > 1 ? 's' : ''; ?> de réalisation</strong> deviendront des pages ordinaires, sous la page des réalisations (même adresse), avec leur photo principale, leur ville, leur date et leur service écrits en tête.</p>
+		<?php endif; ?>
 		<ul style="list-style:disc;padding-left:1.5em">
 			<?php foreach ( $contenus as $c ) : ?>
 				<li><a href="<?php echo esc_url( get_edit_post_link( $c[0]->ID ) ); ?>"><?php echo esc_html( get_the_title( $c[0] ) ); ?></a> : <?php echo (int) $c[1]; ?></li>

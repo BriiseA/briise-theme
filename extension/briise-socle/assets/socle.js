@@ -16,6 +16,30 @@
 		} );
 	}
 
+	/* Réalisations : filtres par catégorie, sans rechargement. */
+	document.querySelectorAll( '.br-realisations' ).forEach( function ( bloc ) {
+		var boutons = bloc.querySelectorAll( '.br-filtre' );
+		var etat = bloc.querySelector( '.br-filtres-etat' );
+		boutons.forEach( function ( bouton ) {
+			bouton.addEventListener( 'click', function () {
+				var filtre = bouton.getAttribute( 'data-filtre' );
+				var n = 0;
+				boutons.forEach( function ( b ) {
+					b.setAttribute( 'aria-pressed', b === bouton ? 'true' : 'false' );
+				} );
+				bloc.querySelectorAll( '.br-project' ).forEach( function ( carte ) {
+					var cats = ( ' ' + ( carte.getAttribute( 'data-cats' ) || '' ) + ' ' );
+					var visible = ! filtre || cats.indexOf( ' ' + filtre + ' ' ) !== -1;
+					carte.hidden = ! visible;
+					n += visible ? 1 : 0;
+				} );
+				if ( etat ) {
+					etat.textContent = n + ( n > 1 ? ' résultats' : ' résultat' );
+				}
+			} );
+		} );
+	} );
+
 	/* Mesure des prises de contact : clic sur un téléphone, un e-mail, envoi d'un
 	   formulaire. Envoyé à Matomo s'il est présent, et à Google Tag Manager
 	   (dataLayer) pour les conversions Google Ads, qui restent soumises au consentement. */

@@ -50,7 +50,8 @@ function briise_est_atterrissage( $post ) {
 }
 
 function briise_est_noindex( $post ) {
-	return $post && ( get_post_meta( $post->ID, '_briise_noindex', true ) || briise_est_page_legale( $post ) || briise_est_atterrissage( $post ) );
+	return $post && ( get_post_meta( $post->ID, '_briise_noindex', true ) || briise_est_page_legale( $post ) || briise_est_atterrissage( $post )
+		|| ( function_exists( 'briise_realisation_mince' ) && briise_realisation_mince( $post ) ) );
 }
 
 function briise_current_seo_post() {
@@ -195,6 +196,9 @@ add_filter( 'wp_sitemaps_posts_query_args', function ( $args ) {
 	if ( get_option( 'wp_page_for_privacy_policy' ) ) {
 		$exclus[] = (int) get_option( 'wp_page_for_privacy_policy' );
 	}
+	if ( function_exists( 'briise_realisations_minces' ) ) {
+		$exclus = array_merge( $exclus, briise_realisations_minces() );
+	}
 	$args['post__not_in'] = array_merge( isset( $args['post__not_in'] ) ? (array) $args['post__not_in'] : array(), $exclus );
 	return $args;
 } );
@@ -205,7 +209,7 @@ add_action( 'add_meta_boxes', function () {
 	if ( ! briise_seo_actif() ) {
 		return;
 	}
-	add_meta_box( 'briise-seo', 'Référencement (Google)', 'briise_encadre_seo', array( 'page', 'post' ), 'normal', 'high' );
+	add_meta_box( 'briise-seo', 'Référencement (Google)', 'briise_encadre_seo', array( 'page', 'post', 'briise_realisation' ), 'normal', 'high' );
 } );
 
 function briise_encadre_seo( $post ) {
@@ -410,6 +414,9 @@ function briise_schema_breadcrumb( $post ) {
 	$items = array( array( 'name' => 'Accueil', 'item' => home_url( '/' ) ) );
 	if ( 'post' === $post->post_type && get_option( 'page_for_posts' ) ) {
 		$items[] = array( 'name' => get_the_title( get_option( 'page_for_posts' ) ), 'item' => get_permalink( get_option( 'page_for_posts' ) ) );
+	}
+	if ( 'briise_realisation' === $post->post_type && function_exists( 'briise_realisations_page' ) && briise_realisations_page() ) {
+		$items[] = array( 'name' => wp_strip_all_tags( get_the_title( briise_realisations_page() ) ), 'item' => get_permalink( briise_realisations_page() ) );
 	}
 	foreach ( array_reverse( get_post_ancestors( $post ) ) as $parent ) {
 		$items[] = array( 'name' => wp_strip_all_tags( get_the_title( $parent ) ), 'item' => get_permalink( $parent ) );

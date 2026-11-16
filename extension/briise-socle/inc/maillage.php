@@ -113,7 +113,8 @@ add_filter( 'render_block_core/group', function ( $html, $block ) {
 function briise_maillage_analyse() {
 	$accueil = (int) get_option( 'page_on_front' );
 	$blog    = (int) get_option( 'page_for_posts' );
-	$toutes  = get_posts( array( 'post_type' => array( 'page', 'post' ), 'post_status' => 'publish', 'posts_per_page' => 500, 'no_found_rows' => true ) );
+	$types   = post_type_exists( 'briise_realisation' ) ? array( 'page', 'post', 'briise_realisation' ) : array( 'page', 'post' );
+	$toutes  = get_posts( array( 'post_type' => $types, 'post_status' => 'publish', 'posts_per_page' => 500, 'no_found_rows' => true ) );
 	$home    = untrailingslashit( home_url() );
 	$vagues  = array( 'en savoir plus', 'cliquez ici', 'ici', 'lire la suite', 'voir plus', 'plus', 'découvrir', 'lien', 'voir' );
 
@@ -170,6 +171,34 @@ function briise_maillage_analyse() {
 					$aretes[ $src->ID ][ $c->ID ] = true;
 					$recus[ $c->ID ][ $src->ID ]  = true;
 				}
+			}
+		}
+		// Grilles automatiques [briise_realisations] : elles mènent à chaque fiche affichée.
+		if ( function_exists( 'briise_realisations_requete' ) && preg_match_all( '/\[briise_realisations([^\]]*)\]/', $src->post_content, $sc ) ) {
+			foreach ( $sc[1] as $a ) {
+				$atts = shortcode_parse_atts( $a );
+				$atts = shortcode_atts( array( 'nombre' => 0, 'service' => '', 'categorie' => '', 'exclure' => '' ), is_array( $atts ) ? $atts : array() );
+				if ( 'auto' === $atts['service'] ) {
+					$atts['service'] = $src->post_name; // Page de service : ses propres réalisations.
+					$liste = get_posts( array( 'post_type' => 'briise_realisation', 'post_status' => 'publish', 'posts_per_page' => (int) $atts['nombre'] ?: 200, 'fields' => 'ids', 'meta_key' => '_briise_service', 'meta_value' => $src->ID ) ); // phpcs:ignore WordPress.DB.SlowDBQuery
+				} else {
+					$liste = wp_list_pluck( briise_realisations_requete( $atts ), 'ID' );
+				}
+				foreach ( $liste as $rid ) {
+					$aretes[ $src->ID ][ $rid ] = true;
+					$recus[ $rid ][ $src->ID ]  = true;
+				}
+			}
+		}
+		// Fiche de réalisation : son lien automatique vers le service compte comme un lien reçu par le service.
+		if ( 'briise_realisation' === $src->post_type ) {
+			$service = (int) get_post_meta( $src->ID, '_briise_service', true );
+			if ( $service && 'publish' === get_post_status( $service ) ) {
+				$aretes[ $src->ID ][ $service ] = true;
+				$recus[ $service ][ $src->ID ]  = true;
+			}
+			if ( function_exists( 'briise_realisations_page' ) && briise_realisations_page() ) {
+				$aretes[ $src->ID ][ briise_realisations_page()->ID ] = true; // Fil d'Ariane.
 			}
 		}
 		// Fil d'Ariane : compte pour la profondeur, pas comme lien dans le texte.
@@ -266,7 +295,7 @@ function briise_onglet_controle() {
 			$cls   = 'br-ko';
 		}
 		$alertes += 'br-ok' === $cls || $l['accueil'] ? 0 : 1;
-		$lignes  .= '<tr class="' . $cls . '"><td>' . $lien( $l['post'] ) . ( 'post' === $l['post']->post_type ? ' <span class="br-muted">(article)</span>' : '' ) . '</td><td>' . ( $l['accueil'] ? '–' : (int) $l['recus'] ) . '</td><td>' . ( null === $l['prof'] ? '–' : (int) $l['prof'] ) . '</td><td>' . esc_html( $etat ) . '</td></tr>';
+		$lignes  .= '<tr class="' . $cls . '"><td>' . $lien( $l['post'] ) . ( 'post' === $l['post']->post_type ? ' <span class="br-muted">(article)</span>' : '' ) . ( 'briise_realisation' === $l['post']->post_type ? ' <span class="br-muted">(' . esc_html( briise_realisations_mots()[0] ) . ')</span>' : '' ) . '</td><td>' . ( $l['accueil'] ? '–' : (int) $l['recus'] ) . '</td><td>' . ( null === $l['prof'] ? '–' : (int) $l['prof'] ) . '</td><td>' . esc_html( $etat ) . '</td></tr>';
 	}
 	?>
 	<style>
@@ -280,7 +309,7 @@ function briise_onglet_controle() {
 	<h2>Contrôle du maillage interne</h2>
 	<p style="max-width:60em">Les liens écrits dans le texte des pages disent à Google quelles pages comptent et de quoi elles parlent. Chaque page devrait recevoir au moins deux liens depuis d’autres pages (le menu et le pied de page ne comptent pas), et se trouver à trois clics au plus de l’accueil. L’analyse lit les contenus publiés ; elle est refaite à chaque ouverture de cet onglet.</p>
 	<?php
-	$total = $alertes + count( $r['casses'] ) + count( $r['exclues'] ) + count( $r['flous'] ) + count( (array) $rythme );
+	$total = $alertes + count( $r['casses'] ) + count( $r['exclues'] ) + count( $r['flous'] ) + count( (array) $rythme ) + ( function_exists( 'briise_realisations_minces' ) ? count( briise_realisations_minces() ) : 0 );
 	echo '<p class="br-bilan' . ( $total ? ' br-a-voir' : '' ) . '">' . ( $total ? esc_html( $total . ' point' . ( $total > 1 ? 's' : '' ) . ' à corriger avant la mise en ligne.' ) : 'Aucun problème détecté : maillage et couleurs des sections en ordre.' ) . '</p>';
 	if ( ! $r['accueil'] ) {
 		echo '<p><strong>Aucune page d’accueil n’est définie</strong> (Réglages > Lecture) : la profondeur ne peut pas être calculée.</p>';
@@ -309,6 +338,14 @@ function briise_onglet_controle() {
 		echo '<h3>' . esc_html( $l[0] ) . ' (' . count( $l[2] ) . ')</h3><p>' . esc_html( $l[1] ) . '</p><ul style="list-style:disc;padding-left:1.5em">';
 		foreach ( $l[2] as $c ) {
 			echo '<li>' . $l[3]( $c ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans la fonction.
+		}
+		echo '</ul>';
+	}
+	if ( function_exists( 'briise_realisations_minces' ) && briise_realisations_minces() ) {
+		$minces = briise_realisations_minces();
+		echo '<h3>' . esc_html( briise_realisations_nom() ) . ' hors de Google (' . count( $minces ) . ')</h3><p style="max-width:60em">Moins de ' . (int) briise_realisation_seuil() . ' mots de texte : la fiche reste visible sur le site mais Google ne la montre pas (contenu trop mince). Raconter la demande et ce qui a été fait suffit à la faire entrer dans Google.</p><ul style="list-style:disc;padding-left:1.5em">';
+		foreach ( $minces as $id ) {
+			echo '<li>' . $lien( get_post( $id ) ) . ' : ' . (int) briise_realisation_nb_mots( $id ) . ' mots</li>'; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans la fonction.
 		}
 		echo '</ul>';
 	}

@@ -355,6 +355,9 @@ function briise_onglet_identite( $o, $v ) {
 		briise_texte( $o, $v, 'instagram', 'Instagram' );
 		briise_texte( $o, $v, 'facebook', 'Facebook' );
 		briise_texte( $o, $v, 'linkedin', 'LinkedIn' );
+		briise_texte( $o, $v, 'tiktok', 'TikTok' );
+		briise_texte( $o, $v, 'youtube', 'YouTube' );
+		briise_texte( $o, $v, 'pinterest', 'Pinterest' );
 		briise_zone( $o, $v, 'autres', 'Autres profils', 'Une adresse par ligne (Pages Jaunes, annuaire professionnel…). Non affichés, seulement transmis à Google.', 2 );
 		?>
 	</table>
@@ -453,6 +456,16 @@ function briise_onglet_fonctions( $o, $v ) {
 			<p class="description"><?php echo esc_html( $f[1] ); ?></p>
 		</div>
 	<?php endforeach; ?>
+	<table class="form-table" role="presentation">
+		<?php
+		$champ = '<select id="br-realisations-nom" name="' . briise_nom( $o, 'realisations_nom' ) . '">';
+		foreach ( briise_realisations_noms() as $nom ) {
+			$champ .= '<option value="' . esc_attr( $nom ) . '"' . selected( $v['realisations_nom'], $nom, false ) . '>' . esc_html( $nom ) . '</option>';
+		}
+		$champ .= '</select>';
+		briise_ligne( 'Nom des réalisations', $champ, 'Menu de l’administration et adresse des fiches (ex. : /portfolio/mariage-a-fontainebleau/). « Portfolio » convient aux photographes et créatifs, « Chantiers » aux artisans du bâtiment.', 'br-realisations-nom' );
+		?>
+	</table>
 	<?php if ( function_exists( 'briise_seo_plugin_active' ) && briise_seo_plugin_active() ) : ?>
 		<div class="br-a-faire">Une extension de référencement est active : le référencement intégré du thème est coupé, quel que soit ce réglage.</div>
 	<?php endif; ?>

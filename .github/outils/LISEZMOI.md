@@ -4,7 +4,7 @@ Ces scripts fabriquent les fichiers du thème ; ils ne sont pas inclus dans `bri
 
 | Script | Produit |
 | --- | --- |
-| `build_br_sections.js` | Balisage des 26 sections (blocs générés avec `@wordpress/blocks`, donc valides) |
+| `build_br_sections.js` | Balisage des 32 sections (blocs générés avec `@wordpress/blocks`, donc valides) |
 | `write_sections.py` | Fichiers `patterns/section-*.php` à partir des sections |
 | `build_br_kits.js` | `inc/kits.json` : pages des trois kits et pages légales |
 | `make_variations.py` | Ambiances `styles/*.json` |
