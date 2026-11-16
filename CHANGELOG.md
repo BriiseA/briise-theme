@@ -32,7 +32,7 @@ Première version stable : le thème a servi à monter de bout en bout un site c
 
 ## 0.11.0
 
-- Deux nouvelles sections, reprises des cartes du site DEFI No Limit : « Coordonnées (carte) » et « Zone d'intervention (carte) ». Elles se remplissent depuis Mon entreprise (téléphone, e-mail, adresse, horaires résumés automatiquement, itinéraire, zone) et prennent les couleurs de l'ambiance. Icônes Tabler intégrées en SVG, sans police externe.
+- Deux nouvelles sections : « Coordonnées (carte) » et « Zone d'intervention (carte) ». Elles se remplissent depuis Mon entreprise (téléphone, e-mail, adresse, horaires résumés automatiquement, itinéraire, zone) et prennent les couleurs de l'ambiance. Icônes Tabler intégrées en SVG, sans police externe.
 - Nouveaux champs facultatifs dans Mon entreprise : précisions sous le téléphone, l'e-mail et l'adresse, badge de chaque carte, sous-titre et secteurs de la zone. Aussi acceptés dans le fichier de site.
 - Kits : les pages Contact, Devis et Rendez-vous utilisent la carte Coordonnées ; la page Zone d'intervention, la carte Zone.
 - Mobile : 4 colonnes, puis 2, puis 1 ; boutons du bandeau en pleine largeur. Contraste vérifié (accessibilité Lighthouse 100).
