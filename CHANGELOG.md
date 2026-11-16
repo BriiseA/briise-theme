@@ -1,5 +1,13 @@
 # Historique des versions
 
+## 1.1.0
+
+- Styles de section en un clic : sur n'importe quelle section, onglet Styles > « Fond clair », « Fond teinté », « Fond nuancé » ou « Fond foncé ». Les couleurs viennent de l'ambiance active ; en fond foncé, textes, étiquettes, boutons, tableaux et horaires s'inversent, les cartes restent claires. Contraste AA vérifié sur les 29 sections dans trois ambiances (accessibilité Lighthouse 100).
+- Même filet de sécurité quand un fond foncé (secondaire, sombre, accent) est choisi dans le nuancier sans couleur de texte.
+- Mon entreprise > Contrôle reconnaît ces styles pour signaler deux sections voisines de même fond, foncé compris.
+- Étiquettes un peu plus sombres sur fond nuancé (contraste AA dans l'ambiance Acier).
+- Tableau de planning : plus de mots coupés en deux dans une colonne étroite.
+
 ## 1.0.0
 
 Première version stable : le thème a servi à monter de bout en bout un site client test (Métallerie Delaunay) avec le process Briise, sans code ajouté. Contenu identique à la 0.11.0 :

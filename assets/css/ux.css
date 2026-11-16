@@ -176,3 +176,8 @@ html { scroll-padding-top: 6.5rem; }
 /* WCAG 2.2 : zone cliquable d'au moins 24 × 24 px (critère 2.5.8). */
 .br-nav .wp-block-navigation__submenu-icon { width: 24px; height: 24px; padding: 6px; margin-left: 0; }
 .br-nav .wp-block-navigation__submenu-icon svg { width: 12px; height: 12px; }
+/* Tableau de planning dans une colonne étroite : pas de mot coupé */
+.br-planning th, .br-planning td:last-child a, .br-today-badge { white-space: nowrap; word-break: normal; }
+.br-planning td:last-child { width: 1%; }
+.br-planning td, .br-planning th { overflow-wrap: normal; word-break: normal; hyphens: manual; }
+.br-planning { overflow-x: auto; }

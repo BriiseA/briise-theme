@@ -245,7 +245,7 @@ function briise_maillage_analyse() {
  * (une tête de page peut précéder une section du même fond). Retourne [ [page, titre 1, titre 2, fond] ].
  */
 function briise_rythme_analyse() {
-	$clairs = array( 'fond', 'surface', 'nuance', 'clair' );
+	$clairs = array( 'fond', 'surface', 'nuance', 'clair', 'secondaire', 'sombre', 'accent' ); // Deux fonds foncés identiques se confondent aussi.
 	$titre  = function ( $b ) {
 		if ( preg_match( '/<h[1-3][^>]*>(.*?)<\/h[1-3]>/s', serialize_block( $b ), $m ) ) {
 			return wp_trim_words( wp_strip_all_tags( $m[1] ), 8, '…' );
@@ -267,7 +267,7 @@ function briise_rythme_analyse() {
 				$prev = null;
 				continue;
 			}
-			$fond = 'core/cover' === $b['blockName'] ? 'photo' : ( $b['attrs']['backgroundColor'] ?? ( empty( $b['attrs']['style']['color']['background'] ) ? 'fond' : 'perso' ) );
+			$fond = briise_fond_effectif( $b );
 			if ( $prev && $prev[1] === $fond && in_array( $fond, $clairs, true ) && false === strpos( $prev[0]['attrs']['className'] ?? '', 'br-page-head' ) ) {
 				$res[] = array( $p, $titre( $prev[0] ), $titre( $b ), $fond );
 			}
