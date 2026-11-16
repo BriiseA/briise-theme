@@ -92,6 +92,15 @@ function briise_defauts( $option ) {
 				'person_page' => 0,
 				'faq_page'    => 0,
 				'logo_clair'  => 0,
+				'precision_telephone' => '',
+				'precision_email'     => '',
+				'precision_adresse'   => '',
+				'badge_coord_titre'   => '',
+				'badge_coord_texte'   => '',
+				'badge_zone_titre'    => '',
+				'badge_zone_texte'    => '',
+				'zone_soustitre'      => '',
+				'zone_secteurs'       => '',
 			);
 		case 'briise_legal':
 			return array(
@@ -285,6 +294,15 @@ function briise_nettoie_entreprise( $in ) {
 		'person_page' => absint( $in['person_page'] ?? 0 ),
 		'faq_page'    => absint( $in['faq_page'] ?? 0 ),
 		'logo_clair'  => absint( $in['logo_clair'] ?? 0 ),
+		'precision_telephone' => sanitize_text_field( $in['precision_telephone'] ?? '' ),
+		'precision_email'     => sanitize_text_field( $in['precision_email'] ?? '' ),
+		'precision_adresse'   => sanitize_text_field( $in['precision_adresse'] ?? '' ),
+		'badge_coord_titre'   => sanitize_text_field( $in['badge_coord_titre'] ?? '' ),
+		'badge_coord_texte'   => sanitize_text_field( $in['badge_coord_texte'] ?? '' ),
+		'badge_zone_titre'    => sanitize_text_field( $in['badge_zone_titre'] ?? '' ),
+		'badge_zone_texte'    => sanitize_text_field( $in['badge_zone_texte'] ?? '' ),
+		'zone_soustitre'      => sanitize_text_field( $in['zone_soustitre'] ?? '' ),
+		'zone_secteurs'       => sanitize_textarea_field( $in['zone_secteurs'] ?? '' ),
 	);
 }
 

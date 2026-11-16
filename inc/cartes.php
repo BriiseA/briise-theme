@@ -1,0 +1,185 @@
+<?php
+/**
+ * Cartes « Coordonnées » et « Zone d'intervention ».
+ *
+ * Construction reprise des cartes du site DEFI No Limit, remplies depuis Mon entreprise
+ * (une seule source pour le téléphone, l'adresse, les horaires et la zone) et colorées
+ * par l'ambiance du client. Icônes : Tabler Icons (licence MIT, © Paweł Kuna), intégrées en SVG.
+ *
+ * Codes courts : [briise_carte_coordonnees] et [briise_carte_zone].
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+function briise_icone( $nom ) {
+	static $icones = array(
+		'address-book' => '<path d="M20 6v12a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2" /> <path d="M10 16h6" /> <path d="M11 11a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /> <path d="M4 8h3" /> <path d="M4 12h3" /> <path d="M4 16h3" />',
+		'bell-ringing' => '<path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /> <path d="M9 17v1a3 3 0 0 0 6 0v-1" /> <path d="M21 6.727a11.05 11.05 0 0 0 -2.794 -3.727" /> <path d="M3 6.727a11.05 11.05 0 0 1 2.792 -3.727" />',
+		'phone' => '<path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />',
+		'mail' => '<path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10" /> <path d="M3 7l9 6l9 -6" />',
+		'map-pin' => '<path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /> <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0" />',
+		'clock' => '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /> <path d="M12 7v5l3 3" />',
+		'map-2' => '<path d="M12 18.5l-3 -1.5l-6 3v-13l6 -3l6 3l6 -3v7.5" /> <path d="M9 4v13" /> <path d="M15 7v5.5" /> <path d="M21.121 20.121a3 3 0 1 0 -4.242 0c.418 .419 1.125 1.045 2.121 1.879c1.051 -.89 1.759 -1.516 2.121 -1.879" /> <path d="M19 18v.01" />',
+		'external-link' => '<path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" /> <path d="M11 13l9 -9" /> <path d="M15 4h5v5" />',
+		'truck' => '<path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /> <path d="M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /> <path d="M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5" />',
+		'info-circle' => '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /> <path d="M12 9h.01" /> <path d="M11 12h1v4h1" />',
+	);
+	return isset( $icones[ $nom ] )
+		? '<svg class="br-ico" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' . $icones[ $nom ] . '</svg>'
+		: '';
+}
+
+/**
+ * Secteurs de la zone, depuis le champ « Secteurs » :
+ * « # Secteur | précision », « Commune | précision », « + étiquette ».
+ * Sans secteurs : un seul secteur avec la liste des communes de la zone.
+ */
+function briise_zone_secteurs() {
+	$e       = briise_reglage( 'briise_entreprise' );
+	$lignes  = preg_split( '/\r\n|\r|\n/', (string) ( $e['zone_secteurs'] ?? '' ) );
+	$secteurs = array();
+	foreach ( $lignes as $l ) {
+		$l = trim( $l );
+		if ( '' === $l ) {
+			continue;
+		}
+		$parts = array_map( 'trim', explode( '|', ltrim( $l, '#+ ' ), 2 ) );
+		if ( '#' === $l[0] ) {
+			$secteurs[] = array( 'titre' => $parts[0], 'sous' => $parts[1] ?? '', 'villes' => array(), 'plus' => array() );
+			continue;
+		}
+		if ( ! $secteurs ) {
+			$secteurs[] = array( 'titre' => '', 'sous' => '', 'villes' => array(), 'plus' => array() );
+		}
+		$i = count( $secteurs ) - 1;
+		if ( '+' === $l[0] ) {
+			$secteurs[ $i ]['plus'][] = trim( substr( $l, 1 ) );
+		} else {
+			$secteurs[ $i ]['villes'][] = array( $parts[0], $parts[1] ?? '' );
+		}
+	}
+	if ( ! $secteurs && ! empty( $e['areas'] ) ) {
+		$secteurs[] = array( 'titre' => $e['city'] ? 'Autour de ' . $e['city'] : 'Nos communes', 'sous' => '', 'villes' => array_map( function ( $v ) {
+			return array( $v, '' );
+		}, $e['areas'] ), 'plus' => array() );
+	}
+	return $secteurs;
+}
+
+/**
+ * Résumé des horaires pour la carte : le premier groupe ouvert en valeur, le reste en détail.
+ */
+function briise_horaires_resume() {
+	$groupes = briise_horaires_groupes();
+	$ouverts = array_values( array_filter( $groupes, function ( $g ) {
+		return 'Fermé' !== $g['texte'];
+	} ) );
+	if ( ! $ouverts ) {
+		return array( '', '' );
+	}
+	$detail = array( $ouverts[0]['texte'] );
+	foreach ( $groupes as $g ) {
+		if ( $g !== $ouverts[0] ) {
+			$detail[] = $g['libelle'] . ' : ' . ( 'Fermé' === $g['texte'] ? 'fermé' : $g['texte'] );
+		}
+	}
+	$note = briise_reglage( 'briise_annonces' )['note'] ?? '';
+	if ( $note ) {
+		$detail[] = $note;
+	}
+	return array( $ouverts[0]['libelle'], implode( ' · ', $detail ) );
+}
+
+function briise_carte_tete( $icone, $titre, $sous, $badge_titre, $badge_texte, $niveau = 2 ) {
+	$h = '<div class="br-carte-tete"><div class="br-carte-tete-g"><span class="br-carte-ico br-carte-ico--tete">' . briise_icone( $icone ) . '</span><div>'
+		. sprintf( '<h%1$d class="br-carte-titre">%2$s</h%1$d>', $niveau, esc_html( $titre ) )
+		. ( $sous ? '<p class="br-carte-sous">' . esc_html( $sous ) . '</p>' : '' ) . '</div></div>';
+	if ( $badge_titre ) {
+		$h .= '<div class="br-carte-badge">' . briise_icone( 'coord' === $icone ? 'bell-ringing' : ( 'map-2' === $icone ? 'truck' : 'bell-ringing' ) )
+			. '<span><strong>' . esc_html( $badge_titre ) . '</strong>' . ( $badge_texte ? '<small>' . esc_html( $badge_texte ) . '</small>' : '' ) . '</span></div>';
+	}
+	return $h . '</div>';
+}
+
+function briise_carte_coordonnees_html( $atts = array() ) {
+	$atts = shortcode_atts( array( 'titre' => 'Coordonnées', 'niveau' => 2 ), $atts, 'briise_carte_coordonnees' );
+	$e    = briise_entreprise();
+	$r    = briise_reglage( 'briise_entreprise' );
+	$col  = function ( $icone, $label, $valeur, $detail, $lien = '' ) {
+		$tag = $lien ? 'a' : 'div';
+		return '<' . $tag . ' class="br-carte-col"' . ( $lien ? ' href="' . esc_url( $lien ) . '"' : '' ) . '><span class="br-carte-ico">' . briise_icone( $icone ) . '</span><span class="br-carte-textes">'
+			. '<span class="br-carte-label">' . esc_html( $label ) . '</span><span class="br-carte-valeur">' . esc_html( $valeur ) . '</span>'
+			. ( $detail ? '<span class="br-carte-detail">' . esc_html( $detail ) . '</span>' : '' ) . '</span></' . $tag . '>';
+	};
+	$cols = array();
+	if ( $e['telephone'] ) {
+		$cols[] = $col( 'phone', 'Téléphone', briise_telephone_lisible( $e['telephone'] ), $r['precision_telephone'] ? $r['precision_telephone'] : 'Appel direct aux heures d’ouverture', 'tel:' . preg_replace( '/[^0-9+]/', '', $e['telephone'] ) );
+	}
+	if ( $e['email'] ) {
+		$cols[] = $col( 'mail', 'E-mail', $e['email'], $r['precision_email'], 'mailto:' . $e['email'] );
+	}
+	if ( $e['street'] || $e['city'] ) {
+		$ville  = trim( $e['postal_code'] . ' ' . $e['city'] );
+		$cols[] = $col( 'map-pin', 'Adresse', $e['street'] ? $e['street'] : $ville, implode( ' · ', array_filter( array( $e['street'] ? $ville : '', $r['precision_adresse'] ) ) ) );
+	}
+	list( $jours, $heures ) = briise_horaires_resume();
+	if ( $jours ) {
+		$cols[] = $col( 'clock', 'Horaires', $jours, $heures );
+	}
+	if ( ! $cols ) {
+		return current_user_can( 'edit_pages' ) ? '<p class="br-a-remplacer">Renseignez les coordonnées dans Mon entreprise &gt; Entreprise.</p>' : '';
+	}
+	$sous = $e['name'] . ( $e['slogan'] ? ' · ' . $e['slogan'] : '' );
+	$h    = '<div class="br-carte br-carte-coord">' . briise_carte_tete( 'address-book', $atts['titre'], $sous, $r['badge_coord_titre'], $r['badge_coord_texte'], (int) $atts['niveau'] )
+		. '<div class="br-carte-corps br-carte-' . count( $cols ) . '">' . implode( '', $cols ) . '</div>';
+	$iti = briise_lien_itineraire();
+	if ( $iti ) {
+		$h .= '<div class="br-carte-pied"><span class="br-carte-pied-g">' . briise_icone( 'map-2' ) . '<span>' . esc_html( briise_adresse_ligne() ) . '</span></span>'
+			. '<a class="br-carte-bouton" href="' . esc_url( $iti ) . '" target="_blank" rel="noopener" aria-label="Itinéraire Google Maps (nouvel onglet)">' . briise_icone( 'external-link' ) . 'Itinéraire Google Maps</a></div>';
+	}
+	return $h . '</div>';
+}
+
+function briise_carte_zone_html( $atts = array() ) {
+	$atts     = shortcode_atts( array( 'titre' => 'Notre zone d’intervention', 'niveau' => 2 ), $atts, 'briise_carte_zone' );
+	$e        = briise_entreprise();
+	$r        = briise_reglage( 'briise_entreprise' );
+	$secteurs = briise_zone_secteurs();
+	if ( ! $secteurs ) {
+		return current_user_can( 'edit_pages' ) ? '<p class="br-a-remplacer">Ajoutez vos communes dans Mon entreprise &gt; Entreprise.</p>' : '';
+	}
+	$sous = $r['zone_soustitre'] ? $r['zone_soustitre'] : ( $e['city'] ? 'Depuis notre atelier de ' . $e['city'] . ( $e['postal_code'] ? ' (' . $e['postal_code'] . ')' : '' ) : '' );
+	$h    = '<div class="br-carte br-carte-zone">' . briise_carte_tete( 'map-2', $atts['titre'], $sous, $r['badge_zone_titre'], $r['badge_zone_texte'], (int) $atts['niveau'] )
+		. '<div class="br-carte-corps br-carte-' . min( 4, count( $secteurs ) ) . '">';
+	$n = (int) $atts['niveau'] + 1;
+	foreach ( $secteurs as $s ) {
+		$h .= '<div class="br-carte-col br-secteur">';
+		if ( $s['titre'] ) {
+			$h .= '<div class="br-secteur-tete"><span class="br-carte-ico">' . briise_icone( 'map-pin' ) . '</span><div>'
+				. sprintf( '<h%1$d class="br-secteur-titre">%2$s</h%1$d>', $n, esc_html( $s['titre'] ) )
+				. ( $s['sous'] ? '<p class="br-secteur-sous">' . esc_html( $s['sous'] ) . '</p>' : '' ) . '</div></div>';
+		}
+		$h .= '<ul class="br-secteur-liste">';
+		foreach ( $s['villes'] as $v ) {
+			$h .= '<li><strong>' . esc_html( $v[0] ) . '</strong>' . ( $v[1] ? ' <span>' . esc_html( $v[1] ) . '</span>' : '' ) . '</li>';
+		}
+		$h .= '</ul>';
+		foreach ( $s['plus'] as $p ) {
+			$h .= '<span class="br-secteur-plus">+ ' . esc_html( $p ) . '</span>';
+		}
+		$h .= '</div>';
+	}
+	$h .= '</div><div class="br-carte-pied"><span class="br-carte-pied-g">' . briise_icone( 'info-circle' ) . '<span>Vous n’êtes pas dans cette zone ? Nous étudions chaque demande.</span></span><span class="br-carte-boutons">';
+	if ( $e['telephone'] ) {
+		$h .= '<a class="br-carte-bouton" href="tel:' . esc_attr( preg_replace( '/[^0-9+]/', '', $e['telephone'] ) ) . '">' . briise_icone( 'phone' ) . esc_html( briise_telephone_lisible( $e['telephone'] ) ) . '</a>';
+	}
+	$h .= '<a class="br-carte-bouton" href="' . esc_url( $e['cta_url'] ) . '">' . briise_icone( 'mail' ) . esc_html( $e['cta_label'] ) . '</a></span></div>';
+	return $h . '</div>';
+}
+
+add_action( 'init', function () {
+	add_shortcode( 'briise_carte_coordonnees', 'briise_carte_coordonnees_html' );
+	add_shortcode( 'briise_carte_zone', 'briise_carte_zone_html' );
+} );

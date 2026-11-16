@@ -357,6 +357,23 @@ function briise_onglet_identite( $o, $v ) {
 		<?php briise_pages( $o, $v, 'faq_page', 'Page de questions', 'Ses questions en accordéon sont transmises à Google. Par défaut : la page « faq ».', '— Page « faq » —' ); ?>
 	</table>
 	<?php
+	?>
+	<h2 class="title">Cartes Coordonnées et Zone d’intervention</h2>
+	<p class="description">Facultatif. Ces précisions s’affichent dans les sections « Coordonnées (carte) » et « Zone d’intervention (carte) ». Le téléphone, l’e-mail, l’adresse et les horaires viennent des champs ci-dessus : rien n’est à taper deux fois.</p>
+	<table class="form-table" role="presentation">
+		<?php
+		briise_texte( $o, $v, 'precision_telephone', 'Précision sous le téléphone', 'Exemple : « Le dirigeant décroche lui-même ». Vide : « Appel direct aux heures d’ouverture ».' );
+		briise_texte( $o, $v, 'precision_email', 'Précision sous l’e-mail', 'Exemple : « Réponse sous 24 h ouvrées ». Uniquement si c’est tenu.' );
+		briise_texte( $o, $v, 'precision_adresse', 'Précision sous l’adresse', 'Exemple : « À 15 min de Nice » ou « Atelier sur rendez-vous ».' );
+		briise_texte( $o, $v, 'badge_coord_titre', 'Badge de la carte Coordonnées', 'Un argument fort, court. Exemple : « Urgences industrielles ». Vide : pas de badge.' );
+		briise_texte( $o, $v, 'badge_coord_texte', 'Sous le badge', 'Exemple : « Intervention rapide possible ».' );
+		briise_texte( $o, $v, 'badge_zone_titre', 'Badge de la carte Zone', 'Exemple : « Intervention mobile ». Vide : pas de badge.' );
+		briise_texte( $o, $v, 'badge_zone_texte', 'Sous le badge', 'Exemple : « Sur site ou en atelier ».' );
+		briise_texte( $o, $v, 'zone_soustitre', 'Sous-titre de la carte Zone', 'Vide : « Depuis notre atelier de [ville] ».' );
+		briise_zone( $o, $v, 'zone_secteurs', 'Secteurs de la zone', 'Une ligne par commune, regroupées par secteur. « # Secteur | précision » ouvre un secteur (3 au plus conseillés) ; « Commune | précision » ajoute une commune ; « + texte » ajoute une étiquette en bas du secteur. Exemple :<br><code># Alpes-Maritimes | Autour de l’atelier</code><br><code>Carros | siège</code><br><code>Nice | et Côte d’Azur</code><br><code>+ Alpes-de-Haute-Provence</code><br>Vide : la carte reprend la liste « Zone d’intervention » ci-dessus.', 9 );
+		?>
+	</table>
+	<?php
 }
 
 /* ----- Onglet Mentions légales ---------------------------------------------------- */

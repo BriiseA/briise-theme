@@ -285,6 +285,11 @@ add('pages-liees', 'contenu', 'Pages liées (automatique)', 'Pages de service : 
   ], { backgroundColor: 'surface' }));
 
 /* ----- Contact ----- */
+add('coordonnees-carte', 'contact', 'Coordonnées (carte)', 'Téléphone, e-mail, adresse et horaires en une carte, avec le lien d’itinéraire. Se remplit depuis Mon entreprise.',
+  Section('', [Short('[briise_carte_coordonnees]')]));
+add('zone-carte', 'contact', 'Zone d’intervention (carte)', 'Les communes regroupées par secteur, avec téléphone et contact en bas. Se remplit depuis Mon entreprise (Secteurs de la zone).',
+  Section('', [Short('[briise_carte_zone]')]));
+
 
 add('bandeau-cta', 'contact', 'Bandeau d’appel à l’action', 'Fin de page : une dernière invitation à passer à l’action.',
   Section('br-cta', [Box('br-cta-inner', [

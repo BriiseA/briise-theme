@@ -62,6 +62,17 @@ Arrondis et formes : `--wp--custom--rayon--grand|moyen|petit|bouton` et `--wp--c
 
 **Couleur du logo du client.** Styles > Couleurs > Palette > Modifier, puis changer `accent`. Si une couleur rend un texte illisible (contraste inférieur à 4,5:1), un avertissement apparaît sur le tableau de bord.
 
+**Cartes Coordonnées et Zone.** Deux sections de la catégorie Contact, reprises des cartes du site DEFI No Limit et colorées par l'ambiance. Elles lisent Mon entreprise : rien n'est tapé deux fois. Champs facultatifs (Mon entreprise > Entreprise, « Cartes Coordonnées et Zone d'intervention ») : une précision sous le téléphone, l'e-mail et l'adresse, un badge par carte, et les secteurs de la zone :
+
+```
+# Alpes-Maritimes | Autour de l'atelier
+Carros | siège
+Nice | et Côte d'Azur
++ Alpes-de-Haute-Provence
+```
+
+Sans secteurs, la carte Zone reprend la liste des villes. Dans le fichier de site, ces champs vont dans `entreprise` : `precision_telephone`, `precision_email`, `precision_adresse`, `badge_coord_titre`, `badge_coord_texte`, `badge_zone_titre`, `badge_zone_texte`, `zone_soustitre`, `zone_secteurs` (lignes séparées par `\n`). Icônes : Tabler Icons (MIT), intégrées en SVG.
+
 **Logo.** Mon entreprise > Entreprise > Logo : il remplace le nom en texte dans l'en-tête (le nom reste lu par Google et les lecteurs d'écran). Le pied de page étant sombre, un « logo pour fond foncé » facultatif l'y remplace aussi ; sans lui, le nom reste en texte. Sans logo, rien ne change.
 
 **Charte du client.** Partir de l'ambiance « Charte du client », remplacer ses couleurs par celles de la charte, puis ajouter ses polices dans Styles > Typographie > Gérer les polices (fichiers WOFF2, licence web vérifiée).
@@ -122,7 +133,7 @@ Dans l'éditeur : bouton « + » > Compositions > catégories « Sections · …
 | Parcours et FAQ | Étapes numérotées, FAQ en accordéon, Horaires et planning |
 | Personnes | Présentation du dirigeant, Équipe, Citation ou valeurs |
 | Contenu | Derniers articles, Pages liées (automatique) |
-| Contact | Bandeau d'appel à l'action, Bloc contact complet, Zone d'intervention, Emplacement de formulaire ou de réservation |
+| Contact | Bandeau d'appel à l'action, Bloc contact complet, Coordonnées (carte), Zone d'intervention, Zone d'intervention (carte), Emplacement de formulaire ou de réservation |
 
 Règles :
 - Rythme des couleurs : deux sections qui se suivent n'ont jamais le même fond. Alterner le blanc (`fond`) et les teintes de l'ambiance (`surface`, `nuance`) ; garder la bande foncée (`secondaire`) pour l'appel à l'action final. Une tête de page peut précéder une section du même fond. Les kits et les modèles respectent cette règle d'eux-mêmes ; une page modifiée à la main se vérifie dans Mon entreprise > Contrôle. Changer un fond : sélectionner la section, puis Styles > Couleur > Arrière-plan.
@@ -156,6 +167,8 @@ Codes courts, à placer dans un bloc « Code court » :
 | `[briise_mentions_legales]` | Mentions légales complètes ; un champ obligatoire vide apparaît en « [à compléter] » |
 | `[briise_fil_ariane]` | Fil d'Ariane de la page en cours |
 | `[briise_zone]` | Villes de la zone d'intervention, en pastilles |
+| `[briise_carte_coordonnees]` | Carte Coordonnées : téléphone, e-mail, adresse, horaires résumés, itinéraire. `titre="…"` pour changer le titre |
+| `[briise_carte_zone]` | Carte Zone d'intervention : communes par secteur, téléphone et contact. `titre="…"` |
 | `[briise_contact_rapide]` | Boutons « Appeler » et « Écrire un e-mail » |
 | `[briise_telephone]` | Le numéro de téléphone, cliquable |
 | `[briise_pages_liees]` | Sur une page qui a des sous-pages : ses sous-pages. Sur une sous-page : les pages sœurs (les autres services). `parent="slug"` : les sous-pages d'une page donnée |

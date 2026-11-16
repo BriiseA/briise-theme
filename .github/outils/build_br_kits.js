@@ -87,7 +87,7 @@ const KITS = {
       page('tarifs', 'Tarifs', tete('Tarifs', 'Des prix clairs avant de réserver : choisissez la formule qui vous convient.'), sec('tarifs-cartes'), sec('tarifs-tableau'), sec('bandeau-cta')),
       page('a-propos', 'À propos', tete('À propos', 'Qui vous êtes, en une phrase : ce qui rassure un client avant de vous contacter.', false), sec('dirigeant'), sec('valeurs'), sec('chiffres-cles'), sec('bandeau-cta')),
       page('faq', 'Questions fréquentes', tete('Questions fréquentes', 'Les réponses aux questions que l’on nous pose le plus souvent.', false), sec('faq'), sec('bandeau-cta')),
-      page('contact', 'Contact', tete('Prendre rendez-vous', 'Écrivez-nous ou appelez-nous : nous répondons sous 24 heures ouvrées.', false), sec('formulaire'), sec('contact')),
+      page('contact', 'Contact', tete('Prendre rendez-vous', 'Écrivez-nous ou appelez-nous : nous répondons sous 24 heures ouvrées.', false), sec('formulaire'), sec('coordonnees-carte')),
       { slug: 'blog', titre: 'Blog', markup: '' },
     ],
   },
@@ -100,9 +100,9 @@ const KITS = {
       page('accueil', 'Accueil', sec('hero-banniere'), sec('trois-cartes'), sec('realisations'), sec('chiffres-cles'), sec('temoignages'), sec('zone'), sec('bandeau-cta')),
       page('savoir-faire', 'Savoir-faire', tete('Notre savoir-faire', 'Ce que vous fabriquez ou réalisez, et pour qui : particuliers, professionnels, collectivités.'), detail, sec('service-alterne'), sec('etapes'), sec('logos'), sec('bandeau-cta')),
       page('realisations', 'Réalisations', tete('Nos réalisations', 'Quelques chantiers récents, avec la demande du client et la solution apportée.'), sec('realisations'), sec('avant-apres'), sec('galerie'), sec('bandeau-cta')),
-      page('zone-intervention', 'Zone d’intervention', tete('Zone d’intervention', 'Les villes et le secteur où nous intervenons, et nos délais de déplacement.'), sec('zone'), sec('contact')),
+      page('zone-intervention', 'Zone d’intervention', tete('Zone d’intervention', 'Les villes et le secteur où nous intervenons, et nos délais de déplacement.'), sec('zone-carte'), sec('bandeau-cta')),
       page('a-propos', 'À propos', tete('L’entreprise', 'Votre histoire en une phrase : depuis quand, combien vous êtes, ce qui vous distingue.', false), sec('dirigeant'), sec('equipe'), sec('valeurs'), sec('bandeau-cta')),
-      page('devis', 'Devis', tete('Demander un devis', 'Décrivez votre projet en quelques lignes : nous revenons vers vous sous 48 heures avec une première estimation.', false), sec('formulaire'), sec('contact')),
+      page('devis', 'Devis', tete('Demander un devis', 'Décrivez votre projet en quelques lignes : nous revenons vers vous sous 48 heures avec une première estimation.', false), sec('formulaire'), sec('coordonnees-carte')),
     ],
   },
   liberal: {
@@ -117,7 +117,7 @@ const KITS = {
       page('honoraires', 'Honoraires', tete('Honoraires', 'Des honoraires transparents, communiqués avant tout engagement.'), sec('tarifs-tableau'), sec('bandeau-cta')),
       page('le-cabinet', 'Le cabinet', tete('Le cabinet', 'Le cabinet, son équipe et sa façon de travailler.', false), sec('dirigeant'), sec('equipe'), sec('valeurs'), sec('contact')),
       page('faq', 'Questions fréquentes', tete('Questions fréquentes', 'Les réponses aux questions que l’on nous pose le plus souvent avant un premier rendez-vous.', false), sec('faq'), sec('bandeau-cta')),
-      page('rendez-vous', 'Rendez-vous', tete('Prendre rendez-vous', 'En ligne, par téléphone ou par e-mail : choisissez ce qui vous convient.', false), sec('formulaire'), sec('contact')),
+      page('rendez-vous', 'Rendez-vous', tete('Prendre rendez-vous', 'En ligne, par téléphone ou par e-mail : choisissez ce qui vous convient.', false), sec('formulaire'), sec('coordonnees-carte')),
     ],
   },
 };
@@ -132,7 +132,7 @@ const MODELES = {
   realisations: { titre: 'Page de réalisations', desc: 'Réalisations en grille, avant / après, galerie.', markup: serialize(rythme([tete(T, 'Quelques réalisations récentes, avec la demande du client et la solution apportée.'), sec('realisations'), sec('avant-apres'), sec('galerie'), sec('bandeau-cta')].flat())) },
   equipe: { titre: 'Page équipe', desc: 'Présentation du dirigeant, de l’équipe et des valeurs.', markup: serialize(rythme([tete(T, 'Les personnes qui vous accompagnent.', false), sec('dirigeant'), sec('equipe'), sec('valeurs'), sec('bandeau-cta')].flat())) },
   faq: { titre: 'Page FAQ', desc: 'Questions fréquentes en accordéon.', markup: serialize(rythme([tete(T, 'Les réponses aux questions que l’on nous pose le plus souvent.', false), sec('faq'), sec('bandeau-cta')].flat())) },
-  zone: { titre: 'Page zone d’intervention', desc: 'Villes couvertes et coordonnées.', markup: serialize(rythme([tete(T, 'Les villes et le secteur où nous intervenons.'), sec('zone'), sec('contact')].flat())) },
+  zone: { titre: 'Page zone d’intervention', desc: 'Villes couvertes et coordonnées.', markup: serialize(rythme([tete(T, 'Les villes et le secteur où nous intervenons.'), sec('zone-carte'), sec('bandeau-cta')].flat())) },
   avis: { titre: 'Page avis clients', desc: 'Témoignages et chiffres clés.', markup: serialize(rythme([tete(T, 'Ce que nos clients disent de notre travail.'), sec('temoignages'), sec('chiffres-cles'), sec('bandeau-cta')].flat())) },
   atterrissage: { titre: 'Page d’atterrissage (publicité)', desc: 'Pour Google Ads : un service, une action, sans menu. Exclue de Google automatiquement.', markup: serialize(rythme([
     Section('br-hero br-atterrissage', [L.cb('core/columns', { verticalAlignment: 'center', className: 'br-split' }, [
@@ -147,7 +147,7 @@ const MODELES = {
     ])]),
     sec('chiffres-cles'), sec('etapes'), sec('temoignages'), sec('faq'), sec('formulaire'),
   ].flat())) },
-  contact: { titre: 'Page contact', desc: 'Formulaire ou réservation, coordonnées et horaires.', markup: serialize(rythme([tete(T, 'Écrivez-nous ou appelez-nous : nous répondons rapidement.', false), sec('formulaire'), sec('contact')].flat())) },
+  contact: { titre: 'Page contact', desc: 'Formulaire ou réservation, coordonnées et horaires.', markup: serialize(rythme([tete(T, 'Écrivez-nous ou appelez-nous : nous répondons rapidement.', false), sec('formulaire'), sec('coordonnees-carte')].flat())) },
 };
 
 require('fs').writeFileSync('/home/claude/briise-theme/inc/kits.json', JSON.stringify({ kits: KITS, legales, modeles: MODELES }, null, 1));
