@@ -6,7 +6,7 @@
  * Description: Pages de service : chaque service avec sa photo, en alternance gauche et droite.
  * Viewport Width: 1400
  */
-$briise = briise_entreprise();
+$briise = briise_theme_entreprise();
 ?>
 <!-- wp:group {"align":"full","className":"br-section","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-section"><!-- wp:columns {"verticalAlignment":"center","className":"br-split"} -->

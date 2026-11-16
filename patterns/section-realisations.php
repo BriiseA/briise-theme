@@ -6,7 +6,7 @@
  * Description: Montrer son travail : artisans, créatifs, rénovation.
  * Viewport Width: 1400
  */
-$briise = briise_entreprise();
+$briise = briise_theme_entreprise();
 ?>
 <!-- wp:group {"align":"full","className":"br-section","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-section"><!-- wp:group {"className":"br-section-head","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"bottom"}} -->

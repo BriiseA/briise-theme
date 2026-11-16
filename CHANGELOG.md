@@ -1,5 +1,16 @@
 # Historique des versions
 
+## 1.2.0
+
+Briise devient un thème et une extension. **À l'installation ou à la mise à jour : installer et activer `briise-socle.zip`, puis mettre à jour le thème.** Les réglages existants sont conservés tels quels.
+
+- Nouvelle extension **Briise Socle** : tout le fonctionnement sort du thème (Mon entreprise, Contrôle, référencement, données structurées, robots.txt, cartes, codes courts, bandeau d'information, mesure des contacts). Un client qui change de thème garde ses réglages et ses fonctions ; un site fait avec un autre thème peut utiliser l'extension seule (apparence simple pour les cartes, les horaires et le bandeau).
+- Le thème garde l'apparence : ambiances, sections, styles de section, kits et import (onglet Démarrage), animations, retour en haut. Sans l'extension, il s'affiche sans erreur et prévient l'administrateur.
+- Mises à jour automatiques : l'extension propose les nouvelles versions du thème et de l'extension publiées sur GitHub, dans Tableau de bord > Mises à jour. Dépôt privé possible avec une clé en lecture seule.
+- Nouvel onglet **Fin de collaboration** : export du fichier de site (réimportable), figer les contenus (les codes Briise deviennent des blocs ordinaires, texte et liens identiques, une révision gardée), liste des comptes et accès à remettre.
+- Chaque version publie deux fichiers, `briise.zip` et `briise-socle.zip`, avec le même numéro.
+- Vérifié : import Delaunay identique (0 bloc invalide, Contrôle inchangé, Lighthouse accessibilité, bonnes pratiques et SEO à 100), mise à jour réelle depuis une version publiée, export puis réimport sur un site vierge sans écart, site figé lisible sans l'extension, extension seule avec le thème Twenty Twenty-Five.
+
 ## 1.1.0
 
 - Styles de section en un clic : sur n'importe quelle section, onglet Styles > « Fond clair », « Fond teinté », « Fond nuancé » ou « Fond foncé ». Les couleurs viennent de l'ambiance active ; en fond foncé, textes, étiquettes, boutons, tableaux et horaires s'inversent, les cartes restent claires. Contraste AA vérifié sur les 29 sections dans trois ambiances (accessibilité Lighthouse 100).

@@ -1,6 +1,11 @@
-# Briise, thème de base
+# Briise, thème de base et extension Briise Socle
 
-Thème WordPress à blocs de l'agence Briise pour les sites vitrines d'entreprises locales de services.
+Thème WordPress à blocs de l'agence Briise pour les sites vitrines d'entreprises locales de services, et son extension **Briise Socle**.
+
+- **Briise Socle** (`extension/briise-socle/`) : le fonctionnement, indépendant du thème. Mon entreprise (coordonnées, horaires, annonces, mentions légales, fonctions), onglet Contrôle, référencement et données structurées, robots.txt et IndexNow, cartes Coordonnées et Zone, codes courts, bandeau d'information, mesure des contacts, mises à jour depuis GitHub, fin de collaboration.
+- **Thème Briise** (racine du dépôt) : l'apparence. Ambiances, sections, gabarits, styles de section, kits et import d'un fichier de site (onglet Démarrage), animations.
+
+Un site Briise utilise les deux. Un site fait avec un autre thème peut n'utiliser que l'extension : il garde Mon entreprise, le contrôle du maillage, le référencement et les cartes (avec une apparence simple), mais pas les sections ni les ambiances. Sans l'extension, le thème s'affiche sans erreur mais sans coordonnées ni référencement, et prévient l'administrateur.
 Le cahier des charges complet est dans le document « Thème de base agence : cahier des charges ».
 
 ## Principe
@@ -16,19 +21,25 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | `theme.json` | Couleurs, polices, tailles, espacements et styles globaux |
 | `templates/` | Modèles de pages (page, article, blog, 404, page sans titre) |
 | `parts/` | En-tête et pied de page |
-| `patterns/` | Bibliothèque de 26 sections (`section-*.php`), en-tête, pied de page, blog |
+| `patterns/` | Bibliothèque de 29 sections (`section-*.php`), en-tête, pied de page, blog |
 | `assets/images/sections/` | Images de remplacement des sections, à remplacer par les photos du client |
-| `inc/reglages.php` | Stockage et nettoyage des réglages de « Mon entreprise » |
-| `inc/admin.php` | Page « Mon entreprise » de l'administration |
-| `inc/entreprise.php` | Lecture des informations, horaires, coordonnées, mentions légales, codes courts |
-| `inc/fonctions.php` | Bandeau d'information, blog activable, Search Console, Matomo |
-| `inc/seo.php` | Title, meta description, Open Graph, noindex, plan du site, données structurées, encadré « Référencement » |
-| `assets/js/ux.js` | Menu intelligent, page active, téléphones cliquables, bouton fixe mobile |
+| `assets/js/ux.js` | Menu intelligent, page active, téléphones cliquables, bouton fixe mobile, retour en haut |
 | `assets/js/motion.js` | Animations d'apparition (coupées si le visiteur le demande) |
 | `styles/` | Ambiances (variations de style) |
 | `inc/kits.php`, `inc/kits.json` | Démarrage : kits ajustables, import d'un fichier de site, modèles de page |
-| `inc/menu.php` | Case « Afficher dans le menu » et tenue du menu principal |
 | `inc/contraste.php` | Avertissement si une couleur modifiée rend un texte illisible |
+| `inc/styles-section.php` | Styles de section en un clic et contrôle du rythme des couleurs |
+| `inc/socle.php` | Lien avec l'extension : le thème lit ses données, ou des valeurs vides si elle manque |
+| `extension/briise-socle/briise-socle.php` | Fichier principal de l'extension |
+| `extension/briise-socle/inc/reglages.php`, `admin.php` | Réglages et page « Mon entreprise » |
+| `extension/briise-socle/inc/entreprise.php` | Informations, horaires, coordonnées, mentions légales, codes courts |
+| `extension/briise-socle/inc/fonctions.php` | Bandeau d'information, blog activable, Search Console, Matomo |
+| `extension/briise-socle/inc/seo.php`, `robots.php` | Title, description, Open Graph, noindex, plan du site, données structurées ; robots.txt, IndexNow |
+| `extension/briise-socle/inc/menu.php` | Case « Afficher dans le menu » et tenue du menu principal |
+| `extension/briise-socle/inc/maillage.php` | Pages liées et onglet Contrôle |
+| `extension/briise-socle/inc/cartes.php` | Cartes Coordonnées et Zone |
+| `extension/briise-socle/inc/mises-a-jour.php` | Mises à jour du thème et de l'extension depuis les versions GitHub |
+| `extension/briise-socle/inc/depart.php` | Onglet « Fin de collaboration » |
 | `.github/outils/` | Scripts de fabrication des sections, kits et ambiances (hors thème) |
 | `assets/fonts/` | Polices hébergées et leurs licences (toutes sous licence OFL) |
 
@@ -201,10 +212,15 @@ Le thème complète le fichier `robots.txt` virtuel de WordPress (un fichier `ro
 
 **Mesure des contacts.** Un clic sur un téléphone ou une adresse e-mail, et l'envoi d'un formulaire, envoient l'événement `briise_contact` (champ `briise_type` : `telephone`, `email` ou `formulaire`) dans `dataLayer` pour Google Tag Manager, et dans Matomo s'il est installé. Pour Google Ads, il reste à créer la conversion dans Tag Manager, derrière le consentement (Consent Mode v2).
 
-## Installer le thème sur un site
+## Installer sur un site
 
-Ne pas utiliser « Code > Download ZIP » : le dossier obtenu s'appelle `briise-theme-main` et WordPress le traiterait comme un autre thème.
-Utiliser le fichier `briise.zip` de la dernière version, dans l'onglet **Releases** du dépôt : il est fabriqué automatiquement à chaque nouvelle version.
+Ne pas utiliser « Code > Download ZIP ». Dans l'onglet **Releases** du dépôt, chaque version contient deux fichiers :
+1. `briise-socle.zip` : Extensions > Ajouter > Téléverser, puis Activer ;
+2. `briise.zip` : Apparence > Thèmes > Ajouter > Téléverser, puis Activer.
+
+**Mises à jour.** L'extension interroge GitHub (au plus toutes les 6 heures) et propose les nouvelles versions du thème et de l'extension dans Tableau de bord > Mises à jour, comme pour n'importe quelle extension. Dépôt public : rien à régler. Dépôt privé : ajouter dans `wp-config.php` une clé GitHub en lecture seule, limitée à ce dépôt (`define( 'BRIISE_GITHUB_TOKEN', '…' );`). Une clé placée sur un site client peut être lue par quiconque a accès à ses fichiers : un dépôt public est plus simple et plus sûr.
+
+**Fin de collaboration.** Mon entreprise > Fin de collaboration (administrateurs) : exporter le fichier de site (réglages et pages, au format d'import), figer les contenus (chaque code `[briise_…]` devient des blocs ordinaires, pour que le site reste lisible sans l'extension ; une révision de chaque page est gardée), liste des comptes et accès à remettre.
 
 ## Versions
 
@@ -213,7 +229,7 @@ Numérotation `MAJEUR.MINEUR.CORRECTIF` :
 - mineur (0.2.0) : nouvelle fonction ou nouvelle section, compatible avec les sites existants ;
 - majeur (1.0.0) : changement qui demande une vérification sur chaque site client.
 
-Chaque version est décrite dans `CHANGELOG.md`. Pour publier une version : mettre à jour `Version:` dans `style.css` et le CHANGELOG, puis pousser sur `main` ; la version (`v0.2.0`) et son `briise.zip` se publient tout seuls dans **Releases**.
+Chaque version est décrite dans `CHANGELOG.md`. Le thème et l'extension portent toujours le même numéro. Pour publier une version : mettre le même numéro dans `style.css` (`Version:`) et dans `extension/briise-socle/briise-socle.php` (en-tête `Version:` et constante `BRIISE_SOCLE_VERSION`), compléter le CHANGELOG, puis pousser sur `main` ; la version (`v1.2.0`) et ses deux fichiers se publient tout seuls dans **Releases**. La publication s'arrête si les numéros diffèrent.
 
 ## Avant chaque livraison client
 

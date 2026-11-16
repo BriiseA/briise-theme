@@ -6,7 +6,7 @@
  * Description: Rassurer sur le déroulé : du premier contact au résultat.
  * Viewport Width: 1400
  */
-$briise = briise_entreprise();
+$briise = briise_theme_entreprise();
 ?>
 <!-- wp:group {"backgroundColor":"nuance","align":"full","className":"br-section","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-section has-nuance-background-color has-background"><!-- wp:group {"className":"br-head","layout":{"type":"default"}} -->

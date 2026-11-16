@@ -6,7 +6,7 @@
  * Description: Pages de service : les autres services, avec un lien vers chacun. Sur une page qui a des sous-pages : la liste de ses sous-pages. Se met à jour seule.
  * Viewport Width: 1400
  */
-$briise = briise_entreprise();
+$briise = briise_theme_entreprise();
 ?>
 <!-- wp:group {"backgroundColor":"surface","align":"full","className":"br-section br-section-liees","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-section br-section-liees has-surface-background-color has-background"><!-- wp:group {"className":"br-section-head","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"bottom"}} -->

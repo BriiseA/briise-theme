@@ -5,7 +5,7 @@
  * Categories: header
  * Inserter: no
  */
-$e = briise_entreprise();
+$e = briise_theme_entreprise();
 ?>
 <!-- wp:group {"align":"full","className":"br-header","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-header"><!-- wp:group {"className":"br-header-inner","layout":{"type":"flex","justifyContent":"space-between","flexWrap":"nowrap"}} -->

@@ -6,7 +6,7 @@
  * Description: Ouverture sobre, sans image : pages intérieures, pages légales, pages de contenu.
  * Viewport Width: 1400
  */
-$briise = briise_entreprise();
+$briise = briise_theme_entreprise();
 ?>
 <!-- wp:group {"align":"full","className":"br-section br-page-head","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-section br-page-head"><!-- wp:group {"className":"br-head","layout":{"type":"default"}} -->

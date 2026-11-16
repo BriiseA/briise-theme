@@ -6,7 +6,7 @@
  * Description: Horaires d’ouverture tirés de « Mon entreprise », et un planning de rendez-vous ou de cours. Le jour en cours est surligné.
  * Viewport Width: 1400
  */
-$briise = briise_entreprise();
+$briise = briise_theme_entreprise();
 ?>
 <!-- wp:group {"align":"full","className":"br-section","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-section"><!-- wp:columns {"className":"br-split"} -->

@@ -6,7 +6,7 @@
  * Description: Quatre preuves rapides. Uniquement des chiffres vrais et vérifiables.
  * Viewport Width: 1400
  */
-$briise = briise_entreprise();
+$briise = briise_theme_entreprise();
 ?>
 <!-- wp:group {"align":"full","className":"br-section br-section\u002d\u002dtight","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-section br-section--tight"><!-- wp:columns {"className":"br-stats-row"} -->

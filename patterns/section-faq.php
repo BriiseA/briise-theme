@@ -6,7 +6,7 @@
  * Description: Lever les freins avant le contact. Sur la page choisie comme FAQ, les questions sont transmises à Google.
  * Viewport Width: 1400
  */
-$briise = briise_entreprise();
+$briise = briise_theme_entreprise();
 ?>
 <!-- wp:group {"align":"full","className":"br-section","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-section"><!-- wp:columns {"className":"br-split"} -->

@@ -6,7 +6,7 @@
  * Description: Certifications, labels, partenaires ou clients connus, en une ligne.
  * Viewport Width: 1400
  */
-$briise = briise_entreprise();
+$briise = briise_theme_entreprise();
 ?>
 <!-- wp:group {"align":"full","className":"br-section br-section\u002d\u002dtight","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-section br-section--tight"><!-- wp:paragraph {"className":"br-label br-center"} -->

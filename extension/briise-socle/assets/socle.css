@@ -1,0 +1,52 @@
+/*
+ * Briise Socle : apparence de secours, chargée seulement quand le thème actif
+ * n'est pas le thème Briise (qui a ses propres styles, accordés aux ambiances).
+ * Couleurs reprises du thème actif quand il les nomme, sinon neutres.
+ */
+.br-bandeau { display: flex; align-items: center; justify-content: center; gap: 1rem; padding: .6rem 1rem; background: var(--wp--preset--color--contrast, #1d1d1f); color: var(--wp--preset--color--base, #fff); font-size: .95em; text-align: center; }
+.br-bandeau[hidden] { display: none; }
+.br-bandeau p { margin: 0; }
+.br-bandeau a { color: inherit; text-decoration: underline; }
+.br-bandeau-fermer { background: none; border: 0; color: inherit; font-size: 1.4em; line-height: 1; min-width: 32px; min-height: 32px; cursor: pointer; }
+
+.br-horaires { display: grid; grid-template-columns: auto 1fr; gap: .25rem 1.25rem; margin: 0; }
+.br-horaires dt { font-weight: 600; }
+.br-horaires dd { margin: 0; }
+.br-horaires-note, .br-muted { opacity: .8; }
+.br-coordonnees, .br-reseaux { list-style: none; padding: 0; margin: 0; display: grid; gap: .35rem; }
+.br-reseaux { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+.br-liees { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.br-liee { border: 1px solid color-mix(in srgb, currentColor 20%, transparent); border-radius: 8px; padding: 1rem 1.25rem; }
+.br-liee a { font-weight: 600; }
+
+.br-carte { box-sizing: border-box; border: 1px solid color-mix(in srgb, currentColor 18%, transparent); border-radius: 12px; overflow: hidden; background: var(--wp--preset--color--base, #fff); color: var(--wp--preset--color--contrast, #1d1d1f); }
+.br-carte *, .br-carte *::before, .br-carte *::after { box-sizing: border-box; }
+.br-carte-tete { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.25rem 1.5rem; background: var(--wp--preset--color--contrast, #1d1d1f); color: var(--wp--preset--color--base, #fff); }
+.br-carte-tete-g { display: flex; align-items: center; gap: .75rem; }
+.br-carte-titre { margin: 0; font-size: 1.25em; color: inherit; }
+.br-carte-sous { margin: .15rem 0 0; opacity: .85; }
+.br-carte-ico svg, .br-ico svg { width: 1.4em; height: 1.4em; flex: none; }
+.br-carte-corps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; padding: 1.5rem; }
+.br-carte-col { display: flex; gap: .75rem; align-items: flex-start; }
+.br-carte-col { color: inherit; text-decoration: none; }
+a.br-carte-col:hover .br-carte-valeur, a.br-carte-col:focus .br-carte-valeur { text-decoration: underline; }
+.br-carte-textes { display: flex; flex-direction: column; gap: .1rem; min-width: 0; overflow-wrap: anywhere; }
+.br-carte-label { font-size: .8em; text-transform: uppercase; letter-spacing: .06em; opacity: .75; }
+.br-carte-valeur { font-weight: 600; }
+.br-carte-detail { font-size: .9em; opacity: .8; }
+.br-carte-badge { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; font-size: .9em; }
+.br-carte-badge svg { width: 1.2em; height: 1.2em; }
+.br-carte-badge strong, .br-carte-badge small { display: block; }
+.br-carte-pied-g { display: flex; align-items: center; gap: .5rem; }
+.br-carte-pied-g svg { width: 1.2em; height: 1.2em; flex: none; }
+.br-carte-pied { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.5rem; border-top: 1px solid color-mix(in srgb, currentColor 15%, transparent); }
+.br-carte-bouton { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; padding: .6rem 1.1rem; border-radius: 999px; background: var(--wp--preset--color--contrast, #1d1d1f); color: var(--wp--preset--color--base, #fff); text-decoration: none; font-weight: 600; }
+.br-carte-bouton svg { width: 1.1em; height: 1.1em; }
+.br-secteur { border-top: 1px solid color-mix(in srgb, currentColor 15%, transparent); padding: 1rem 1.5rem; }
+.br-secteur-tete { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem 1rem; }
+.br-secteur-titre { margin: 0; font-size: 1.05em; }
+.br-secteur-liste { list-style: none; padding: 0; margin: .5rem 0 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+.br-secteur-liste li, .br-chip { border: 1px solid color-mix(in srgb, currentColor 25%, transparent); border-radius: 999px; padding: .2rem .7rem; font-size: .9em; }
+
+.br-a-remplacer { outline: 2px dashed #b32d2e; }

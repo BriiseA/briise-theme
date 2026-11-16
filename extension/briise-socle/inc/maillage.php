@@ -240,46 +240,10 @@ function briise_maillage_analyse() {
 	return compact( 'pages', 'casses', 'exclues', 'flous', 'accueil' );
 }
 
-/**
- * Rythme des couleurs : deux sections voisines d'une page ne doivent pas avoir le même fond clair
- * (une tête de page peut précéder une section du même fond). Retourne [ [page, titre 1, titre 2, fond] ].
- */
-function briise_rythme_analyse() {
-	$clairs = array( 'fond', 'surface', 'nuance', 'clair', 'secondaire', 'sombre', 'accent' ); // Deux fonds foncés identiques se confondent aussi.
-	$titre  = function ( $b ) {
-		if ( preg_match( '/<h[1-3][^>]*>(.*?)<\/h[1-3]>/s', serialize_block( $b ), $m ) ) {
-			return wp_trim_words( wp_strip_all_tags( $m[1] ), 8, '…' );
-		}
-		return 'section sans titre';
-	};
-	$res = array();
-	foreach ( get_posts( array( 'post_type' => 'page', 'post_status' => array( 'publish', 'draft' ), 'posts_per_page' => 500, 'no_found_rows' => true ) ) as $p ) {
-		if ( function_exists( 'briise_est_page_legale' ) && briise_est_page_legale( $p ) ) {
-			continue;
-		}
-		$prev = null;
-		foreach ( parse_blocks( $p->post_content ) as $b ) {
-			if ( ! $b['blockName'] ) {
-				continue; // Espaces entre deux blocs.
-			}
-			// Seules les sections comptent (groupes et bannières), pas un paragraphe posé seul.
-			if ( ! in_array( $b['blockName'], array( 'core/group', 'core/cover' ), true ) ) {
-				$prev = null;
-				continue;
-			}
-			$fond = briise_fond_effectif( $b );
-			if ( $prev && $prev[1] === $fond && in_array( $fond, $clairs, true ) && false === strpos( $prev[0]['attrs']['className'] ?? '', 'br-page-head' ) ) {
-				$res[] = array( $p, $titre( $prev[0] ), $titre( $b ), $fond );
-			}
-			$prev = array( $b, $fond );
-		}
-	}
-	return $res;
-}
-
 function briise_onglet_controle() {
 	$r        = briise_maillage_analyse();
-	$rythme   = briise_rythme_analyse();
+	// Le contrôle des couleurs vient du thème Briise (styles de section) ; absent avec un autre thème.
+	$rythme   = function_exists( 'briise_rythme_analyse' ) ? briise_rythme_analyse() : null;
 	$lien     = function ( $p ) {
 		return '<a href="' . esc_url( get_edit_post_link( $p->ID ) ) . '">' . esc_html( get_the_title( $p ) ) . '</a>';
 	};
@@ -316,7 +280,7 @@ function briise_onglet_controle() {
 	<h2>Contrôle du maillage interne</h2>
 	<p style="max-width:60em">Les liens écrits dans le texte des pages disent à Google quelles pages comptent et de quoi elles parlent. Chaque page devrait recevoir au moins deux liens depuis d’autres pages (le menu et le pied de page ne comptent pas), et se trouver à trois clics au plus de l’accueil. L’analyse lit les contenus publiés ; elle est refaite à chaque ouverture de cet onglet.</p>
 	<?php
-	$total = $alertes + count( $r['casses'] ) + count( $r['exclues'] ) + count( $r['flous'] ) + count( $rythme );
+	$total = $alertes + count( $r['casses'] ) + count( $r['exclues'] ) + count( $r['flous'] ) + count( (array) $rythme );
 	echo '<p class="br-bilan' . ( $total ? ' br-a-voir' : '' ) . '">' . ( $total ? esc_html( $total . ' point' . ( $total > 1 ? 's' : '' ) . ' à corriger avant la mise en ligne.' ) : 'Aucun problème détecté : maillage et couleurs des sections en ordre.' ) . '</p>';
 	if ( ! $r['accueil'] ) {
 		echo '<p><strong>Aucune page d’accueil n’est définie</strong> (Réglages > Lecture) : la profondeur ne peut pas être calculée.</p>';
@@ -348,9 +312,12 @@ function briise_onglet_controle() {
 		}
 		echo '</ul>';
 	}
+	if ( null === $rythme ) {
+		return;
+	}
 	?>
 	<h2 style="margin-top:2.5em">Couleurs des sections</h2>
-	<p style="max-width:60em">Deux sections qui se suivent avec le même fond se lisent comme un seul bloc : le visiteur ne voit plus où commence le sujet suivant. Alterner le blanc et les teintes de l’ambiance (fond, surface, nuance) ; garder la bande foncée pour l’appel à l’action. Pour changer un fond : sélectionner la section dans l’éditeur, puis Styles > Couleur > Arrière-plan.</p>
+	<p style="max-width:60em">Deux sections qui se suivent avec le même fond se lisent comme un seul bloc : le visiteur ne voit plus où commence le sujet suivant. Alterner le blanc et les teintes de l’ambiance (fond, surface, nuance) ; garder la bande foncée pour l’appel à l’action. Pour changer un fond : sélectionner la section dans l’éditeur, puis onglet Styles > « Fond clair », « Fond teinté », « Fond nuancé » ou « Fond foncé ».</p>
 	<?php
 	if ( ! $rythme ) {
 		echo '<p>Aucune section voisine de même couleur.</p>';

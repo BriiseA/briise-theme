@@ -24,7 +24,7 @@ function briise_kits() {
  * Remplace les repères ({{CTA}}, {{URL:…}}, {{IMG:…}}, {{TITRE}}) par les vraies valeurs.
  */
 function briise_kit_remplir( $markup, $liens = array(), $pages = array(), $titre = '', &$manquants = array() ) {
-	$e = briise_entreprise();
+	$e = briise_theme_entreprise();
 	// Sans liens fournis (modèles de l'éditeur), ceux du kit installé.
 	if ( ! $liens ) {
 		$kits  = briise_kits()['kits'];
@@ -283,7 +283,7 @@ function briise_plan_depuis_kit( $cle, $choix ) {
 	}
 	// Une page par service, rangée sous la page des services.
 	$parent = $kit['liens']['services'];
-	$ville  = briise_entreprise()['city'];
+	$ville  = briise_theme_entreprise()['city'];
 	foreach ( preg_split( '/\r\n|\r|\n/', (string) ( $choix['services'] ?? '' ) ) as $service ) {
 		$service = trim( sanitize_text_field( $service ) );
 		if ( '' === $service ) {
@@ -364,6 +364,12 @@ add_action( 'admin_init', $briise_modeles );
 add_action( 'rest_api_init', $briise_modeles );
 
 /* ----- Onglet « Démarrage » ------------------------------------------------------- */
+
+// L'onglet est fourni par le thème : les kits et l'import montent des pages avec ses sections.
+add_filter( 'briise_onglets', function ( $onglets ) {
+	$avant = array_slice( $onglets, 0, array_search( 'controle', array_keys( $onglets ), true ), true );
+	return $avant + array( 'demarrage' => array( 'Démarrage', 'manage_options', '' ) ) + $onglets;
+} );
 
 add_action( 'admin_post_briise_kit', function () {
 	if ( ! current_user_can( 'manage_options' ) || ! check_admin_referer( 'briise_kit' ) ) {

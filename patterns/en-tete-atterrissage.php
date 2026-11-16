@@ -8,7 +8,7 @@
  * Pour les pages de publicité : pas de menu qui disperse le visiteur,
  * seulement le nom, le téléphone et l'action principale.
  */
-$e = briise_entreprise();
+$e = briise_theme_entreprise();
 ?>
 <!-- wp:group {"align":"full","className":"br-header br-header--atterrissage","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-header br-header--atterrissage"><!-- wp:group {"className":"br-header-inner","layout":{"type":"flex","justifyContent":"space-between","flexWrap":"nowrap"}} -->
@@ -18,7 +18,7 @@ $e = briise_entreprise();
 
 <!-- wp:buttons {"className":"br-header-actions"} -->
 <div class="wp-block-buttons br-header-actions"><?php if ( $e['telephone'] ) : ?><!-- wp:button {"className":"is-style-outline br-header-tel"} -->
-<div class="wp-block-button is-style-outline br-header-tel"><a class="wp-block-button__link wp-element-button" href="tel:<?php echo esc_attr( $e['telephone'] ); ?>"><?php echo esc_html( briise_telephone_lisible( $e['telephone'] ) ); ?></a></div>
+<div class="wp-block-button is-style-outline br-header-tel"><a class="wp-block-button__link wp-element-button" href="tel:<?php echo esc_attr( $e['telephone'] ); ?>"><?php echo esc_html( briise_theme_telephone( $e['telephone'] ) ); ?></a></div>
 <!-- /wp:button --><?php endif; ?>
 
 <!-- wp:button {"className":"br-header-cta-btn"} -->

@@ -6,7 +6,7 @@
  * Description: Positionnement : une phrase forte et trois engagements.
  * Viewport Width: 1400
  */
-$briise = briise_entreprise();
+$briise = briise_theme_entreprise();
 ?>
 <!-- wp:group {"backgroundColor":"surface","align":"full","className":"br-section","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-section has-surface-background-color has-background"><!-- wp:paragraph {"className":"br-statement br-center br-narrow"} -->

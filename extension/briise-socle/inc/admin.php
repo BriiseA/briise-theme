@@ -15,9 +15,15 @@ function briise_onglets() {
 		'identite' => array( 'Entreprise', 'manage_options', 'briise_entreprise' ),
 		'legal'    => array( 'Mentions légales', 'manage_options', 'briise_legal' ),
 		'fonctions' => array( 'Fonctions', 'manage_options', 'briise_fonctions' ),
-		'demarrage' => array( 'Démarrage', 'manage_options', '' ),
 		'controle'  => array( 'Contrôle', 'manage_options', '' ),
+		'depart'    => array( 'Fin de collaboration', 'manage_options', '' ),
 	);
+	/**
+	 * Un thème ou une extension peut ajouter un onglet :
+	 * 'cle' => array( libellé, capacité, option enregistrée ou '', fonction d'affichage facultative ).
+	 * Le thème Briise y ajoute « Démarrage » (kits et import d'un fichier de site).
+	 */
+	$onglets = apply_filters( 'briise_onglets', $onglets );
 	return array_filter( $onglets, function ( $o ) {
 		return current_user_can( $o[1] );
 	} );
@@ -157,13 +163,14 @@ function briise_page_reglages() {
 				<?php endforeach; ?>
 			</nav>
 		<?php endif; ?>
-		<?php if ( in_array( $actif, array( 'demarrage', 'controle' ), true ) ) : ?>
-			<?php call_user_func( 'briise_onglet_' . $actif ); ?>
+		<?php $rappel = $onglets[ $actif ][3] ?? 'briise_onglet_' . $actif; ?>
+		<?php if ( '' === $option ) : ?>
+			<?php call_user_func( $rappel ); ?>
 		<?php else : ?>
 		<form method="post" action="options.php">
 			<?php
 			settings_fields( $option );
-			call_user_func( 'briise_onglet_' . $actif, $option, briise_reglage( $option ) );
+			call_user_func( $rappel, $option, briise_reglage( $option ) );
 			submit_button( 'Enregistrer' );
 			?>
 		</form>

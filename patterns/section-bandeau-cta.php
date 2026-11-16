@@ -6,7 +6,7 @@
  * Description: Fin de page : une dernière invitation à passer à l’action.
  * Viewport Width: 1400
  */
-$briise = briise_entreprise();
+$briise = briise_theme_entreprise();
 ?>
 <!-- wp:group {"backgroundColor":"secondaire","textColor":"fond","align":"full","className":"br-section br-cta","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-section br-cta has-fond-color has-secondaire-background-color has-text-color has-background"><!-- wp:group {"className":"br-cta-inner","layout":{"type":"default"}} -->

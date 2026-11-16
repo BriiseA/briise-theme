@@ -6,7 +6,7 @@
  * Description: Ouverture de l’accueil ou d’une page de service : titre, phrase d’accroche, deux boutons, photo.
  * Viewport Width: 1400
  */
-$briise = briise_entreprise();
+$briise = briise_theme_entreprise();
 ?>
 <!-- wp:group {"align":"full","className":"br-section br-hero","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-section br-hero"><!-- wp:columns {"verticalAlignment":"center","className":"br-split"} -->

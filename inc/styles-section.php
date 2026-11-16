@@ -43,3 +43,40 @@ function briise_fond_effectif( $bloc ) {
 	}
 	return empty( $bloc['attrs']['style']['color']['background'] ) ? 'fond' : 'perso';
 }
+
+/**
+ * Rythme des couleurs : deux sections voisines d'une page ne doivent pas avoir le même fond clair
+ * (une tête de page peut précéder une section du même fond). Retourne [ [page, titre 1, titre 2, fond] ].
+ */
+function briise_rythme_analyse() {
+	$clairs = array( 'fond', 'surface', 'nuance', 'clair', 'secondaire', 'sombre', 'accent' ); // Deux fonds foncés identiques se confondent aussi.
+	$titre  = function ( $b ) {
+		if ( preg_match( '/<h[1-3][^>]*>(.*?)<\/h[1-3]>/s', serialize_block( $b ), $m ) ) {
+			return wp_trim_words( wp_strip_all_tags( $m[1] ), 8, '…' );
+		}
+		return 'section sans titre';
+	};
+	$res = array();
+	foreach ( get_posts( array( 'post_type' => 'page', 'post_status' => array( 'publish', 'draft' ), 'posts_per_page' => 500, 'no_found_rows' => true ) ) as $p ) {
+		if ( function_exists( 'briise_est_page_legale' ) && briise_est_page_legale( $p ) ) {
+			continue;
+		}
+		$prev = null;
+		foreach ( parse_blocks( $p->post_content ) as $b ) {
+			if ( ! $b['blockName'] ) {
+				continue; // Espaces entre deux blocs.
+			}
+			// Seules les sections comptent (groupes et bannières), pas un paragraphe posé seul.
+			if ( ! in_array( $b['blockName'], array( 'core/group', 'core/cover' ), true ) ) {
+				$prev = null;
+				continue;
+			}
+			$fond = briise_fond_effectif( $b );
+			if ( $prev && $prev[1] === $fond && in_array( $fond, $clairs, true ) && false === strpos( $prev[0]['attrs']['className'] ?? '', 'br-page-head' ) ) {
+				$res[] = array( $p, $titre( $prev[0] ), $titre( $b ), $fond );
+			}
+			$prev = array( $b, $fond );
+		}
+	}
+	return $res;
+}

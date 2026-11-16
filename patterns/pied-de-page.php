@@ -7,11 +7,11 @@
  *
  * Tout vient de « Mon entreprise » : rien à modifier ici pour un client.
  */
-$e          = briise_entreprise();
+$e          = briise_theme_entreprise();
 // Sur la page d'action elle-même, pas de lien qui y renvoie.
 $sur_cta    = is_singular() && untrailingslashit( get_permalink() ) === untrailingslashit( $e['cta_url'] );
-$horaires   = briise_horaires_html();
-$coord      = briise_coordonnees_html() . briise_reseaux_html();
+$horaires   = briise_theme_horaires_html();
+$coord      = briise_theme_coordonnees_html() . briise_theme_reseaux_html();
 $largeur    = $horaires ? '40%' : '50%';
 $largeur_co = $horaires ? '30%' : '50%';
 $legales    = array();
@@ -41,7 +41,7 @@ foreach ( array( 'mentions-legales' => 'Mentions légales', 'confidentialite' =>
 <!-- /wp:paragraph -->
 
 <!-- wp:html -->
-<?php echo $coord; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans briise_coordonnees_html(). ?>
+<?php echo $coord; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans briise_theme_coordonnees_html(). ?>
 <!-- /wp:html --></div>
 <!-- /wp:column -->
 <?php endif; ?>
@@ -53,7 +53,7 @@ foreach ( array( 'mentions-legales' => 'Mentions légales', 'confidentialite' =>
 <!-- /wp:paragraph -->
 
 <!-- wp:html -->
-<?php echo $horaires; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans briise_horaires_html(). ?>
+<?php echo $horaires; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans briise_theme_horaires_html(). ?>
 <!-- /wp:html --></div>
 <!-- /wp:column -->
 <?php endif; ?></div>
@@ -71,7 +71,7 @@ foreach ( array( 'mentions-legales' => 'Mentions légales', 'confidentialite' =>
 <?php endif; ?></div>
 <!-- /wp:group -->
 
-<?php if ( briise_fonction( 'bouton_mobile' ) && ! $sur_cta ) : ?>
+<?php if ( briise_theme_fonction( 'bouton_mobile' ) && ! $sur_cta ) : ?>
 <!-- wp:group {"className":"br-sticky","layout":{"type":"default"}} -->
 <div class="wp-block-group br-sticky"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button -->

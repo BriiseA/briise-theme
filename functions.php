@@ -7,19 +7,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once get_theme_file_path( 'inc/reglages.php' );
-require_once get_theme_file_path( 'inc/entreprise.php' );
-require_once get_theme_file_path( 'inc/fonctions.php' );
-require_once get_theme_file_path( 'inc/seo.php' );
-require_once get_theme_file_path( 'inc/menu.php' );
+// Le fonctionnement (Mon entreprise, référencement, contrôle…) est dans l'extension Briise Socle.
+// Sans elle, le thème s'affiche quand même, avec des valeurs vides, et prévient l'administrateur.
+require_once get_theme_file_path( 'inc/socle.php' );
 require_once get_theme_file_path( 'inc/kits.php' );
-require_once get_theme_file_path( 'inc/robots.php' );
-require_once get_theme_file_path( 'inc/maillage.php' );
 require_once get_theme_file_path( 'inc/performance.php' );
-require_once get_theme_file_path( 'inc/cartes.php' );
 require_once get_theme_file_path( 'inc/styles-section.php' );
 if ( is_admin() ) {
-	require_once get_theme_file_path( 'inc/admin.php' );
 	require_once get_theme_file_path( 'inc/contraste.php' );
 }
 
@@ -51,50 +45,26 @@ add_action( 'init', function () {
  * a demandé à réduire les animations.
  */
 add_action( 'wp_head', function () {
-	if ( ! briise_fonction( 'animations' ) ) {
+	if ( ! briise_theme_fonction( 'animations' ) ) {
 		return;
 	}
 	wp_print_inline_script_tag( "if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){var d=document.documentElement;d.classList.add('br-motion');setTimeout(function(){if(!window.briiseMotionLoaded){d.classList.remove('br-motion');}},3000);}" );
 }, 1 );
 add_action( 'wp_enqueue_scripts', function () {
 	$version = wp_get_theme()->get( 'Version' );
-	if ( briise_fonction( 'animations' ) ) {
+	if ( briise_theme_fonction( 'animations' ) ) {
 		wp_enqueue_style( 'briise-motion', get_theme_file_uri( 'assets/css/motion.css' ), array(), $version );
 		wp_enqueue_script( 'briise-motion', get_theme_file_uri( 'assets/js/motion.js' ), array(), $version, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 	}
 	wp_enqueue_style( 'briise-ux', get_theme_file_uri( 'assets/css/ux.css' ), array(), $version );
 	wp_enqueue_script( 'briise-ux', get_theme_file_uri( 'assets/js/ux.js' ), array(), $version, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 	wp_add_inline_script( 'briise-ux', 'window.briiseUx=' . wp_json_encode( array(
-		'menu'     => briise_fonction( 'menu_remonte' ),
-		'jour'     => briise_fonction( 'horaires_jour' ),
-		'sommaire' => briise_fonction( 'sommaire_faq' ),
+		'menu'     => briise_theme_fonction( 'menu_remonte' ),
+		'jour'     => briise_theme_fonction( 'horaires_jour' ),
+		'sommaire' => briise_theme_fonction( 'sommaire_faq' ),
 	) ) . ';', 'before' );
 } );
 
-
-/**
- * Page d'accueil : les comptes sans droit d'administration
- * ne modifient que les textes et les images.
- */
-add_filter( 'block_editor_settings_all', function ( $settings, $context ) {
-	if ( empty( $context->post ) || current_user_can( 'edit_theme_options' ) || ! briise_fonction( 'verrou' ) ) {
-		return $settings;
-	}
-	if ( (int) $context->post->ID === (int) get_option( 'page_on_front' ) ) {
-		$settings['templateLock'] = 'contentOnly';
-	}
-	return $settings;
-}, 10, 2 );
-
-/**
- * Sécurité : seuls les administrateurs insèrent du HTML non filtré.
- */
-add_filter( 'map_meta_cap', function ( $caps, $cap, $user_id ) {
-	if ( 'unfiltered_html' === $cap && ! user_can( $user_id, 'manage_options' ) ) {
-		return array( 'do_not_allow' );
-	}
-	return $caps;
-}, 10, 3 );
 
 /**
  * Hero bannière : sa photo est l'élément le plus visible de la page,
@@ -123,3 +93,12 @@ add_filter( 'render_block_core/post-title', function ( $html, $block ) {
 	}
 	return $html;
 }, 10, 2 );
+
+/* ----- Retour en haut ------------------------------------------------------ */
+
+add_action( 'wp_footer', function () {
+	if ( ! briise_theme_fonction( 'retour_haut' ) ) {
+		return;
+	}
+	echo '<a href="#" id="br-haut" class="br-haut" aria-label="Revenir en haut de la page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>';
+}, 5 );

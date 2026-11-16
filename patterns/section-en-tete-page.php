@@ -6,7 +6,7 @@
  * Description: Pour toutes les pages intérieures : fil d’Ariane automatique, titre, introduction et bouton d’action.
  * Viewport Width: 1400
  */
-$briise = briise_entreprise();
+$briise = briise_theme_entreprise();
 ?>
 <!-- wp:group {"align":"full","className":"br-section br-page-head","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-section br-page-head"><!-- wp:group {"className":"br-head","layout":{"type":"default"}} -->

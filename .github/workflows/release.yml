@@ -1,15 +1,17 @@
 name: Version installable
 
 # Dès que le numéro « Version: » de style.css change sur main, fabrique
-# briise.zip (avec un dossier « briise » à l'intérieur, prêt à téléverser
-# dans WordPress) et publie la version correspondante (v0.1.0, v0.2.0…)
+# briise.zip (le thème, dossier « briise ») et briise-socle.zip (l'extension,
+# dossier « briise-socle »), prêts à téléverser dans WordPress, et publie la
+# version correspondante (v1.2.0…). Les sites l'installent ensuite depuis
+# Tableau de bord > Mises à jour (module de mise à jour de l'extension).
 # dans l'onglet « Releases » du dépôt. Si cette version existe déjà, rien
 # ne se passe. Peut aussi se lancer à la main depuis l'onglet « Actions ».
 
 on:
   push:
     branches: [main]
-    paths: [style.css, .github/workflows/release.yml]
+    paths: [style.css, extension/briise-socle/briise-socle.php, .github/workflows/release.yml]
   workflow_dispatch:
 
 permissions:
@@ -38,19 +40,28 @@ jobs:
             echo "${{ steps.version.outputs.tag }} existe déjà : rien à faire."
           fi
 
-      - name: Préparer briise.zip
+      - name: Vérifier que le thème et l'extension ont le même numéro
+        run: |
+          T=$(grep -m1 -E '^Version:' style.css | sed -E 's/^Version:[[:space:]]*//' | tr -d '[:space:]')
+          P=$(grep -m1 -E '^ \* Version:' extension/briise-socle/briise-socle.php | sed -E 's/^ \* Version:[[:space:]]*//' | tr -d '[:space:]')
+          C=$(grep -m1 "BRIISE_SOCLE_VERSION'," extension/briise-socle/briise-socle.php | grep -oE "[0-9]+\.[0-9]+\.[0-9]+")
+          echo "Thème $T, extension $P ($C)"
+          [ "$T" = "$P" ] && [ "$P" = "$C" ] || { echo "Numéros différents : mettre le même dans style.css et briise-socle.php (en-tête et constante)."; exit 1; }
+
+      - name: Préparer briise.zip et briise-socle.zip
         if: steps.existe.outputs.oui != '1'
         run: |
           mkdir -p build/briise
-          rsync -a --exclude ".git" --exclude ".github" --exclude "build" --exclude ".gitignore" ./ build/briise/
-          cd build && zip -rq briise.zip briise
+          rsync -a --exclude ".git" --exclude ".github" --exclude "build" --exclude "extension" --exclude ".gitignore" ./ build/briise/
+          cp -r extension/briise-socle build/briise-socle
+          cd build && zip -rq briise.zip briise && zip -rq briise-socle.zip briise-socle
 
       - name: Publier la version
         if: steps.existe.outputs.oui != '1'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${{ steps.version.outputs.tag }}" build/briise.zip \
+          gh release create "${{ steps.version.outputs.tag }}" build/briise.zip build/briise-socle.zip \
             --target "${{ github.sha }}" \
             --title "Briise ${{ steps.version.outputs.tag }}" \
-            --notes "Fichier à installer : briise.zip (Apparence > Thèmes > Ajouter > Téléverser). Détail des changements : CHANGELOG.md."
+            --notes "Première installation : briise-socle.zip (Extensions > Ajouter > Téléverser), puis briise.zip (Apparence > Thèmes > Ajouter > Téléverser). Sites déjà installés : Tableau de bord > Mises à jour. Détail des changements : CHANGELOG.md."

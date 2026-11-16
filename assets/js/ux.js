@@ -2,6 +2,7 @@
  * Briise : confort de navigation.
  * Fonctionne sur les pages existantes, sans modifier leur contenu.
  * Les réglages viennent de « Mon entreprise > Fonctions » (window.briiseUx).
+ * Le bandeau d'information et la mesure des contacts sont dans l'extension Briise Socle.
  */
 ( function () {
 	'use strict';
@@ -216,40 +217,7 @@
 		} );
 	}
 
-	/* 9. Bandeau d'information : fermé, il ne revient que si son texte change. */
-	var bandeau = document.getElementById( 'br-bandeau' );
-	if ( bandeau ) {
-		bandeau.querySelector( '.br-bandeau-fermer' ).addEventListener( 'click', function () {
-			bandeau.hidden = true;
-			try {
-				localStorage.setItem( 'br-bandeau', bandeau.dataset.id );
-			} catch ( e ) {}
-		} );
-	}
-
-	/* 10. Mesure des prises de contact : clic sur un téléphone, un e-mail, envoi d'un
-	       formulaire. Envoyé à Matomo s'il est présent, et à Google Tag Manager
-	       (dataLayer) pour les conversions Google Ads, qui restent soumises au consentement. */
-	var mesurer = function ( type, detail ) {
-		window.dataLayer = window.dataLayer || [];
-		window.dataLayer.push( { event: 'briise_contact', briise_type: type, briise_detail: detail } );
-		if ( window._paq ) {
-			window._paq.push( [ 'trackEvent', 'Contact', type, detail ] );
-		}
-	};
-	document.addEventListener( 'click', function ( ev ) {
-		var lien = ev.target.closest && ev.target.closest( 'a[href^="tel:"], a[href^="mailto:"]' );
-		if ( lien ) {
-			mesurer( lien.href.indexOf( 'tel:' ) === 0 ? 'telephone' : 'email', location.pathname );
-		}
-	} );
-	document.addEventListener( 'submit', function ( ev ) {
-		if ( ev.target && ev.target.tagName === 'FORM' && ! ev.target.closest( '.wp-block-search' ) ) {
-			mesurer( 'formulaire', location.pathname );
-		}
-	}, true );
-
-	/* 11. Liens d'ancre : défilement doux, sauf mouvement réduit. */
+	/* 9. Liens d'ancre : défilement doux, sauf mouvement réduit. */
 	if ( ! reduce ) {
 		document.documentElement.classList.add( 'br-smooth' );
 	}
