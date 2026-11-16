@@ -1,5 +1,16 @@
 # Historique des versions
 
+## 1.0.0
+
+Première version stable : le thème a servi à monter de bout en bout un site client test (Métallerie Delaunay) avec le process Briise, sans code ajouté. Contenu identique à la 0.11.0 :
+- 7 ambiances vérifiées en contraste AA, dont Acier pour les métiers du métal ;
+- 31 sections, dont les cartes Coordonnées et Zone d'intervention ;
+- kits artisan, prestataire et libéral, import d'un fichier de site ;
+- Mon entreprise : coordonnées, logo, horaires, mentions légales, fonctions, démarrage, contrôle du maillage et des couleurs ;
+- référencement : titres et descriptions, données structurées, plan du site, robots.txt pour les moteurs et les IA, Bing et IndexNow ;
+- page d'atterrissage pour la publicité, mesure des contacts ;
+- accessibilité WCAG 2.2 AA, polices préchargées.
+
 ## 0.11.0
 
 - Deux nouvelles sections, reprises des cartes du site DEFI No Limit : « Coordonnées (carte) » et « Zone d'intervention (carte) ». Elles se remplissent depuis Mon entreprise (téléphone, e-mail, adresse, horaires résumés automatiquement, itinéraire, zone) et prennent les couleurs de l'ambiance. Icônes Tabler intégrées en SVG, sans police externe.
