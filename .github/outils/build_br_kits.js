@@ -152,5 +152,5 @@ const MODELES = {
   contact: { titre: 'Page contact', desc: 'Formulaire de contact, coordonnées et horaires.', markup: serialize(rythme([tete(T, 'Écrivez-nous ou appelez-nous : nous répondons rapidement.', false), sec('formulaire-contact'), sec('coordonnees-carte')].flat())) },
 };
 
-require('fs').writeFileSync('/home/claude/briise-theme/inc/kits.json', JSON.stringify({ kits: KITS, legales, modeles: MODELES }, null, 1));
+require('fs').writeFileSync(require('path').join(__dirname, '..', '..', 'inc', 'kits.json'), JSON.stringify({ kits: KITS, legales, modeles: MODELES }, null, 1));
 console.log(Object.keys(KITS).map((k) => k + ':' + KITS[k].pages.length).join(' '), '+', legales.length, 'légales');

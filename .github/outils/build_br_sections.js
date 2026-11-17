@@ -420,6 +420,7 @@ add('formulaire-contact', 'contact', 'Formulaire de contact', 'Le formulaire de 
   ], 'br-split')]));
 
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
-require('fs').writeFileSync('/home/claude/validate/br_sections.json', JSON.stringify(out, null, 1));
+require('fs').mkdirSync(require('path').join(__dirname, 'build'), { recursive: true });
+require('fs').writeFileSync(require('path').join(__dirname, 'build', 'br_sections.json'), JSON.stringify(out, null, 1));
 module.exports = { S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres };
 console.log(Object.keys(S).length, 'sections');

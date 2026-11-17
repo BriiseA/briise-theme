@@ -1,0 +1,44 @@
+name: Banc d'essai
+
+# Le contrôle technique du thème : installe un WordPress neuf, importe le site Delaunay
+# et vérifie blocs, pages, Contrôle, formulaires, sécurité et accessibilité.
+# Lancé à chaque envoi, et avant chaque publication (Version installable).
+# En cas d'échec : croix rouge, et la version n'est pas publiée. Les captures sont
+# téléchargeables dans l'onglet Actions (artefact « banc-sortie »).
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  banc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: sqlite3, pdo_sqlite, gd, mbstring, intl, zip
+          coverage: none
+
+      - name: Outils (paquets WordPress pour valider les blocs)
+        run: npm ci --prefix .github/outils --no-audit --no-fund
+
+      - name: Banc d'essai
+        run: bash .github/outils/banc/lancer.sh
+
+      - name: Captures et journaux
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: banc-sortie
+          path: /tmp/briise-banc/sortie
+          retention-days: 14

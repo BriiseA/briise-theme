@@ -11,14 +11,19 @@ name: Version installable
 on:
   push:
     branches: [main]
-    paths: [style.css, extension/briise-socle/briise-socle.php, .github/workflows/release.yml]
+    paths: [style.css, extension/briise-socle/briise-socle.php, .github/workflows/release.yml, .github/workflows/banc.yml]
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
+  banc:
+    # Une version n'est publiée que si le banc d'essai est au vert.
+    uses: ./.github/workflows/banc.yml
+
   zip:
+    needs: banc
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

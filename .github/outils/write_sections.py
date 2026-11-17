@@ -1,6 +1,7 @@
-import json,re
-R='/home/claude/briise-theme/'
-d=json.load(open('/home/claude/validate/br_sections.json'))
+import json,re,pathlib
+ICI=pathlib.Path(__file__).resolve().parent
+R=str(ICI.parents[1])+'/'
+d=json.load(open(ICI/'build'/'br_sections.json'))
 CATS={'ouverture':'Ouverture','offre':'Offre','confiance':'Confiance','parcours':'Parcours','personnes':'Personnes','contenu':'Contenu','contact':'Contact'}
 for slug,s in d.items():
     m=s['markup']
