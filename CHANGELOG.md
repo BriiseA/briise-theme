@@ -1,5 +1,10 @@
 # Historique des versions
 
+## 1.5.2
+
+- **Tableaux comparatifs lisibles sur mobile** : un tableau de 4 colonnes ou plus devient, sur téléphone, une fiche par ligne, chaque valeur précédée du titre de sa colonne. Automatique, sans JavaScript, pour tous les tableaux du thème (« Quel modèle choisir ? », comparatifs de prix).
+- Vérifié sur Delaunay : accessibilité 100 sur les pages escaliers, escalier hélicoïdal, portails et le guide quart tournant.
+
 ## 1.5.1
 
 - **En-tête avec photo plus clair** : voile à 68 % derrière le texte seulement (au lieu de 84 %), qui s'efface en douceur pour laisser la photo nette et lumineuse sur la droite ; 68 % aussi sur tablette et mobile (au lieu de 78 %). C'est le minimum qui garde le texte lisible (contraste AA) même sur une zone blanche de la photo, dans toutes les ambiances. Légère ombre sous le texte pour les photos très claires.
