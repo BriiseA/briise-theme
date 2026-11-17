@@ -21,7 +21,7 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | `theme.json` | Couleurs, polices, tailles, espacements et styles globaux |
 | `templates/` | Modèles de pages (page, article, blog, 404, page sans titre, fiche de réalisation) |
 | `parts/` | En-tête et pied de page |
-| `patterns/` | Bibliothèque de 39 sections (`section-*.php`), en-tête, pied de page, blog |
+| `patterns/` | Bibliothèque de 40 sections (`section-*.php`), en-tête, pied de page, blog |
 | `assets/images/sections/` | Images de remplacement des sections, à remplacer par les photos du client |
 | `assets/js/ux.js` | Menu intelligent, page active, téléphones cliquables, bouton fixe mobile, retour en haut |
 | `assets/js/motion.js` | Animations d'apparition (coupées si le visiteur le demande) |
@@ -80,6 +80,8 @@ Arrondis et formes : `--wp--custom--rayon--grand|moyen|petit|bouton` et `--wp--c
 **En-tête de page avec photo.** Titre, fil d'Ariane, introduction et bouton à gauche, photo à droite : c'est l'**image mise en avant** de la page, que le client change sans toucher à la mise en page. La photo s'affiche à peu près à sa taille réelle, sans voile : elle reste nette dès 1 400 px de large, et ses couleurs sont respectées. Sans image, le texte prend toute la largeur. Variante **En-tête de page avec trois photos** (mosaïque : l'image mise en avant et deux photos) quand le client en a trois bonnes. L'ancien bandeau pleine largeur reste disponible (« En-tête bandeau photo pleine largeur ») pour les très grandes photos, 2 400 px au moins. Mon entreprise > Contrôle signale une photo d'en-tête manquante ou trop petite. En-tête avec photo par défaut pour les pages de service et les pages À propos, Équipe ou L'atelier ; en-tête sans photo pour Devis, Contact, FAQ, pages légales et articles.
 
 **Pages de service racontées.** Le modèle « Page de service » suit l'ordre des questions du visiteur : ce que c'est (en-tête), ce que ça change (« Ce que ça change, en photos »), lequel choisir (« Quel modèle choisir, en cartes »), la preuve (réalisations du service), le déroulé et le prix (« Déroulé et prix, en photos »), les questions, l'action. Chaque section porte des photos : jamais plus d'un écran de texte sans image.
+
+**Sécurité.** Mon entreprise > Fonctions > « Protections de sécurité », activé par défaut : identifiants de connexion cachés, XML-RPC fermé, en-têtes de sécurité, éditeur de code désactivé, message d'erreur de connexion neutre. L'onglet Contrôle liste ce qui reste à régler avant la mise en ligne (compte « admin », HTTPS, double authentification, mises à jour, extensions désactivées). Cookies : un site Briise n'en dépose aucun ; dès qu'un client ajoute Analytics, Ads, une carte ou une vidéo, installer Complianz (mode d'emploi, étape 10).
 
 **Crédit de l'agence.** Mon entreprise > Fonctions > « Crédit de l'agence en pied de page » : « Site réalisé par Briise » (texte du début modifiable), en petit à côté des mentions légales, lien en nofollow vers briise.fr. Désactivé par défaut, à activer avec l'accord du client ; coupé automatiquement quand on fige les contenus en fin de collaboration.
 
@@ -164,7 +166,7 @@ Dans l'éditeur : bouton « + » > Compositions > catégories « Sections · …
 | --- | --- |
 | Ouverture | Hero avec image, Hero bannière plein écran, Hero texte seul, En-tête de page avec photo, En-tête de page avec trois photos, En-tête bandeau photo pleine largeur, En-tête de page avec fil d'Ariane |
 | Offre et tarifs | Ce que ça change, en photos ; Quel modèle choisir, en cartes ; Trois cartes de service, Service détaillé alterné, Tableau comparatif, Grille de tarifs en cartes, Tableau de tarifs simple |
-| Confiance et preuves | Chiffres clés, Témoignages, Logos ou labels, Dernières réalisations, Toutes les réalisations avec filtres, Réalisations de ce service (les trois automatiques), Réalisations en grille (à la main), Avant / après, Galerie en mosaïque |
+| Confiance et preuves | Chiffres clés, Témoignages, Logos ou labels, Dernières réalisations, Toutes les réalisations avec filtres, Réalisations de ce service (les trois automatiques), Réalisations en grille (à la main), Avant / après, Avant / après à faire glisser, Galerie en mosaïque |
 | Parcours et FAQ | Déroulé et prix, en photos ; Étapes numérotées, FAQ en accordéon, Horaires et planning |
 | Personnes | Présentation du dirigeant, Équipe, Citation ou valeurs |
 | Contenu | Derniers articles, Pages liées (automatique) |

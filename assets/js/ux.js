@@ -222,3 +222,28 @@
 		document.documentElement.classList.add( 'br-smooth' );
 	}
 }() );
+
+/* Avant / après à faire glisser : souris (survol ou glisser), doigt, clavier. */
+(function () {
+	document.querySelectorAll('.br-glisse').forEach(function (c) {
+		if (c.querySelectorAll('img').length < 2) { return; }
+		c.classList.add('is-pret');
+		var p = document.createElement('div');
+		p.className = 'br-comp-poignee';
+		p.setAttribute('aria-hidden', 'true');
+		p.innerHTML = '<span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6l6 6"/><path d="M15 6l6 6l-6 6"/></svg></span>';
+		var r = document.createElement('input');
+		r.type = 'range'; r.min = '0'; r.max = '100'; r.value = '50';
+		r.className = 'br-comp-range';
+		r.setAttribute('aria-label', 'Comparer avant et après');
+		c.appendChild(p); c.appendChild(r);
+		var appui = false;
+		function regler(v) { v = Math.max(0, Math.min(100, v)); c.style.setProperty('--br-pos', v + '%'); r.value = String(Math.round(v)); }
+		function depuis(e) { var b = c.getBoundingClientRect(); regler((e.clientX - b.left) / b.width * 100); }
+		c.addEventListener('pointerdown', function (e) { appui = true; if (c.setPointerCapture) { c.setPointerCapture(e.pointerId); } depuis(e); });
+		c.addEventListener('pointermove', function (e) { if (appui || e.pointerType === 'mouse') { depuis(e); } });
+		['pointerup', 'pointercancel'].forEach(function (t) { c.addEventListener(t, function () { appui = false; }); });
+		r.addEventListener('input', function () { regler(+r.value); });
+		regler(50);
+	});
+})();

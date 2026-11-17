@@ -3,13 +3,13 @@
  * Title: Parcours : Étapes numérotées
  * Slug: briise/etapes
  * Categories: briise-parcours
- * Description: Rassurer sur le déroulé : du premier contact au résultat.
+ * Description: Rassurer sur le déroulé : du premier contact au résultat, avec une photo par étape.
  * Viewport Width: 1400
  */
 $briise = briise_theme_entreprise();
 ?>
-<!-- wp:group {"backgroundColor":"nuance","align":"full","className":"br-section","layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull br-section has-nuance-background-color has-background"><!-- wp:group {"className":"br-head","layout":{"type":"default"}} -->
+<!-- wp:group {"backgroundColor":"nuance","align":"full","className":"br-section br-etapes-photos","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull br-section br-etapes-photos has-nuance-background-color has-background"><!-- wp:group {"className":"br-head","layout":{"type":"default"}} -->
 <div class="wp-block-group br-head"><!-- wp:paragraph {"className":"br-label"} -->
 <p class="br-label">Comment ça se passe</p>
 <!-- /wp:paragraph -->
@@ -21,7 +21,12 @@ $briise = briise_theme_entreprise();
 
 <!-- wp:columns {"className":"br-steps"} -->
 <div class="wp-block-columns br-steps"><!-- wp:column -->
-<div class="wp-block-column"><!-- wp:paragraph {"className":"br-num"} -->
+<div class="wp-block-column"><!-- wp:group {"className":"br-etape","layout":{"type":"default"}} -->
+<div class="wp-block-group br-etape"><!-- wp:image {"aspectRatio":"4/3","scale":"cover","sizeSlug":"full","linkDestination":"none","className":"is-style-br-arrondi"} -->
+<figure class="wp-block-image size-full is-style-br-arrondi"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/sections/carre.svg' ) ); ?>" alt="Photo à remplacer : le premier échange" style="aspect-ratio:4/3;object-fit:cover"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:paragraph {"className":"br-num"} -->
 <p class="br-num">1</p>
 <!-- /wp:paragraph -->
 
@@ -32,10 +37,16 @@ $briise = briise_theme_entreprise();
 <!-- wp:paragraph {"className":"br-muted"} -->
 <p class="br-muted">Par téléphone ou par le formulaire. Nous répondons sous 24 heures ouvrées.</p>
 <!-- /wp:paragraph --></div>
+<!-- /wp:group --></div>
 <!-- /wp:column -->
 
 <!-- wp:column -->
-<div class="wp-block-column"><!-- wp:paragraph {"className":"br-num"} -->
+<div class="wp-block-column"><!-- wp:group {"className":"br-etape","layout":{"type":"default"}} -->
+<div class="wp-block-group br-etape"><!-- wp:image {"aspectRatio":"4/3","scale":"cover","sizeSlug":"full","linkDestination":"none","className":"is-style-br-arrondi"} -->
+<figure class="wp-block-image size-full is-style-br-arrondi"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/sections/carre-2.svg' ) ); ?>" alt="Photo à remplacer : le rendez-vous" style="aspect-ratio:4/3;object-fit:cover"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:paragraph {"className":"br-num"} -->
 <p class="br-num">2</p>
 <!-- /wp:paragraph -->
 
@@ -46,10 +57,16 @@ $briise = briise_theme_entreprise();
 <!-- wp:paragraph {"className":"br-muted"} -->
 <p class="br-muted">Un échange pour comprendre votre besoin, puis un devis clair et détaillé.</p>
 <!-- /wp:paragraph --></div>
+<!-- /wp:group --></div>
 <!-- /wp:column -->
 
 <!-- wp:column -->
-<div class="wp-block-column"><!-- wp:paragraph {"className":"br-num"} -->
+<div class="wp-block-column"><!-- wp:group {"className":"br-etape","layout":{"type":"default"}} -->
+<div class="wp-block-group br-etape"><!-- wp:image {"aspectRatio":"4/3","scale":"cover","sizeSlug":"full","linkDestination":"none","className":"is-style-br-arrondi"} -->
+<figure class="wp-block-image size-full is-style-br-arrondi"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/sections/carre-3.svg' ) ); ?>" alt="Photo à remplacer : le travail réalisé" style="aspect-ratio:4/3;object-fit:cover"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:paragraph {"className":"br-num"} -->
 <p class="br-num">3</p>
 <!-- /wp:paragraph -->
 
@@ -60,6 +77,7 @@ $briise = briise_theme_entreprise();
 <!-- wp:paragraph {"className":"br-muted"} -->
 <p class="br-muted">Aux dates convenues, avec un interlocuteur unique du début à la fin.</p>
 <!-- /wp:paragraph --></div>
+<!-- /wp:group --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
 

@@ -63,7 +63,7 @@ add('hero-image', 'ouverture', 'Hero avec image', 'Ouverture de l’accueil ou d
 
 add('hero-banniere', 'ouverture', 'Hero bannière plein écran', 'Grande photo pleine largeur, titre et bouton posés dessus. Le voile sombre garantit la lisibilité, quelle que soit la photo.',
   cb('core/cover', {
-    url: IMG('banniere'), alt: '', dimRatio: 70, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 82, minHeightUnit: 'vh',
+    url: IMG('banniere'), alt: '', dimRatio: 70, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 68, minHeightUnit: 'vh',
     contentPosition: 'bottom left', align: 'full', className: 'br-banniere', layout: { type: 'constrained' },
   }, [
     Box('br-banniere-inner', [
@@ -271,6 +271,17 @@ add('avant-apres', 'confiance', 'Avant / après', 'Deux photos côte à côte po
     ], 'br-avant-apres'),
   ]));
 
+const avantApres = (label, titre, chapo, a = ['avant', 'Avant : décrivez l’état de départ', 'Avant'], b = ['apres', 'Après : décrivez le résultat', 'Après']) => Section('', [
+  Head([Label(label), H(titre, 2), Lead(chapo)]),
+  Cols([
+    Col([Box('br-avap', [Img(a[0], '16/10', 'is-style-br-arrondi', a[1]), P(a[2], 'br-chip br-avap-tag')])]),
+    Col([Box('br-avap', [Img(b[0], '16/10', 'is-style-br-arrondi', b[1]), P(b[2], 'br-chip br-avap-tag')])]),
+  ], 'br-avant-apres br-glisse'),
+  P('Faites glisser le curseur, ou passez la souris sur la photo, pour comparer.', 'br-muted br-glisse-aide'),
+]);
+add('avant-apres-glisse', 'confiance', 'Avant / après à faire glisser', 'Une seule photo coupée par un curseur : on glisse pour passer de l’avant à l’après. Les deux photos doivent être prises du même endroit, avec le même cadrage ; sinon, préférer « Avant / après » côte à côte.',
+  avantApres('Avant / après', 'Le titre de la transformation', 'Le contexte en une phrase : la demande, la contrainte, le délai.'));
+
 add('galerie', 'confiance', 'Galerie en mosaïque', 'Six photos en mosaïque : lieu, ambiance, détails du travail.',
   Section('', [
     Head([Label('En images'), H('Un aperçu de notre univers', 2)]),
@@ -281,16 +292,12 @@ add('galerie', 'confiance', 'Galerie en mosaïque', 'Six photos en mosaïque : l
 /* ----- Parcours ----- */
 
 const etape = (n, t, d) => Col([Num(n), H(t, 3), Muted(d)]);
-add('etapes', 'parcours', 'Étapes numérotées', 'Rassurer sur le déroulé : du premier contact au résultat.',
-  Section('', [
-    Head([Label('Comment ça se passe'), H('Trois étapes, sans surprise', 2)]),
-    Cols([
-      etape('1', 'Vous nous contactez', 'Par téléphone ou par le formulaire. Nous répondons sous 24 heures ouvrées.'),
-      etape('2', 'Nous faisons le point', 'Un échange pour comprendre votre besoin, puis un devis clair et détaillé.'),
-      etape('3', 'Nous réalisons', 'Aux dates convenues, avec un interlocuteur unique du début à la fin.'),
-    ], 'br-steps'),
-    MainBtns(),
-  ], { backgroundColor: 'nuance' }));
+add('etapes', 'parcours', 'Étapes numérotées', 'Rassurer sur le déroulé : du premier contact au résultat, avec une photo par étape.',
+  etapesPhotos('Trois étapes, sans surprise', [
+    ['carre', 'Photo à remplacer : le premier échange', 'Vous nous contactez', 'Par téléphone ou par le formulaire. Nous répondons sous 24 heures ouvrées.'],
+    ['carre-2', 'Photo à remplacer : le rendez-vous', 'Nous faisons le point', 'Un échange pour comprendre votre besoin, puis un devis clair et détaillé.'],
+    ['carre-3', 'Photo à remplacer : le travail réalisé', 'Nous réalisons', 'Aux dates convenues, avec un interlocuteur unique du début à la fin.'],
+  ], [MainBtns()]));
 
 add('faq', 'parcours', 'FAQ en accordéon', 'Lever les freins avant le contact. Sur la page choisie comme FAQ, les questions sont transmises à Google.',
   Section('', [Cols([
@@ -397,6 +404,7 @@ add('formulaire', 'contact', 'Formulaire de demande de devis', 'Le formulaire de
       Label('Votre demande'), H('Parlons de votre projet', 2),
       P('Ce qui se passe après l’envoi : sous quel délai vous répondez, et par quel moyen.'),
       List(['Réponse sous 24 heures ouvrées', 'Devis gratuit et sans engagement', 'Vos données ne servent qu’à vous répondre']),
+      Short('[briise_appel]'),
     ], { width: '42%' }),
     Col([Box('br-card br-formulaire', [Short('[briise_formulaire type="devis"]')])], { width: '58%' }),
   ], 'br-split')]));
@@ -406,11 +414,12 @@ add('formulaire-contact', 'contact', 'Formulaire de contact', 'Le formulaire de 
       Label('Nous écrire'), H('Une question ? Écrivez-nous', 2),
       P('Ce qui se passe après l’envoi : sous quel délai vous répondez, et par quel moyen.'),
       List(['Réponse sous 24 heures ouvrées', 'Vos données ne servent qu’à vous répondre']),
+      Short('[briise_appel]'),
     ], { width: '42%' }),
     Col([Box('br-card br-formulaire', [Short('[briise_formulaire type="contact"]')])], { width: '58%' }),
   ], 'br-split')]));
 
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').writeFileSync('/home/claude/validate/br_sections.json', JSON.stringify(out, null, 1));
-module.exports = { S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos };
+module.exports = { S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres };
 console.log(Object.keys(S).length, 'sections');

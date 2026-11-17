@@ -31,7 +31,11 @@ $briise = briise_theme_entreprise();
 <!-- wp:list-item -->
 <li>Vos données ne servent qu’à vous répondre</li>
 <!-- /wp:list-item --></ul>
-<!-- /wp:list --></div>
+<!-- /wp:list -->
+
+<!-- wp:shortcode -->
+[briise_appel]
+<!-- /wp:shortcode --></div>
 <!-- /wp:column -->
 
 <!-- wp:column {"width":"58%"} -->

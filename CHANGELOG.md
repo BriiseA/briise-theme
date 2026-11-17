@@ -1,5 +1,16 @@
 # Historique des versions
 
+## 1.7.0
+
+- **Sécurité** (Mon entreprise > Fonctions > Protections de sécurité, activé par défaut) : identifiants de connexion cachés (`?author=` et liste des utilisateurs de l'API fermés aux visiteurs), XML-RPC fermé, en-têtes de sécurité (nosniff, SAMEORIGIN, Referrer-Policy, Permissions-Policy), éditeur de code désactivé, version de WordPress cachée, message d'erreur de connexion neutre.
+- **Contrôle > Sécurité** : compte « admin », HTTPS absent, site caché aux moteurs, erreurs PHP visibles, mises à jour en attente, extensions désactivées, double authentification absente.
+- **Avant / après à faire glisser** (nouvelle section) : curseur à la souris (survol ou glisser), au doigt et au clavier ; les deux photos côte à côte sans JavaScript.
+- **Bouton d'appel** `[briise_appel]` sur les sections formulaire de devis et de contact : « Appeler : 06… », bien visible, cliquable sur mobile.
+- **Héros** : titre à une taille raisonnable par défaut (3 lignes au lieu de 5 sur Delaunay), colonne plus large, bannière moins haute (68 % de l'écran).
+- **Étapes numérotées** : une photo par étape.
+- **Pages liées** : colonnes choisies selon le nombre de pages (5 sur une ligne, 6 en 3 + 3) : plus de carte seule sur sa ligne.
+- 40 sections.
+
 ## 1.6.1
 
 - **Sections plus compactes** : marge haute et basse des sections ramenée de 120 à 88 px sur ordinateur, de 64 à 44 px sur mobile. Le surtitre colle au titre, le titre est à 18 px du contenu au lieu de 48 px. Les sections sont 10 à 15 % moins hautes, sans rien perdre en lisibilité.

@@ -77,7 +77,10 @@ add_shortcode( 'briise_pages_liees', function ( $atts ) {
 	if ( ! $c['pages'] ) {
 		return '';
 	}
-	$h = '<ul class="br-liees">';
+	$n = count( $c['pages'] );
+	// Colonnes choisies pour ne jamais laisser une carte seule sur sa ligne.
+	$cols = array( 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 3, 7 => 4, 8 => 4, 9 => 3 );
+	$h    = '<ul class="br-liees" data-colonnes="' . (int) ( $cols[ $n ] ?? 4 ) . '">';
 	foreach ( $c['pages'] as $p ) {
 		$resume = briise_liees_resume( $p );
 		$h     .= '<li class="br-liee"><a href="' . esc_url( get_permalink( $p ) ) . '">' . esc_html( get_the_title( $p ) ) . '</a>'
@@ -340,7 +343,8 @@ function briise_onglet_controle() {
 	<p style="max-width:60em">Les liens écrits dans le texte des pages disent à Google quelles pages comptent et de quoi elles parlent. Chaque page devrait recevoir au moins deux liens depuis d’autres pages (le menu et le pied de page ne comptent pas), et se trouver à trois clics au plus de l’accueil. L’analyse lit les contenus publiés ; elle est refaite à chaque ouverture de cet onglet.</p>
 	<?php
 	$photos = briise_photos_entete();
-	$total = $alertes + count( $r['casses'] ) + count( $r['exclues'] ) + count( $r['flous'] ) + count( (array) $rythme ) + ( function_exists( 'briise_realisations_minces' ) ? count( briise_realisations_minces() ) : 0 ) + count( $photos );
+	$secu   = function_exists( 'briise_securite_points' ) ? briise_securite_points() : array();
+	$total = $alertes + count( $r['casses'] ) + count( $r['exclues'] ) + count( $r['flous'] ) + count( (array) $rythme ) + ( function_exists( 'briise_realisations_minces' ) ? count( briise_realisations_minces() ) : 0 ) + count( $photos ) + count( $secu );
 	echo '<p class="br-bilan' . ( $total ? ' br-a-voir' : '' ) . '">' . ( $total ? esc_html( $total . ' point' . ( $total > 1 ? 's' : '' ) . ' à corriger avant la mise en ligne.' ) : 'Aucun problème détecté : maillage et couleurs des sections en ordre.' ) . '</p>';
 	if ( ! $r['accueil'] ) {
 		echo '<p><strong>Aucune page d’accueil n’est définie</strong> (Réglages > Lecture) : la profondeur ne peut pas être calculée.</p>';
@@ -369,6 +373,13 @@ function briise_onglet_controle() {
 		echo '<h3>' . esc_html( $l[0] ) . ' (' . count( $l[2] ) . ')</h3><p>' . esc_html( $l[1] ) . '</p><ul style="list-style:disc;padding-left:1.5em">';
 		foreach ( $l[2] as $c ) {
 			echo '<li>' . $l[3]( $c ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans la fonction.
+		}
+		echo '</ul>';
+	}
+	if ( $secu ) {
+		echo '<h3>Sécurité (' . count( $secu ) . ')</h3><p style="max-width:60em">À régler avant la mise en ligne. Certains points ne se règlent que sur le site en ligne (HTTPS, indexation).</p><ul style="list-style:disc;padding-left:1.5em">';
+		foreach ( $secu as $pt ) {
+			echo '<li><strong>' . esc_html( $pt[0] ) . '</strong> : ' . esc_html( $pt[1] ) . '</li>';
 		}
 		echo '</ul>';
 	}

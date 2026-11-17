@@ -8,8 +8,8 @@
  */
 $briise = briise_theme_entreprise();
 ?>
-<!-- wp:cover {"url":"<?php echo esc_url( get_theme_file_uri( 'assets/images/sections/banniere.svg' ) ); ?>","dimRatio":70,"overlayColor":"sombre","isUserOverlayColor":true,"minHeight":82,"minHeightUnit":"vh","contentPosition":"bottom left","align":"full","className":"br-banniere","layout":{"type":"constrained"}} -->
-<div class="wp-block-cover alignfull has-custom-content-position is-position-bottom-left br-banniere" style="min-height:82vh"><img class="wp-block-cover__image-background" alt="" src="<?php echo esc_url( get_theme_file_uri( 'assets/images/sections/banniere.svg' ) ); ?>" data-object-fit="cover"/><span aria-hidden="true" class="wp-block-cover__background has-sombre-background-color has-background-dim-70 has-background-dim"></span><div class="wp-block-cover__inner-container"><!-- wp:group {"className":"br-banniere-inner","layout":{"type":"default"}} -->
+<!-- wp:cover {"url":"<?php echo esc_url( get_theme_file_uri( 'assets/images/sections/banniere.svg' ) ); ?>","dimRatio":70,"overlayColor":"sombre","isUserOverlayColor":true,"minHeight":68,"minHeightUnit":"vh","contentPosition":"bottom left","align":"full","className":"br-banniere","layout":{"type":"constrained"}} -->
+<div class="wp-block-cover alignfull has-custom-content-position is-position-bottom-left br-banniere" style="min-height:68vh"><img class="wp-block-cover__image-background" alt="" src="<?php echo esc_url( get_theme_file_uri( 'assets/images/sections/banniere.svg' ) ); ?>" data-object-fit="cover"/><span aria-hidden="true" class="wp-block-cover__background has-sombre-background-color has-background-dim-70 has-background-dim"></span><div class="wp-block-cover__inner-container"><!-- wp:group {"className":"br-banniere-inner","layout":{"type":"default"}} -->
 <div class="wp-block-group br-banniere-inner"><!-- wp:paragraph {"className":"br-label"} -->
 <p class="br-label">Votre activité, votre ville</p>
 <!-- /wp:paragraph -->

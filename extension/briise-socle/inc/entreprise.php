@@ -327,6 +327,18 @@ add_action( 'init', function () {
 		$e = briise_entreprise();
 		return $e['telephone'] ? '<a href="tel:' . esc_attr( $e['telephone'] ) . '">' . esc_html( briise_telephone_lisible( $e['telephone'] ) ) . '</a>' : '';
 	} );
+	// Bouton d'appel bien visible (pages Devis et Contact) : [briise_appel texte="Appeler Thomas" intro="Vous préférez appeler ?"].
+	add_shortcode( 'briise_appel', function ( $atts ) {
+		$atts = shortcode_atts( array( 'texte' => 'Appeler', 'intro' => 'Vous préférez appeler ?' ), $atts, 'briise_appel' );
+		$e    = briise_entreprise();
+		if ( ! $e['telephone'] ) {
+			return '';
+		}
+		$icone = function_exists( 'briise_icone' ) ? briise_icone( 'phone' ) : '';
+		return '<p class="br-appel">' . ( $atts['intro'] ? '<span class="br-appel-intro">' . esc_html( $atts['intro'] ) . '</span> ' : '' )
+			. '<a class="br-appel-bouton" href="tel:' . esc_attr( preg_replace( '/[^0-9+]/', '', $e['telephone'] ) ) . '">' . $icone
+			. '<span>' . esc_html( $atts['texte'] ) . ' : ' . esc_html( briise_telephone_lisible( $e['telephone'] ) ) . '</span></a></p>';
+	} );
 	add_shortcode( 'briise_info', function ( $atts ) {
 		$atts = shortcode_atts( array( 'champ' => 'name' ), $atts );
 		$e    = briise_entreprise();
