@@ -1,5 +1,9 @@
 # Historique des versions
 
+## 1.5.1
+
+- **En-tête avec photo plus clair** : voile à 68 % derrière le texte seulement (au lieu de 84 %), qui s'efface en douceur pour laisser la photo nette et lumineuse sur la droite ; 68 % aussi sur tablette et mobile (au lieu de 78 %). C'est le minimum qui garde le texte lisible (contraste AA) même sur une zone blanche de la photo, dans toutes les ambiances. Légère ombre sous le texte pour les photos très claires.
+
 ## 1.5.0
 
 - Formulaires : **autres adresses qui reçoivent les demandes**, dans Mon entreprise > Entreprise (une par ligne, adresses invalides ignorées), ajoutées à l'e-mail de l'entreprise pour tous les formulaires Briise.
