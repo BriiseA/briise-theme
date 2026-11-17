@@ -1,5 +1,9 @@
 # Historique des versions
 
+## 1.6.1
+
+- **Sections plus compactes** : marge haute et basse des sections ramenée de 120 à 88 px sur ordinateur, de 64 à 44 px sur mobile. Le surtitre colle au titre, le titre est à 18 px du contenu au lieu de 48 px. Les sections sont 10 à 15 % moins hautes, sans rien perdre en lisibilité.
+
 ## 1.6.0
 
 - **Nouvel en-tête de page avec photo** : texte à gauche, photo nette à droite (l'image mise en avant), sans voile. La photo s'affiche presque à sa taille réelle : nette dès 1 400 px de large, quelle que soit sa forme. Variante **avec trois photos** (mosaïque). L'ancien bandeau pleine largeur devient « En-tête bandeau photo pleine largeur », réservé aux photos de 2 400 px et plus.
