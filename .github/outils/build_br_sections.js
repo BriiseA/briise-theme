@@ -81,7 +81,25 @@ add('hero-texte', 'ouverture', 'Hero texte seul', 'Ouverture sobre, sans image :
     Lead('Une phrase d’introduction qui résume ce que le visiteur va trouver sur cette page.'),
   ])]));
 
-add('en-tete-photo', 'ouverture', 'En-tête de page avec photo', 'Pages de service : la photo de l’ouvrage en bandeau, avec fil d’Ariane, titre, introduction et bouton. La photo est l’image mise en avant de la page ; sans elle, le bandeau reste foncé et lisible.',
+/* En-têtes de page : la photo est l'image mise en avant de la page, affichée à sa taille réelle (nette dès 1 400 px). */
+const FeatImg = (ratio = '4/3', cls = 'br-tete-media') => cb('core/post-featured-image', { aspectRatio: ratio, scale: 'cover', sizeSlug: 'full', className: cls });
+const teteTexte = (titre, chapo, bouton = CTA_LABEL) => [Short('[briise_fil_ariane]'), H(titre, 1, null, { fontSize: 'huge' }), Lead(chapo), ...(bouton ? [Btns(Btn(bouton, CTA))] : [])];
+const teteSplit = (titre, chapo, bouton) => Section('br-tete br-tete-split', [Cols([
+  Col(teteTexte(titre, chapo, bouton), { verticalAlignment: 'center', width: '52%' }),
+  Col([FeatImg()], { verticalAlignment: 'center', width: '48%' }),
+], 'br-split', { verticalAlignment: 'center' })]);
+const teteMosaique = (titre, chapo, bouton, imgs = [['carre-2', 'Photo à remplacer : un détail de l’ouvrage'], ['carre-3', 'Photo à remplacer : une autre réalisation']]) => Section('br-tete br-tete-mosaique', [Cols([
+  Col(teteTexte(titre, chapo, bouton), { verticalAlignment: 'center', width: '46%' }),
+  Col([Box('br-mosaique-tete', [FeatImg('4/5', 'br-tete-media'), ...imgs.map(([n, alt]) => Img(n, '1/1', 'br-mosaique-img', alt))])], { verticalAlignment: 'center', width: '54%' }),
+], 'br-split', { verticalAlignment: 'center' })]);
+
+add('en-tete-photo', 'ouverture', 'En-tête de page avec photo', 'Pages de service, à propos : titre et introduction à gauche, photo nette à droite. La photo est l’image mise en avant de la page (1 400 px de large au moins) ; sans elle, le texte prend toute la largeur.',
+  teteSplit('Le titre de la page', 'Une ou deux phrases : ce que c’est, pour qui, le prix de départ et le délai.', CTA_LABEL));
+
+add('en-tete-mosaique', 'ouverture', 'En-tête de page avec trois photos', 'Variante quand vous avez trois bonnes photos : titre à gauche, mosaïque à droite. La grande photo est l’image mise en avant de la page ; les deux petites se remplacent d’un clic.',
+  teteMosaique('Le titre de la page', 'Une ou deux phrases : ce que c’est, pour qui, le prix de départ et le délai.', CTA_LABEL));
+
+add('en-tete-bandeau', 'ouverture', 'En-tête bandeau photo pleine largeur', 'Photo de la page en bandeau sur toute la largeur, texte posé dessus. Réservé aux très grandes photos (2 400 px de large au moins) : sinon, préférer l’en-tête avec photo à côté.',
   cb('core/cover', {
     useFeaturedImage: true, dimRatio: 100, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 420, minHeightUnit: 'px',
     contentPosition: 'center left', align: 'full', className: 'br-banniere br-tete-photo', layout: { type: 'constrained' },
@@ -121,6 +139,44 @@ const bloc = (titre) => [
   List(['Un bénéfice précis', 'Un deuxième bénéfice', 'Une garantie ou un engagement']),
   Arrow('Demander un devis pour ce service', CTA),
 ];
+/* Pages de service, dans l'ordre du récit : bénéfices, choix du modèle, déroulé et prix. Toujours avec des photos. */
+const benefices = (titre, items, label = 'Ce que ça change chez vous') => Section('br-benefices', [
+  Head([Label(label), H(titre, 2)]),
+  Cols(items.map(([img, alt, t, d]) => Col([Box('br-benefice', [Img(img, '4/3', 'is-style-br-arrondi', alt), H(t, 3), Muted(d)])]))),
+]);
+const modeles = (titre, intro, items, apres = [], label = 'Quel modèle choisir ?') => Section('br-modeles', [
+  Head([Label(label), H(titre, 2), ...(intro ? [Lead(intro)] : [])]),
+  Cols(items.map(([img, alt, t, faits]) => Col([Box('br-modele', [Img(img, '4/3', 'is-style-br-arrondi', alt), H(t, 3), ...faits.map(([k, v]) => P(`<strong>${k}</strong>${v}`, 'br-modele-fait'))])])), 'br-modeles-grille'),
+  ...apres,
+], { backgroundColor: 'surface' });
+const etapesPhotos = (titre, items, apres = [], label = 'Comment ça se passe') => Section('br-etapes-photos', [
+  Head([Label(label), H(titre, 2)]),
+  Cols(items.map(([img, alt, t, d], i) => Col([Box('br-etape', [Img(img, '4/3', 'is-style-br-arrondi', alt), Num(String(i + 1)), H(t, 3), Muted(d)])])), 'br-steps'),
+  ...apres,
+], { backgroundColor: 'nuance' });
+
+add('benefices-photos', 'offre', 'Ce que ça change, en photos', 'Pages de service : trois bénéfices concrets pour le client, chacun avec sa photo. Ce qu’il y gagne, pas une liste de caractéristiques.',
+  benefices('Ce que votre client y gagne', [
+    ['carre', 'Photo à remplacer : le bénéfice en situation', 'Premier bénéfice', 'Ce que le client gagne concrètement, avec ses mots : plus de place, plus de lumière, moins d’entretien.'],
+    ['carre-2', 'Photo à remplacer : le bénéfice en situation', 'Deuxième bénéfice', 'Une phrase ou deux, avec un fait précis plutôt qu’un adjectif.'],
+    ['carre-3', 'Photo à remplacer : le bénéfice en situation', 'Troisième bénéfice', 'Ce qui rassure : délai, garantie, sur-mesure, propreté du chantier.'],
+  ]));
+
+add('modeles-cartes', 'offre', 'Quel modèle choisir, en cartes', 'Une carte par modèle ou par option, avec sa photo, sa place, son prix, pour qui il est fait et ses limites. Lisible sur mobile, plus parlant qu’un tableau.',
+  modeles('Quel modèle pour votre projet ?', 'Une phrase qui dit de quoi dépend le bon choix : la place, l’usage, le budget.', [
+    ['carre', 'Photo à remplacer : le premier modèle', 'Premier modèle', [['Idéal pour : ', 'la situation où il convient le mieux.'], ['Prix : ', 'à partir de… €.'], ['À savoir : ', 'sa limite, dite franchement.']]],
+    ['carre-2', 'Photo à remplacer : le deuxième modèle', 'Deuxième modèle', [['Idéal pour : ', 'la situation où il convient le mieux.'], ['Prix : ', 'à partir de… €.'], ['À savoir : ', 'sa limite, dite franchement.']]],
+    ['carre-3', 'Photo à remplacer : le troisième modèle', 'Troisième modèle', [['Idéal pour : ', 'la situation où il convient le mieux.'], ['Prix : ', 'à partir de… €.'], ['À savoir : ', 'sa limite, dite franchement.']]],
+  ], [Arrow('Vous hésitez ? Nous vous conseillons gratuitement', CTA)]));
+
+add('etapes-photos', 'parcours', 'Déroulé et prix, en photos', 'Comment ça se passe, de la visite à la fin du chantier, chaque étape avec sa photo, puis le prix et ce qui le fait varier.',
+  etapesPhotos('De la première visite à la fin du chantier', [
+    ['carre', 'Photo à remplacer : la visite', 'La visite', 'Ce qui se passe au premier rendez-vous, et qui vient.'],
+    ['carre-2', 'Photo à remplacer : le devis', 'Le devis', 'Sous quel délai, avec quoi (plan, échantillons).'],
+    ['carre-3', 'Photo à remplacer : la fabrication ou la préparation', 'La préparation', 'Combien de temps, où, par qui.'],
+    ['carre', 'Photo à remplacer : la pose ou la livraison', 'La fin du chantier', 'Durée, propreté, ce que le client reçoit.'],
+  ], [Table(['Prestation', 'Prix TTC'], [['Prestation la plus courante', 'À partir de… €'], ['Option fréquente', '+ … €']]), Muted('Ce qui fait varier le prix, en une phrase. Le prix exact figure sur le devis.')]));
+
 add('service-alterne', 'offre', 'Service détaillé, image et texte alternés', 'Pages de service : chaque service avec sa photo, en alternance gauche et droite.',
   Section('', [
     Cols([Col([Img('paysage', '4/3')], { width: '50%' }), Col(bloc('Premier service'), { width: '50%', verticalAlignment: 'center' })], 'br-split', { verticalAlignment: 'center' }),
@@ -356,5 +412,5 @@ add('formulaire-contact', 'contact', 'Formulaire de contact', 'Le formulaire de 
 
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').writeFileSync('/home/claude/validate/br_sections.json', JSON.stringify(out, null, 1));
-module.exports = { S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL };
+module.exports = { S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos };
 console.log(Object.keys(S).length, 'sections');

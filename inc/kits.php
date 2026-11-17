@@ -154,7 +154,7 @@ function briise_plan_installer( $plan ) {
 			) ) );
 			if ( ! empty( $p['template'] ) && in_array( $p['template'], array( 'page-sans-titre', 'page-atterrissage' ), true ) ) {
 				update_post_meta( $id, '_wp_page_template', $p['template'] );
-			} elseif ( preg_match( '/br-page-head|br-banniere|br-hero/', $p['markup'] ) ) {
+			} elseif ( preg_match( '/br-page-head|br-banniere|br-hero|br-tete/', $p['markup'] ) ) {
 				update_post_meta( $id, '_wp_page_template', 'page-sans-titre' );
 			}
 		}
@@ -528,5 +528,9 @@ add_action( 'save_post_page', function ( $post_id, $post ) {
 	}
 	if ( false !== strpos( $post->post_content, 'br-atterrissage' ) ) {
 		update_post_meta( $post_id, '_wp_page_template', 'page-atterrissage' );
+	}
+	// Une page qui commence par un en-tête du thème (titre déjà dans l'en-tête) prend le gabarit sans titre.
+	elseif ( preg_match( '/^\s*<!-- wp:(group|cover) \{[^\n]*"className":"[^"]*\b(br-page-head|br-banniere|br-hero|br-tete)\b/', $post->post_content ) ) {
+		update_post_meta( $post_id, '_wp_page_template', 'page-sans-titre' );
 	}
 }, 20, 2 );

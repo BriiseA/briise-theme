@@ -263,6 +263,13 @@ add_action( 'admin_post_briise_depart_figer', function () {
 				$faites[] = $c[0]->post_title;
 			}
 		}
+		// Le client part : le crédit de l'agence disparaît du pied de page.
+		$f = get_option( 'briise_fonctions', array() );
+		if ( ! empty( $f['credit'] ) ) {
+			$f['credit'] = false;
+			update_option( 'briise_fonctions', $f );
+			$faites[] = 'crédit Briise retiré du pied de page';
+		}
 		$n = briise_depart_realisations();
 		if ( $n ) {
 			$faites[] = $n . ' fiche' . ( $n > 1 ? 's' : '' ) . ' de réalisation devenue' . ( $n > 1 ? 's' : '' ) . ' des pages';

@@ -28,11 +28,8 @@ const rythme = (blocks) => {
 const tete = (titre, chapo, bouton = true) => [Section('br-page-head', [Head([
   Short('[briise_fil_ariane]'), H(titre, 1, null, { fontSize: 'huge' }), Lead(chapo), ...(bouton ? [MainBtns()] : []),
 ])])];
-// Pages de service : en-tête avec la photo de la page (image mise en avant), en dégradé.
-const teteP = (titre, chapo, bouton = true) => [L.cb('core/cover', {
-  useFeaturedImage: true, dimRatio: 100, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 420, minHeightUnit: 'px',
-  contentPosition: 'center left', align: 'full', className: 'br-banniere br-tete-photo', layout: { type: 'constrained' },
-}, [Box('br-banniere-inner', [Short('[briise_fil_ariane]'), H(titre, 1, null, { fontSize: 'huge' }), Lead(chapo), ...(bouton ? [MainBtns()] : [])])])];
+// Pages de service et à propos : en-tête avec la photo de la page (image mise en avant) à côté du texte.
+const teteP = (titre, chapo, bouton = true) => [L.teteSplit(titre, chapo, bouton ? L.CTA_LABEL : false)];
 // Sur la page des services : la liste de chaque page de service (vide tant qu'il n'y en a pas).
 const detail = [Section('br-section-liees', [L.cb('core/heading', { content: 'Chaque service en détail', level: 2 }), Short('[briise_pages_liees]')], { backgroundColor: 'surface' })];
 const page = (slug, titre, ...parts) => ({ slug, titre, markup: serialize(rythme(parts.flat())) });
@@ -131,7 +128,7 @@ const KITS = {
 
 const T = '{{TITRE}}';
 const MODELES = {
-  service: { titre: 'Page de service', desc: 'Un service en détail : en-tête avec la photo de la page, présentation, déroulé, réalisations, questions, appel à l’action.', markup: serialize(rythme([teteP(T, 'Ce que comprend ce service, pour qui il est fait, et le résultat obtenu.'), sec('service-alterne'), sec('etapes'), sec('realisations-service'), sec('faq'), sec('pages-liees'), sec('bandeau-cta')].flat())) },
+  service: { titre: 'Page de service', desc: 'Un service raconté dans l’ordre où le visiteur se pose ses questions : ce que c’est, ce que ça change, quel modèle, les réalisations, le déroulé et le prix, les questions, l’action.', markup: serialize(rythme([teteP(T, 'Ce que c’est, pour qui, le prix de départ et le délai, en deux phrases.'), sec('benefices-photos'), sec('modeles-cartes'), sec('realisations-service'), sec('etapes-photos'), sec('faq'), sec('pages-liees'), sec('bandeau-cta')].flat())) },
   simple: { titre: 'Page simple', desc: 'Titre, introduction et un bloc de texte libre.', markup: serialize(rythme([tete(T, 'Une phrase d’introduction qui résume la page.', false), Section('br-section--tight', [Box('br-legal', [P('Votre texte ici. Utilisez des intertitres pour découper le contenu.')])])].flat())) },
   tarifs: { titre: 'Page de tarifs', desc: 'Formules en cartes, tableau des prestations, appel à l’action.', markup: serialize(rythme([tete(T, 'Des prix clairs avant de réserver.'), sec('tarifs-cartes'), sec('tarifs-tableau'), sec('bandeau-cta')].flat())) },
   realisations: { titre: 'Page de réalisations', desc: 'Toutes les réalisations publiées, avec filtres par catégorie, puis un avant / après.', markup: serialize(rythme([tete(T, 'Quelques réalisations récentes, avec la demande du client et la solution apportée.'), sec('realisations-toutes'), sec('avant-apres'), sec('bandeau-cta')].flat())) },

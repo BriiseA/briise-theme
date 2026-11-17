@@ -54,6 +54,10 @@ function briise_theme_reseaux_html() {
 	return function_exists( 'briise_reseaux_html' ) ? briise_reseaux_html() : '';
 }
 
+function briise_theme_credit_html() {
+	return function_exists( 'briise_credit_html' ) ? briise_credit_html() : '';
+}
+
 add_action( 'admin_notices', function () {
 	if ( briise_socle_actif() || ! current_user_can( 'install_plugins' ) ) {
 		return;

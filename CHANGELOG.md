@@ -1,5 +1,14 @@
 # Historique des versions
 
+## 1.6.0
+
+- **Nouvel en-tête de page avec photo** : texte à gauche, photo nette à droite (l'image mise en avant), sans voile. La photo s'affiche presque à sa taille réelle : nette dès 1 400 px de large, quelle que soit sa forme. Variante **avec trois photos** (mosaïque). L'ancien bandeau pleine largeur devient « En-tête bandeau photo pleine largeur », réservé aux photos de 2 400 px et plus.
+- **Pages de service racontées et illustrées** : trois nouvelles sections avec photos, « Ce que ça change », « Quel modèle choisir » (une carte par modèle) et « Déroulé et prix ». Le modèle « Page de service » suit l'ordre des questions du visiteur : ce que c'est, ce que ça change, lequel choisir, la preuve, le déroulé et le prix, les questions, l'action.
+- **Contrôle** : signale une photo d'en-tête manquante ou trop petite (floue à l'écran).
+- **Crédit de l'agence** en pied de page (« Site réalisé par Briise », lien de marque en nofollow), désactivé par défaut, coupé automatiquement en fin de collaboration.
+- Une page qui commence par un en-tête du thème prend d'elle-même le gabarit sans titre.
+- 39 sections. Vérifié sur Delaunay : 0 bloc invalide, Contrôle sans alerte (hors photo trop petite testée exprès), accessibilité 100.
+
 ## 1.5.2
 
 - **Tableaux comparatifs lisibles sur mobile** : un tableau de 4 colonnes ou plus devient, sur téléphone, une fiche par ligne, chaque valeur précédée du titre de sa colonne. Automatique, sans JavaScript, pour tous les tableaux du thème (« Quel modèle choisir ? », comparatifs de prix).

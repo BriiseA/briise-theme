@@ -466,6 +466,7 @@ function briise_onglet_fonctions( $o, $v ) {
 		}
 		$champ .= '</select>';
 		briise_ligne( 'Nom des réalisations', $champ, 'Menu de l’administration et adresse des fiches (ex. : /portfolio/mariage-a-fontainebleau/). « Portfolio » convient aux photographes et créatifs, « Chantiers » aux artisans du bâtiment.', 'br-realisations-nom' );
+		briise_ligne( 'Texte du crédit', '<input type="text" class="regular-text" id="br-credit-texte" name="' . briise_nom( $o, 'credit_texte' ) . '" value="' . esc_attr( $v['credit_texte'] ?? 'Site réalisé par' ) . '">', 'Suivi du lien « Briise ». Exemples : « Site réalisé par », « Site créé par ». Le lien porte toujours le nom de l’agence, jamais des mots-clés.', 'br-credit-texte' );
 		?>
 	</table>
 	<?php if ( function_exists( 'briise_seo_plugin_active' ) && briise_seo_plugin_active() ) : ?>

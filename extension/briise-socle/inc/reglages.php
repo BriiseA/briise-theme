@@ -45,6 +45,7 @@ function briise_fonctions_liste() {
 		'ia_entrainement' => array( 'Autoriser l’entraînement des IA', 'Décoché : les robots qui collectent des textes pour entraîner les IA (GPTBot, ClaudeBot, Google-Extended…) sont refusés. Les robots des moteurs de recherche IA restent toujours autorisés, sinon le site ne serait plus cité.', true ),
 		'realisations'  => array( 'Réalisations', 'Le client publie ses réalisations (photos, ville, service) depuis le menu du même nom : la page des réalisations, l’accueil et les pages de service se mettent à jour seules. Le nom affiché se règle plus bas.', true ),
 		'reseaux_icones' => array( 'Réseaux sociaux en icônes', 'Dans le pied de page, les réseaux s’affichent en icônes (nom lu par les lecteurs d’écran). Décoché : en texte.', true ),
+		'credit'        => array( 'Crédit de l’agence en pied de page', 'Un petit lien « Site réalisé par Briise » en bas du pied de page, en nofollow (aucun risque pour le référencement du client). À activer seulement avec l’accord du client, prévu au contrat. Coupé automatiquement en fin de collaboration.', false ),
 		'bandeau'       => array( 'Bandeau d’information', 'Un message en haut du site (fermeture, nouveauté), avec date de fin. L’éditeur le gère dans l’onglet « Horaires et annonces ».', false ),
 	);
 }
@@ -143,6 +144,7 @@ function briise_defauts( $option ) {
 			}
 			return $out + array(
 				'realisations_nom' => 'Réalisations',
+				'credit_texte' => 'Site réalisé par',
 				'matomo_url' => '',
 				'matomo_id'  => '',
 				'gsc'        => '',
@@ -351,6 +353,7 @@ function briise_nettoie_fonctions( $in ) {
 		$out[ $cle ] = ! empty( $in[ $cle ] );
 	}
 	$out['realisations_nom'] = in_array( $in['realisations_nom'] ?? '', briise_realisations_noms(), true ) ? $in['realisations_nom'] : 'Réalisations';
+	$out['credit_texte']     = sanitize_text_field( (string) ( $in['credit_texte'] ?? '' ) ) ?: 'Site réalisé par';
 	$url = esc_url_raw( trim( (string) ( $in['matomo_url'] ?? '' ) ) );
 	$out['matomo_url'] = $url ? trailingslashit( preg_replace( '#/(matomo|piwik)\.(php|js)$#', '', $url ) ) : '';
 	$out['matomo_id']  = absint( $in['matomo_id'] ?? 0 ) ?: '';
@@ -438,4 +441,17 @@ function briise_types_activite() {
 		'TravelAgency'                => 'Agence de voyages',
 		'EntertainmentBusiness'       => 'Loisirs, divertissement',
 	) );
+}
+
+/**
+ * Crédit de l'agence : « Site réalisé par Briise », lien de marque en nofollow.
+ * Vide si la fonction est désactivée (par défaut, et après la fin de collaboration).
+ */
+function briise_credit_html() {
+	if ( ! briise_fonction( 'credit' ) ) {
+		return '';
+	}
+	$f     = get_option( 'briise_fonctions', array() );
+	$texte = trim( (string) ( $f['credit_texte'] ?? '' ) ) ?: 'Site réalisé par';
+	return '<span class="br-credit">' . esc_html( $texte ) . ' <a href="https://briise.fr" rel="nofollow">Briise</a></span>';
 }

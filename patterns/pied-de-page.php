@@ -14,6 +14,7 @@ $horaires   = briise_theme_horaires_html();
 $coord      = briise_theme_coordonnees_html() . briise_theme_reseaux_html();
 $largeur    = $horaires ? '40%' : '50%';
 $largeur_co = $horaires ? '30%' : '50%';
+$credit     = briise_theme_credit_html();
 $legales    = array();
 foreach ( array( 'mentions-legales' => 'Mentions légales', 'confidentialite' => 'Confidentialité', 'cookies' => 'Cookies', 'accessibilite' => 'Accessibilité' ) as $slug => $label ) {
 	$page = get_page_by_path( $slug );
@@ -64,9 +65,9 @@ foreach ( array( 'mentions-legales' => 'Mentions légales', 'confidentialite' =>
 <p>© <?php echo esc_html( wp_date( 'Y' ) . ' ' . $e['name'] ); ?></p>
 <!-- /wp:paragraph -->
 
-<?php if ( $legales ) : ?>
+<?php if ( $legales || $credit ) : ?>
 <!-- wp:paragraph -->
-<p><?php echo wp_kses_post( implode( ' · ', $legales ) ); ?></p>
+<p><?php echo wp_kses_post( implode( ' · ', array_filter( array_merge( $legales, array( $credit ) ) ) ) ); ?></p>
 <!-- /wp:paragraph -->
 <?php endif; ?></div>
 <!-- /wp:group -->

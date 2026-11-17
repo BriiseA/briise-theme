@@ -269,6 +269,36 @@ function briise_maillage_analyse() {
 	return compact( 'pages', 'casses', 'exclues', 'flous', 'accueil' );
 }
 
+/**
+ * Photos d'en-tête : chaque page dont l'en-tête montre l'image mise en avant doit en avoir une,
+ * assez grande pour rester nette (1 400 px à côté du texte, 2 400 px en bandeau pleine largeur).
+ * Retourne [ [WP_Post, message], ... ].
+ */
+function briise_photos_entete() {
+	$out = array();
+	foreach ( get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'posts_per_page' => -1 ) ) as $p ) {
+		$c = $p->post_content;
+		if ( false !== strpos( $c, 'br-tete-photo' ) ) {
+			$mini = 2400;
+		} elseif ( false !== strpos( $c, 'br-tete-split' ) || false !== strpos( $c, 'br-tete-mosaique' ) ) {
+			$mini = 1400;
+		} else {
+			continue;
+		}
+		$id = get_post_thumbnail_id( $p );
+		if ( ! $id ) {
+			$out[] = array( $p, 'aucune photo : ajouter une image mise en avant (panneau de droite > Page)' );
+			continue;
+		}
+		$meta    = wp_get_attachment_metadata( $id );
+		$largeur = (int) ( $meta['width'] ?? 0 );
+		if ( $largeur && $largeur < $mini ) {
+			$out[] = array( $p, 'photo de ' . $largeur . ' px de large, floue à l’écran : en choisir une d’au moins ' . number_format( $mini, 0, ',', ' ' ) . ' px' );
+		}
+	}
+	return $out;
+}
+
 function briise_onglet_controle() {
 	$r        = briise_maillage_analyse();
 	// Le contrôle des couleurs vient du thème Briise (styles de section) ; absent avec un autre thème.
@@ -309,7 +339,8 @@ function briise_onglet_controle() {
 	<h2>Contrôle du maillage interne</h2>
 	<p style="max-width:60em">Les liens écrits dans le texte des pages disent à Google quelles pages comptent et de quoi elles parlent. Chaque page devrait recevoir au moins deux liens depuis d’autres pages (le menu et le pied de page ne comptent pas), et se trouver à trois clics au plus de l’accueil. L’analyse lit les contenus publiés ; elle est refaite à chaque ouverture de cet onglet.</p>
 	<?php
-	$total = $alertes + count( $r['casses'] ) + count( $r['exclues'] ) + count( $r['flous'] ) + count( (array) $rythme ) + ( function_exists( 'briise_realisations_minces' ) ? count( briise_realisations_minces() ) : 0 );
+	$photos = briise_photos_entete();
+	$total = $alertes + count( $r['casses'] ) + count( $r['exclues'] ) + count( $r['flous'] ) + count( (array) $rythme ) + ( function_exists( 'briise_realisations_minces' ) ? count( briise_realisations_minces() ) : 0 ) + count( $photos );
 	echo '<p class="br-bilan' . ( $total ? ' br-a-voir' : '' ) . '">' . ( $total ? esc_html( $total . ' point' . ( $total > 1 ? 's' : '' ) . ' à corriger avant la mise en ligne.' ) : 'Aucun problème détecté : maillage et couleurs des sections en ordre.' ) . '</p>';
 	if ( ! $r['accueil'] ) {
 		echo '<p><strong>Aucune page d’accueil n’est définie</strong> (Réglages > Lecture) : la profondeur ne peut pas être calculée.</p>';
@@ -338,6 +369,13 @@ function briise_onglet_controle() {
 		echo '<h3>' . esc_html( $l[0] ) . ' (' . count( $l[2] ) . ')</h3><p>' . esc_html( $l[1] ) . '</p><ul style="list-style:disc;padding-left:1.5em">';
 		foreach ( $l[2] as $c ) {
 			echo '<li>' . $l[3]( $c ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans la fonction.
+		}
+		echo '</ul>';
+	}
+	if ( $photos ) {
+		echo '<h3>Photos d’en-tête à revoir (' . count( $photos ) . ')</h3><p style="max-width:60em">L’en-tête de ces pages affiche leur image mise en avant. Trop petite, le navigateur l’agrandit et elle devient floue.</p><ul style="list-style:disc;padding-left:1.5em">';
+		foreach ( $photos as $ph ) {
+			echo '<li>' . $lien( $ph[0] ) . ' : ' . esc_html( $ph[1] ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans la fonction.
 		}
 		echo '</ul>';
 	}
