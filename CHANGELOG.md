@@ -1,5 +1,11 @@
 # Historique des versions
 
+## 1.8.0
+
+- **Banc d'essai** : à chaque envoi, GitHub installe un WordPress neuf, le thème, l'extension, Fluent Forms et FluentSMTP, importe Delaunay et vérifie blocs, fichiers générés, Contrôle, formulaires, gabarits, pages (en ligne, sans erreur, un seul titre principal), sécurité, conversion WebP et accessibilité (100 sur six pages). Une version n'est publiée que si tout est au vert. Captures téléchargeables dans l'onglet Actions. En local : `bash .github/outils/banc/lancer.sh`.
+- **Photos en WebP** : chaque photo JPEG ou PNG envoyée est enregistrée en WebP (environ 3 à 8 fois plus légère sur nos tests), option dans Fonctions, activée par défaut.
+- Outils de l'agence rangés dans le dépôt : chemins relatifs, fichier de site d'exemple Delaunay dans `.github/outils/exemples/`.
+
 ## 1.7.0
 
 - **Sécurité** (Mon entreprise > Fonctions > Protections de sécurité, activé par défaut) : identifiants de connexion cachés (`?author=` et liste des utilisateurs de l'API fermés aux visiteurs), XML-RPC fermé, en-têtes de sécurité (nosniff, SAMEORIGIN, Referrer-Policy, Permissions-Policy), éditeur de code désactivé, version de WordPress cachée, message d'erreur de connexion neutre.

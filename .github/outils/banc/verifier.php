@@ -44,6 +44,25 @@ $ok( ! $mauvais, 'gabarit sans titre sur les pages à en-tête' . ( $mauvais ? '
 // Sécurité.
 $ok( briise_fonction( 'securite' ) && defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT, 'protections de sécurité actives' );
 
+// Photos : une photo JPEG envoyée est enregistrée en WebP (si le serveur sait écrire le WebP).
+if ( function_exists( 'imagewebp' ) ) {
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+	require_once ABSPATH . 'wp-admin/includes/media.php';
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+	wp_set_current_user( 1 );
+	$img = imagecreatetruecolor( 1600, 900 );
+	for ( $x = 0; $x < 1600; $x += 40 ) {
+		imagefilledrectangle( $img, $x, 0, $x + 20, 900, imagecolorallocate( $img, $x % 255, 120, 200 - $x % 200 ) );
+	}
+	$tmp = wp_tempnam( 'banc.jpg' );
+	imagejpeg( $img, $tmp, 90 );
+	$id = media_handle_sideload( array( 'name' => 'banc-photo.jpg', 'tmp_name' => $tmp ), 0 );
+	$ok( ! is_wp_error( $id ) && 'image/webp' === get_post_mime_type( $id ), 'photo JPEG envoyée enregistrée en WebP' );
+	if ( ! is_wp_error( $id ) ) {
+		wp_delete_attachment( $id, true );
+	}
+}
+
 // Adresses à tester.
 $urls = array();
 foreach ( get_posts( array( 'post_type' => array( 'page', 'briise_realisation' ), 'numberposts' => -1 ) ) as $p ) {
