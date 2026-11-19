@@ -71,6 +71,10 @@ function briise_rythme_analyse() {
 				$prev = null;
 				continue;
 			}
+			// La bande de confiance chevauche ses voisines : elle ne compte pas.
+			if ( false !== strpos( $b['attrs']['className'] ?? '', 'br-confiance-zone' ) ) {
+				continue;
+			}
 			$fond = briise_fond_effectif( $b );
 			if ( $prev && $prev[1] === $fond && in_array( $fond, $clairs, true ) && false === strpos( $prev[0]['attrs']['className'] ?? '', 'br-page-head' ) ) {
 				$res[] = array( $p, $titre( $prev[0] ), $titre( $b ), $fond );

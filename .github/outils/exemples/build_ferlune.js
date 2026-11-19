@@ -26,13 +26,16 @@ const Num = (n) => P(n, 'br-num');
 /* Rythme des couleurs : copie de rythme() de build_br_kits.js. */
 const CLAIRS = ['fond', 'surface', 'nuance'];
 const fondDe = (b) => (b.name === 'core/cover' ? 'photo' : (b.attributes.backgroundColor || 'fond'));
+const passe = (b) => /br-confiance-zone/.test(b.attributes.className || '');
 const rythme = (blocks) => {
   const out = [];
   blocks.forEach((b, i) => {
-    const prev = out[i - 1];
+    if (passe(b)) { out.push(b); return; }
+    const prev = [...out].reverse().find((x) => !passe(x));
     const f = fondDe(b);
     if (prev && !/br-page-head/.test(prev.attributes.className || '') && fondDe(prev) === f && CLAIRS.includes(f)) {
-      const next = blocks[i + 1] ? fondDe(blocks[i + 1]) : null;
+      const suite = blocks.slice(i + 1).find((x) => !passe(x));
+      const next = suite ? fondDe(suite) : null;
       const choix = CLAIRS.find((c) => c !== f && c !== next);
       out.push(cloneBlock(b, { backgroundColor: choix === 'fond' ? undefined : choix }));
     } else out.push(b);
