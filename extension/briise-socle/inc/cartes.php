@@ -202,7 +202,7 @@ add_action( 'init', function () {
  * Aucune carte externe : pas de cookie, rien à charger.
  */
 function briise_zone_schema_points() {
-	$e      = briise_entreprise();
+	$e      = briise_reglage( 'briise_entreprise' );
 	$points = array();
 	foreach ( preg_split( '/\r\n|\r|\n/', (string) ( $e['zone_points'] ?? '' ) ) as $ligne ) {
 		$p = array_map( 'trim', preg_split( '/[;|]/', $ligne ) );
@@ -218,7 +218,7 @@ function briise_zone_schema_html() {
 	if ( count( $points ) < 2 ) {
 		return current_user_can( 'edit_pages' ) ? '<p class="br-muted">Schéma de zone : ajoutez au moins deux communes dans Mon entreprise &gt; Coordonnées &gt; Communes du schéma.</p>' : '';
 	}
-	$e      = briise_entreprise();
+	$e      = briise_reglage( 'briise_entreprise' );
 	$rayon  = (int) ( $e['zone_rayon'] ?? 0 );
 	$c      = $points[0];
 	$cos    = cos( deg2rad( $c[1] ) );
