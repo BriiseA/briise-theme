@@ -33,6 +33,7 @@ const BRIISE_JOURS = array(
 function briise_fonctions_liste() {
 	return array(
 		'menu_remonte'  => array( 'Menu qui réapparaît en remontant', 'Le menu se cache quand on descend dans la page et revient dès qu’on remonte.', true ),
+		'entete_flottant' => array( 'En-tête flottant', 'Le menu devient une barre arrondie, légèrement transparente, posée au-dessus de la page. Plus moderne ; à réserver aux sites avec de belles photos en haut de page.', false ),
 		'bouton_mobile' => array( 'Bouton d’action fixe sur mobile', 'Rappelle l’action principale en bas de l’écran du téléphone ; il s’efface quand un autre bouton est déjà visible.', true ),
 		'animations'    => array( 'Animations d’apparition', 'Apparitions douces au défilement. Toujours coupées si le visiteur a demandé à réduire les animations.', true ),
 		'verrou'        => array( 'Verrouillage de l’accueil pour l’éditeur', 'L’éditeur modifie les textes et les images de l’accueil sans pouvoir casser sa structure. À désactiver pour un client autonome.', true ),
@@ -117,6 +118,8 @@ function briise_defauts( $option ) {
 				'badge_zone_texte'    => '',
 				'zone_soustitre'      => '',
 				'zone_secteurs'       => '',
+				'zone_points'         => '',
+				'zone_rayon'          => '',
 			);
 		case 'briise_legal':
 			return array(
@@ -325,6 +328,8 @@ function briise_nettoie_entreprise( $in ) {
 		'badge_zone_texte'    => sanitize_text_field( $in['badge_zone_texte'] ?? '' ),
 		'zone_soustitre'      => sanitize_text_field( $in['zone_soustitre'] ?? '' ),
 		'zone_secteurs'       => sanitize_textarea_field( $in['zone_secteurs'] ?? '' ),
+		'zone_points'         => sanitize_textarea_field( $in['zone_points'] ?? '' ),
+		'zone_rayon'          => (string) absint( $in['zone_rayon'] ?? 0 ),
 	);
 }
 

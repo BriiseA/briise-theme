@@ -64,7 +64,8 @@
 		'main h2:not(.br-cta h2)', '.br-label', '.br-lead', '.br-chips', '.br-statement', '.br-quote',
 		'.br-arrow', '.br-project', '.br-expertise', '.br-steps > .wp-block-column', '.br-stats > .wp-block-column',
 		'.br-meta > .wp-block-column', '.br-member', '.br-card', '.br-style', '.br-table', '.wp-block-post-template > li',
-		'main .wp-block-image:not(.br-hero .wp-block-image)', 'main .wp-block-buttons', '.is-style-br-tirets', '.br-footer-mail'
+		'main .wp-block-image:not(.br-hero .wp-block-image)', 'main .wp-block-buttons', '.is-style-br-tirets', '.br-footer-mail',
+		'.br-tuiles > .br-tuile', '.br-confiance-item', '.br-schema'
 	];
 	var items = Array.prototype.slice.call( document.querySelectorAll( selectors.join( ',' ) ) );
 
@@ -108,7 +109,64 @@
 			} );
 		} else {
 			el.classList.add( 'is-in' );
+			compter( el );
 		}
+	}
+
+	/* ---------- 4. Chiffres qui comptent jusqu'à leur valeur ---------- */
+	function compter( el ) {
+		var cibles = el.matches( '.br-tuile-chiffre, .br-stat' ) ? [ el ] : el.querySelectorAll( '.br-tuile-chiffre, .br-stat' );
+		Array.prototype.forEach.call( cibles, function ( c ) {
+			if ( c.dataset.brCompte || c.children.length ) {
+				return;
+			}
+			var m = c.textContent.match( /^(\D*?)(\d+(?:[.,]\d+)?)(\s.*|%.*|\/.*|)$/ );
+			if ( ! m ) {
+				return;
+			}
+			c.dataset.brCompte = '1';
+			var final = c.textContent;
+			var dec = ( m[ 2 ].split( /[.,]/ )[ 1 ] || '' ).length;
+			var sep = m[ 2 ].indexOf( ',' ) !== -1 ? ',' : '.';
+			var cible = parseFloat( m[ 2 ].replace( ',', '.' ) );
+			if ( ! ( cible > 1 ) ) {
+				return;
+			}
+			c.setAttribute( 'aria-label', final );
+			var t0 = null;
+			var pas = function ( t ) {
+				if ( t0 === null ) {
+					t0 = t;
+				}
+				var k = Math.min( 1, ( t - t0 ) / 1300 );
+				var v = cible * ( 1 - Math.pow( 1 - k, 3 ) );
+				c.textContent = m[ 1 ] + v.toFixed( dec ).replace( '.', sep ) + m[ 3 ];
+				if ( k < 1 ) {
+					requestAnimationFrame( pas );
+				} else {
+					c.textContent = final;
+					c.removeAttribute( 'aria-label' );
+				}
+			};
+			requestAnimationFrame( pas );
+		} );
+	}
+
+	/* ---------- 5. Étapes : les numéros s'allument l'un après l'autre ---------- */
+	var etapes = document.querySelectorAll( '.br-steps' );
+	if ( etapes.length && 'IntersectionObserver' in window ) {
+		var ioEtapes = new IntersectionObserver( function ( entries ) {
+			entries.forEach( function ( e ) {
+				if ( e.isIntersecting ) {
+					e.target.classList.add( 'br-etapes-on' );
+					ioEtapes.unobserve( e.target );
+				}
+			} );
+		}, { threshold: 0.35 } );
+		Array.prototype.forEach.call( etapes, function ( el ) {
+			el.classList.add( 'br-etapes-anim' );
+			ioEtapes.observe( el );
+		} );
 	}
 
 	var start = function () {

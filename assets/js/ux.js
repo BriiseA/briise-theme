@@ -164,7 +164,7 @@
 	      et s'efface quand un appel à l'action est déjà visible. */
 	var sticky = document.querySelector( '.br-sticky' );
 	if ( sticky ) {
-		var stickyLink = sticky.querySelector( '.wp-block-button__link' );
+		var stickyLink = sticky.querySelector( '.wp-block-button:not(.br-sticky-tel) .wp-block-button__link' );
 		var mainAction = document.querySelector( '.br-page-head .wp-block-button:not(.is-style-outline) .wp-block-button__link' );
 		if ( stickyLink && mainAction && mainAction.href && mainAction.href !== stickyLink.href ) {
 			stickyLink.href = mainAction.href;

@@ -117,10 +117,14 @@
 				"grand": "10px",
 				"moyen": "8px",
 				"petit": "4px",
-				"bouton": "6px"
+				"bouton": "6px",
+				"photo": "8px"
 			},
 			"forme": {
 				"blob": "12px"
+			},
+			"ombre": {
+				"carte": "none"
 			}
 		}
 	},

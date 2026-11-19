@@ -64,3 +64,38 @@ add_action( 'admin_notices', function () {
 	}
 	echo '<div class="notice notice-error"><p><strong>Thème Briise :</strong> l’extension <strong>Briise Socle</strong> n’est pas active. Sans elle, « Mon entreprise », les coordonnées, les horaires et le référencement ne fonctionnent pas. Installez <code>briise-socle.zip</code> (Extensions > Ajouter > Téléverser), puis activez-la.</p></div>';
 } );
+
+/**
+ * Pages de service pour le pied de page : les sous-pages de la page qui en a le plus
+ * (page des services, des ouvrages…), 6 au plus. Les pages hors de Google sont exclues.
+ */
+function briise_theme_pages_services() {
+	static $res = null;
+	if ( null !== $res ) {
+		return $res;
+	}
+	$res     = array();
+	$enfants = get_pages( array( 'post_status' => 'publish', 'sort_column' => 'menu_order,post_title', 'hierarchical' => 0 ) );
+	$parents = array();
+	foreach ( $enfants as $p ) {
+		if ( $p->post_parent && ! get_post_meta( $p->ID, '_briise_noindex', true ) ) {
+			$parents[ $p->post_parent ][] = $p->ID;
+		}
+	}
+	if ( ! $parents ) {
+		return $res;
+	}
+	uasort( $parents, function ( $a, $b ) {
+		return count( $b ) - count( $a );
+	} );
+	$parent = (int) array_key_first( $parents );
+	if ( count( $parents[ $parent ] ) < 2 ) {
+		return $res;
+	}
+	$res = array(
+		'titre' => get_the_title( $parent ),
+		'pages' => array_slice( $parents[ $parent ], 0, 6 ),
+	);
+	return $res;
+}
+

@@ -108,7 +108,8 @@
 				"grand": "28px",
 				"moyen": "20px",
 				"petit": "10px",
-				"bouton": "999px"
+				"bouton": "999px",
+				"photo": "32px"
 			},
 			"forme": {
 				"blob": "42% 58% 61% 39% / 47% 41% 59% 53%"

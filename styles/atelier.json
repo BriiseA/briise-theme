@@ -9,7 +9,7 @@
 				{
 					"slug": "fond",
 					"name": "Fond",
-					"color": "#f1f0ec"
+					"color": "#ffffff"
 				},
 				{
 					"slug": "clair",
@@ -19,7 +19,7 @@
 				{
 					"slug": "surface",
 					"name": "Surface",
-					"color": "#dddbd3"
+					"color": "#f1f0ec"
 				},
 				{
 					"slug": "nuance",
@@ -132,13 +132,14 @@
 		},
 		"custom": {
 			"rayon": {
-				"grand": "2px",
-				"moyen": "2px",
-				"petit": "2px",
-				"bouton": "2px"
+				"grand": "24px",
+				"moyen": "20px",
+				"petit": "8px",
+				"bouton": "12px",
+				"photo": "24px"
 			},
 			"forme": {
-				"blob": "0"
+				"blob": "28px"
 			}
 		}
 	},
@@ -148,8 +149,7 @@
 				"typography": {
 					"fontWeight": "700",
 					"lineHeight": "0.98",
-					"letterSpacing": "0",
-					"textTransform": "uppercase"
+					"letterSpacing": "0"
 				}
 			},
 			"h3": {

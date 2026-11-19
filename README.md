@@ -21,7 +21,7 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | `theme.json` | Couleurs, polices, tailles, espacements et styles globaux |
 | `templates/` | Modèles de pages (page, article, blog, 404, page sans titre, fiche de réalisation) |
 | `parts/` | En-tête et pied de page |
-| `patterns/` | Bibliothèque de 40 sections (`section-*.php`), en-tête, pied de page, blog |
+| `patterns/` | Bibliothèque de 44 sections (`section-*.php`), en-tête, pied de page, blog |
 | `assets/images/sections/` | Images de remplacement des sections, à remplacer par les photos du client |
 | `assets/js/ux.js` | Menu intelligent, page active, téléphones cliquables, bouton fixe mobile, retour en haut |
 | `assets/js/motion.js` | Animations d'apparition (coupées si le visiteur le demande) |
@@ -164,17 +164,19 @@ Fiches de réalisation : liste `realisations`, créées après les pages (chacun
 
 ## Bibliothèque de sections
 
+**Nouveautés 1.9.0.** Chaque ambiance règle ses arrondis (cartes, boutons, photos) et son ombre ; les titres sont en minuscules, sauf dans l'ambiance Acier. Un morceau de titre peut passer dans la couleur d'accent (outil « Surlignage » de l'éditeur, couleur Accent). « Accueil texte et photo avec étiquettes » : titre et bouton visibles sans défiler sur mobile, deux étiquettes posées sur la photo. « Bande de confiance » : une carte de quatre garanties qui chevauche la section du dessus, icône réglée par une classe (`is-icone-garantie`, `plan`, `atelier`, `avis`, `delai`, `prix`, `local`, `devis`, `equipe`). « Chiffres en tuiles » : une grande tuile et trois petites, les chiffres comptent jusqu'à leur valeur. « Zone d'intervention en schéma » (`[briise_zone_schema]`) : dessin SVG de la zone à partir de Mon entreprise > Coordonnées > Communes du schéma (`nom ; latitude ; longitude`, la première au centre) et du rayon, sans carte externe ni cookie. En-tête : téléphone cliquable (numéro en clair sur grand écran, icône sur mobile), option « En-tête flottant » dans Fonctions. Barre mobile à deux boutons, Appeler et l'action principale. Pied de page : pages de service et communes desservies. Cartes entièrement cliquables avec léger soulèvement au survol, numéros des étapes qui s'allument l'un après l'autre, transitions douces entre les pages (navigateurs compatibles), tout coupé si le visiteur a demandé à réduire les animations. En-tête de page sans photo : le texte prend toute la largeur pour les visiteurs ; les personnes qui peuvent modifier la page voient où ira la photo.
+
 Dans l'éditeur : bouton « + » > Compositions > catégories « Sections · … ». Chaque section fonctionne avec les sept ambiances.
 
 | Famille | Sections |
 | --- | --- |
-| Ouverture | Hero avec image, Hero bannière plein écran, Hero texte seul, En-tête de page avec photo, En-tête de page avec trois photos, En-tête bandeau photo pleine largeur, En-tête de page avec fil d'Ariane |
+| Ouverture | Accueil texte et photo avec étiquettes, Hero avec image, Hero bannière plein écran, Hero texte seul, En-tête de page avec photo, En-tête de page avec trois photos, En-tête bandeau photo pleine largeur, En-tête de page avec fil d'Ariane |
 | Offre et tarifs | Ce que ça change, en photos ; Quel modèle choisir, en cartes ; Trois cartes de service, Service détaillé alterné, Tableau comparatif, Grille de tarifs en cartes, Tableau de tarifs simple |
-| Confiance et preuves | Chiffres clés, Témoignages, Logos ou labels, Dernières réalisations, Toutes les réalisations avec filtres, Réalisations de ce service (les trois automatiques), Réalisations en grille (à la main), Avant / après, Avant / après à faire glisser, Galerie en mosaïque |
+| Confiance et preuves | Bande de confiance, Chiffres en tuiles, Chiffres clés, Témoignages, Logos ou labels, Dernières réalisations, Toutes les réalisations avec filtres, Réalisations de ce service (les trois automatiques), Réalisations en grille (à la main), Avant / après, Avant / après à faire glisser, Galerie en mosaïque |
 | Parcours et FAQ | Déroulé et prix, en photos ; Étapes numérotées, FAQ en accordéon, Horaires et planning |
 | Personnes | Présentation du dirigeant, Équipe, Citation ou valeurs |
 | Contenu | Derniers articles, Pages liées (automatique) |
-| Contact | Bandeau d'appel à l'action, Bloc contact complet, Coordonnées (carte), Zone d'intervention, Zone d'intervention (carte), Formulaire de demande de devis, Formulaire de contact |
+| Contact | Bandeau d'appel à l'action, Bloc contact complet, Coordonnées (carte), Zone d'intervention, Zone d'intervention (carte), Zone d'intervention en schéma, Formulaire de demande de devis, Formulaire de contact |
 
 Règles :
 - Rythme des couleurs : deux sections qui se suivent n'ont jamais le même fond. Alterner le blanc (`fond`) et les teintes de l'ambiance (`surface`, `nuance`) ; garder la bande foncée (`secondaire`) pour l'appel à l'action final. Une tête de page peut précéder une section du même fond. Les kits et les modèles respectent cette règle d'eux-mêmes ; une page modifiée à la main se vérifie dans Mon entreprise > Contrôle. Changer un fond en un clic : sélectionner la section (bouton « Sélectionner le parent » ou vue en liste), puis onglet Styles > « Fond clair », « Fond teinté », « Fond nuancé » ou « Fond foncé ». Ces quatre styles suivent l'ambiance : si l'ambiance change, les sections suivent. En « Fond foncé », les textes, étiquettes, boutons et tableaux passent en clair et les cartes gardent leur fond clair ; le contraste AA est vérifié dans les ambiances Acier, Galet et Cabinet. Le client (compte Éditeur) y a accès comme l'administrateur : c'est la façon simple et sûre de lui laisser la main sur les couleurs, sans sortir de la charte.

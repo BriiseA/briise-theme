@@ -80,8 +80,77 @@
 	50% { transform: rotate(-10deg) translate(-14px, 12px); }
 }
 
+/* 1.9.0 : accueil avec photo (pas de flottement), étapes, schéma de zone */
+.br-hero-photo .wp-block-image {
+	animation: none;
+}
+.br-hero-photo .br-etiquette-photo {
+	animation: br-etiquette .7s cubic-bezier(.34, 1.4, .5, 1) both;
+}
+.br-hero-photo .br-etiquette-photo--1 { animation-delay: .5s; }
+.br-hero-photo .br-etiquette-photo--2 { animation-delay: .7s; }
+@keyframes br-etiquette {
+	from { opacity: 0; transform: translateY(14px) scale(.96); }
+	to { opacity: 1; transform: none; }
+}
+.br-etapes-anim {
+	position: relative;
+}
+.br-etapes-anim .br-num {
+	transform: scale(.55);
+	opacity: .35;
+	transition: transform .5s cubic-bezier(.34, 1.6, .5, 1), opacity .4s ease;
+}
+.br-etapes-anim.br-etapes-on .br-num {
+	transform: none;
+	opacity: 1;
+}
+.br-etapes-anim > .wp-block-column:nth-child(2) .br-num { transition-delay: .45s; }
+.br-etapes-anim > .wp-block-column:nth-child(3) .br-num { transition-delay: .9s; }
+.br-etapes-anim > .wp-block-column:nth-child(4) .br-num { transition-delay: 1.35s; }
+.br-etapes-anim > .wp-block-column:nth-child(5) .br-num { transition-delay: 1.8s; }
+@media (min-width: 782px) {
+	.br-etapes-anim::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		bottom: -1.5rem;
+		height: 3px;
+		width: 0;
+		border-radius: 3px;
+		background: var(--wp--preset--color--accent);
+		transition: width 1.8s linear .1s;
+	}
+	.br-etapes-anim.br-etapes-on::after {
+		width: 100%;
+	}
+}
+.br-schema .br-schema-cercle {
+	stroke-dashoffset: 0;
+}
+.br-motion .br-schema.br-reveal .br-schema-point {
+	opacity: 0;
+	transform-box: fill-box;
+	transform-origin: center;
+	transform: scale(.4);
+	transition: opacity .4s ease, transform .5s cubic-bezier(.34, 1.6, .5, 1);
+	transition-delay: calc(var(--br-n, 0) * 140ms + 300ms);
+}
+.br-motion .br-schema.is-in .br-schema-point {
+	opacity: 1;
+	transform: none;
+}
+
 /* Respect du réglage « réduire les animations » */
 @media (prefers-reduced-motion: reduce) {
+	.br-hero-photo .br-etiquette-photo,
+	.br-etapes-anim .br-num,
+	.br-etapes-anim::after {
+		animation: none;
+		transition: none;
+		transform: none;
+		opacity: 1;
+	}
 	.br-hero .wp-block-image,
 	.br-cta::before,
 	.br-cta::after {

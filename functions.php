@@ -103,3 +103,29 @@ add_action( 'wp_footer', function () {
 	}
 	echo '<a href="#" id="br-haut" class="br-haut" aria-label="Revenir en haut de la page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>';
 }, 5 );
+
+/**
+ * En-tête flottant (Mon entreprise > Fonctions).
+ */
+add_filter( 'body_class', function ( $classes ) {
+	if ( briise_theme_fonction( 'entete_flottant' ) ) {
+		$classes[] = 'br-entete-flottant';
+	}
+	return $classes;
+} );
+
+/**
+ * En-tête de page sans photo : pour les visiteurs, le texte prend toute la largeur ;
+ * pour les personnes qui peuvent modifier la page, un fond aux couleurs du site montre
+ * où ira la photo (l'onglet Contrôle signale aussi la photo manquante).
+ */
+add_filter( 'render_block_core/post-featured-image', function ( $html, $block ) {
+	if ( '' !== trim( $html ) || false === strpos( $block['attrs']['className'] ?? '', 'br-tete-media' ) ) {
+		return $html;
+	}
+	if ( ! current_user_can( 'edit_pages' ) ) {
+		return $html;
+	}
+	return '<div class="br-photo-secours br-tete-media" aria-hidden="true"><span>Ajoutez l’image mise en avant de la page</span></div>';
+}, 10, 2 );
+

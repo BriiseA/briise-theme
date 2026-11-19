@@ -114,10 +114,11 @@
 		},
 		"custom": {
 			"rayon": {
-				"grand": "4px",
-				"moyen": "4px",
-				"petit": "2px",
-				"bouton": "999px"
+				"grand": "28px",
+				"moyen": "24px",
+				"petit": "12px",
+				"bouton": "999px",
+				"photo": "160px 160px 28px 28px"
 			},
 			"forme": {
 				"blob": "50% 50% 0 0 / 40% 40% 0 0"

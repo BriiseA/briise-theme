@@ -1,7 +1,12 @@
 # Historique des versions
 
-## Prochaine version
+## 1.9.0
 
+- **Système d'ambiance** : chaque ambiance règle ses arrondis de cartes, de boutons et de photos et son ombre ; titres en minuscules (capitales seulement dans Acier) ; Atelier et Acier passent sur fond blanc avec une seule teinte d'accompagnement.
+- **Nouvelles sections** : Accueil texte et photo avec étiquettes, Bande de confiance (carte de quatre garanties avec icônes), Chiffres en tuiles, Zone d'intervention en schéma (`[briise_zone_schema]`, réglages « Communes du schéma » et « Rayon d'intervention »). Kit Artisan : ouverture avec photo, bande de confiance et tuiles ; modèle Page de service : bande de confiance sous l'en-tête.
+- **En-tête et pied de page** : téléphone cliquable dans l'en-tête, option « En-tête flottant », barre mobile Appeler + action principale, menu mobile en grands caractères, pages de service et communes dans le pied de page.
+- **Animations** : cartes cliquables en entier avec soulèvement au survol, chiffres qui comptent, numéros d'étapes qui s'allument, étiquettes de l'accueil, schéma de zone qui se dessine, transitions entre les pages ; tout respecte « réduire les animations ».
+- **Banc d'essai** : vérifie les nouvelles sections, l'en-tête et la barre mobile ; captures prises avec les animations coupées.
 - **Site d'exemple renommé** : le client fictif Delaunay (Étampes) devient l'Atelier Ferlune, métallerie à Saran, avec ses chantiers dans la métropole d'Orléans (Ingré, Olivet, Fleury-les-Aubrais, Saint-Jean-de-Braye, Chécy). Contact de démonstration : contact@briise.fr, adresse fictive sans numéro de rue. Fichiers : `exemples/build_ferlune.js` et `exemples/site-ferlune.json`.
 
 ## 1.8.0

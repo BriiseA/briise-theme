@@ -8,7 +8,7 @@
 			"palette": [
 				{
 					"slug": "fond",
-					"color": "#f2f3f3",
+					"color": "#ffffff",
 					"name": "Fond"
 				},
 				{
@@ -18,12 +18,12 @@
 				},
 				{
 					"slug": "surface",
-					"color": "#e1e4e6",
+					"color": "#f2f3f3",
 					"name": "Surface"
 				},
 				{
 					"slug": "nuance",
-					"color": "#cfd5d9",
+					"color": "#e1e4e6",
 					"name": "Nuance"
 				},
 				{
@@ -132,10 +132,11 @@
 		},
 		"custom": {
 			"rayon": {
-				"grand": "2px",
-				"moyen": "2px",
-				"petit": "2px",
-				"bouton": "2px"
+				"grand": "6px",
+				"moyen": "6px",
+				"petit": "4px",
+				"bouton": "4px",
+				"photo": "6px"
 			},
 			"forme": {
 				"blob": "0"

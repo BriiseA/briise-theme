@@ -83,7 +83,8 @@ const AVIS = Section('', [
 ], { backgroundColor: 'surface' });
 
 /* Récit des pages de service (sections du thème) : en-tête photo, bénéfices, modèles, preuve, déroulé et prix. */
-const { teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres } = B;
+const { teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, heroPhoto, confiance, tuiles, zoneSchema } = B;
+const CONF = [['garantie', 'Garantie décennale', '10 ans, attestation jointe au devis'], ['plan', 'Plan 3D offert', 'Votre ouvrage vu dans votre pièce'], ['atelier', '100 % fait à Saran', 'Sans sous-traitance ni catalogue'], ['delai', 'Devis sous 5 jours', 'Après une visite gratuite']];
 const conseil = (t = 'Vous hésitez ? Thomas vous conseille pendant la visite gratuite') => Arrow(t, CTA);
 const guideCarte = (titre, texte, slug) => Col([Box('br-card', [H(titre, 3), Muted(texte), Arrow('Lire le guide', URL(slug))])]);
 // La preuve : les réalisations du service, et qui les fabrique (une ligne, une photo, le lien vers l'atelier).
@@ -102,19 +103,22 @@ const page = (slug, titre, seo_titre, seo_description, blocs, extra = {}) =>
 // Accueil
 page('accueil', 'Accueil', 'Métallier à Saran : escaliers, garde-corps sur mesure',
   'Atelier Ferlune dessine, fabrique à Saran et pose escaliers, garde-corps, verrières et portails sur mesure. Devis et plan 3D sous 5 jours.', [
-  cb('core/cover', { url: IMG('banniere'), alt: '', dimRatio: 70, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 68, minHeightUnit: 'vh', contentPosition: 'bottom left', align: 'full', className: 'br-banniere', layout: { type: 'constrained' } }, [
-    Box('br-banniere-inner', [
-      Label('Atelier Ferlune · Saran'),
-      H('Métallier à Saran : escaliers, garde-corps et verrières sur mesure', 1, null, { fontSize: 'huge' }),
-      Lead('Nous dessinons vos ouvrages en acier, les fabriquons dans notre atelier de Saran et les posons chez vous, dans un rayon de 35 km. Le devis est gratuit.'),
-      Btns(Btn(CTA_LABEL, CTA), Btn('Voir nos réalisations', URL('realisations'), 'is-style-outline')),
-    ]),
-  ]),
-  Section('br-section--tight', [
-    Cols([['100 %', 'fabriqué dans notre atelier de Saran, sans sous-traitance'], ['3D', 'un plan de votre ouvrage dans votre pièce, joint au devis'], ['5 jours', 'pour recevoir le devis après la visite'], ['1', 'seul interlocuteur, du devis à la pose']]
-      .map(([n, t]) => Col([P(n, 'br-stat'), Muted(t)])), 'br-stats-row'),
-    Arrow('Découvrir l’atelier et l’équipe', URL('atelier')),
-  ]),
+  heroPhoto({
+    pastille: 'Métallerie sur mesure · Saran',
+    titre: 'Escaliers, garde-corps et verrières sur mesure,', accent: 'fabriqués à Saran',
+    chapo: 'Nous dessinons vos ouvrages en acier, les fabriquons dans notre atelier et les posons chez vous, dans un rayon de 35 km. Le devis est gratuit.',
+    second: ['Voir nos réalisations', URL('realisations')],
+    coches: ['Visite et devis gratuits', 'Plan 3D sous 5 jours', 'Garantie décennale'],
+    img: 'banniere', alt: 'Escalier quart tournant en acier noir et marches en chêne, posé à Ingré',
+    etiquettes: [['Plan 3D joint au devis', 'Votre ouvrage, chez vous'], ['Fabriqué à l’atelier', '100 %']],
+  }),
+  confiance(CONF),
+  tuiles('Pourquoi nous choisir', 'Les mêmes mains, du dessin à la pose', [
+    ['grande', '100 %', 'fabriqué dans notre atelier de Saran, sans sous-traitance ni catalogue.'],
+    ['large', '3D', 'Un plan de votre ouvrage dans votre pièce, joint au devis : vous validez avant qu’on fabrique.'],
+    ['', '5 jours', 'pour recevoir le devis après la visite'],
+    ['accent', '1', 'seul interlocuteur, Thomas, du devis à la pose'],
+  ], null, [Arrow('Découvrir l’atelier et l’équipe', URL('atelier'))]),
   Section('', [
     sectionHead('Ce que nous fabriquons', ['Tous nos ouvrages sur mesure', URL('ouvrages')]),
     P(`Escaliers, garde-corps et verrières d’intérieur, et aussi ${A('nos portails et portillons en acier', 'portails')}.`),
@@ -136,12 +140,7 @@ page('accueil', 'Accueil', 'Métallier à Saran : escaliers, garde-corps sur mes
     projet('carre-3', 'Verrière', 'Saran', 'Verrière de cuisine', 'Verrière atelier noire, 2026 (fictif).', 'Verrière d’intérieur noire entre une cuisine et un salon, à Saran'),
   ]),
   AVIS,
-  Section('', [
-    Head([Label('Zone d’intervention'), H('Nous intervenons à Saran et à 35 km autour', 2), Lead('métropole d’Orléans, Beauce et Val de Loire. La visite et le devis sont gratuits dans toute la zone.')]),
-    Short('[briise_zone]'),
-    Muted('Votre commune n’est pas dans la liste ? Appelez-nous, nous étudions chaque demande.'),
-    Arrow('Toutes les communes où nous intervenons', URL('zone-intervention')),
-  ], { backgroundColor: 'nuance' }),
+  zoneSchema('Zone d’intervention', 'Nous intervenons à Saran et à 35 km autour', 'Métropole d’Orléans, Beauce et Val de Loire. La visite et le devis sont gratuits dans toute la zone.', ['Toutes les communes où nous intervenons', URL('zone-intervention')]),
   bandeau('Un projet d’escalier, de garde-corps ou de verrière ?', 'Le devis est gratuit, avec un plan 3D de votre ouvrage.'),
 ]);
 
@@ -175,6 +174,7 @@ page('ouvrages', 'Ouvrages sur mesure', 'Métallerie sur mesure près d’Orléa
 page('escaliers-metalliques', 'Escaliers métalliques', 'Escalier métallique sur mesure à Saran, dès 4 800 €',
   'Escaliers en acier droits, quart tournants, hélicoïdaux ou à limon central, fabriqués à Saran et posés. Devis gratuit avec plan 3D.', [
   teteSplit('Escaliers métalliques sur mesure', 'Un escalier en acier dessiné à vos cotes, fabriqué dans notre atelier de Saran et posé chez vous : à partir de 4 800 € posé pour un escalier droit, 6 à 8 semaines de fabrication.', 'Demander un devis pour votre escalier'),
+  confiance(CONF),
   benefices('Pourquoi un escalier en acier', [
     ['carre', 'Escalier en acier fin dans une pièce lumineuse', 'Il laisse passer la lumière', 'L’acier est si solide qu’une structure fine suffit. L’escalier paraît léger, et la pièce garde sa lumière et sa profondeur.'],
     ['carre-2', 'Marches en chêne posées sur une structure en acier noir', 'Il ne grince pas', 'Les pièces sont soudées : rien ne prend de jeu avec les années. Avec des marches en chêne, le bruit des pas reste doux.'],
@@ -210,6 +210,7 @@ page('escaliers-metalliques', 'Escaliers métalliques', 'Escalier métallique su
 page('escalier-helicoidal', 'Escalier hélicoïdal', 'Escalier hélicoïdal en métal sur mesure à Saran',
   'Escalier hélicoïdal en acier, rond ou carré, dessiné au bon diamètre et fabriqué à Saran. Moins de 2 m² au sol. Devis gratuit avec plan 3D.', [
   teteSplit('Escalier hélicoïdal sur mesure', 'Un escalier en colimaçon en acier, dessiné au diamètre qui convient à votre pièce et fabriqué dans notre atelier de Saran : à partir de 9 000 € posé (fictif), 6 à 8 semaines de fabrication.', 'Demander un devis pour votre escalier'),
+  confiance(CONF),
   benefices('Un escalier qui tient dans un coin de pièce', [
     ['carre', 'Escalier hélicoïdal dans l’angle d’une entrée', 'Moins de 2 m² au sol', 'Un hélicoïdal de 1,40 m de diamètre tient dans un carré de 1,40 m de côté. Un escalier droit demande environ 3,5 m de long.'],
     ['carre-2', 'Détail des marches et de la main courante d’un hélicoïdal', 'Une vraie pièce de décoration', 'Il se voit sous tous les angles : nous soignons chaque soudure, et vous choisissez la teinte, les marches et la main courante.'],
@@ -254,6 +255,7 @@ page('escalier-helicoidal', 'Escalier hélicoïdal', 'Escalier hélicoïdal en m
 page('garde-corps', 'Garde-corps et rampes', 'Garde-corps sur mesure à Saran, dès 390 € le mètre',
   'Garde-corps et rampes en acier ou acier et verre pour mezzanine, escalier ou terrasse, conformes à la norme révisée. Fabriqués à Saran.', [
   teteSplit('Garde-corps et rampes sur mesure', 'Garde-corps de mezzanine, d’escalier ou de terrasse, fabriqués à Saran et posés en 3 à 5 semaines : à partir de 390 € le mètre linéaire posé.', 'Demander un devis pour votre garde-corps'),
+  confiance(CONF),
   benefices('Un garde-corps qui protège sans enfermer', [
     ['carre', 'Enfant sur une mezzanine protégée par un garde-corps en verre', 'Vos enfants en sécurité', `Chaque garde-corps suit la norme révisée en 2024 : hauteur, écart entre les barreaux, rien sur quoi grimper. ${A('Ce que dit la norme', 'norme-garde-corps')}.`],
     ['carre-2', 'Mezzanine ouverte sur le séjour avec un garde-corps fin', 'La vue et la lumière gardées', 'Des montants fins, du verre ou des barreaux espacés : la mezzanine reste ouverte sur la pièce.'],
@@ -287,6 +289,7 @@ page('garde-corps', 'Garde-corps et rampes', 'Garde-corps sur mesure à Saran, d
 page('verrieres-interieur', 'Verrières d’intérieur', 'Verrière d’intérieur sur mesure à Saran, dès 750 €/m²',
   'Verrières atelier en acier dessinées à vos dimensions, fabriquées à Saran et posées en une journée. Devis gratuit avec plan 3D.', [
   teteSplit('Verrières d’intérieur sur mesure', 'Une verrière atelier en acier, dessinée à vos dimensions et fabriquée à Saran : à partir de 750 € le m² posé, 3 à 4 semaines de fabrication.', 'Demander un devis pour votre verrière'),
+  confiance(CONF),
   benefices('La lumière d’une pièce ouverte, le calme d’une pièce fermée', [
     ['carre', 'Couloir éclairé par une verrière haute', 'La lumière du jour partout', 'Une pièce sombre, un couloir ou une entrée reçoivent la lumière des fenêtres voisines.'],
     ['carre-2', 'Verrière noire entre une cuisine et un salon', 'Les odeurs et le bruit restent de leur côté', 'Contrairement à une cuisine ouverte, la verrière sépare les pièces. Avec un vitrage acoustique, le bruit passe beaucoup moins.'],
@@ -319,6 +322,7 @@ page('verrieres-interieur', 'Verrières d’intérieur', 'Verrière d’intérie
 page('portails', 'Portails et portillons', 'Portail acier sur mesure à Saran : battant, coulissant',
   'Portails en acier battants ou coulissants et portillons, galvanisés et thermolaqués, fabriqués à Saran en 5 à 7 semaines. Devis gratuit.', [
   teteSplit('Portails et portillons en acier sur mesure', 'Portails battants ou coulissants et portillons assortis, fabriqués dans notre atelier de Saran en 5 à 7 semaines : à partir de 2 900 € posé pour un portail battant (fictif).', 'Demander un devis pour votre portail'),
+  confiance(CONF),
   benefices('Un portail en acier fait pour durer', [
     ['carre', 'Portail en acier gris anthracite après plusieurs hivers', 'Pas de rouille, pas de peinture à refaire', 'Il est galvanisé, plongé dans un bain de zinc qui protège l’acier, puis thermolaqué : une peinture cuite au four, dans la teinte de votre choix.'],
     ['carre-2', 'Portail coulissant sur une allée en pente', 'Fait pour votre entrée', 'Une allée en pente, des piliers qui ne sont pas d’aplomb, une largeur hors standard : nous le dessinons à vos mesures.'],
@@ -640,6 +644,8 @@ const site = {
     precision_telephone: 'Thomas décroche lui-même', precision_email: 'Réponse sous 48 h ouvrées (fictif)', precision_adresse: 'Atelier sur rendez-vous',
     badge_coord_titre: 'Visite et devis gratuits', badge_coord_texte: 'Plan 3D sous 5 jours ouvrés',
     badge_zone_titre: 'Déplacement gratuit', badge_zone_texte: 'Dans un rayon de 35 km',
+    zone_rayon: '35',
+    zone_points: ['Saran ; 47.950 ; 1.877', 'Orléans ; 47.902 ; 1.909', 'Ingré ; 47.919 ; 1.823', 'Fleury-les-Aubrais ; 47.933 ; 1.917', 'Olivet ; 47.863 ; 1.900', 'Saint-Jean-de-Braye ; 47.913 ; 1.971', 'Chécy ; 47.894 ; 2.023', 'Meung-sur-Loire ; 47.828 ; 1.700'].join('\n'),
     zone_secteurs: [
       '# Autour de l’atelier | Saran et environs', 'Saran | atelier et siège', 'Fleury-les-Aubrais | garde-corps de terrasse', 'Ingré | escalier, verrière, garde-corps',
       '# Métropole d’Orléans | Tout le secteur', 'Olivet | escalier, garde-corps', 'Saint-Jean-de-Braye | portail coulissant', 'Chécy | portail et portillon', 'Orléans',
@@ -655,7 +661,7 @@ const site = {
     jours: Object.fromEntries([1, 2, 3, 4, 5, 6, 7].map((n) => [n, n <= 5 ? { ouvert: true, plages: [['07:30', '12:00'], ['13:30', '17:00']] } : { ouvert: false, plages: [['', ''], ['', '']] }])),
     note: 'Rendez-vous possibles le samedi matin.',
   },
-  ambiance: 'acier', couleurs: {},
+  ambiance: 'atelier', couleurs: {},
   cta: 'devis', cta_label: 'Demander un devis', accueil: 'accueil', personne: 'atelier', blog: '',
   statut: 'publish',
   realisations,

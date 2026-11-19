@@ -193,4 +193,68 @@ function briise_carte_zone_html( $atts = array() ) {
 add_action( 'init', function () {
 	add_shortcode( 'briise_carte_coordonnees', 'briise_carte_coordonnees_html' );
 	add_shortcode( 'briise_carte_zone', 'briise_carte_zone_html' );
+	add_shortcode( 'briise_zone_schema', 'briise_zone_schema_html' );
 } );
+
+/**
+ * Schéma de la zone d'intervention : l'adresse au centre, le rayon et les communes,
+ * dessinés en SVG à partir de « Communes du schéma » (nom ; latitude ; longitude).
+ * Aucune carte externe : pas de cookie, rien à charger.
+ */
+function briise_zone_schema_points() {
+	$e      = briise_entreprise();
+	$points = array();
+	foreach ( preg_split( '/\r\n|\r|\n/', (string) ( $e['zone_points'] ?? '' ) ) as $ligne ) {
+		$p = array_map( 'trim', preg_split( '/[;|]/', $ligne ) );
+		if ( count( $p ) >= 3 && '' !== $p[0] && is_numeric( str_replace( ',', '.', $p[1] ) ) && is_numeric( str_replace( ',', '.', $p[2] ) ) ) {
+			$points[] = array( $p[0], (float) str_replace( ',', '.', $p[1] ), (float) str_replace( ',', '.', $p[2] ) );
+		}
+	}
+	return $points;
+}
+
+function briise_zone_schema_html() {
+	$points = briise_zone_schema_points();
+	if ( count( $points ) < 2 ) {
+		return current_user_can( 'edit_pages' ) ? '<p class="br-muted">Schéma de zone : ajoutez au moins deux communes dans Mon entreprise &gt; Coordonnées &gt; Communes du schéma.</p>' : '';
+	}
+	$e      = briise_entreprise();
+	$rayon  = (int) ( $e['zone_rayon'] ?? 0 );
+	$c      = $points[0];
+	$cos    = cos( deg2rad( $c[1] ) );
+	$km     = array();
+	$max    = 1;
+	foreach ( $points as $p ) {
+		$x    = ( $p[2] - $c[2] ) * 111.32 * $cos;
+		$y    = ( $c[1] - $p[1] ) * 110.57;
+		$km[] = array( $x, $y );
+		$max  = max( $max, sqrt( $x * $x + $y * $y ) );
+	}
+	$cx    = 280;
+	$cy    = 190;
+	$ref   = $rayon > 0 ? max( $rayon, $max ) : $max;
+	$ech   = 165 / $ref;
+	$noms  = array();
+	$svg   = '';
+	if ( $rayon > 0 ) {
+		$r    = round( $rayon * $ech, 1 );
+		$svg .= '<circle class="br-schema-cercle" cx="' . $cx . '" cy="' . $cy . '" r="' . $r . '" style="fill:none;stroke:var(--wp--preset--color--accent);stroke-width:2;stroke-dasharray:6 6"/>';
+		$svg .= '<text x="' . $cx . '" y="' . round( $cy + $r + 22 ) . '" text-anchor="middle" style="fill:var(--wp--preset--color--texte-doux);font-size:14px">' . esc_html( $rayon ) . ' km</text>';
+	}
+	foreach ( $points as $i => $p ) {
+		$x      = round( $cx + $km[ $i ][0] * $ech, 1 );
+		$y      = round( $cy + $km[ $i ][1] * $ech, 1 );
+		$gauche = $x > 430;
+		$tx     = $gauche ? $x - 12 : $x + 12;
+		$centre = 0 === $i;
+		$svg   .= '<g class="br-schema-point" style="--br-n:' . $i . '">';
+		$svg   .= '<circle cx="' . $x . '" cy="' . $y . '" r="' . ( $centre ? 10 : 6 ) . '" style="fill:var(--wp--preset--color--' . ( $centre ? 'accent' : 'secondaire' ) . ')"/>';
+		$svg   .= '<text x="' . $tx . '" y="' . round( $y + 5 ) . '"' . ( $gauche ? ' text-anchor="end"' : '' ) . ' style="fill:var(--wp--preset--color--texte);font-size:' . ( $centre ? 17 : 15 ) . 'px;font-weight:' . ( $centre ? 700 : 500 ) . '">' . esc_html( $p[0] ) . '</text>';
+		$svg   .= '</g>';
+		$noms[] = $p[0];
+	}
+	$label = ( $rayon > 0 ? sprintf( 'Zone d’intervention : %d km autour de %s', $rayon, $c[0] ) : sprintf( 'Zone d’intervention autour de %s', $c[0] ) ) . ', avec ' . implode( ', ', array_slice( $noms, 1 ) );
+	$html  = '<figure class="br-schema"><svg viewBox="0 0 560 400" role="img" aria-label="' . esc_attr( $label ) . '">' . $svg . '</svg>';
+	$html .= '<figcaption class="br-schema-legende">Schéma indicatif' . ( $rayon > 0 ? ' : ' . esc_html( $rayon ) . ' km autour de ' . esc_html( $c[0] ) : '' ) . '.</figcaption></figure>';
+	return $html;
+}

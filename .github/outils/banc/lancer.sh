@@ -62,6 +62,15 @@ etape "4. Vérifications"
 php "$ICI/verifier.php" > "$BANC_SORTIE/verifier.json" || echec "vérifications WordPress (voir ci-dessus)"
 python3 "$ICI/pages.py" || echec "pages ou sécurité"
 
+# 1.9.0 : nouvelles sections et éléments d'interface présents sur les pages de la démo.
+ACC=$(curl -s "$BANC_URL/")
+ESC=$(curl -s "$BANC_URL/ouvrages/escaliers-metalliques/")
+for c in "ACC:br-hero-photo:ouverture de l’accueil avec photo" "ACC:br-confiance-item:bande de confiance de l’accueil" "ACC:br-tuile-chiffre:chiffres en tuiles" "ACC:br-schema-point:schéma de la zone" "ACC:br-header-tel:téléphone dans l’en-tête" "ACC:br-sticky-tel:bouton Appeler de la barre mobile" "ACC:br-footer-liens:pages de service dans le pied de page" "ESC:br-confiance-item:bande de confiance de la page de service"; do
+	V="${c%%:*}"; R="${c#*:}"; M="${R%%:*}"; L="${R#*:}"
+	if [ "$V" = ACC ]; then H="$ACC"; else H="$ESC"; fi
+	if grep -qF -- "$M" <<< "$H"; then echo "  ok    $L"; else echec "$L absent"; fi
+done
+
 if [ -z "${BANC_SANS_LIGHTHOUSE:-}" ] && [ -n "$CHROME" ]; then
 	for p in / /ouvrages/escaliers-metalliques/ /ouvrages/escalier-helicoidal/ /devis/ /atelier/ /escalier-quart-tournant-dimensions/; do
 		npx --yes lighthouse@12 "$BANC_URL$p" --quiet --only-categories=accessibility --output=json \
@@ -77,9 +86,9 @@ etape "5. Captures"
 if [ -n "$CHROME" ]; then
 	for p in accueil:/ escaliers:/ouvrages/escaliers-metalliques/ devis:/devis/ atelier:/atelier/; do
 		n="${p%%:*}"; u="${p#*:}"
-		"$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --window-size=1440,2400 \
+		"$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --force-prefers-reduced-motion --window-size=1440,2400 \
 			--screenshot="$BANC_SORTIE/captures/$n-ordinateur.png" "$BANC_URL$u" > /dev/null 2>&1 || true
-		"$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --window-size=390,1800 \
+		"$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --force-prefers-reduced-motion --window-size=390,1800 \
 			--screenshot="$BANC_SORTIE/captures/$n-mobile.png" "$BANC_URL$u" > /dev/null 2>&1 || true
 	done
 	ls "$BANC_SORTIE/captures" | sed 's/^/  /'

@@ -77,7 +77,8 @@
 				"grand": "12px",
 				"moyen": "10px",
 				"petit": "6px",
-				"bouton": "8px"
+				"bouton": "8px",
+				"photo": "12px"
 			},
 			"forme": {
 				"blob": "12px"

@@ -383,6 +383,8 @@ function briise_onglet_identite( $o, $v ) {
 		briise_texte( $o, $v, 'badge_zone_texte', 'Sous le badge', 'Exemple : « Sur site ou en atelier ».' );
 		briise_texte( $o, $v, 'zone_soustitre', 'Sous-titre de la carte Zone', 'Vide : « Depuis notre atelier de [ville] ».' );
 		briise_zone( $o, $v, 'zone_secteurs', 'Secteurs de la zone', 'Une ligne par commune, regroupées par secteur. « # Secteur | précision » ouvre un secteur (3 au plus conseillés) ; « Commune | précision » ajoute une commune ; « + texte » ajoute une étiquette en bas du secteur. Exemple :<br><code># Alpes-Maritimes | Autour de l’atelier</code><br><code>Carros | siège</code><br><code>Nice | et Côte d’Azur</code><br><code>+ Alpes-de-Haute-Provence</code><br>Vide : la carte reprend la liste « Zone d’intervention » ci-dessus.', 9 );
+		briise_zone( $o, $v, 'zone_points', 'Communes du schéma de zone', 'Pour la section « Zone d’intervention en schéma ». Une commune par ligne : nom ; latitude ; longitude. La première ligne est votre adresse, au centre. Les coordonnées se lisent dans Google Maps (clic droit sur la commune). Exemple :<br><code>Saran ; 47.950 ; 1.877</code><br><code>Orléans ; 47.902 ; 1.909</code>', 6 );
+		briise_texte( $o, $v, 'zone_rayon', 'Rayon d’intervention (km)', 'Dessine le cercle autour de votre adresse. Vide : pas de cercle.' );
 		?>
 	</table>
 	<?php

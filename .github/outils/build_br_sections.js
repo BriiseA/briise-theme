@@ -120,6 +120,34 @@ add('en-tete-page', 'ouverture', 'En-tête de page avec fil d’Ariane', 'Pour t
     MainBtns(),
   ])]));
 
+/* 1.9.0 : ouverture de l'accueil avec photo et étiquettes, bande de confiance, tuiles, schéma de zone. */
+const Mark = (t) => `<mark style="background-color:rgba(0,0,0,0)" class="has-inline-color has-accent-color">${t}</mark>`;
+const heroPhoto = ({ pastille, titre, accent, chapo, second, coches = [], img = 'portrait', alt, etiquettes = [] }) => Section('br-hero br-hero-photo', [Cols([
+  Col([P(pastille, 'br-pastille'), H(titre + ' ' + Mark(accent), 1, null, { fontSize: 'huge' }), Lead(chapo), MainBtns(second), ...(coches.length ? [List(coches, 'br-coches')] : [])], { verticalAlignment: 'center', width: '52%' }),
+  Col([Box('br-hero-media', [Img(img, '1/1', 'br-hero-img', alt), ...etiquettes.map(([petit, grand], i) => Box('br-etiquette-photo br-etiquette-photo--' + (i + 1), [P(petit, 'br-etiquette-petit'), P(grand, 'br-etiquette-grand')]))])], { verticalAlignment: 'center', width: '48%' }),
+], 'br-split', { verticalAlignment: 'center' })], { backgroundColor: 'surface' });
+const confiance = (items) => cb('core/group', { align: 'full', className: 'br-confiance-zone', layout: { type: 'default' } }, [
+  cb('core/group', { className: 'br-confiance', layout: { type: 'default' } }, items.map(([ic, t, s]) => Box('br-confiance-item is-icone-' + ic, [P(t, 'br-confiance-titre'), P(s, 'br-confiance-sous')]))),
+]);
+const tuiles = (label, titre, items, chapo, apres = []) => Section('br-tuiles-section', [Head([Label(label), H(titre, 2), ...(chapo ? [Lead(chapo)] : [])]),
+  Box('br-tuiles', items.map(([v, c, t]) => Box('br-tuile' + (v ? ' br-tuile--' + v : ''), [P(c, 'br-tuile-chiffre'), P(t, 'br-tuile-texte')]))), ...apres]);
+const zoneSchema = (label, titre, chapo, lien) => Section('br-zone-schema', [Cols([
+  Col([Label(label), H(titre, 2), Lead(chapo), ...(lien ? [Arrow(lien[0], lien[1])] : [])], { verticalAlignment: 'center', width: '44%' }),
+  Col([Short('[briise_zone_schema]')], { verticalAlignment: 'center', width: '56%' }),
+], 'br-split', { verticalAlignment: 'center' })]);
+
+add('accueil-photo', 'ouverture', 'Accueil texte et photo avec étiquettes', 'Ouverture de l’accueil : titre, phrase et boutons à gauche, une vraie photo à droite avec deux étiquettes posées dessus (prix de départ, délai, garantie). Sur mobile, le titre et le bouton restent visibles sans défiler.',
+  heroPhoto({ pastille: 'Votre métier · Votre ville', titre: 'Le titre qui dit ce que vous faites,', accent: 'et où', chapo: 'Une ou deux phrases : pour qui, ce qui vous distingue, et ce que le visiteur gagne à vous appeler.', second: ['Voir nos réalisations', URL('realisations')], coches: ['Devis gratuit', 'Votre délai de réponse', 'Votre garantie'], img: 'portrait', alt: 'Photo à remplacer : votre travail, votre atelier ou votre équipe', etiquettes: [['À partir de', '000 € posé'], ['Délai', '2 semaines']] }));
+
+add('bande-confiance', 'confiance', 'Bande de confiance', 'Juste sous l’ouverture, une carte qui chevauche la section du dessus : quatre garanties réelles avec leur icône. L’icône se change dans Avancé > Classes CSS : is-icone-garantie, is-icone-plan, is-icone-atelier, is-icone-avis, is-icone-delai, is-icone-prix, is-icone-local, is-icone-devis, is-icone-equipe.',
+  confiance([['garantie', 'Garantie décennale', 'Attestation jointe au devis'], ['devis', 'Devis gratuit', 'Sous 5 jours ouvrés'], ['local', 'Une équipe locale', 'À votre ville et alentour'], ['avis', 'Note Google', 'À n’afficher que si elle est réelle']]));
+
+add('tuiles-chiffres', 'confiance', 'Chiffres en tuiles', 'Vos preuves en chiffres, en tuiles de tailles différentes : une grande pour le chiffre le plus fort, les autres autour. Les chiffres comptent jusqu’à leur valeur quand la section apparaît.',
+  tuiles('Pourquoi nous choisir', 'Ce qui fait la différence', [['grande', '100 %', 'Le chiffre le plus fort, avec une phrase qui dit ce qu’il garantit au client.'], ['large', '3D', 'Un avantage concret, en une phrase.'], ['', '5 jours', 'Un délai que vous tenez.'], ['accent', '1', 'seul interlocuteur, du devis à la fin du chantier']]));
+
+add('zone-schema', 'contact', 'Zone d’intervention en schéma', 'Un schéma de la zone : votre adresse au centre, le rayon d’intervention et les communes où vous travaillez. Il se dessine à partir de Mon entreprise > Coordonnées > Communes du schéma (nom ; latitude ; longitude).',
+  zoneSchema('Zone d’intervention', 'Nous intervenons à 30 km autour de votre ville', 'Les communes principales de votre zone, et ce qui se passe au-delà.', ['Toutes les communes où nous intervenons', URL('zone-intervention')]));
+
 /* ----- Offre ----- */
 
 // {{SERVICE:n}} : nom du n-ième service du client, {{URL:service-n}} : sa page (remplis à l'installation).
@@ -422,5 +450,5 @@ add('formulaire-contact', 'contact', 'Formulaire de contact', 'Le formulaire de 
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').mkdirSync(require('path').join(__dirname, 'build'), { recursive: true });
 require('fs').writeFileSync(require('path').join(__dirname, 'build', 'br_sections.json'), JSON.stringify(out, null, 1));
-module.exports = { S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres };
+module.exports = { Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres };
 console.log(Object.keys(S).length, 'sections');

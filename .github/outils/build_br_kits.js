@@ -10,13 +10,17 @@ const sec = (slug) => S[slug].blocks;
 const { cloneBlock } = require('@wordpress/blocks');
 const CLAIRS = ['fond', 'surface', 'nuance'];
 const fondDe = (b) => (b.name === 'core/cover' ? 'photo' : (b.attributes.backgroundColor || 'fond'));
+// La bande de confiance chevauche la section du dessus : elle ne compte pas dans le rythme.
+const passe = (b) => /br-confiance-zone/.test(b.attributes.className || '');
 const rythme = (blocks) => {
   const out = [];
   blocks.forEach((b, i) => {
-    const prev = out[i - 1];
+    if (passe(b)) { out.push(b); return; }
+    const prev = [...out].reverse().find((x) => !passe(x));
     const f = fondDe(b);
     if (prev && !/br-page-head/.test(prev.attributes.className || '') && fondDe(prev) === f && CLAIRS.includes(f)) {
-      const next = blocks[i + 1] ? fondDe(blocks[i + 1]) : null;
+      const suite = blocks.slice(i + 1).find((x) => !passe(x));
+      const next = suite ? fondDe(suite) : null;
       const choix = CLAIRS.find((c) => c !== f && c !== next);
       out.push(cloneBlock(b, { backgroundColor: choix === 'fond' ? undefined : choix }));
     } else {
@@ -99,7 +103,7 @@ const KITS = {
     cta: 'Demander un devis', page_cta: 'devis', page_personne: 'a-propos', page_faq: '', blog: false,
     liens: { services: 'savoir-faire', realisations: 'realisations', 'a-propos': 'a-propos', blog: 'realisations' },
     pages: [
-      page('accueil', 'Accueil', sec('hero-banniere'), sec('trois-cartes'), sec('realisations'), sec('chiffres-cles'), sec('temoignages'), sec('zone'), sec('bandeau-cta')),
+      page('accueil', 'Accueil', sec('accueil-photo'), sec('bande-confiance'), sec('trois-cartes'), sec('realisations'), sec('tuiles-chiffres'), sec('temoignages'), sec('zone'), sec('bandeau-cta')),
       page('savoir-faire', 'Savoir-faire', tete('Notre savoir-faire', 'Ce que vous fabriquez ou réalisez, et pour qui : particuliers, professionnels, collectivités.'), detail, sec('service-alterne'), sec('etapes'), sec('logos'), sec('bandeau-cta')),
       page('realisations', 'Réalisations', tete('Nos réalisations', 'Quelques chantiers récents, avec la demande du client et la solution apportée.'), sec('realisations-toutes'), sec('avant-apres'), sec('bandeau-cta')),
       page('zone-intervention', 'Zone d’intervention', tete('Zone d’intervention', 'Les villes et le secteur où nous intervenons, et nos délais de déplacement.'), sec('zone-carte'), sec('bandeau-cta')),
