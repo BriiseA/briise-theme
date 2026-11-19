@@ -1,5 +1,9 @@
 # Historique des versions
 
+## Prochaine version
+
+- **Site d'exemple renommé** : le client fictif Delaunay (Étampes) devient l'Atelier Ferlune, métallerie à Saran, avec ses chantiers dans la métropole d'Orléans (Ingré, Olivet, Fleury-les-Aubrais, Saint-Jean-de-Braye, Chécy). Contact de démonstration : contact@briise.fr, adresse fictive sans numéro de rue. Fichiers : `exemples/build_ferlune.js` et `exemples/site-ferlune.json`.
+
 ## 1.8.0
 
 - **Banc d'essai** : à chaque envoi, GitHub installe un WordPress neuf, le thème, l'extension, Fluent Forms et FluentSMTP, importe Delaunay et vérifie blocs, fichiers générés, Contrôle, formulaires, gabarits, pages (en ligne, sans erreur, un seul titre principal), sécurité, conversion WebP et accessibilité (100 sur six pages). Une version n'est publiée que si tout est au vert. Captures téléchargeables dans l'onglet Actions. En local : `bash .github/outils/banc/lancer.sh`.

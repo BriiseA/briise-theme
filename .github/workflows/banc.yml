@@ -1,6 +1,6 @@
 name: Banc d'essai
 
-# Le contrôle technique du thème : installe un WordPress neuf, importe le site Delaunay
+# Le contrôle technique du thème : installe un WordPress neuf, importe le site Atelier Ferlune
 # et vérifie blocs, pages, Contrôle, formulaires, sécurité et accessibilité.
 # Lancé à chaque envoi, et avant chaque publication (Version installable).
 # En cas d'échec : croix rouge, et la version n'est pas publiée. Les captures sont

@@ -25,9 +25,9 @@ $ok( ! $a['exclues'], 'aucun lien vers une page exclue de Google' );
 $ok( ! $a['flous'], 'aucun texte de lien vague' );
 $ok( function_exists( 'briise_rythme_analyse' ) && ! briise_rythme_analyse(), 'couleurs : jamais deux sections voisines du même fond' );
 
-// La fiche d'Angerville est volontairement trop courte : le Contrôle doit la repérer, et elle seule.
+// La fiche de Chécy est volontairement trop courte : le Contrôle doit la repérer, et elle seule.
 $minces = function_exists( 'briise_realisations_minces' ) ? briise_realisations_minces() : array();
-$ok( 1 === count( $minces ), 'fiches trop courtes repérées : 1 attendue (Angerville), ' . count( $minces ) . ' trouvée(s)' );
+$ok( 1 === count( $minces ), 'fiches trop courtes repérées : 1 attendue (Chécy), ' . count( $minces ) . ' trouvée(s)' );
 
 // Formulaires.
 $ok( briise_fluentforms_actif() && briise_formulaire_id( 'devis' ) > 0, 'formulaire de devis créé à l’import' );

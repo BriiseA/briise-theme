@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Banc d'essai Briise : le « contrôle technique » du thème avant chaque version.
 #
-# 1. Fabrique les sections, les kits et le site Delaunay, et vérifie que tous les blocs sont valides
+# 1. Fabrique les sections, les kits et le site Atelier Ferlune, et vérifie que tous les blocs sont valides
 #    et que les fichiers du dépôt sont à jour.
 # 2. Installe un WordPress neuf (base SQLite), le thème, l'extension, Fluent Forms et FluentSMTP.
-# 3. Importe le site Delaunay (client fictif).
+# 3. Importe le site Atelier Ferlune (client fictif).
 # 4. Vérifie : Contrôle sans alerte, formulaires créés, sécurité active, chaque page en ligne
 #    sans erreur, un seul titre principal, accessibilité 100.
 # 5. Prend des captures (ordinateur et mobile) des pages principales.
@@ -33,16 +33,16 @@ etape "1. Blocs et fichiers générés"
 	node build_br_sections.js > /dev/null 2>&1
 	python3 write_sections.py > /dev/null
 	node build_br_kits.js > /dev/null 2>&1
-	node exemples/build_delaunay.js > /dev/null 2>&1
+	node exemples/build_ferlune.js > /dev/null 2>&1
 )
 python3 "$ICI/blocs.py" "$OUTILS" "$DEPOT"
-for f in sections kits delaunay; do
+for f in sections kits ferlune; do
 	R=$(node "$OUTILS/validate.js" "$OUTILS/build/banc_$f.json" 2>/dev/null | tail -1)
 	echo "  $f : $R"
 	case "$R" in *"invalid blocks: 0") ;; *) echec "blocs invalides dans $f" ;; esac
 done
-if ! git -C "$DEPOT" diff --quiet -- patterns inc/kits.json .github/outils/exemples/site-delaunay.json; then
-	git -C "$DEPOT" diff --stat -- patterns inc/kits.json .github/outils/exemples/site-delaunay.json
+if ! git -C "$DEPOT" diff --quiet -- patterns inc/kits.json .github/outils/exemples/site-ferlune.json; then
+	git -C "$DEPOT" diff --stat -- patterns inc/kits.json .github/outils/exemples/site-ferlune.json
 	echec "les fichiers générés ne sont pas à jour : relancer les outils et enregistrer le résultat"
 fi
 
@@ -55,8 +55,8 @@ pkill -f "php -S localhost:$BANC_PORT" 2> /dev/null || true
 for _ in $(seq 1 30); do curl -s -o /dev/null "$BANC_URL/" && break; sleep 1; done
 trap 'pkill -f "php -S localhost:$BANC_PORT" 2> /dev/null || true' EXIT
 
-etape "3. Import du site Delaunay"
-php "$ICI/importer.php" "$OUTILS/exemples/site-delaunay.json" || echec "import"
+etape "3. Import du site Atelier Ferlune"
+php "$ICI/importer.php" "$OUTILS/exemples/site-ferlune.json" || echec "import"
 
 etape "4. Vérifications"
 php "$ICI/verifier.php" > "$BANC_SORTIE/verifier.json" || echec "vérifications WordPress (voir ci-dessus)"
