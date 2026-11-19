@@ -1,5 +1,11 @@
 # Historique des versions
 
+## 1.9.1
+
+- **Bande de confiance** : la carte est posée à cheval entre l'ouverture et la section suivante, sans bande de couleur parasite en dessous ; elle n'entre plus dans le contrôle du rythme des couleurs.
+- **Survol** : les icônes de la bande pivotent légèrement et les tuiles de chiffres se soulèvent ; rien ne bouge si le visiteur a demandé à réduire les animations.
+- **Vitesse** : les deux petites feuilles de style du thème sont écrites dans la page (deux requêtes bloquantes de moins). Mesure mobile sur le banc, avec compression comme chez un hébergeur : 98 à 100, LCP 1,6 à 2,3 s, CLS 0 à 0,03.
+
 ## 1.9.0
 
 - **Système d'ambiance** : chaque ambiance règle ses arrondis de cartes, de boutons et de photos et son ombre ; titres en minuscules (capitales seulement dans Acier) ; Atelier et Acier passent sur fond blanc avec une seule teinte d'accompagnement.

@@ -55,9 +55,11 @@ add_action( 'wp_enqueue_scripts', function () {
 	$version = wp_get_theme()->get( 'Version' );
 	if ( briise_theme_fonction( 'animations' ) ) {
 		wp_enqueue_style( 'briise-motion', get_theme_file_uri( 'assets/css/motion.css' ), array(), $version );
+		wp_style_add_data( 'briise-motion', 'path', get_theme_file_path( 'assets/css/motion.css' ) ); // Petit fichier : WordPress l'écrit dans la page, une requête bloquante de moins.
 		wp_enqueue_script( 'briise-motion', get_theme_file_uri( 'assets/js/motion.js' ), array(), $version, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 	}
 	wp_enqueue_style( 'briise-ux', get_theme_file_uri( 'assets/css/ux.css' ), array(), $version );
+	wp_style_add_data( 'briise-ux', 'path', get_theme_file_path( 'assets/css/ux.css' ) );
 	wp_enqueue_script( 'briise-ux', get_theme_file_uri( 'assets/js/ux.js' ), array(), $version, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 	wp_add_inline_script( 'briise-ux', 'window.briiseUx=' . wp_json_encode( array(
 		'menu'     => briise_theme_fonction( 'menu_remonte' ),
