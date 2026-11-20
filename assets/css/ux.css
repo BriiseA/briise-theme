@@ -23,13 +23,8 @@
 	.br-smart-header { top: 0; }
 }
 
-/* Page en cours */
-.br-nav a[aria-current="page"] {
-	text-decoration: underline;
-	text-decoration-color: var(--wp--preset--color--deco);
-	text-decoration-thickness: 2px;
-	text-underline-offset: 6px;
-}
+/* Page en cours : pastille avec un point dans le menu (theme.json, « Page en cours dans le menu »). */
+.br-nav a[aria-current="page"] { text-decoration: none; }
 .br-footer a[aria-current="page"] { font-weight: 600; }
 
 /* Ancres : la cible n'est pas masquée par l'en-tête */

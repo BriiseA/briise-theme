@@ -31,6 +31,10 @@ function briise_menu_lien( $page_id, $enfants = array() ) {
 		'url'   => get_permalink( $page_id ),
 		'kind'  => 'post-type',
 	);
+	$desc = get_post_meta( $page_id, '_briise_menu_desc', true );
+	if ( $desc ) {
+		$attrs['description'] = $desc;
+	}
 	if ( $enfants ) {
 		return array( 'blockName' => 'core/navigation-submenu', 'attrs' => $attrs, 'innerBlocks' => $enfants, 'innerHTML' => '', 'innerContent' => array_fill( 0, count( $enfants ), null ) );
 	}

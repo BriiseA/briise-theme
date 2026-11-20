@@ -183,6 +183,22 @@ const etapesPhotos = (titre, items, apres = [], label = 'Comment ça se passe') 
   ...apres,
 ], { backgroundColor: 'nuance' });
 
+/* Étapes sans photo : un fil qui se remplit au défilement (motion.js).
+   items : [titre, texte, durée facultative]. */
+const filEtape = ([t, d, duree], i) => Box('br-fil-etape', [P(String(i + 1), 'br-fil-num'), H(t, 3), P(d, 'br-fil-texte'), ...(duree ? [P(duree, 'br-duree')] : [])]);
+const etapesFrise = (titre, items, apres = [], label = 'Comment ça se passe', bg = 'nuance') => Section('br-etapes', [
+  Head([Label(label), H(titre, 2)]),
+  Box('br-fil br-fil--frise', items.map(filEtape)),
+  ...apres,
+], { backgroundColor: bg });
+const etapesFil = (titre, items, cote = [], label = 'Comment ça se passe', bg = 'fond') => Section('br-etapes br-etapes-fil', [
+  Cols([
+    Col([Box('br-etapes-cote', [Label(label), H(titre, 2), ...cote])], { width: '42%' }),
+    Col([Box('br-fil br-fil--vertical', items.map(filEtape))], { width: '58%' }),
+  ], 'br-etapes-cols'),
+], { backgroundColor: bg });
+const prixCarte = (rows, note, head = ['Ouvrage', 'Prix posé TTC']) => Box('br-prix-carte', [Table(head, rows), Muted(note)]);
+
 add('benefices-photos', 'offre', 'Ce que ça change, en photos', 'Pages de service : trois bénéfices concrets pour le client, chacun avec sa photo. Ce qu’il y gagne, pas une liste de caractéristiques.',
   benefices('Ce que votre client y gagne', [
     ['carre', 'Photo à remplacer : le bénéfice en situation', 'Premier bénéfice', 'Ce que le client gagne concrètement, avec ses mots : plus de place, plus de lumière, moins d’entretien.'],
@@ -319,13 +335,20 @@ add('galerie', 'confiance', 'Galerie en mosaïque', 'Six photos en mosaïque : l
 
 /* ----- Parcours ----- */
 
-const etape = (n, t, d) => Col([Num(n), H(t, 3), Muted(d)]);
-add('etapes', 'parcours', 'Étapes numérotées', 'Rassurer sur le déroulé : du premier contact au résultat, avec une photo par étape.',
-  etapesPhotos('Trois étapes, sans surprise', [
-    ['carre', 'Photo à remplacer : le premier échange', 'Vous nous contactez', 'Par téléphone ou par le formulaire. Nous répondons sous 24 heures ouvrées.'],
-    ['carre-2', 'Photo à remplacer : le rendez-vous', 'Nous faisons le point', 'Un échange pour comprendre votre besoin, puis un devis clair et détaillé.'],
-    ['carre-3', 'Photo à remplacer : le travail réalisé', 'Nous réalisons', 'Aux dates convenues, avec un interlocuteur unique du début à la fin.'],
+add('etapes', 'parcours', 'Étapes en frise', 'Rassurer sur le déroulé : du premier contact au résultat. Une frise numérotée qui se remplit au défilement, avec la durée de chaque étape. Idéale sur l’accueil.',
+  etapesFrise('Trois étapes, sans surprise', [
+    ['Vous nous contactez', 'Par téléphone ou par le formulaire. Nous répondons sous 24 heures ouvrées.', 'Réponse sous 24 h'],
+    ['Nous faisons le point', 'Un échange pour comprendre votre besoin, puis un devis clair et détaillé.', 'Devis gratuit'],
+    ['Nous réalisons', 'Aux dates convenues, avec un interlocuteur unique du début à la fin.', 'Délai annoncé au devis'],
   ], [MainBtns()]));
+
+add('etapes-prix', 'parcours', 'Déroulé et prix, côte à côte', 'Pages de service : les étapes sur un fil qui se remplit au défilement, et le prix dans la colonne qui reste à l’écran. Le visiteur lit le déroulé et voit le prix en même temps.',
+  etapesFil('De la première visite à la fin du chantier', [
+    ['La visite', 'Ce qui se passe au premier rendez-vous, et qui vient.', 'Gratuite'],
+    ['Le devis', 'Avec quoi : plan, échantillons, prix détaillé.', 'Sous … jours'],
+    ['La préparation', 'Où, par qui, ce que le client a à faire.', '… semaines'],
+    ['La fin du chantier', 'Propreté, ce que le client reçoit, la garantie.', '… jours'],
+  ], [prixCarte([['Prestation la plus courante', 'À partir de… €'], ['Option fréquente', '+ … €']], 'Ce qui fait varier le prix, en une phrase. Le prix exact figure sur le devis.', ['Prestation', 'Prix TTC'])]));
 
 add('faq', 'parcours', 'FAQ en accordéon', 'Lever les freins avant le contact. Sur la page choisie comme FAQ, les questions sont transmises à Google.',
   Section('', [Cols([
@@ -450,5 +473,5 @@ add('formulaire-contact', 'contact', 'Formulaire de contact', 'Le formulaire de 
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').mkdirSync(require('path').join(__dirname, 'build'), { recursive: true });
 require('fs').writeFileSync(require('path').join(__dirname, 'build', 'br_sections.json'), JSON.stringify(out, null, 1));
-module.exports = { Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres };
+module.exports = { Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte };
 console.log(Object.keys(S).length, 'sections');

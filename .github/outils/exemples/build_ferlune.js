@@ -86,7 +86,7 @@ const AVIS = Section('', [
 ], { backgroundColor: 'surface' });
 
 /* Récit des pages de service (sections du thème) : en-tête photo, bénéfices, modèles, preuve, déroulé et prix. */
-const { teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, heroPhoto, confiance, tuiles, zoneSchema } = B;
+const { teteSplit, teteMosaique, benefices, modeles, etapesPhotos, etapesFrise, etapesFil, prixCarte, avantApres, heroPhoto, confiance, tuiles, zoneSchema } = B;
 const CONF = [['garantie', 'Garantie décennale', '10 ans, attestation jointe au devis'], ['plan', 'Plan 3D offert', 'Votre ouvrage vu dans votre pièce'], ['atelier', '100 % fait à Saran', 'Sans sous-traitance ni catalogue'], ['delai', 'Devis sous 5 jours', 'Après une visite gratuite']];
 const conseil = (t = 'Vous hésitez ? Thomas vous conseille pendant la visite gratuite') => Arrow(t, CTA);
 const guideCarte = (titre, texte, slug) => Col([Box('br-card', [H(titre, 3), Muted(texte), Arrow('Lire le guide', URL(slug))])]);
@@ -96,7 +96,7 @@ const preuve = (titre) => Section('br-section-realisations', [
   Short('[briise_realisations service="auto" nombre="3"]'),
   Box('br-qui', [Img('portrait', '1/1', 'Thomas Ferlune dans son atelier', 'br-qui-photo'), P(`Fabriqués par Thomas et Karim dans notre atelier de Saran, depuis 2011. ${A('L’histoire de l’Atelier Ferlune', 'atelier')}.`)]),
 ]);
-const prixTable = (rows, note) => [Table(['Ouvrage', 'Prix posé TTC'], rows), Muted(note)];
+const prixTable = (rows, note) => [prixCarte(rows, note)];
 
 /* ---------- Pages ---------- */
 const pages = [];
@@ -131,11 +131,11 @@ page('accueil', 'Accueil', 'Métallier à Saran : escaliers, garde-corps sur mes
       ['03', 'Verrières d’intérieur', 'Une verrière atelier pour faire entrer la lumière sans ouvrir la pièce. À partir de 750 € le m² posé.', 'Verrières d’intérieur en détail', 'verrieres-interieur'],
     ].map(([n, t, d, l, s]) => Col([Box('br-card', [Num(n), H(t, 3), Muted(d), Arrow(l, URL(s))])]))),
   ], { backgroundColor: 'surface' }),
-  etapesPhotos('Votre projet en quatre étapes', [
-    ['carre', 'Thomas prenant les cotes d’un escalier chez un client', 'Visite et mesures', 'Thomas vient chez vous, écoute votre projet et prend les cotes.'],
-    ['paysage-2', 'Plan 3D d’un ouvrage dans une pièce', 'Plan 3D et devis', 'Sous 5 jours ouvrés, vous recevez le devis et le plan 3D de l’ouvrage dans votre pièce.'],
-    ['carre-2', 'Soudure à l’atelier de Saran', 'Fabrication à l’atelier', 'Découpe, soudure et finition à Saran, en 3 à 8 semaines selon l’ouvrage.'],
-    ['carre-3', 'Pose d’un garde-corps chez un client', 'Pose', 'Ceux qui ont fabriqué votre ouvrage viennent le poser.'],
+  etapesFrise('Votre projet en quatre étapes', [
+    ['Visite et mesures', 'Thomas vient chez vous, écoute votre projet et prend les cotes.', 'Gratuite'],
+    ['Plan 3D et devis', 'Vous recevez le devis et le plan 3D de l’ouvrage dans votre pièce.', 'Sous 5 jours ouvrés'],
+    ['Fabrication à l’atelier', 'Découpe, soudure et finition à Saran, selon l’ouvrage.', '3 à 8 semaines'],
+    ['Pose', 'Ceux qui ont fabriqué votre ouvrage viennent le poser.'],
   ]),
   grille('Nos dernières réalisations', ['Toutes nos réalisations', URL('realisations')], [
     projet('carre', 'Escalier', 'Ingré', 'Escalier quart tournant', 'Structure acier, marches en chêne, 2025 (fictif).', 'Escalier quart tournant en acier avec marches en chêne, à Ingré'),
@@ -192,11 +192,11 @@ page('escaliers-metalliques', 'Escaliers métalliques', 'Escalier métallique su
   preuve('Des escaliers réalisés près de chez vous'),
   avantApres('Du plan 3D à la pose', 'L’escalier que vous validez, l’escalier que vous recevez', 'Avant la fabrication, vous voyez votre escalier en 3D dans votre pièce. Voici le plan validé par une cliente d’Ingré, et l’escalier posé six semaines plus tard (fictif).',
     ['paysage-2', 'Plan 3D de l’escalier quart tournant, validé avant fabrication', 'Plan 3D'], ['paysage', 'Le même escalier quart tournant posé, marches en chêne', 'Posé']),
-  etapesPhotos('De la visite à la pose, et le prix', [
-    ['carre', 'Thomas mesurant une trémie au laser', 'La visite', 'Thomas mesure au laser la hauteur à monter et la trémie, c’est-à-dire l’ouverture dans le plafond.'],
-    ['paysage-2', 'Plan 3D d’un escalier dans une pièce', 'Le plan 3D et le devis', 'Sous 5 jours ouvrés, vous voyez l’escalier dans votre pièce et recevez le prix définitif.'],
-    ['carre-2', 'Soudure d’un limon d’escalier à l’atelier', 'La fabrication', '6 à 8 semaines à l’atelier de Saran : découpe, soudure, thermolaquage dans la teinte choisie.'],
-    ['carre-3', 'Pose d’un escalier dans une maison', 'La pose', 'En 1 à 2 jours, par ceux qui l’ont fabriqué. L’ancien escalier est démonté et emporté (fictif).'],
+  etapesFil('De la visite à la pose, et le prix', [
+    ['La visite', 'Thomas mesure au laser la hauteur à monter et la trémie, c’est-à-dire l’ouverture dans le plafond.', 'Gratuite'],
+    ['Le plan 3D et le devis', 'Vous voyez l’escalier dans votre pièce et recevez le prix définitif.', 'Sous 5 jours ouvrés'],
+    ['La fabrication', 'À l’atelier de Saran : découpe, soudure, thermolaquage dans la teinte choisie.', '6 à 8 semaines'],
+    ['La pose', 'Par ceux qui l’ont fabriqué. L’ancien escalier est démonté et emporté (fictif).', '1 à 2 jours'],
   ], prixTable([['Escalier droit', 'À partir de 4 800 €'], ['Quart tournant', '7 000 à 14 000 €'], ['Hélicoïdal ou limon central', '9 000 à 16 000 € (fictif)']],
     'Ce qui fait varier le prix : le nombre de marches, la forme, les marches en chêne, la rampe et la teinte. Le prix du devis ne change plus ensuite.')),
   faq('Vos questions sur les escaliers', [
@@ -207,7 +207,7 @@ page('escaliers-metalliques', 'Escaliers métalliques', 'Escalier métallique su
   ], 'nuance'),
   liees(),
   bandeau('Un projet d’escalier ?', 'Visite et devis gratuits, plan 3D sous 5 jours ouvrés.', 'Demander un devis pour votre escalier'),
-], { parent: 'ouvrages', menu: true });
+], { parent: 'ouvrages', menu: true, menu_description: 'Droits, quart tournants, à limon central' });
 
 // Escalier hélicoïdal
 page('escalier-helicoidal', 'Escalier hélicoïdal', 'Escalier hélicoïdal en métal sur mesure à Saran',
@@ -237,11 +237,11 @@ page('escalier-helicoidal', 'Escalier hélicoïdal', 'Escalier hélicoïdal en m
     conseil(),
   ]),
   preuve('Escaliers hélicoïdaux réalisés'),
-  etapesPhotos('De la visite à la pose, et le prix', [
-    ['carre', 'Mesure d’une trémie avant un escalier hélicoïdal', 'La visite', 'Thomas mesure la hauteur à monter et la trémie : son ouverture doit être au moins aussi grande que l’escalier.'],
-    ['paysage-2', 'Plan 3D comparant plusieurs diamètres', 'Le plan 3D', 'Nous comparons deux ou trois diamètres dans votre pièce, pour voir le passage et la place qui reste.'],
-    ['carre-2', 'Marches découpées au laser à l’atelier', 'La fabrication', '6 à 8 semaines : chaque marche est découpée au laser et soudée sur le fût central.'],
-    ['carre-3', 'Assemblage d’un escalier hélicoïdal chez un client', 'La pose', 'Livré en plusieurs parties et assemblé en une journée, avec la main courante et le garde-corps de l’étage.'],
+  etapesFil('De la visite à la pose, et le prix', [
+    ['La visite', 'Thomas mesure la hauteur à monter et la trémie : son ouverture doit être au moins aussi grande que l’escalier.', 'Gratuite'],
+    ['Le plan 3D', 'Nous comparons deux ou trois diamètres dans votre pièce, pour voir le passage et la place qui reste.', 'Sous 5 jours ouvrés'],
+    ['La fabrication', 'Chaque marche est découpée au laser et soudée sur le fût central.', '6 à 8 semaines'],
+    ['La pose', 'Livré en plusieurs parties et assemblé sur place, avec la main courante et le garde-corps de l’étage.', 'En une journée'],
   ], prixTable([['Rond, 1,20 à 1,40 m', '9 000 à 12 000 € (fictif)'], ['Rond de 1,60 m et plus, ou carré', '12 000 à 16 000 € (fictif)']],
     'Ce qui fait varier le prix : le diamètre, la hauteur à monter, les marches en chêne et le garde-corps autour de la trémie à l’étage.')),
   faq('Vos questions sur l’escalier hélicoïdal', [
@@ -252,7 +252,7 @@ page('escalier-helicoidal', 'Escalier hélicoïdal', 'Escalier hélicoïdal en m
   ], 'nuance'),
   liees(),
   bandeau('Un escalier hélicoïdal pour votre maison ?', 'Visite et devis gratuits, avec plusieurs diamètres comparés en 3D.', 'Demander un devis pour votre escalier'),
-], { parent: 'ouvrages', menu: true });
+], { parent: 'ouvrages', menu: true, menu_description: 'Gain de place, autour d’un fût central' });
 
 // Garde-corps
 page('garde-corps', 'Garde-corps et rampes', 'Garde-corps sur mesure à Saran, dès 390 € le mètre',
@@ -271,11 +271,11 @@ page('garde-corps', 'Garde-corps et rampes', 'Garde-corps sur mesure à Saran, d
     ['paysage', 'Garde-corps en tôle perforée', 'Tôle perforée', [['Vous voyez : ', 'un écran graphique qui cache sans assombrir.'], ['Avec de jeunes enfants : ', 'très sûr, rien à escalader.'], ['Prix posé : ', 'dès 480 € le mètre (fictif).']]],
   ], [Muted(`Pour un escalier, la rampe et le garde-corps sont assortis, ou dessinés avec ${A('un escalier en acier sur mesure', 'escaliers-metalliques')}.`), conseil()]),
   preuve('Garde-corps réalisés près de chez vous'),
-  etapesPhotos('De la visite à la pose, et le prix', [
-    ['carre', 'Bord de mezzanine mesuré avant un garde-corps', 'La visite', 'Thomas regarde sur quoi le garde-corps sera fixé : dalle, bord de mezzanine, mur ou terrasse étanche.'],
-    ['paysage-2', 'Plan 3D d’un garde-corps', 'Le plan 3D et le devis', 'Sous 5 jours ouvrés, avec la hauteur et l’écartement conformes à la norme.'],
-    ['carre-2', 'Thermolaquage de montants en acier', 'La fabrication', '3 à 5 semaines à l’atelier, thermolaquage compris.'],
-    ['carre-3', 'Pose d’un garde-corps en verre', 'La pose', 'Le plus souvent en une journée. Vous recevez le certificat de conformité pour votre assurance.'],
+  etapesFil('De la visite à la pose, et le prix', [
+    ['La visite', 'Thomas regarde sur quoi le garde-corps sera fixé : dalle, bord de mezzanine, mur ou terrasse étanche.', 'Gratuite'],
+    ['Le plan 3D et le devis', 'Avec la hauteur et l’écartement conformes à la norme.', 'Sous 5 jours ouvrés'],
+    ['La fabrication', 'À l’atelier de Saran, thermolaquage compris.', '3 à 5 semaines'],
+    ['La pose', 'Vous recevez le certificat de conformité pour votre assurance.', 'Le plus souvent en une journée'],
   ], prixTable([['Garde-corps acier', 'À partir de 390 € le mètre linéaire'], ['Garde-corps acier et verre', 'À partir de 650 € le mètre linéaire (fictif)'], ['Rampe d’escalier seule', 'À partir de 180 € le mètre linéaire (fictif)']],
     'Ce qui fait varier le prix : la longueur, le remplissage, les fixations et la teinte. Le prix du devis est le prix final.')),
   faq('Vos questions sur les garde-corps', [
@@ -286,7 +286,7 @@ page('garde-corps', 'Garde-corps et rampes', 'Garde-corps sur mesure à Saran, d
   ], 'nuance'),
   liees(),
   bandeau('Un garde-corps à créer ou à remplacer ?', 'Visite et devis gratuits, plan 3D sous 5 jours ouvrés.', 'Demander un devis pour votre garde-corps'),
-], { parent: 'ouvrages', menu: true });
+], { parent: 'ouvrages', menu: true, menu_description: 'Mezzanines, escaliers, terrasses' });
 
 // Verrières
 page('verrieres-interieur', 'Verrières d’intérieur', 'Verrière d’intérieur sur mesure à Saran, dès 750 €/m²',
@@ -305,11 +305,11 @@ page('verrieres-interieur', 'Verrières d’intérieur', 'Verrière d’intérie
     ['paysage', 'Petite verrière haute dans une entrée', 'Petite verrière haute', [['Posée : ', 'en bande en haut d’une cloison.'], ['Idéal pour : ', 'une entrée ou un couloir sombre, une salle de bains.'], ['Prix posé : ', 'dès 750 € le m².']]],
   ], [Muted('Côté vitrage : clair pour la lumière, dépoli pour ne pas être vu (salle de bains, chambre), feuilleté acoustique pour le bruit (bureau, séjour).'), conseil()]),
   preuve('Verrières réalisées près de chez vous'),
-  etapesPhotos('De la visite à la pose, et le prix', [
-    ['carre', 'Cloison examinée avant la pose d’une verrière', 'La visite', 'Thomas vérifie la cloison. Si c’est un mur porteur, il faut d’abord l’ouvrir avec un maçon : nous vous le disons tout de suite.'],
-    ['paysage-2', 'Plan 3D d’une verrière alignée sur des meubles', 'Le plan 3D et le devis', 'Sous 5 jours ouvrés, avec les traverses alignées sur vos meubles.'],
-    ['carre-2', 'Profils de verrière en acier à l’atelier', 'La fabrication', '3 à 4 semaines à l’atelier de Saran.'],
-    ['carre-3', 'Verrière posée dans une cuisine', 'La pose', 'En une journée. Les reprises de plâtre sont faites par notre partenaire plaquiste (fictif).'],
+  etapesFil('De la visite à la pose, et le prix', [
+    ['La visite', 'Thomas vérifie la cloison. Si c’est un mur porteur, il faut d’abord l’ouvrir avec un maçon : nous vous le disons tout de suite.', 'Gratuite'],
+    ['Le plan 3D et le devis', 'Avec les traverses alignées sur vos meubles.', 'Sous 5 jours ouvrés'],
+    ['La fabrication', 'Les profils en acier sont coupés, soudés et laqués à l’atelier de Saran.', '3 à 4 semaines'],
+    ['La pose', 'Les reprises de plâtre sont faites par notre partenaire plaquiste (fictif).', 'En une journée'],
   ], prixTable([['Verrière atelier en acier', 'À partir de 750 € le m²'], ['Exemple : verrière de cuisine de 2,40 × 1,20 m', 'Environ 2 200 € posée (fictif)']],
     'Ce qui fait varier le prix : la surface, la présence d’une porte, le type de vitrage et la teinte.')),
   faq('Vos questions sur les verrières', [
@@ -319,7 +319,7 @@ page('verrieres-interieur', 'Verrières d’intérieur', 'Verrière d’intérie
   ], 'nuance'),
   liees(),
   bandeau('Plus de lumière dans votre maison ?', 'Visite et devis gratuits, plan 3D sous 5 jours ouvrés.', 'Demander un devis pour votre verrière'),
-], { parent: 'ouvrages', menu: true });
+], { parent: 'ouvrages', menu: true, menu_description: 'Atelier, pour faire entrer la lumière' });
 
 // Portails
 page('portails', 'Portails et portillons', 'Portail acier sur mesure à Saran : battant, coulissant',
@@ -336,11 +336,11 @@ page('portails', 'Portails et portillons', 'Portail acier sur mesure à Saran : 
     ['paysage-2', 'Portail coulissant autoportant en acier', 'Coulissant', [['Place : ', 'sur le côté, la largeur du passage.'], ['Allée en pente : ', 'aucun problème, il ne touche pas le sol.'], ['Motorisation : ', 'recommandée au-delà de 4 m.'], ['Prix posé : ', 'dès 3 800 € (fictif).']]],
   ], [Muted('Acier ou aluminium ? L’acier est plus lourd et très rigide : il résiste aux chocs et se répare par soudure ; galvanisé et thermolaqué, il ne rouille pas. L’aluminium ne rouille jamais et pèse moins lourd, mais il se déforme plus facilement sous un choc. Nous ne le fabriquons pas : si c’est votre choix, nous vous le dirons honnêtement.'), conseil()]),
   preuve('Portails réalisés près de chez vous'),
-  etapesPhotos('De la visite à la pose, et le prix', [
-    ['carre', 'Mesure d’une entrée et de ses piliers', 'La visite', 'Thomas mesure l’entrée, la pente et les piliers, et regarde où passer le câble du moteur.'],
-    ['paysage-2', 'Plan d’un portail pour la déclaration en mairie', 'Le plan et la mairie', 'Avec le devis, vous recevez le plan et la teinte : de quoi faire la déclaration en mairie si votre commune la demande.'],
-    ['carre-2', 'Portail en cours de soudure à l’atelier', 'La fabrication', '5 à 7 semaines : soudure, galvanisation, thermolaquage.'],
-    ['carre-3', 'Pose d’un portail coulissant motorisé', 'La pose', 'En 1 à 2 jours. Un électricien partenaire raccorde le moteur (fictif).'],
+  etapesFil('De la visite à la pose, et le prix', [
+    ['La visite', 'Thomas mesure l’entrée, la pente et les piliers, et regarde où passer le câble du moteur.', 'Gratuite'],
+    ['Le plan et la mairie', 'Avec le devis, vous recevez le plan et la teinte : de quoi faire la déclaration en mairie si votre commune la demande.'],
+    ['La fabrication', 'Soudure, galvanisation, thermolaquage.', '5 à 7 semaines'],
+    ['La pose', 'Un électricien partenaire raccorde le moteur (fictif).', '1 à 2 jours'],
   ], prixTable([['Portail battant', 'À partir de 2 900 € (fictif)'], ['Portail coulissant', 'À partir de 3 800 € (fictif)'], ['Portillon assorti', 'À partir de 900 € (fictif)']],
     'Ce qui fait varier le prix : la largeur, le type d’ouverture, le dessin du remplissage, la motorisation et la teinte.')),
   faq('Vos questions sur les portails', [
@@ -350,7 +350,7 @@ page('portails', 'Portails et portillons', 'Portail acier sur mesure à Saran : 
   ], 'nuance'),
   liees(),
   bandeau('Un portail à remplacer ?', 'Visite et devis gratuits, plan 3D sous 5 jours ouvrés.', 'Demander un devis pour votre portail'),
-], { parent: 'ouvrages', menu: true });
+], { parent: 'ouvrages', menu: true, menu_description: 'Battants ou coulissants, motorisés' });
 
 // Réalisations
 page('realisations', 'Réalisations', 'Nos réalisations : escaliers, garde-corps, verrières',

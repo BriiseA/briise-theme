@@ -164,6 +164,10 @@ function briise_plan_installer( $plan ) {
 		if ( ! empty( $p['seo_description'] ) ) {
 			update_post_meta( $id, '_briise_seo_desc', sanitize_textarea_field( $p['seo_description'] ) );
 		}
+		if ( ! empty( $p['menu_description'] ) ) {
+			// Une courte ligne sous le lien, dans le sous-menu (facultatif).
+			update_post_meta( $id, '_briise_menu_desc', sanitize_text_field( $p['menu_description'] ) );
+		}
 	}
 
 	// 5. Accueil, blog, confidentialité.

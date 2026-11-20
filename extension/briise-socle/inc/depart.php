@@ -205,7 +205,7 @@ function briise_depart_fichier() {
 			'menu'   => $blocs ? (bool) briise_menu_contient( $blocs, $p->ID ) : false,
 			'markup' => $p->post_content,
 		);
-		foreach ( array( 'seo_titre' => '_briise_seo_title', 'seo_description' => '_briise_seo_desc', 'template' => '_wp_page_template' ) as $cle => $meta ) {
+		foreach ( array( 'seo_titre' => '_briise_seo_title', 'seo_description' => '_briise_seo_desc', 'menu_description' => '_briise_menu_desc', 'template' => '_wp_page_template' ) as $cle => $meta ) {
 			$v = get_post_meta( $p->ID, $meta, true );
 			if ( $v && 'default' !== $v ) {
 				$page[ $cle ] = $v;

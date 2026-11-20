@@ -21,7 +21,7 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | `theme.json` | Couleurs, polices, tailles, espacements et styles globaux |
 | `templates/` | Modèles de pages (page, article, blog, 404, page sans titre, fiche de réalisation) |
 | `parts/` | En-tête et pied de page |
-| `patterns/` | Bibliothèque de 44 sections (`section-*.php`), en-tête, pied de page, blog |
+| `patterns/` | Bibliothèque de 45 sections (`section-*.php`), en-tête, pied de page, blog |
 | `assets/images/sections/` | Images de remplacement des sections, à remplacer par les photos du client |
 | `assets/js/ux.js` | Menu intelligent, page active, téléphones cliquables, bouton fixe mobile, retour en haut |
 | `assets/js/motion.js` | Animations d'apparition (coupées si le visiteur le demande) |
@@ -145,12 +145,13 @@ Fichier JSON importé dans Démarrage. Seule la liste `pages` est obligatoire. D
   "pages": [
     { "slug": "accueil", "titre": "Accueil", "markup": "<!-- wp:… -->", "seo_titre": "…", "seo_description": "…" },
     { "slug": "savoir-faire", "titre": "Savoir-faire", "modele": "service", "menu": true },
-    { "slug": "escaliers", "titre": "Escaliers sur mesure", "parent": "savoir-faire", "modele": "service", "menu": true }
+    { "slug": "escaliers", "titre": "Escaliers sur mesure", "parent": "savoir-faire", "modele": "service", "menu": true,
+      "menu_description": "Droits, quart tournants, hélicoïdaux" }
   ]
 }
 ```
 
-Dans `markup`, les repères `{{CTA}}`, `{{CTA_LABEL}}`, `{{URL:slug}}`, `{{IMG:nom}}` et `{{TITRE}}` sont remplacés à l'import, ainsi que `{{SERVICE:n}}` (nom du n-ième service) et `{{URL:service-n}}` (sa page). Les services sont les sous-pages de la page des services, dans l'ordre du fichier. `"legales": false` évite la création des pages légales.
+Dans `markup`, les repères `{{CTA}}`, `{{CTA_LABEL}}`, `{{URL:slug}}`, `{{IMG:nom}}` et `{{TITRE}}` sont remplacés à l'import, ainsi que `{{SERVICE:n}}` (nom du n-ième service) et `{{URL:service-n}}` (sa page). Les services sont les sous-pages de la page des services, dans l'ordre du fichier. `"legales": false` évite la création des pages légales. `menu_description` (facultatif) ajoute une courte ligne sous le lien dans le sous-menu ; elle se modifie ensuite dans Apparence > Éditeur > Navigation.
 
 Fiches de réalisation : liste `realisations`, créées après les pages (chacune retrouve son service par son adresse) ; les photos s'ajoutent ensuite dans chaque fiche.
 

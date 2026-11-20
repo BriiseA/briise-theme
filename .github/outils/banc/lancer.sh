@@ -65,7 +65,7 @@ python3 "$ICI/pages.py" || echec "pages ou sécurité"
 # 1.9.0 : nouvelles sections et éléments d'interface présents sur les pages de la démo.
 ACC=$(curl -s "$BANC_URL/")
 ESC=$(curl -s "$BANC_URL/ouvrages/escaliers-metalliques/")
-for c in "ACC:br-hero-photo:ouverture de l’accueil avec photo" "ACC:br-confiance-item:bande de confiance de l’accueil" "ACC:br-tuile-chiffre:chiffres en tuiles" "ACC:br-schema-point:schéma de la zone" "ACC:br-header-tel:téléphone dans l’en-tête" "ACC:br-sticky-tel:bouton Appeler de la barre mobile" "ACC:br-footer-liens:pages de service dans le pied de page" "ESC:br-confiance-item:bande de confiance de la page de service"; do
+for c in "ACC:br-hero-photo:ouverture de l’accueil avec photo" "ACC:br-confiance-item:bande de confiance de l’accueil" "ACC:br-tuile-chiffre:chiffres en tuiles" "ACC:br-schema-point:schéma de la zone" "ACC:br-header-tel:téléphone dans l’en-tête" "ACC:br-sticky-tel:bouton Appeler de la barre mobile" "ACC:br-footer-liens:pages de service dans le pied de page" "ESC:br-confiance-item:bande de confiance de la page de service" "ACC:br-fil--frise:frise des étapes de l’accueil" "ESC:br-fil--vertical:fil des étapes de la page de service" "ESC:br-prix-carte:prix à côté des étapes" "ESC:wp-block-navigation-item__description:description dans le sous-menu" "ESC:current-menu-ancestor:page en cours dans le menu"; do
 	V="${c%%:*}"; R="${c#*:}"; M="${R%%:*}"; L="${R#*:}"
 	if [ "$V" = ACC ]; then H="$ACC"; else H="$ESC"; fi
 	if grep -qF -- "$M" <<< "$H"; then echo "  ok    $L"; else echec "$L absent"; fi

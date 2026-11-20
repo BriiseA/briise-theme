@@ -1,15 +1,15 @@
 <?php
 /**
- * Title: Parcours : Étapes numérotées
+ * Title: Parcours : Étapes en frise
  * Slug: briise/etapes
  * Categories: briise-parcours
- * Description: Rassurer sur le déroulé : du premier contact au résultat, avec une photo par étape.
+ * Description: Rassurer sur le déroulé : du premier contact au résultat. Une frise numérotée qui se remplit au défilement, avec la durée de chaque étape. Idéale sur l’accueil.
  * Viewport Width: 1400
  */
 $briise = briise_theme_entreprise();
 ?>
-<!-- wp:group {"backgroundColor":"nuance","align":"full","className":"br-section br-etapes-photos","layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull br-section br-etapes-photos has-nuance-background-color has-background"><!-- wp:group {"className":"br-head","layout":{"type":"default"}} -->
+<!-- wp:group {"backgroundColor":"nuance","align":"full","className":"br-section br-etapes","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull br-section br-etapes has-nuance-background-color has-background"><!-- wp:group {"className":"br-head","layout":{"type":"default"}} -->
 <div class="wp-block-group br-head"><!-- wp:paragraph {"className":"br-label"} -->
 <p class="br-label">Comment ça se passe</p>
 <!-- /wp:paragraph -->
@@ -19,67 +19,61 @@ $briise = briise_theme_entreprise();
 <!-- /wp:heading --></div>
 <!-- /wp:group -->
 
-<!-- wp:columns {"className":"br-steps"} -->
-<div class="wp-block-columns br-steps"><!-- wp:column -->
-<div class="wp-block-column"><!-- wp:group {"className":"br-etape","layout":{"type":"default"}} -->
-<div class="wp-block-group br-etape"><!-- wp:image {"aspectRatio":"4/3","scale":"cover","sizeSlug":"full","linkDestination":"none","className":"is-style-br-arrondi"} -->
-<figure class="wp-block-image size-full is-style-br-arrondi"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/sections/carre.svg' ) ); ?>" alt="Photo à remplacer : le premier échange" style="aspect-ratio:4/3;object-fit:cover"/></figure>
-<!-- /wp:image -->
-
-<!-- wp:paragraph {"className":"br-num"} -->
-<p class="br-num">1</p>
+<!-- wp:group {"className":"br-fil br-fil\u002d\u002dfrise","layout":{"type":"default"}} -->
+<div class="wp-block-group br-fil br-fil--frise"><!-- wp:group {"className":"br-fil-etape","layout":{"type":"default"}} -->
+<div class="wp-block-group br-fil-etape"><!-- wp:paragraph {"className":"br-fil-num"} -->
+<p class="br-fil-num">1</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":3} -->
 <h3 class="wp-block-heading">Vous nous contactez</h3>
 <!-- /wp:heading -->
 
-<!-- wp:paragraph {"className":"br-muted"} -->
-<p class="br-muted">Par téléphone ou par le formulaire. Nous répondons sous 24 heures ouvrées.</p>
+<!-- wp:paragraph {"className":"br-fil-texte"} -->
+<p class="br-fil-texte">Par téléphone ou par le formulaire. Nous répondons sous 24 heures ouvrées.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"className":"br-duree"} -->
+<p class="br-duree">Réponse sous 24 h</p>
 <!-- /wp:paragraph --></div>
-<!-- /wp:group --></div>
-<!-- /wp:column -->
+<!-- /wp:group -->
 
-<!-- wp:column -->
-<div class="wp-block-column"><!-- wp:group {"className":"br-etape","layout":{"type":"default"}} -->
-<div class="wp-block-group br-etape"><!-- wp:image {"aspectRatio":"4/3","scale":"cover","sizeSlug":"full","linkDestination":"none","className":"is-style-br-arrondi"} -->
-<figure class="wp-block-image size-full is-style-br-arrondi"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/sections/carre-2.svg' ) ); ?>" alt="Photo à remplacer : le rendez-vous" style="aspect-ratio:4/3;object-fit:cover"/></figure>
-<!-- /wp:image -->
-
-<!-- wp:paragraph {"className":"br-num"} -->
-<p class="br-num">2</p>
+<!-- wp:group {"className":"br-fil-etape","layout":{"type":"default"}} -->
+<div class="wp-block-group br-fil-etape"><!-- wp:paragraph {"className":"br-fil-num"} -->
+<p class="br-fil-num">2</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":3} -->
 <h3 class="wp-block-heading">Nous faisons le point</h3>
 <!-- /wp:heading -->
 
-<!-- wp:paragraph {"className":"br-muted"} -->
-<p class="br-muted">Un échange pour comprendre votre besoin, puis un devis clair et détaillé.</p>
+<!-- wp:paragraph {"className":"br-fil-texte"} -->
+<p class="br-fil-texte">Un échange pour comprendre votre besoin, puis un devis clair et détaillé.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"className":"br-duree"} -->
+<p class="br-duree">Devis gratuit</p>
 <!-- /wp:paragraph --></div>
-<!-- /wp:group --></div>
-<!-- /wp:column -->
+<!-- /wp:group -->
 
-<!-- wp:column -->
-<div class="wp-block-column"><!-- wp:group {"className":"br-etape","layout":{"type":"default"}} -->
-<div class="wp-block-group br-etape"><!-- wp:image {"aspectRatio":"4/3","scale":"cover","sizeSlug":"full","linkDestination":"none","className":"is-style-br-arrondi"} -->
-<figure class="wp-block-image size-full is-style-br-arrondi"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/sections/carre-3.svg' ) ); ?>" alt="Photo à remplacer : le travail réalisé" style="aspect-ratio:4/3;object-fit:cover"/></figure>
-<!-- /wp:image -->
-
-<!-- wp:paragraph {"className":"br-num"} -->
-<p class="br-num">3</p>
+<!-- wp:group {"className":"br-fil-etape","layout":{"type":"default"}} -->
+<div class="wp-block-group br-fil-etape"><!-- wp:paragraph {"className":"br-fil-num"} -->
+<p class="br-fil-num">3</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":3} -->
 <h3 class="wp-block-heading">Nous réalisons</h3>
 <!-- /wp:heading -->
 
-<!-- wp:paragraph {"className":"br-muted"} -->
-<p class="br-muted">Aux dates convenues, avec un interlocuteur unique du début à la fin.</p>
+<!-- wp:paragraph {"className":"br-fil-texte"} -->
+<p class="br-fil-texte">Aux dates convenues, avec un interlocuteur unique du début à la fin.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"className":"br-duree"} -->
+<p class="br-duree">Délai annoncé au devis</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group --></div>
-<!-- /wp:column --></div>
-<!-- /wp:columns -->
+<!-- /wp:group -->
 
 <!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button -->

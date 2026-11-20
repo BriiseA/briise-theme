@@ -1,5 +1,12 @@
 # Historique des versions
 
+## 1.10.0
+
+- **Étapes sans photo** : la section « Étapes » devient une frise numérotée qui se remplit au défilement, avec une étiquette de durée par étape (« Gratuite », « Sous 5 jours ouvrés »…). Sur mobile, la frise devient un fil vertical.
+- **Déroulé et prix, côte à côte** (nouvelle section `etapes-prix`, 45 sections) : les étapes sur un fil vertical qui se remplit, le tableau des prix dans la colonne de gauche qui reste à l’écran. Le modèle « Page de service » l’utilise à la place de la version en photos, qui reste dans la bibliothèque.
+- **Sous-menu** : une liste simple, sans image ni prix. Chaque lien peut avoir une courte description (`menu_description` dans le fichier de site, ou Apparence > Éditeur > Navigation). La page en cours est marquée d’un point ; son entrée dans le menu principal porte une pastille.
+- Démo Ferlune : frise sur l’accueil, fil et prix sur les cinq pages d’ouvrages, descriptions dans le sous-menu.
+
 ## 1.9.1
 
 - **Bande de confiance** : la carte est posée à cheval entre l'ouverture et la section suivante, sans bande de couleur parasite en dessous ; elle n'entre plus dans le contrôle du rythme des couleurs.

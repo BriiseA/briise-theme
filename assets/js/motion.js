@@ -3,6 +3,7 @@
  * 1. Apparition des éléments au défilement.
  * 2. Galets vivants : parallaxe à la souris sur le visuel du hero et les formes de l'appel à l'action.
  * 3. Titres principaux révélés ligne par ligne.
+ * 6. Frise et fil des étapes remplis au rythme du défilement.
  * Tout est désactivé si le visiteur a demandé à réduire les animations.
  */
 ( function () {
@@ -167,6 +168,58 @@
 			el.classList.add( 'br-etapes-anim' );
 			ioEtapes.observe( el );
 		} );
+	}
+
+	/* ---------- 6. Frise et fil des étapes : remplis au rythme du défilement ---------- */
+	var fils = Array.prototype.slice.call( document.querySelectorAll( '.br-fil' ) );
+	if ( fils.length ) {
+		var borne = function ( v ) { return Math.max( 0, Math.min( 1, v ) ); };
+		var rafFil = null;
+		var majFils = function () {
+			rafFil = null;
+			var vh = window.innerHeight;
+			fils.forEach( function ( fil ) {
+				var r = fil.getBoundingClientRect();
+				if ( r.bottom < -vh || r.top > vh * 2 ) {
+					return;
+				}
+				var etapes = fil.querySelectorAll( ':scope > .br-fil-etape' );
+				var n = etapes.length;
+				var ronds = Array.prototype.map.call( etapes, function ( e ) {
+					var num = e.querySelector( '.br-fil-num' );
+					var b = ( num || e ).getBoundingClientRect();
+					return b.top + b.height / 2;
+				} );
+				// Frise : les numéros sont sur une même ligne, on suit la position de la section.
+				var frise = n > 1 && Math.abs( ronds[ 0 ] - ronds[ 1 ] ) < 2;
+				var pos = borne( ( vh * 0.85 - r.top ) / ( vh * 0.45 ) ) * ( n - 1 );
+				var entree = r.top < vh * 0.85;
+				Array.prototype.forEach.call( etapes, function ( e, i ) {
+					var f;
+					var on;
+					if ( frise ) {
+						on = entree && pos >= i - 0.001;
+						f = borne( pos - i );
+					} else {
+						// Fil vertical : une étape s'allume quand son numéro passe aux deux tiers de l'écran.
+						var ligne = vh * 0.66;
+						on = ronds[ i ] <= ligne;
+						f = i < n - 1 ? borne( ( ligne - ronds[ i ] ) / ( ronds[ i + 1 ] - ronds[ i ] ) ) : 0;
+					}
+					e.classList.toggle( 'is-on', on );
+					e.style.setProperty( '--br-f', f.toFixed( 3 ) );
+				} );
+			} );
+		};
+		var demanderFils = function () {
+			if ( ! rafFil ) {
+				rafFil = requestAnimationFrame( majFils );
+			}
+		};
+		fils.forEach( function ( fil ) { fil.classList.add( 'br-fil-anim' ); } );
+		majFils();
+		window.addEventListener( 'scroll', demanderFils, { passive: true } );
+		window.addEventListener( 'resize', demanderFils );
 	}
 
 	var start = function () {
