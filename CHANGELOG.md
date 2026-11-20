@@ -1,5 +1,10 @@
 # Historique des versions
 
+## 1.11.0
+
+- **Prochaines disponibilités** (option, dans Mon entreprise > Horaires et annonces, avec le bandeau d’information) : une date et le début de la phrase, par exemple « Prochaines visites possibles à partir du lundi 1er décembre », avec le bouton d’action du site. La ligne disparaît toute seule une fois la date passée, ou 30 jours sans mise à jour ; une case « La date est toujours juste » la relance pour 30 jours. Le même bandeau continue d’annoncer les fermetures et congés 7 jours avant.
+- **Ce que comprend le prix** : deux listes courtes, compris et non compris, sous le tableau des prix de la section « Déroulé et prix », et une nouvelle section `prix-compris` (46 sections). Démo : page Escaliers.
+
 ## 1.10.0
 
 - **Étapes sans photo** : la section « Étapes » devient une frise numérotée qui se remplit au défilement, avec une étiquette de durée par étape (« Gratuite », « Sous 5 jours ouvrés »…). Sur mobile, la frise devient un fil vertical.

@@ -97,6 +97,19 @@ a[href^="tel:"] { white-space: nowrap; }
 .br-bandeau p { margin: 0; }
 .br-bandeau p + p { margin-top: .2rem; }
 .br-bandeau a { color: inherit; font-weight: 600; text-underline-offset: 3px; }
+/* Prochaine disponibilité : un point vert devant la phrase */
+.br-bandeau p.is-dispo::before {
+	content: "";
+	display: inline-block;
+	width: .5rem;
+	height: .5rem;
+	margin-right: .6rem;
+	border-radius: 50%;
+	background: #7fd18b;
+	box-shadow: 0 0 0 3px rgba(127, 209, 139, .25);
+	vertical-align: .08em;
+}
+.br-bandeau p.is-dispo a { margin-left: .5rem; }
 .br-bandeau-fermer {
 	flex: none;
 	width: 2.75rem;

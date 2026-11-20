@@ -198,6 +198,11 @@ const etapesFil = (titre, items, cote = [], label = 'Comment ça se passe', bg =
   ], 'br-etapes-cols'),
 ], { backgroundColor: bg });
 const prixCarte = (rows, note, head = ['Ouvrage', 'Prix posé TTC']) => Box('br-prix-carte', [Table(head, rows), Muted(note)]);
+/* Ce que comprend le prix : deux listes courtes, compris et non compris. */
+const compris = (oui, non = []) => Box('br-compris', [
+  P('Compris dans le prix', 'br-compris-titre'), List(oui, 'br-liste-oui'),
+  ...(non.length ? [P('Non compris', 'br-compris-titre is-non'), List(non, 'br-liste-non')] : []),
+]);
 
 add('benefices-photos', 'offre', 'Ce que ça change, en photos', 'Pages de service : trois bénéfices concrets pour le client, chacun avec sa photo. Ce qu’il y gagne, pas une liste de caractéristiques.',
   benefices('Ce que votre client y gagne', [
@@ -348,7 +353,19 @@ add('etapes-prix', 'parcours', 'Déroulé et prix, côte à côte', 'Pages de se
     ['Le devis', 'Avec quoi : plan, échantillons, prix détaillé.', 'Sous … jours'],
     ['La préparation', 'Où, par qui, ce que le client a à faire.', '… semaines'],
     ['La fin du chantier', 'Propreté, ce que le client reçoit, la garantie.', '… jours'],
-  ], [prixCarte([['Prestation la plus courante', 'À partir de… €'], ['Option fréquente', '+ … €']], 'Ce qui fait varier le prix, en une phrase. Le prix exact figure sur le devis.', ['Prestation', 'Prix TTC'])]));
+  ], [prixCarte([['Prestation la plus courante', 'À partir de… €'], ['Option fréquente', '+ … €']], 'Ce qui fait varier le prix, en une phrase. Le prix exact figure sur le devis.', ['Prestation', 'Prix TTC']),
+    compris(['La visite et le devis', 'Le matériel et la main-d’œuvre', 'Le nettoyage du chantier'], ['Ce que le client doit prévoir de son côté'])]));
+
+add('prix-compris', 'offre', 'Prix et ce qu’il comprend', 'Les prix, puis deux listes courtes : ce qui est compris, ce qui ne l’est pas. Elles répondent à la peur numéro un du prospect, les mauvaises surprises sur le devis.',
+  Section('br-prix-compris', [
+    Cols([
+      Col([Label('Le prix'), H('Ce que comprend le prix', 2), prixCarte([['Prestation la plus courante', 'À partir de… €'], ['Option fréquente', '+ … €']], 'Le prix exact figure sur le devis, après la visite.', ['Prestation', 'Prix TTC'])], { width: '42%' }),
+      Col([Box('br-compris br-compris-cols', [
+        Box('', [P('Compris dans le prix', 'br-compris-titre'), List(['La visite et le devis', 'Le matériel et la main-d’œuvre', 'La pose et le nettoyage du chantier'], 'br-liste-oui')]),
+        Box('', [P('Non compris', 'br-compris-titre is-non'), List(['Ce que le client doit prévoir de son côté', 'Les travaux d’un autre corps de métier'], 'br-liste-non')]),
+      ])], { width: '58%' }),
+    ], 'br-etapes-cols'),
+  ], { backgroundColor: 'fond' }));
 
 add('faq', 'parcours', 'FAQ en accordéon', 'Lever les freins avant le contact. Sur la page choisie comme FAQ, les questions sont transmises à Google.',
   Section('', [Cols([
@@ -473,5 +490,5 @@ add('formulaire-contact', 'contact', 'Formulaire de contact', 'Le formulaire de 
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').mkdirSync(require('path').join(__dirname, 'build'), { recursive: true });
 require('fs').writeFileSync(require('path').join(__dirname, 'build', 'br_sections.json'), JSON.stringify(out, null, 1));
-module.exports = { Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte };
+module.exports = { Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris };
 console.log(Object.keys(S).length, 'sections');

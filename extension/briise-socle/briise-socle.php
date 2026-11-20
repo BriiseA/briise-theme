@@ -3,7 +3,7 @@
  * Plugin Name: Briise Socle
  * Plugin URI: https://briise.fr
  * Description: Le fonctionnement des sites Briise, indépendant du thème : Mon entreprise (coordonnées, horaires, annonces, mentions légales), contrôle du maillage, référencement et données structurées, robots.txt, cartes Coordonnées et Zone, mesure des contacts, mises à jour et fin de collaboration.
- * Version: 1.10.0
+ * Version: 1.11.0
  * Requires at least: 6.6
  * Requires PHP: 7.4
  * Author: Briise
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BRIISE_SOCLE_VERSION', '1.10.0' );
+define( 'BRIISE_SOCLE_VERSION', '1.11.0' );
 define( 'BRIISE_SOCLE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BRIISE_SOCLE_URL', plugin_dir_url( __FILE__ ) );
 

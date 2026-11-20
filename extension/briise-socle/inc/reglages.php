@@ -77,6 +77,9 @@ function briise_defauts( $option ) {
 				'bandeau_lien'    => '',
 				'bandeau_url'     => '',
 				'bandeau_fin'     => '',
+				'dispo_date'      => '',
+				'dispo_texte'     => 'Prochaines visites possibles',
+				'dispo_maj'       => '',
 			);
 		case 'briise_entreprise':
 			return array(
@@ -246,7 +249,7 @@ function briise_nettoie_annonces( $in ) {
 	// Bandeau absent du formulaire (fonction désactivée) : on garde l'existant.
 	if ( ! array_key_exists( 'bandeau_texte', $in ) ) {
 		$avant = briise_reglage( 'briise_annonces' );
-		foreach ( array( 'bandeau_actif', 'bandeau_texte', 'bandeau_lien', 'bandeau_url', 'bandeau_fin' ) as $cle ) {
+		foreach ( array( 'bandeau_actif', 'bandeau_texte', 'bandeau_lien', 'bandeau_url', 'bandeau_fin', 'dispo_date', 'dispo_texte', 'dispo_maj' ) as $cle ) {
 			$out[ $cle ] = $avant[ $cle ];
 		}
 		return $out;
@@ -256,6 +259,16 @@ function briise_nettoie_annonces( $in ) {
 	$out['bandeau_lien']  = sanitize_text_field( $in['bandeau_lien'] ?? '' );
 	$out['bandeau_url']   = esc_url_raw( $in['bandeau_url'] ?? '' );
 	$out['bandeau_fin']   = briise_nettoie_date( $in['bandeau_fin'] ?? '' );
+
+	// Disponibilités : la date de mise à jour sert à les retirer après 30 jours sans nouvelle.
+	$avant              = briise_reglage( 'briise_annonces' );
+	$out['dispo_date']  = briise_nettoie_date( $in['dispo_date'] ?? '' );
+	$out['dispo_texte'] = mb_substr( sanitize_text_field( $in['dispo_texte'] ?? '' ), 0, 80 );
+	if ( '' === $out['dispo_texte'] ) {
+		$out['dispo_texte'] = 'Prochaines visites possibles';
+	}
+	$change            = $out['dispo_date'] !== $avant['dispo_date'] || $out['dispo_texte'] !== $avant['dispo_texte'] || ! empty( $in['dispo_confirmer'] );
+	$out['dispo_maj']  = $out['dispo_date'] ? ( $change || ! $avant['dispo_maj'] ? briise_aujourdhui() : $avant['dispo_maj'] ) : '';
 	return $out;
 }
 

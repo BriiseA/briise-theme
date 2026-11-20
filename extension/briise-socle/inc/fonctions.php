@@ -11,8 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 /* ----- Bandeau d'information ------------------------------------------------ */
 
 /**
- * Messages à afficher aujourd'hui : le bandeau saisi, puis les fermetures
- * exceptionnelles qui commencent dans 7 jours ou moins.
+ * Messages à afficher aujourd'hui : le bandeau saisi, les fermetures
+ * exceptionnelles qui commencent dans 7 jours ou moins, puis la prochaine
+ * disponibilité (retirée une fois sa date passée ou après 30 jours sans mise à jour).
  */
 function briise_bandeau_messages() {
 	if ( ! briise_fonction( 'bandeau' ) ) {
@@ -23,6 +24,11 @@ function briise_bandeau_messages() {
 	$msgs = array();
 	if ( $a['bandeau_actif'] && $a['bandeau_texte'] && ( ! $a['bandeau_fin'] || $a['bandeau_fin'] >= $auj ) ) {
 		$msgs[] = array( 'texte' => $a['bandeau_texte'], 'lien' => $a['bandeau_lien'], 'url' => $a['bandeau_url'] );
+	}
+	$dispo = briise_disponibilite();
+	if ( $dispo ) {
+		$e      = briise_entreprise();
+		$msgs[] = array( 'texte' => $dispo, 'lien' => $e['cta_label'], 'url' => $e['cta_url'], 'classe' => 'is-dispo' );
 	}
 	if ( $a['annoncer'] ) {
 		$dans7 = wp_date( 'Y-m-d', time() + 7 * DAY_IN_SECONDS );
@@ -35,6 +41,25 @@ function briise_bandeau_messages() {
 	return $msgs;
 }
 
+/**
+ * Texte de la prochaine disponibilité, ou chaîne vide si elle est passée,
+ * trop ancienne (30 jours sans mise à jour) ou non renseignée.
+ */
+function briise_disponibilite() {
+	$a = briise_reglage( 'briise_annonces' );
+	if ( empty( $a['dispo_date'] ) || empty( $a['dispo_maj'] ) ) {
+		return '';
+	}
+	$auj = briise_aujourdhui();
+	if ( $a['dispo_date'] < $auj || $a['dispo_maj'] < wp_date( 'Y-m-d', time() - 30 * DAY_IN_SECONDS ) ) {
+		return '';
+	}
+	$jours = array( 'dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi' );
+	$jour  = $jours[ (int) gmdate( 'w', strtotime( $a['dispo_date'] . ' 12:00:00 UTC' ) ) ];
+	$annee = substr( $a['dispo_date'], 0, 4 ) !== wp_date( 'Y' );
+	return $a['dispo_texte'] . ' à partir du ' . $jour . ' ' . briise_date( $a['dispo_date'], $annee );
+}
+
 add_action( 'wp_body_open', function () {
 	$msgs = briise_bandeau_messages();
 	if ( ! $msgs ) {
@@ -43,7 +68,7 @@ add_action( 'wp_body_open', function () {
 	$id = substr( md5( wp_json_encode( $msgs ) ), 0, 10 );
 	echo '<div class="br-bandeau" id="br-bandeau" data-id="' . esc_attr( $id ) . '" role="region" aria-label="Information"><div class="br-bandeau-inner">';
 	foreach ( $msgs as $m ) {
-		echo '<p>' . esc_html( $m['texte'] );
+		echo '<p' . ( empty( $m['classe'] ) ? '' : ' class="' . esc_attr( $m['classe'] ) . '"' ) . '>' . esc_html( $m['texte'] );
 		if ( $m['url'] ) {
 			echo ' <a href="' . esc_url( $m['url'] ) . '">' . esc_html( $m['lien'] ? $m['lien'] : 'En savoir plus' ) . '</a>';
 		}

@@ -86,7 +86,7 @@ const AVIS = Section('', [
 ], { backgroundColor: 'surface' });
 
 /* Récit des pages de service (sections du thème) : en-tête photo, bénéfices, modèles, preuve, déroulé et prix. */
-const { teteSplit, teteMosaique, benefices, modeles, etapesPhotos, etapesFrise, etapesFil, prixCarte, avantApres, heroPhoto, confiance, tuiles, zoneSchema } = B;
+const { teteSplit, teteMosaique, benefices, modeles, etapesPhotos, etapesFrise, etapesFil, prixCarte, compris, avantApres, heroPhoto, confiance, tuiles, zoneSchema } = B;
 const CONF = [['garantie', 'Garantie décennale', '10 ans, attestation jointe au devis'], ['plan', 'Plan 3D offert', 'Votre ouvrage vu dans votre pièce'], ['atelier', '100 % fait à Saran', 'Sans sous-traitance ni catalogue'], ['delai', 'Devis sous 5 jours', 'Après une visite gratuite']];
 const conseil = (t = 'Vous hésitez ? Thomas vous conseille pendant la visite gratuite') => Arrow(t, CTA);
 const guideCarte = (titre, texte, slug) => Col([Box('br-card', [H(titre, 3), Muted(texte), Arrow('Lire le guide', URL(slug))])]);
@@ -96,7 +96,7 @@ const preuve = (titre) => Section('br-section-realisations', [
   Short('[briise_realisations service="auto" nombre="3"]'),
   Box('br-qui', [Img('portrait', '1/1', 'Thomas Ferlune dans son atelier', 'br-qui-photo'), P(`Fabriqués par Thomas et Karim dans notre atelier de Saran, depuis 2011. ${A('L’histoire de l’Atelier Ferlune', 'atelier')}.`)]),
 ]);
-const prixTable = (rows, note) => [prixCarte(rows, note)];
+const prixTable = (rows, note, oui, non) => [prixCarte(rows, note), ...(oui ? [compris(oui, non)] : [])];
 
 /* ---------- Pages ---------- */
 const pages = [];
@@ -198,7 +198,9 @@ page('escaliers-metalliques', 'Escaliers métalliques', 'Escalier métallique su
     ['La fabrication', 'À l’atelier de Saran : découpe, soudure, thermolaquage dans la teinte choisie.', '6 à 8 semaines'],
     ['La pose', 'Par ceux qui l’ont fabriqué. L’ancien escalier est démonté et emporté (fictif).', '1 à 2 jours'],
   ], prixTable([['Escalier droit', 'À partir de 4 800 €'], ['Quart tournant', '7 000 à 14 000 €'], ['Hélicoïdal ou limon central', '9 000 à 16 000 € (fictif)']],
-    'Ce qui fait varier le prix : le nombre de marches, la forme, les marches en chêne, la rampe et la teinte. Le prix du devis ne change plus ensuite.')),
+    'Ce qui fait varier le prix : le nombre de marches, la forme, les marches en chêne, la rampe et la teinte. Le prix du devis ne change plus ensuite.',
+    ['La visite et la prise des cotes', 'Le plan 3D de l’escalier dans votre pièce', 'La fabrication et le thermolaquage dans la teinte choisie', 'La pose par l’équipe de l’atelier', 'Le démontage et l’enlèvement de l’ancien escalier'],
+    ['L’agrandissement de la trémie, l’ouverture dans le plafond : c’est un travail de maçon, nous vous orientons (fictif)', 'Les reprises de peinture autour de l’escalier'])),
   faq('Vos questions sur les escaliers', [
     ['Un escalier en métal est-il bruyant ?', 'Moins qu’on ne le croit. La structure soudée ne grince pas ; le bruit vient des marches. Avec des marches en chêne, ou un revêtement sur les marches en acier, le pas reste discret.'],
     ['Escalier en kit ou sur mesure : lequel choisir ?', 'Un escalier en kit coûte moins cher mais suit des dimensions standard. Si votre trémie, votre hauteur sous plafond ou vos murs sortent du standard, le sur-mesure s’adapte à votre maison, et vous voyez le résultat en 3D avant la fabrication.'],

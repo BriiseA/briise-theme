@@ -28,6 +28,36 @@ $briise = briise_theme_entreprise();
 <!-- wp:paragraph {"className":"br-muted"} -->
 <p class="br-muted">Ce qui fait varier le prix, en une phrase. Le prix exact figure sur le devis.</p>
 <!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+
+<!-- wp:group {"className":"br-compris","layout":{"type":"default"}} -->
+<div class="wp-block-group br-compris"><!-- wp:paragraph {"className":"br-compris-titre"} -->
+<p class="br-compris-titre">Compris dans le prix</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"className":"br-liste-oui"} -->
+<ul class="wp-block-list br-liste-oui"><!-- wp:list-item -->
+<li>La visite et le devis</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Le matériel et la main-d’œuvre</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Le nettoyage du chantier</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph {"className":"br-compris-titre is-non"} -->
+<p class="br-compris-titre is-non">Non compris</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"className":"br-liste-non"} -->
+<ul class="wp-block-list br-liste-non"><!-- wp:list-item -->
+<li>Ce que le client doit prévoir de son côté</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list --></div>
 <!-- /wp:group --></div>
 <!-- /wp:group --></div>
 <!-- /wp:column -->
