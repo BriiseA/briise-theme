@@ -397,8 +397,37 @@ function briise_onglet_identite( $o, $v ) {
 		briise_texte( $o, $v, 'badge_zone_texte', 'Sous le badge', 'Exemple : « Sur site ou en atelier ».' );
 		briise_texte( $o, $v, 'zone_soustitre', 'Sous-titre de la carte Zone', 'Vide : « Depuis notre atelier de [ville] ».' );
 		briise_zone( $o, $v, 'zone_secteurs', 'Secteurs de la zone', 'Une ligne par commune, regroupées par secteur. « # Secteur | précision » ouvre un secteur (3 au plus conseillés) ; « Commune | précision » ajoute une commune ; « + texte » ajoute une étiquette en bas du secteur. Exemple :<br><code># Alpes-Maritimes | Autour de l’atelier</code><br><code>Carros | siège</code><br><code>Nice | et Côte d’Azur</code><br><code>+ Alpes-de-Haute-Provence</code><br>Vide : la carte reprend la liste « Zone d’intervention » ci-dessus.', 9 );
-		briise_zone( $o, $v, 'zone_points', 'Communes du schéma de zone', 'Pour la section « Zone d’intervention en schéma ». Une commune par ligne : nom ; latitude ; longitude. La première ligne est votre adresse, au centre. Les coordonnées se lisent dans Google Maps (clic droit sur la commune). Exemple :<br><code>Saran ; 47.950 ; 1.877</code><br><code>Orléans ; 47.902 ; 1.909</code>', 6 );
+		briise_zone( $o, $v, 'zone_points', 'Communes du schéma de zone', 'Pour la section « Zone d’intervention en liste » (distances calculées seules). Une commune par ligne : nom ; latitude ; longitude. La première ligne est votre adresse, au centre. Les coordonnées se lisent dans Google Maps (clic droit sur la commune). Exemple :<br><code>Saran ; 47.950 ; 1.877</code><br><code>Orléans ; 47.902 ; 1.909</code>', 6 );
 		briise_texte( $o, $v, 'zone_rayon', 'Rayon d’intervention (km)', 'Dessine le cercle autour de votre adresse. Vide : pas de cercle.' );
+		?>
+	</table>
+
+	<h2 class="title">Qualifications et assurances</h2>
+	<p class="description">Uniquement des qualifications réelles et en cours : Qualibat, RGE, Qualifelec, garantie décennale, ISO 9001… Le lien « Vérifier » mène à l’annuaire officiel (france-renov.gouv.fr pour le RGE, qualibat.com pour Qualibat). Le lendemain de la date de fin, la ligne disparaît du site toute seule. Logo : le fichier officiel fourni par l’organisme.<?php echo briise_fonction( 'qualifications' ) ? '' : ' <strong>La fonction « Qualifications » est désactivée (onglet Fonctions) : rien ne s’affiche sur le site.</strong>'; ?></p>
+	<table class="widefat striped br-qualifs-admin" role="presentation" style="max-width:1100px">
+		<thead><tr><th>Nom</th><th>Précision</th><th>Numéro</th><th>Valable jusqu’au</th><th>Lien « Vérifier »</th><th>Logo</th></tr></thead>
+		<tbody>
+		<?php
+		$qs = array_pad( (array) $v['qualifications'], BRIISE_QUALIFS_MAX, array() );
+		foreach ( $qs as $i => $q ) {
+			$q   = wp_parse_args( $q, array( 'nom' => '', 'detail' => '', 'numero' => '', 'fin' => '', 'lien' => '', 'logo' => 0 ) );
+			$n   = (int) $i + 1;
+			$img = $q['logo'] ? wp_get_attachment_image_url( $q['logo'], 'thumbnail' ) : '';
+			echo '<tr>';
+			echo '<td><input type="text" aria-label="Qualification ' . $n . ', nom" placeholder="Qualibat RGE" name="' . briise_nom( $o, array( 'qualifications', $i, 'nom' ) ) . '" value="' . esc_attr( $q['nom'] ) . '"></td>';
+			echo '<td><input type="text" aria-label="Qualification ' . $n . ', précision" placeholder="Menuiseries extérieures" name="' . briise_nom( $o, array( 'qualifications', $i, 'detail' ) ) . '" value="' . esc_attr( $q['detail'] ) . '"></td>';
+			echo '<td><input type="text" style="width:9em" aria-label="Qualification ' . $n . ', numéro" name="' . briise_nom( $o, array( 'qualifications', $i, 'numero' ) ) . '" value="' . esc_attr( $q['numero'] ) . '"></td>';
+			echo '<td><input type="date" aria-label="Qualification ' . $n . ', valable jusqu’au" name="' . briise_nom( $o, array( 'qualifications', $i, 'fin' ) ) . '" value="' . esc_attr( $q['fin'] ) . '"></td>';
+			echo '<td><input type="url" aria-label="Qualification ' . $n . ', lien de vérification" placeholder="https://" name="' . briise_nom( $o, array( 'qualifications', $i, 'lien' ) ) . '" value="' . esc_attr( $q['lien'] ) . '"></td>';
+			echo '<td><div class="br-media' . ( $img ? ' br-media-rempli' : '' ) . '"><div class="br-media-apercu">' . ( $img ? '<img src="' . esc_url( $img ) . '" alt="">' : '' ) . '</div><input type="hidden" name="' . briise_nom( $o, array( 'qualifications', $i, 'logo' ) ) . '" value="' . (int) $q['logo'] . '"><button type="button" class="button br-media-choisir" aria-label="Choisir le logo de la qualification ' . $n . '">Choisir</button><button type="button" class="button-link br-media-retirer">Retirer</button></div></td>';
+			echo '</tr>';
+		}
+		?>
+		</tbody>
+	</table>
+	<table class="form-table" role="presentation">
+		<?php
+		briise_ligne( 'Pied de page', '<input type="hidden" name="' . briise_nom( $o, 'qualifs_pied' ) . '" value="0"><label><input type="checkbox" name="' . briise_nom( $o, 'qualifs_pied' ) . '" value="1" ' . checked( ! empty( $v['qualifs_pied'] ), true, false ) . '> Afficher aussi les qualifications dans le pied de page, sur toutes les pages</label>' );
 		?>
 	</table>
 	<?php

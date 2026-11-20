@@ -15,6 +15,7 @@ $coord      = briise_theme_coordonnees_html() . briise_theme_reseaux_html();
 $largeur    = $horaires ? '40%' : '50%';
 $largeur_co = $horaires ? '30%' : '50%';
 $credit     = briise_theme_credit_html();
+$qualifs    = function_exists( 'briise_qualifications_pied_html' ) ? briise_qualifications_pied_html() : '';
 $services   = briise_theme_pages_services();
 $zone       = $e['areas'] ?? array();
 $zone       = array_slice( array_filter( array_map( 'trim', is_array( $zone ) ? $zone : preg_split( '/\r\n|\r|\n/', (string) $zone ) ) ), 0, 6 );
@@ -86,6 +87,12 @@ foreach ( array( 'mentions-legales' => 'Mentions légales', 'confidentialite' =>
 <!-- /wp:column -->
 <?php endif; ?></div>
 <!-- /wp:columns -->
+<?php if ( $qualifs ) : ?>
+
+<!-- wp:html -->
+<?php echo $qualifs; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans briise_qualifications_pied_html(). ?>
+<!-- /wp:html -->
+<?php endif; ?>
 
 <!-- wp:group {"className":"br-footer-bottom","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between"}} -->
 <div class="wp-block-group br-footer-bottom"><!-- wp:paragraph -->

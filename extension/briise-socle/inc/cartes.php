@@ -194,6 +194,7 @@ add_action( 'init', function () {
 	add_shortcode( 'briise_carte_coordonnees', 'briise_carte_coordonnees_html' );
 	add_shortcode( 'briise_carte_zone', 'briise_carte_zone_html' );
 	add_shortcode( 'briise_zone_schema', 'briise_zone_schema_html' );
+	add_shortcode( 'briise_zone_liste', 'briise_zone_liste_html' );
 } );
 
 /**
@@ -230,31 +231,120 @@ function briise_zone_schema_html() {
 		$km[] = array( $x, $y );
 		$max  = max( $max, sqrt( $x * $x + $y * $y ) );
 	}
-	$cx    = 280;
-	$cy    = 190;
-	$ref   = $rayon > 0 ? max( $rayon, $max ) : $max;
-	$ech   = 165 / $ref;
-	$noms  = array();
-	$svg   = '';
+	$cx  = 280;
+	$cy  = 190;
+	$big = 165;
+	$ref = $rayon > 0 ? max( $rayon, $max ) : $max;
+	$svg = '';
 	if ( $rayon > 0 ) {
-		$r    = round( $rayon * $ech, 1 );
+		$r    = round( $big * sqrt( $rayon / $ref ), 1 );
 		$svg .= '<circle class="br-schema-cercle" cx="' . $cx . '" cy="' . $cy . '" r="' . $r . '" style="fill:none;stroke:var(--wp--preset--color--accent);stroke-width:2;stroke-dasharray:6 6"/>';
 		$svg .= '<text x="' . $cx . '" y="' . round( $cy + $r + 22 ) . '" text-anchor="middle" style="fill:var(--wp--preset--color--texte-doux);font-size:14px">' . esc_html( $rayon ) . ' km</text>';
 	}
+	// Échelle en racine carrée : les communes proches du centre s'écartent un peu,
+	// les plus lointaines restent au bord du cercle. Le schéma reste indicatif.
+	$pos = array();
 	foreach ( $points as $i => $p ) {
-		$x      = round( $cx + $km[ $i ][0] * $ech, 1 );
-		$y      = round( $cy + $km[ $i ][1] * $ech, 1 );
-		$gauche = $x > 430;
-		$tx     = $gauche ? $x - 12 : $x + 12;
+		$d     = sqrt( $km[ $i ][0] ** 2 + $km[ $i ][1] ** 2 );
+		$k     = $d > 0 ? $big * sqrt( $d / $ref ) / $d : 0;
+		$x     = round( $cx + $km[ $i ][0] * $k, 1 );
+		$y     = round( $cy + $km[ $i ][1] * $k, 1 );
+		$cote  = 0 === $i || $x >= $cx ? 'd' : 'g';
+		$pos[] = array( 'x' => $x, 'y' => $y, 'ly' => $y + 5, 'cote' => $cote );
+	}
+	// Étiquettes : de chaque côté, on les écarte verticalement pour qu'elles ne se chevauchent pas.
+	foreach ( array( 'd', 'g' ) as $cote ) {
+		$ids = array_keys( array_filter( $pos, function ( $q ) use ( $cote ) { return $q['cote'] === $cote; } ) );
+		usort( $ids, function ( $a, $b ) use ( $pos ) { return $pos[ $a ]['ly'] <=> $pos[ $b ]['ly']; } );
+		for ( $passe = 0; $passe < 2; $passe++ ) {
+			for ( $n = 1; $n < count( $ids ); $n++ ) {
+				$haut = $pos[ $ids[ $n - 1 ] ]['ly'];
+				if ( $pos[ $ids[ $n ] ]['ly'] - $haut < 21 ) {
+					$pos[ $ids[ $n ] ]['ly'] = $haut + 21;
+				}
+			}
+			// Trop bas : on remonte le groupe.
+			$der = end( $ids );
+			if ( false !== $der && $pos[ $der ]['ly'] > 392 ) {
+				$dec = $pos[ $der ]['ly'] - 392;
+				foreach ( $ids as $id ) {
+					$pos[ $id ]['ly'] -= $dec;
+				}
+				for ( $n = count( $ids ) - 2; $n >= 0; $n-- ) {
+					if ( $pos[ $ids[ $n + 1 ] ]['ly'] - $pos[ $ids[ $n ] ]['ly'] < 21 ) {
+						$pos[ $ids[ $n ] ]['ly'] = $pos[ $ids[ $n + 1 ] ]['ly'] - 21;
+					}
+				}
+			}
+		}
+	}
+	$noms = array();
+	foreach ( $points as $i => $p ) {
+		$q      = $pos[ $i ];
 		$centre = 0 === $i;
+		$droite = 'd' === $q['cote'];
+		$tx     = $droite ? $q['x'] + ( $centre ? 16 : 13 ) : $q['x'] - 13;
 		$svg   .= '<g class="br-schema-point" style="--br-n:' . $i . '">';
-		$svg   .= '<circle cx="' . $x . '" cy="' . $y . '" r="' . ( $centre ? 10 : 6 ) . '" style="fill:var(--wp--preset--color--' . ( $centre ? 'accent' : 'secondaire' ) . ')"/>';
-		$svg   .= '<text x="' . $tx . '" y="' . round( $y + 5 ) . '"' . ( $gauche ? ' text-anchor="end"' : '' ) . ' style="fill:var(--wp--preset--color--texte);font-size:' . ( $centre ? 17 : 15 ) . 'px;font-weight:' . ( $centre ? 700 : 500 ) . '">' . esc_html( $p[0] ) . '</text>';
+		if ( abs( $q['ly'] - 5 - $q['y'] ) > 4 ) {
+			// Étiquette déplacée : un trait fin la relie à son point.
+			$svg .= '<line x1="' . $q['x'] . '" y1="' . $q['y'] . '" x2="' . ( $droite ? $tx - 3 : $tx + 3 ) . '" y2="' . round( $q['ly'] - 5, 1 ) . '" style="stroke:var(--wp--preset--color--texte-doux);stroke-width:1;opacity:.6"/>';
+		}
+		$svg   .= '<circle cx="' . $q['x'] . '" cy="' . $q['y'] . '" r="' . ( $centre ? 10 : 6 ) . '" style="fill:var(--wp--preset--color--' . ( $centre ? 'accent' : 'secondaire' ) . ');stroke:var(--wp--preset--color--surface);stroke-width:2"/>';
+		$svg   .= '<text x="' . round( $tx, 1 ) . '" y="' . round( $q['ly'], 1 ) . '"' . ( $droite ? '' : ' text-anchor="end"' ) . ' style="fill:var(--wp--preset--color--texte);font-size:' . ( $centre ? 17 : 15 ) . 'px;font-weight:' . ( $centre ? 700 : 500 ) . ';paint-order:stroke;stroke:var(--wp--preset--color--surface);stroke-width:4px;stroke-linejoin:round">' . esc_html( $p[0] ) . '</text>';
 		$svg   .= '</g>';
 		$noms[] = $p[0];
 	}
 	$label = ( $rayon > 0 ? sprintf( 'Zone d’intervention : %d km autour de %s', $rayon, $c[0] ) : sprintf( 'Zone d’intervention autour de %s', $c[0] ) ) . ', avec ' . implode( ', ', array_slice( $noms, 1 ) );
 	$html  = '<figure class="br-schema"><svg viewBox="0 0 560 400" role="img" aria-label="' . esc_attr( $label ) . '">' . $svg . '</svg>';
-	$html .= '<figcaption class="br-schema-legende">Schéma indicatif' . ( $rayon > 0 ? ' : ' . esc_html( $rayon ) . ' km autour de ' . esc_html( $c[0] ) : '' ) . '.</figcaption></figure>';
+	$html .= '<figcaption class="br-schema-legende">' . ( $rayon > 0 ? 'Zone de ' . esc_html( $rayon ) . ' km autour de ' . esc_html( $c[0] ) . '. ' : '' ) . 'Schéma indicatif, distances non à l’échelle.</figcaption></figure>';
 	return $html;
+}
+
+/**
+ * Zone d'intervention en liste : les communes du schéma, groupées par distance
+ * (à vol d'oiseau depuis la première ligne), puis une invitation à appeler.
+ * Plus lisible que le schéma sur mobile, et les noms sont du vrai texte pour Google.
+ */
+function briise_zone_liste_html() {
+	$points = briise_zone_schema_points();
+	if ( count( $points ) < 2 ) {
+		return current_user_can( 'edit_pages' ) ? '<p class="br-muted">Zone en liste : ajoutez au moins deux communes dans Mon entreprise &gt; Entreprise &gt; Communes du schéma de zone (la première est votre adresse). Ce message n’est visible que par vous.</p>' : '';
+	}
+	$e     = briise_reglage( 'briise_entreprise' );
+	$rayon = (int) ( $e['zone_rayon'] ?? 0 );
+	$c     = array_shift( $points );
+	$dist  = function ( $p ) use ( $c ) {
+		$x = deg2rad( $p[2] - $c[2] ) * cos( deg2rad( ( $p[1] + $c[1] ) / 2 ) );
+		$y = deg2rad( $p[1] - $c[1] );
+		return max( 1, (int) round( 6371 * sqrt( $x * $x + $y * $y ) ) );
+	};
+	$liste = array();
+	foreach ( $points as $p ) {
+		$liste[] = array( $p[0], $dist( $p ) );
+	}
+	usort( $liste, function ( $a, $b ) { return $a[1] <=> $b[1]; } );
+	$haut    = max( $rayon, end( $liste )[1] );
+	$groupes = array(
+		array( 'Moins de 10 km', 0, 9 ),
+		array( '10 à 20 km', 10, 20 ),
+		array( sprintf( '20 à %d km', max( 21, $haut ) ), 21, PHP_INT_MAX ),
+	);
+	$h = '<div class="br-zone-liste">';
+	foreach ( $groupes as $g ) {
+		$items = array_filter( $liste, function ( $l ) use ( $g ) { return $l[1] >= $g[1] && $l[1] <= $g[2]; } );
+		if ( ! $items ) {
+			continue;
+		}
+		$h .= '<div class="br-zone-groupe"><p class="br-zone-groupe-titre">' . esc_html( $g[0] ) . '</p><ul>';
+		foreach ( $items as $l ) {
+			$h .= '<li class="br-zone-commune">' . esc_html( $l[0] ) . ' <span>' . (int) $l[1] . ' km</span></li>';
+		}
+		$h .= '</ul></div>';
+	}
+	$h .= '<p class="br-zone-note">Distances à vol d’oiseau depuis ' . esc_html( $c[0] ) . '.</p>';
+	$tel = briise_entreprise()['telephone'];
+	if ( $tel ) {
+		$h .= '<p class="br-zone-appel">Votre commune n’est pas dans la liste ? <a href="tel:' . esc_attr( $tel ) . '">Appelez-nous au ' . esc_html( briise_telephone_lisible( $tel ) ) . '</a>' . ( $rayon ? sprintf( ' : si elle est à moins de %d km, nous venons.', $rayon ) : '.' ) . '</p>';
+	}
+	return $h . '</div>';
 }

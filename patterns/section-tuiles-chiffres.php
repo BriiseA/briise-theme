@@ -21,7 +21,11 @@ $briise = briise_theme_entreprise();
 
 <!-- wp:group {"className":"br-tuiles","layout":{"type":"default"}} -->
 <div class="wp-block-group br-tuiles"><!-- wp:group {"className":"br-tuile br-tuile\u002d\u002dgrande","layout":{"type":"default"}} -->
-<div class="wp-block-group br-tuile br-tuile--grande"><!-- wp:paragraph {"className":"br-tuile-chiffre"} -->
+<div class="wp-block-group br-tuile br-tuile--grande"><!-- wp:image {"sizeSlug":"large","linkDestination":"none","className":"br-tuile-fond"} -->
+<figure class="wp-block-image size-large br-tuile-fond"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/sections/paysage.svg' ) ); ?>" alt="Photo à remplacer : votre atelier ou votre équipe au travail. Sans photo, retirez-la : la tuile reste sombre."/></figure>
+<!-- /wp:image -->
+
+<!-- wp:paragraph {"className":"br-tuile-chiffre"} -->
 <p class="br-tuile-chiffre">100 %</p>
 <!-- /wp:paragraph -->
 
@@ -30,8 +34,8 @@ $briise = briise_theme_entreprise();
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
-<!-- wp:group {"className":"br-tuile br-tuile\u002d\u002dlarge","layout":{"type":"default"}} -->
-<div class="wp-block-group br-tuile br-tuile--large"><!-- wp:paragraph {"className":"br-tuile-chiffre"} -->
+<!-- wp:group {"className":"br-tuile br-tuile\u002d\u002dlarge br-tuile\u002d\u002dplan","layout":{"type":"default"}} -->
+<div class="wp-block-group br-tuile br-tuile--large br-tuile--plan"><!-- wp:paragraph {"className":"br-tuile-chiffre"} -->
 <p class="br-tuile-chiffre">3D</p>
 <!-- /wp:paragraph -->
 

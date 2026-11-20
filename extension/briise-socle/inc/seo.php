@@ -366,6 +366,7 @@ function briise_schema_business() {
 		'sameAs'      => $s['same_as'] ? $s['same_as'] : null,
 		'founder'     => $s['person_name'] ? array( '@id' => briise_person_url() . '#personne' ) : null,
 	);
+	$data = apply_filters( 'briise_schema_entreprise', $data );
 	return array_filter( $data, function ( $v ) { return null !== $v && '' !== $v && array() !== $v; } );
 }
 

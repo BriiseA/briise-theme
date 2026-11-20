@@ -1,5 +1,13 @@
 # Historique des versions
 
+## 1.12.0
+
+- **Qualifications et assurances** (fonction activable, onglet Fonctions) : jusqu’à six lignes dans Mon entreprise > Entreprise (nom, précision, numéro, date de fin, lien « Vérifier », logo). Elles s’affichent dans la nouvelle section « Qualifications » (une ligne discrète de logos) et, si c’est coché, dans une rangée du pied de page. Une qualification périmée disparaît seule le lendemain de sa date de fin ; décocher la fonction les masque partout sans les effacer. Elles sont transmises à Google (`hasCredential`).
+- **Chiffres en tuiles** : la grande tuile accepte une photo de fond, assombrie en bas pour garder le texte lisible ; la tuile large peut recevoir une trame de plan (`br-tuile--plan`). Sans photo, la tuile reste sombre.
+- **Cartes de service avec photos** (nouvelle section `trois-cartes-photos`) : la photo occupe la carte, titre et texte sur un dégradé sombre, toute la carte mène au service. Une carte dont on retire la photo reprend l’aspect simple.
+- **Zone d’intervention en liste** (`[briise_zone_liste]`, section `zone-liste`) : les communes groupées par distance, calculée seule depuis les coordonnées déjà saisies, puis une invitation à appeler. Elle remplace la section en schéma, peu lisible sur mobile ; le code court `[briise_zone_schema]` reste disponible et mieux réparti (échelle adoucie, noms qui ne se chevauchent plus).
+- 48 sections. Démo Ferlune : photo derrière les chiffres, cartes d’ouvrages avec photos (sans les prix), zone en liste, deux qualifications fictives.
+
 ## 1.11.0
 
 - **Prochaines disponibilités** (option, dans Mon entreprise > Horaires et annonces, avec le bandeau d’information) : une date et le début de la phrase, par exemple « Prochaines visites possibles à partir du lundi 1er décembre », avec le bouton d’action du site. La ligne disparaît toute seule une fois la date passée, ou 30 jours sans mise à jour ; une case « La date est toujours juste » la relance pour 30 jours. Le même bandeau continue d’annoncer les fermetures et congés 7 jours avant.

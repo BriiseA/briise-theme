@@ -49,6 +49,7 @@ function briise_fonctions_liste() {
 		'photos_webp'   => array( 'Photos en WebP', 'Chaque photo JPEG ou PNG envoyée dans la médiathèque est enregistrée en WebP : 2 à 3 fois plus légère, même qualité à l’œil, pages plus rapides. Les photos de plus de 2 560 px sont réduites par WordPress.', true ),
 		'securite'      => array( 'Protections de sécurité', 'Cache les identifiants de connexion, ferme XML-RPC, ajoute les en-têtes de sécurité, désactive l’éditeur de code et rend neutre le message d’erreur de connexion. À laisser activé, sauf si une application externe a besoin de XML-RPC.', true ),
 		'credit'        => array( 'Crédit de l’agence en pied de page', 'Un petit lien « Site réalisé par Briise » en bas du pied de page, en nofollow (aucun risque pour le référencement du client). À activer seulement avec l’accord du client, prévu au contrat. Coupé automatiquement en fin de collaboration.', false ),
+		'qualifications' => array( 'Qualifications et assurances', 'Les qualifications saisies dans l’onglet Entreprise (logo, numéro, lien « Vérifier ») s’affichent dans la section « Qualifications » et, si c’est coché, dans le pied de page. Décoché : elles disparaissent partout, sans être effacées.', true ),
 		'bandeau'       => array( 'Bandeau d’information', 'Un message en haut du site (fermeture, nouveauté), avec date de fin. L’éditeur le gère dans l’onglet « Horaires et annonces ».', false ),
 	);
 }
@@ -123,6 +124,8 @@ function briise_defauts( $option ) {
 				'zone_secteurs'       => '',
 				'zone_points'         => '',
 				'zone_rayon'          => '',
+				'qualifications'      => array(),
+				'qualifs_pied'        => true,
 			);
 		case 'briise_legal':
 			return array(
@@ -343,6 +346,8 @@ function briise_nettoie_entreprise( $in ) {
 		'zone_secteurs'       => sanitize_textarea_field( $in['zone_secteurs'] ?? '' ),
 		'zone_points'         => sanitize_textarea_field( $in['zone_points'] ?? '' ),
 		'zone_rayon'          => (string) absint( $in['zone_rayon'] ?? 0 ),
+		'qualifications'      => briise_nettoie_qualifications( $in['qualifications'] ?? array() ),
+		'qualifs_pied'        => array_key_exists( 'qualifs_pied', $in ) ? ! empty( $in['qualifs_pied'] ) : true,
 	);
 }
 

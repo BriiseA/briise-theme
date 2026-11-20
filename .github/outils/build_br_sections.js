@@ -23,6 +23,8 @@ const Lead = (t) => P(t, 'br-lead');
 const Muted = (t) => P(t, 'br-muted');
 const Img = (name, ratio = '4/3', cls = 'is-style-br-arrondi', alt = 'Photo à remplacer : décrivez ce qu’elle montre') =>
   cb('core/image', { url: IMG(name), alt: fr(alt), aspectRatio: ratio, scale: 'cover', sizeSlug: 'full', linkDestination: 'none', className: cls });
+/* Photo de fond d'une tuile ou d'une carte : un bloc image ordinaire, que le client remplace ou retire. Sans elle, la tuile garde son aspect simple. */
+const ImgFond = (name, cls, alt) => cb('core/image', { url: IMG(name), alt: fr(alt || 'Photo à remplacer : décrivez ce qu’elle montre'), sizeSlug: 'large', linkDestination: 'none', className: cls });
 const Btn = (text, url, cls, extra = {}) => cb('core/button', { text: text === CTA_LABEL ? text : fr(text), url, ...(cls ? { className: cls } : {}), ...extra });
 const Btns = (...b) => cb('core/buttons', {}, b);
 const MainBtns = (second) => Btns(Btn(CTA_LABEL, CTA), ...(second ? [Btn(second[0], second[1], 'is-style-outline')] : []));
@@ -130,7 +132,15 @@ const confiance = (items) => cb('core/group', { align: 'full', className: 'br-co
   cb('core/group', { className: 'br-confiance', layout: { type: 'default' } }, items.map(([ic, t, s]) => Box('br-confiance-item is-icone-' + ic, [P(t, 'br-confiance-titre'), P(s, 'br-confiance-sous')]))),
 ]);
 const tuiles = (label, titre, items, chapo, apres = []) => Section('br-tuiles-section', [Head([Label(label), H(titre, 2), ...(chapo ? [Lead(chapo)] : [])]),
-  Box('br-tuiles', items.map(([v, c, t]) => Box('br-tuile' + (v ? ' br-tuile--' + v : ''), [P(c, 'br-tuile-chiffre'), P(t, 'br-tuile-texte')]))), ...apres]);
+  Box('br-tuiles', items.map(([v, c, t, img, alt]) => Box('br-tuile' + (v ? ' ' + v.split(' ').map((x) => 'br-tuile--' + x).join(' ') : ''), [
+    ...(img ? [ImgFond(img, 'br-tuile-fond', alt)] : []), P(c, 'br-tuile-chiffre'), P(t, 'br-tuile-texte')]))), ...apres]);
+/* Zone d'intervention en liste : communes groupées par distance, calculée depuis Mon entreprise. */
+const zoneListe = (label, titre, chapo, lien) => Section('br-zone-liste-section', [Cols([
+  Col([Label(label), H(titre, 2), Lead(chapo), ...(lien ? [Arrow(lien[0], lien[1])] : [])], { width: '42%' }),
+  Col([Short('[briise_zone_liste]')], { width: '58%' }),
+], 'br-etapes-cols')]);
+/* Qualifications : une ligne de logos avec le lien « Vérifier ». */
+const qualifs = (titre = 'Qualifié et assuré') => Section('br-qualifs-section', [Short(`[briise_qualifications titre="${titre}"]`)]);
 const zoneSchema = (label, titre, chapo, lien) => Section('br-zone-schema', [Cols([
   Col([Label(label), H(titre, 2), Lead(chapo), ...(lien ? [Arrow(lien[0], lien[1])] : [])], { verticalAlignment: 'center', width: '44%' }),
   Col([Short('[briise_zone_schema]')], { verticalAlignment: 'center', width: '56%' }),
@@ -143,10 +153,13 @@ add('bande-confiance', 'confiance', 'Bande de confiance', 'Juste sous l’ouvert
   confiance([['garantie', 'Garantie décennale', 'Attestation jointe au devis'], ['devis', 'Devis gratuit', 'Sous 5 jours ouvrés'], ['local', 'Une équipe locale', 'À votre ville et alentour'], ['avis', 'Note Google', 'À n’afficher que si elle est réelle']]));
 
 add('tuiles-chiffres', 'confiance', 'Chiffres en tuiles', 'Vos preuves en chiffres, en tuiles de tailles différentes : une grande pour le chiffre le plus fort, les autres autour. Les chiffres comptent jusqu’à leur valeur quand la section apparaît.',
-  tuiles('Pourquoi nous choisir', 'Ce qui fait la différence', [['grande', '100 %', 'Le chiffre le plus fort, avec une phrase qui dit ce qu’il garantit au client.'], ['large', '3D', 'Un avantage concret, en une phrase.'], ['', '5 jours', 'Un délai que vous tenez.'], ['accent', '1', 'seul interlocuteur, du devis à la fin du chantier']]));
+  tuiles('Pourquoi nous choisir', 'Ce qui fait la différence', [['grande', '100 %', 'Le chiffre le plus fort, avec une phrase qui dit ce qu’il garantit au client.', 'paysage', 'Photo à remplacer : votre atelier ou votre équipe au travail. Sans photo, retirez-la : la tuile reste sombre.'], ['large plan', '3D', 'Un avantage concret, en une phrase.'], ['', '5 jours', 'Un délai que vous tenez.'], ['accent', '1', 'seul interlocuteur, du devis à la fin du chantier']]));
 
-add('zone-schema', 'contact', 'Zone d’intervention en schéma', 'Un schéma de la zone : votre adresse au centre, le rayon d’intervention et les communes où vous travaillez. Il se dessine à partir de Mon entreprise > Coordonnées > Communes du schéma (nom ; latitude ; longitude).',
-  zoneSchema('Zone d’intervention', 'Nous intervenons à 30 km autour de votre ville', 'Les communes principales de votre zone, et ce qui se passe au-delà.', ['Toutes les communes où nous intervenons', URL('zone-intervention')]));
+add('zone-liste', 'contact', 'Zone d’intervention en liste', 'Les communes où vous intervenez, groupées par distance (moins de 10 km, 10 à 20 km…), puis une invitation à appeler. Les distances se calculent seules à partir de Mon entreprise > Entreprise > Communes du schéma de zone (nom ; latitude ; longitude, votre adresse en premier).',
+  zoneListe('Zone d’intervention', 'Nous intervenons à 30 km autour de votre ville', 'Les secteurs où vous travaillez, en une phrase. La visite ou le devis sont-ils gratuits partout ?', ['Toutes les communes où nous intervenons', URL('zone-intervention')]));
+
+add('qualifications', 'confiance', 'Qualifications et assurances', 'Une ligne discrète : le logo de chaque qualification (Qualibat, RGE, décennale…), une précision et le lien « Vérifier » vers l’annuaire officiel. Se remplit dans Mon entreprise > Entreprise ; une qualification périmée disparaît seule. Rien ne s’affiche si la fonction est coupée.',
+  qualifs());
 
 /* ----- Offre ----- */
 
@@ -155,6 +168,17 @@ const carte = (n) => Col([Box('br-card', [
   Num('0' + n), H(`{{SERVICE:${n}}}`, 3), Muted('Deux phrases pour décrire ce service, pour qui il est fait et ce qu’il apporte.'),
   Arrow(`{{SERVICE:${n}}} en détail`, URL(`service-${n}`)),
 ])]);
+const cartePhoto = (n) => Col([Box('br-card', [
+  ImgFond(n === 1 ? 'portrait' : n === 2 ? 'carre' : 'paysage', 'br-card-fond', 'Photo à remplacer : une réalisation de ce service'),
+  Num('0' + n), H(`{{SERVICE:${n}}}`, 3), Muted('Deux phrases pour décrire ce service, pour qui il est fait et ce qu’il apporte.'),
+  Arrow(`{{SERVICE:${n}}} en détail`, URL(`service-${n}`)),
+])]);
+add('trois-cartes-photos', 'offre', 'Trois cartes de service avec photos', 'Chaque carte est une photo pleine hauteur, avec le titre et le texte sur un dégradé sombre ; toute la carte mène à la page du service. Retirez la photo d’une carte : elle reprend l’aspect simple.',
+  Section('', [
+    sectionHead('Ce que nous faisons', ['Tous nos services', URL('services')]),
+    Cols([cartePhoto(1), cartePhoto(2), cartePhoto(3)]),
+  ], { backgroundColor: 'surface' }));
+
 add('trois-cartes', 'offre', 'Trois cartes de service', 'Présenter l’offre en trois blocs, chacun menant à sa page.',
   Section('', [
     sectionHead('Ce que nous faisons', ['Tous nos services', URL('services')]),
@@ -490,5 +514,5 @@ add('formulaire-contact', 'contact', 'Formulaire de contact', 'Le formulaire de 
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').mkdirSync(require('path').join(__dirname, 'build'), { recursive: true });
 require('fs').writeFileSync(require('path').join(__dirname, 'build', 'br_sections.json'), JSON.stringify(out, null, 1));
-module.exports = { Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris };
+module.exports = { Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
 console.log(Object.keys(S).length, 'sections');

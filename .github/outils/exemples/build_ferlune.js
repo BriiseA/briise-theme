@@ -86,7 +86,7 @@ const AVIS = Section('', [
 ], { backgroundColor: 'surface' });
 
 /* Récit des pages de service (sections du thème) : en-tête photo, bénéfices, modèles, preuve, déroulé et prix. */
-const { teteSplit, teteMosaique, benefices, modeles, etapesPhotos, etapesFrise, etapesFil, prixCarte, compris, avantApres, heroPhoto, confiance, tuiles, zoneSchema } = B;
+const { teteSplit, teteMosaique, benefices, modeles, etapesPhotos, etapesFrise, etapesFil, prixCarte, compris, avantApres, heroPhoto, confiance, tuiles, zoneSchema, zoneListe, qualifs, ImgFond } = B;
 const CONF = [['garantie', 'Garantie décennale', '10 ans, attestation jointe au devis'], ['plan', 'Plan 3D offert', 'Votre ouvrage vu dans votre pièce'], ['atelier', '100 % fait à Saran', 'Sans sous-traitance ni catalogue'], ['delai', 'Devis sous 5 jours', 'Après une visite gratuite']];
 const conseil = (t = 'Vous hésitez ? Thomas vous conseille pendant la visite gratuite') => Arrow(t, CTA);
 const guideCarte = (titre, texte, slug) => Col([Box('br-card', [H(titre, 3), Muted(texte), Arrow('Lire le guide', URL(slug))])]);
@@ -117,19 +117,20 @@ page('accueil', 'Accueil', 'Métallier à Saran : escaliers, garde-corps sur mes
   }),
   confiance(CONF),
   tuiles('Pourquoi nous choisir', 'Les mêmes mains, du dessin à la pose', [
-    ['grande', '100 %', 'fabriqué dans notre atelier de Saran, sans sous-traitance ni catalogue.'],
-    ['large', '3D', 'Un plan de votre ouvrage dans votre pièce, joint au devis : vous validez avant qu’on fabrique.'],
+    ['grande', '100 %', 'fabriqué dans notre atelier de Saran, sans sous-traitance ni catalogue.', 'paysage', 'Karim soude une rampe d’escalier à l’atelier de Saran'],
+    ['large plan', '3D', 'Un plan de votre ouvrage dans votre pièce, joint au devis : vous validez avant qu’on fabrique.'],
     ['', '5 jours', 'pour recevoir le devis après la visite'],
     ['accent', '1', 'seul interlocuteur, Thomas, du devis à la pose'],
   ], null, [Arrow('Découvrir l’atelier et l’équipe', URL('atelier'))]),
+  qualifs(),
   Section('', [
     sectionHead('Ce que nous fabriquons', ['Tous nos ouvrages sur mesure', URL('ouvrages')]),
     P(`Escaliers, garde-corps et verrières d’intérieur, et aussi ${A('nos portails et portillons en acier', 'portails')}.`),
     Cols([
-      ['01', 'Escaliers métalliques', 'Droits, quart tournants ou hélicoïdaux, marches en acier ou en chêne. À partir de 4 800 € posé.', 'Escaliers métalliques en détail', 'escaliers-metalliques'],
-      ['02', 'Garde-corps et rampes', 'Pour une mezzanine, un escalier ou une terrasse, en acier ou en acier et verre. À partir de 390 € le mètre posé.', 'Garde-corps en détail', 'garde-corps'],
-      ['03', 'Verrières d’intérieur', 'Une verrière atelier pour faire entrer la lumière sans ouvrir la pièce. À partir de 750 € le m² posé.', 'Verrières d’intérieur en détail', 'verrieres-interieur'],
-    ].map(([n, t, d, l, s]) => Col([Box('br-card', [Num(n), H(t, 3), Muted(d), Arrow(l, URL(s))])]))),
+      ['01', 'Escaliers métalliques', 'Droits, quart tournants ou hélicoïdaux, marches en acier ou en chêne.', 'Escaliers métalliques en détail', 'escaliers-metalliques', 'portrait', 'Escalier quart tournant en acier noir, marches en chêne, posé à Ingré'],
+      ['02', 'Garde-corps et rampes', 'Pour une mezzanine, un escalier ou une terrasse, en acier ou en acier et verre.', 'Garde-corps en détail', 'garde-corps', 'carre', 'Garde-corps de mezzanine en acier et verre à Olivet'],
+      ['03', 'Verrières d’intérieur', 'Une verrière atelier pour faire entrer la lumière sans ouvrir la pièce.', 'Verrières d’intérieur en détail', 'verrieres-interieur', 'paysage', 'Verrière atelier noire entre cuisine et séjour à Saran'],
+    ].map(([n, t, d, l, s, img, alt]) => Col([Box('br-card', [ImgFond(img, 'br-card-fond', alt), Num(n), H(t, 3), Muted(d), Arrow(l, URL(s))])]))),
   ], { backgroundColor: 'surface' }),
   etapesFrise('Votre projet en quatre étapes', [
     ['Visite et mesures', 'Thomas vient chez vous, écoute votre projet et prend les cotes.', 'Gratuite'],
@@ -143,7 +144,7 @@ page('accueil', 'Accueil', 'Métallier à Saran : escaliers, garde-corps sur mes
     projet('carre-3', 'Verrière', 'Saran', 'Verrière de cuisine', 'Verrière atelier noire, 2026 (fictif).', 'Verrière d’intérieur noire entre une cuisine et un salon, à Saran'),
   ]),
   AVIS,
-  zoneSchema('Zone d’intervention', 'Nous intervenons à Saran et à 35 km autour', 'Métropole d’Orléans, Beauce et Val de Loire. La visite et le devis sont gratuits dans toute la zone.', ['Toutes les communes où nous intervenons', URL('zone-intervention')]),
+  zoneListe('Zone d’intervention', 'Nous intervenons à Saran et à 35 km autour', 'Métropole d’Orléans, Beauce et Val de Loire. La visite et le devis sont gratuits dans toute la zone.', ['Toutes les communes où nous intervenons', URL('zone-intervention')]),
   bandeau('Un projet d’escalier, de garde-corps ou de verrière ?', 'Le devis est gratuit, avec un plan 3D de votre ouvrage.'),
 ]);
 
@@ -650,6 +651,10 @@ const site = {
     badge_coord_titre: 'Visite et devis gratuits', badge_coord_texte: 'Plan 3D sous 5 jours ouvrés',
     badge_zone_titre: 'Déplacement gratuit', badge_zone_texte: 'Dans un rayon de 35 km',
     zone_rayon: '35',
+    qualifications: [
+      { nom: 'Garantie décennale', detail: 'Exemple Assurances (fictif)', numero: '000000' },
+      { nom: 'Qualibat', detail: 'Métallerie, serrurerie (fictif)', numero: 'E-000000', fin: '2028-03-31', lien: 'https://www.qualibat.com/' },
+    ],
     zone_points: ['Saran ; 47.950 ; 1.877', 'Orléans ; 47.902 ; 1.909', 'Ingré ; 47.919 ; 1.823', 'Fleury-les-Aubrais ; 47.933 ; 1.917', 'Olivet ; 47.863 ; 1.900', 'Saint-Jean-de-Braye ; 47.913 ; 1.971', 'Chécy ; 47.894 ; 2.023', 'Meung-sur-Loire ; 47.828 ; 1.700'].join('\n'),
     zone_secteurs: [
       '# Autour de l’atelier | Saran et environs', 'Saran | atelier et siège', 'Fleury-les-Aubrais | garde-corps de terrasse', 'Ingré | escalier, verrière, garde-corps',
