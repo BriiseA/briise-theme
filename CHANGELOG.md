@@ -1,5 +1,12 @@
 # Historique des versions
 
+## 1.13.1
+
+- **Photos dans le fichier de site** : une liste `images` (nom => adresse) remplace les images d’exemple par les vraies photos à l’import, dans les pages comme dans les fiches de réalisation. Une adresse qui commence par `/` est complétée avec celle du site. Un nom inconnu affiche une image d’exemple au lieu d’une image cassée.
+- **Fiches de réalisation importées** : leurs liens `{{URL:…}}` et photos `{{IMG:…}}` sont remplis comme ceux des pages.
+- Nouvelles classes pour les pages de prestation : tête avec trois chiffres (`br-stats`) et photo qui porte la prochaine date libre, cartes de formules (`br-formule`, `is-mise-en-avant`), liste cochée simple (`br-liste-simple`), texte d’article (`br-article-texte`). Les liens écrits dans l’appel à l’action sur photo restent lisibles ; les cartes de faits restent visibles sur fond clair.
+- **Deuxième site d’exemple** : Lison Vautrin, photographe à Olivet (cliente fictive, ambiance Galerie), 14 pages et 5 histoires du portfolio, construit par `.github/outils/exemples/build_lison.js`. Le banc vérifie ses blocs et la longueur des titres et descriptions Google.
+
 ## 1.13.0
 
 - **Ambiance Galerie** pour les métiers de l’image et de l’événement : fond très clair, rose poudré, framboise en accent, grands titres serrés en Bricolage Grotesque, texte en Geist (police libre, fournie avec le thème), photos et boutons très arrondis. Contraste AA vérifié.

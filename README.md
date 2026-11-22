@@ -86,7 +86,7 @@ Arrondis et formes : `--wp--custom--rayon--grand|moyen|petit|bouton` et `--wp--c
 
 **Photos.** Chaque photo JPEG ou PNG envoyée est enregistrée en WebP (Fonctions > Photos en WebP) ; WordPress réduit celles de plus de 2 560 px.
 
-**Banc d'essai.** `.github/outils/banc/lancer.sh` installe un WordPress neuf, importe le site d'exemple Atelier Ferlune (métallerie fictive à Saran) et vérifie tout (blocs, pages, Contrôle, sécurité, accessibilité). GitHub le lance à chaque envoi ; une version n'est publiée que s'il est au vert.
+**Banc d'essai.** `.github/outils/banc/lancer.sh` installe un WordPress neuf, importe le site d'exemple Atelier Ferlune (métallerie fictive à Saran) et vérifie tout (blocs, pages, Contrôle, sécurité, accessibilité). Il vérifie aussi les blocs du second site d'exemple, Lison Vautrin (photographe fictive à Olivet, ambiance Galerie, `exemples/build_lison.js`). GitHub le lance à chaque envoi ; une version n'est publiée que s'il est au vert.
 
 **Crédit de l'agence.** Mon entreprise > Fonctions > « Crédit de l'agence en pied de page » : « Site réalisé par Briise » (texte du début modifiable), en petit à côté des mentions légales, lien en nofollow vers briise.fr. Désactivé par défaut, à activer avec l'accord du client ; coupé automatiquement quand on fige les contenus en fin de collaboration.
 
@@ -152,7 +152,7 @@ Fichier JSON importé dans Démarrage. Seule la liste `pages` est obligatoire. D
 }
 ```
 
-Dans `markup`, les repères `{{CTA}}`, `{{CTA_LABEL}}`, `{{URL:slug}}`, `{{IMG:nom}}` et `{{TITRE}}` sont remplacés à l'import, ainsi que `{{SERVICE:n}}` (nom du n-ième service) et `{{URL:service-n}}` (sa page). Les services sont les sous-pages de la page des services, dans l'ordre du fichier. `"legales": false` évite la création des pages légales. `reservation_lieux` (facultatif) : les lieux proposés dans le formulaire de réservation. `menu_description` (facultatif) ajoute une courte ligne sous le lien dans le sous-menu ; elle se modifie ensuite dans Apparence > Éditeur > Navigation.
+Dans `markup`, les repères `{{CTA}}`, `{{CTA_LABEL}}`, `{{URL:slug}}`, `{{IMG:nom}}` et `{{TITRE}}` sont remplacés à l'import, ainsi que `{{SERVICE:n}}` (nom du n-ième service) et `{{URL:service-n}}` (sa page). Les services sont les sous-pages de la page des services, dans l'ordre du fichier. `"legales": false` évite la création des pages légales. `reservation_lieux` (facultatif) : les lieux proposés dans le formulaire de réservation. `images` (facultatif) : les vraies photos, `{ "naissance-lange": "https://…/naissance.jpg" }` ; chaque repère `{{IMG:naissance-lange}}` des pages et des fiches prend cette adresse (une adresse qui commence par `/` est complétée avec celle du site). `menu_description` (facultatif) ajoute une courte ligne sous le lien dans le sous-menu ; elle se modifie ensuite dans Apparence > Éditeur > Navigation.
 
 Fiches de réalisation : liste `realisations`, créées après les pages (chacune retrouve son service par son adresse) ; les photos s'ajoutent ensuite dans chaque fiche.
 

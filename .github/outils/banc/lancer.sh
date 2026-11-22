@@ -34,6 +34,7 @@ etape "1. Blocs et fichiers générés"
 	python3 write_sections.py > /dev/null
 	node build_br_kits.js > /dev/null 2>&1
 	node exemples/build_ferlune.js > /dev/null 2>&1
+	node exemples/build_lison.js > /dev/null 2>&1
 )
 python3 "$ICI/blocs.py" "$OUTILS" "$DEPOT"
 for f in sections kits ferlune; do
@@ -41,8 +42,12 @@ for f in sections kits ferlune; do
 	echo "  $f : $R"
 	case "$R" in *"invalid blocks: 0") ;; *) echec "blocs invalides dans $f" ;; esac
 done
-if ! git -C "$DEPOT" diff --quiet -- patterns inc/kits.json .github/outils/exemples/site-ferlune.json; then
-	git -C "$DEPOT" diff --stat -- patterns inc/kits.json .github/outils/exemples/site-ferlune.json
+# Lison Vautrin (photographe, ambiance Galerie) : blocs valides, titres et descriptions Google dans les limites.
+R=$(node "$OUTILS/validate.js" "$OUTILS/build/lison_blocs.json" 2>/dev/null | tail -1)
+echo "  lison : $R"
+case "$R" in *"invalid blocks: 0") ;; *) echec "blocs invalides dans le site de Lison" ;; esac
+if ! git -C "$DEPOT" diff --quiet -- patterns inc/kits.json .github/outils/exemples/site-ferlune.json .github/outils/exemples/site-lison.json; then
+	git -C "$DEPOT" diff --stat -- patterns inc/kits.json .github/outils/exemples/site-ferlune.json .github/outils/exemples/site-lison.json
 	echec "les fichiers générés ne sont pas à jour : relancer les outils et enregistrer le résultat"
 fi
 

@@ -48,8 +48,15 @@ function briise_kit_remplir( $markup, $liens = array(), $pages = array(), $titre
 		$repli               = $liens['services'] ?? '';
 		return isset( $pages[ $repli ] ) ? get_permalink( $pages[ $repli ] ) : home_url( '/' );
 	};
-	$markup = preg_replace_callback( '/\{\{IMG:([a-z0-9-]+)\}\}/', function ( $m ) {
-		return esc_url( get_theme_file_uri( 'assets/images/sections/' . $m[1] . '.svg' ) );
+	// Photos : celles du fichier de site (« images » : nom => adresse), sinon l'image d'exemple du thème.
+	$images = $liens['__images'] ?? array();
+	$markup = preg_replace_callback( '/\{\{IMG:([a-z0-9-]+)\}\}/', function ( $m ) use ( $images ) {
+		if ( ! empty( $images[ $m[1] ] ) ) {
+			$u = $images[ $m[1] ];
+			return esc_url( 0 === strpos( $u, '/' ) ? home_url( $u ) : $u );
+		}
+		$nom = file_exists( get_theme_file_path( 'assets/images/sections/' . $m[1] . '.svg' ) ) ? $m[1] : 'carre';
+		return esc_url( get_theme_file_uri( 'assets/images/sections/' . $nom . '.svg' ) );
 	}, $markup );
 	// Les services du client, dans l'ordre : {{SERVICE:n}} (nom) et {{URL:service-n}} (page).
 	$services = $liens['__services'] ?? array();
@@ -140,6 +147,7 @@ function briise_plan_installer( $plan ) {
 	$manquants = array();
 	// Les services : sous-pages de la page des services (à défaut, de la page qui a le plus de sous-pages).
 	$liens   = $plan['liens'] ?? array();
+	$liens['__images'] = array_map( 'sanitize_text_field', (array) ( $plan['images'] ?? array() ) );
 	$parents = array_count_values( array_filter( array_column( $plan['pages'], 'parent' ) ) );
 	$p_serv  = $liens['services'] ?? ( $parents ? array_search( max( $parents ), $parents, true ) : '' );
 	$liens['__services'] = array();
@@ -211,7 +219,14 @@ function briise_plan_installer( $plan ) {
 	// 7. Réalisations (extension Briise Socle), après les pages : chacune retrouve son service.
 	$realisations = array();
 	if ( ! empty( $plan['realisations'] ) && function_exists( 'briise_realisations_importer' ) ) {
-		$realisations = briise_realisations_importer( $plan['realisations'], $statut );
+		// Les liens et photos écrits dans une fiche ({{URL:…}}, {{IMG:…}}) sont remplis comme ceux des pages.
+		$fiches = array_map( function ( $r ) use ( $liens, $ids ) {
+			if ( ! empty( $r['markup'] ) ) {
+				$r['markup'] = briise_kit_remplir( $r['markup'], $liens, $ids, $r['titre'] ?? '' );
+			}
+			return $r;
+		}, (array) $plan['realisations'] );
+		$realisations = briise_realisations_importer( $fiches, $statut );
 	}
 
 	// 8. Formulaires (Fluent Forms) : créés d'office si une page les utilise et que l'extension est là.
