@@ -48,15 +48,16 @@ function briise_kit_remplir( $markup, $liens = array(), $pages = array(), $titre
 		$repli               = $liens['services'] ?? '';
 		return isset( $pages[ $repli ] ) ? get_permalink( $pages[ $repli ] ) : home_url( '/' );
 	};
-	// Photos : celles du fichier de site (« images » : nom => adresse), sinon l'image d'exemple du thème.
+	// Photos : celles du fichier de site (« images » : nom => adresse), sinon celle de la Médiathèque
+	// qui porte ce nom de fichier, sinon l'image d'exemple du thème (qui garde le nom pour plus tard).
 	$images = $liens['__images'] ?? array();
 	$markup = preg_replace_callback( '/\{\{IMG:([a-z0-9-]+)\}\}/', function ( $m ) use ( $images ) {
 		if ( ! empty( $images[ $m[1] ] ) ) {
 			$u = $images[ $m[1] ];
 			return esc_url( 0 === strpos( $u, '/' ) ? home_url( $u ) : $u );
 		}
-		$nom = file_exists( get_theme_file_path( 'assets/images/sections/' . $m[1] . '.svg' ) ) ? $m[1] : 'carre';
-		return esc_url( get_theme_file_uri( 'assets/images/sections/' . $nom . '.svg' ) );
+		$id = briise_photo_media( $m[1] );
+		return esc_url( $id ? wp_get_attachment_image_url( $id, 'full' ) : briise_photo_exemple( $m[1] ) );
 	}, $markup );
 	// Les services du client, dans l'ordre : {{SERVICE:n}} (nom) et {{URL:service-n}} (page).
 	$services = $liens['__services'] ?? array();
@@ -71,12 +72,154 @@ function briise_kit_remplir( $markup, $liens = array(), $pages = array(), $titre
 	$markup = preg_replace_callback( '/\{\{URL:([a-z0-9-]*)\}\}/', function ( $m ) use ( $url ) {
 		return esc_url( '' === $m[1] ? home_url( '/' ) : $url( $m[1] ) );
 	}, $markup );
-	return str_replace(
+	return briise_photos_ids( str_replace(
 		array( '{{CTA_LABEL}}', '{{CTA}}', '{{TITRE}}' ),
 		array( esc_html( $e['cta_label'] ), esc_url( $e['cta_url'] ), esc_html( '' !== $titre ? $titre : 'Le titre de la page' ) ),
 		$markup
-	);
+	) );
 }
+
+/* ----- Photos : la Médiathèque remplace les images d'exemple ------------------------ */
+
+/**
+ * Photo de la Médiathèque dont le fichier porte ce nom (« naissance-lange » trouve naissance-lange.jpg,
+ * naissance-lange.webp, naissance-lange-scaled.jpg…). Retourne son numéro, ou 0.
+ */
+function briise_photo_media( $nom ) {
+	static $cache = array();
+	$nom = sanitize_title( $nom );
+	if ( '' === $nom ) {
+		return 0;
+	}
+	if ( isset( $cache[ $nom ] ) ) {
+		return $cache[ $nom ];
+	}
+	global $wpdb;
+	$id      = 0;
+	$proches = array();
+	$lignes  = $wpdb->get_results( $wpdb->prepare( "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attached_file' AND meta_value LIKE %s ORDER BY post_id DESC", '%' . $wpdb->esc_like( $nom ) . '%' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+	foreach ( $lignes as $l ) {
+		if ( ! wp_attachment_is_image( (int) $l->post_id ) ) {
+			continue;
+		}
+		$base = sanitize_title( pathinfo( $l->meta_value, PATHINFO_FILENAME ) );
+		if ( $base === $nom ) {
+			$id = (int) $l->post_id;
+			break;
+		}
+		// Variantes que WordPress ajoute : -scaled, -rotated, -1, -2…
+		if ( preg_replace( '/(-(scaled|rotated|e\d{10,}|\d{1,2}))+$/', '', $base ) === $nom ) {
+			$proches[] = (int) $l->post_id;
+		}
+	}
+	if ( ! $id && $proches ) {
+		$id = $proches[0];
+	}
+	$cache[ $nom ] = $id;
+	return $id;
+}
+
+/**
+ * Image d'exemple du thème pour un nom sans photo ; le nom reste dans l'adresse (?photo=…)
+ * pour que « Placer les photos de la Médiathèque » la remplace plus tard.
+ */
+function briise_photo_exemple( $nom ) {
+	$GLOBALS['briise_photos_absentes'][ $nom ] = true;
+	if ( file_exists( get_theme_file_path( 'assets/images/sections/' . $nom . '.svg' ) ) ) {
+		return get_theme_file_uri( 'assets/images/sections/' . $nom . '.svg' );
+	}
+	return add_query_arg( 'photo', $nom, get_theme_file_uri( 'assets/images/sections/carre.svg' ) );
+}
+
+/**
+ * Relie chaque bloc Image dont la photo vient de la Médiathèque à son numéro (class wp-image-N) :
+ * WordPress sert alors la bonne taille à chaque écran (srcset), comme pour une photo insérée à la main.
+ */
+function briise_photos_ids( $markup ) {
+	$uploads = wp_get_upload_dir()['baseurl'];
+	$chemin  = wp_parse_url( $uploads, PHP_URL_PATH );
+	if ( false === strpos( $markup, 'wp:image' ) || false === strpos( $markup, $chemin ? $chemin : '/wp-content/uploads' ) ) {
+		return $markup;
+	}
+	$blocs  = parse_blocks( $markup );
+	$change = false;
+	$relier = function ( &$liste ) use ( &$relier, &$change, $uploads ) {
+		foreach ( $liste as &$b ) {
+			if ( ! empty( $b['innerBlocks'] ) ) {
+				$relier( $b['innerBlocks'] );
+			}
+			if ( 'core/image' !== $b['blockName'] || ! empty( $b['attrs']['id'] ) || ! preg_match( '/<img\b[^>]*\bsrc="([^"]+)"/', $b['innerHTML'], $m ) ) {
+				continue;
+			}
+			$src = html_entity_decode( $m[1] );
+			if ( 0 !== strpos( set_url_scheme( $src ), set_url_scheme( $uploads ) ) ) {
+				continue;
+			}
+			$id = attachment_url_to_postid( $src );
+			if ( ! $id ) {
+				continue;
+			}
+			$b['attrs']['id'] = $id;
+			$classe           = function ( $html ) use ( $id ) {
+				return preg_replace( '/<img\b(?![^>]*\bclass=)/', '<img class="wp-image-' . $id . '"', $html, 1 );
+			};
+			$b['innerHTML'] = $classe( $b['innerHTML'] );
+			foreach ( $b['innerContent'] as $k => $c ) {
+				if ( is_string( $c ) ) {
+					$b['innerContent'][ $k ] = $classe( $c );
+				}
+			}
+			$change = true;
+		}
+	};
+	$relier( $blocs );
+	return $change ? serialize_blocks( $blocs ) : $markup;
+}
+
+/**
+ * Remplace, dans les pages et les fiches existantes, les images d'exemple par les photos de la
+ * Médiathèque qui portent le même nom. Retourne [ pages modifiées, photos placées ].
+ */
+function briise_photos_relier() {
+	$types = array( 'page' );
+	if ( defined( 'BRIISE_REALISATION' ) && post_type_exists( BRIISE_REALISATION ) ) {
+		$types[] = BRIISE_REALISATION;
+	}
+	$base   = preg_quote( wp_parse_url( get_theme_file_uri( 'assets/images/sections/' ), PHP_URL_PATH ), '#' );
+	$pages  = 0;
+	$photos = 0;
+	foreach ( get_posts( array( 'post_type' => $types, 'post_status' => array( 'publish', 'draft', 'private', 'pending', 'future' ), 'numberposts' => -1 ) ) as $p ) {
+		$contenu = preg_replace_callback( '#(?:https?:)?(?://[^/"\s]+)?' . $base . '([a-z0-9-]+)\.svg(?:\?photo=([a-z0-9-]+))?#', function ( $m ) use ( &$photos ) {
+			$nom = ! empty( $m[2] ) ? $m[2] : $m[1];
+			$id  = briise_photo_media( $nom );
+			if ( ! $id ) {
+				return $m[0];
+			}
+			++$photos;
+			return wp_get_attachment_image_url( $id, 'full' );
+		}, $p->post_content );
+		$contenu = briise_photos_ids( $contenu );
+		if ( $contenu !== $p->post_content ) {
+			wp_update_post( wp_slash( array( 'ID' => $p->ID, 'post_content' => $contenu ) ) );
+			++$pages;
+		}
+		$nom = get_post_meta( $p->ID, '_briise_photo_nom', true );
+		if ( $nom && ! has_post_thumbnail( $p ) && briise_photo_media( $nom ) ) {
+			set_post_thumbnail( $p->ID, briise_photo_media( $nom ) );
+			++$photos;
+		}
+	}
+	return array( $pages, $photos );
+}
+
+add_action( 'admin_post_briise_photos', function () {
+	if ( ! current_user_can( 'manage_options' ) || ! check_admin_referer( 'briise_photos' ) ) {
+		wp_die( 'Accès refusé.' );
+	}
+	set_transient( 'briise_photos_resultat_' . get_current_user_id(), briise_photos_relier(), 120 );
+	wp_safe_redirect( admin_url( 'admin.php?page=briise-entreprise&onglet=demarrage#br-photos' ) );
+	exit;
+} );
 
 /* ----- Installation d'un plan ---------------------------------------------------- */
 
@@ -227,6 +370,26 @@ function briise_plan_installer( $plan ) {
 			return $r;
 		}, (array) $plan['realisations'] );
 		$realisations = briise_realisations_importer( $fiches, $statut );
+		// Photo principale de chaque fiche : « image » = le nom de la photo (liste « images » ou Médiathèque).
+		foreach ( $fiches as $r ) {
+			if ( empty( $r['image'] ) || empty( $r['titre'] ) ) {
+				continue;
+			}
+			$fiche = get_page_by_path( sanitize_title( $r['slug'] ?? $r['titre'] ), OBJECT, BRIISE_REALISATION );
+			if ( ! $fiche ) {
+				continue;
+			}
+			$nom = sanitize_title( $r['image'] );
+			update_post_meta( $fiche->ID, '_briise_photo_nom', $nom );
+			$url = $liens['__images'][ $nom ] ?? '';
+			$id  = $url ? attachment_url_to_postid( 0 === strpos( $url, '/' ) ? home_url( $url ) : $url ) : 0;
+			$id  = $id ? $id : briise_photo_media( $nom );
+			if ( $id && ! has_post_thumbnail( $fiche ) ) {
+				set_post_thumbnail( $fiche->ID, $id );
+			} elseif ( ! $id ) {
+				$GLOBALS['briise_photos_absentes'][ $nom ] = true;
+			}
+		}
 	}
 
 	// 8. Formulaires (Fluent Forms) : créés d'office si une page les utilise et que l'extension est là.
@@ -247,7 +410,9 @@ function briise_plan_installer( $plan ) {
 	if ( ! empty( $plan['kit'] ) ) {
 		update_option( 'briise_kit', sanitize_key( $plan['kit'] ) );
 	}
-	return array( 'crees' => array_values( wp_list_pluck( $crees, 'titre' ) ), 'gardes' => $gardes, 'manquants' => array_keys( $manquants ), 'realisations' => $realisations );
+	$exemples = array( 'portrait', 'paysage', 'paysage-2', 'carre', 'carre-2', 'carre-3', 'banniere', 'avant', 'apres', 'logo-1', 'logo-2', 'logo-3', 'logo-4', 'logo-5' );
+	$absentes = array_values( array_diff( array_keys( $GLOBALS['briise_photos_absentes'] ?? array() ), $exemples ) );
+	return array( 'crees' => array_values( wp_list_pluck( $crees, 'titre' ) ), 'gardes' => $gardes, 'manquants' => array_keys( $manquants ), 'realisations' => $realisations, 'photos_absentes' => $absentes );
 }
 
 /**
@@ -428,6 +593,25 @@ add_action( 'admin_post_briise_kit', function () {
 	exit;
 } );
 
+function briise_photos_encadre() {
+	$r = get_transient( 'briise_photos_resultat_' . get_current_user_id() );
+	if ( false !== $r ) {
+		delete_transient( 'briise_photos_resultat_' . get_current_user_id() );
+		echo '<div class="notice notice-success inline"><p>' . ( $r[1]
+			? esc_html( sprintf( '%d photos placées, dans %d pages ou fiches.', $r[1], $r[0] ) )
+			: 'Aucune photo à placer : aucune image d’exemple n’a de photo du même nom dans la Médiathèque.' ) . '</p></div>';
+	}
+	?>
+	<h2 class="title" id="br-photos">Placer les photos de la Médiathèque</h2>
+	<p class="description">Les photos du client se déposent dans Médias &gt; Ajouter, nommées comme dans le fichier de site (naissance-lange.jpg pour le repère « naissance-lange »). Déposées avant l’import, elles sont placées toutes seules. Déposées après, ce bouton remplace chaque image d’exemple par la photo du même nom, dans les pages et les fiches de réalisation.</p>
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+		<input type="hidden" name="action" value="briise_photos">
+		<?php wp_nonce_field( 'briise_photos' ); ?>
+		<?php submit_button( 'Placer les photos de la Médiathèque', 'secondary', 'submit', false ); ?>
+	</form>
+	<?php
+}
+
 function briise_onglet_demarrage() {
 	$data   = briise_kits();
 	$actuel = get_option( 'briise_kit' );
@@ -447,6 +631,9 @@ function briise_onglet_demarrage() {
 			}
 			if ( ! empty( $r['manquants'] ) ) {
 				echo '<p>Certaines sections renvoyaient vers des pages non retenues (' . esc_html( implode( ', ', $r['manquants'] ) ) . ') : leurs liens mènent à la page des services. À revoir lors de la rédaction.</p>';
+			}
+			if ( ! empty( $r['photos_absentes'] ) ) {
+				echo '<p><strong>Photos absentes de la Médiathèque</strong> (une image d’exemple les remplace) : ' . esc_html( implode( ', ', $r['photos_absentes'] ) ) . '. Ajoutez-les dans Médias avec ce nom de fichier (par exemple ' . esc_html( $r['photos_absentes'][0] ) . '.jpg), puis cliquez sur « Placer les photos de la Médiathèque » plus bas.</p>';
 			}
 			echo '<p>Prochaines étapes : compléter les autres onglets de Mon entreprise, puis remplacer les textes et les photos d’exemple de chaque page.</p></div>';
 		}
@@ -480,6 +667,7 @@ function briise_onglet_demarrage() {
 			<?php submit_button( 'Importer et créer le site', 'secondary', 'submit', false ); ?>
 		</form>
 		<?php
+		briise_photos_encadre();
 		return;
 	endif;
 

@@ -577,7 +577,7 @@ page('preparer-seance-photo', 'Préparer sa séance photo', 'Que porter pour une
 ], { menu: false });
 
 /* ================= Histoires du portfolio (fiches de réalisation) ================= */
-const histoire = (titre, date, service, cat, ville, resume, blocs) => ({ titre, date, service, categories: [cat], ville, resume, markup: serialize(blocs) });
+const histoire = (titre, date, service, cat, ville, resume, blocs, image) => ({ titre, date, service, categories: [cat], ville, resume, image, markup: serialize(blocs) });
 const realisations = [
   histoire('Une naissance au studio, avec la grande sœur', '2026-10', S.naissance, 'Naissance', 'Olivet', 'Neuf jours, une grande sœur de trois ans et deux heures et demie au chaud, au rythme des tétées.', [
     H('La séance', 2),
@@ -588,7 +588,7 @@ const realisations = [
     H('Le conseil de Lison', 2),
     P('Venez avec un change de couches et rien d’autre : le studio est chauffé, les langes et les bonnets sont prêtés. Si les aînés sont petits, prévoyez de les photographier au début, puis qu’une personne les emmène se promener.'),
     Muted('Photos publiées avec l’accord écrit des deux parents. Aucun prénom d’enfant.'),
-  ]),
+  ], 'naissance-lange'),
   histoire('Inès et Thomas, un mariage au Moulin du Loiret', '2026-09', S.mariage, 'Mariage', 'Olivet', 'Une journée de septembre, de la mairie d’Olivet à la première danse, en formule journée et soirée.', [
     H('La journée', 2),
     P('Inès et Thomas se sont mariés un samedi de septembre à la mairie d’Olivet, puis au Moulin du Loiret pour la réception. Ils avaient choisi la formule journée et soirée : onze heures de présence, des préparatifs à la première danse (mariage fictif).'),
@@ -598,7 +598,7 @@ const realisations = [
     H('Le conseil de Lison', 2),
     P('Préparez la liste des photos de groupe avec vos témoins, dix groupes au plus, et confiez-la à une personne qui connaît les deux familles : elle les appelle pendant que je photographie. Vingt minutes suffisent alors, et vos invités profitent du cocktail.'),
     Muted('Photos publiées avec l’accord écrit des mariés.'),
-  ]),
+  ], 'mariage-petales'),
   histoire('Une famille de cinq en bord de Loire', '2026-06', S.famille, 'Famille', 'Saint-Jean-le-Blanc', 'Trois enfants, un champ de fleurs au bord de la Loire et une heure et demie de jeux à l’heure dorée.', [
     H('La séance', 2),
     P('Sophie voulait une photo de famille avec ses trois enfants, sans les faire tenir en place. Nous nous sommes retrouvés un soir de juin au bord de la Loire, à Saint-Jean-le-Blanc, une heure et demie avant le coucher du soleil (séance fictive).'),
@@ -608,7 +608,7 @@ const realisations = [
     H('Le conseil de Lison', 2),
     P('Choisissez des couleurs qui vont ensemble sans être identiques, et prévoyez un goûter pour les enfants. Fixez l’heure selon les siestes plutôt que selon la lumière : un enfant reposé se laisse photographier bien plus longtemps.'),
     Muted('Photos publiées avec l’accord écrit des deux parents. Aucun prénom d’enfant.'),
-  ]),
+  ], 'famille-coquelicots'),
   histoire('Une séance grossesse au coucher du soleil', '2026-07', S.grossesse, 'Grossesse', 'Saint-Denis-en-Val', 'Une heure en bord de Loire à sept mois et demi, avec des pauses pour s’asseoir.', [
     H('La séance', 2),
     P('Pauline était enceinte de sept mois et demi. Elle voulait des photos dehors, dans la lumière du soir, sans marcher longtemps. Nous avons choisi un champ plat au bord de la Loire, à Saint-Denis-en-Val, accessible en voiture (séance fictive).'),
@@ -618,7 +618,7 @@ const realisations = [
     H('Le conseil de Lison', 2),
     P('Réservez vers six mois de grossesse pour une séance entre sept et huit mois. Dehors, prévoyez des chaussures plates et de l’eau ; au studio, je prête des robes et un fauteuil vous attend entre deux séries de photos.'),
     Muted('Photos publiées avec l’accord écrit de la personne photographiée.'),
-  ]),
+  ], 'grossesse-champ'),
   histoire('Manon et Alex, une heure à deux en bord de Loire', '2026-08', S.couple, 'Couple', 'Orléans', 'Un couple qui « déteste les photos », une plage de Loire et une heure de balade au coucher du soleil.', [
     H('La séance', 2),
     P('Manon et Alex n’aimaient pas être photographiés et voulaient pourtant des photos d’eux avant leurs fiançailles. Nous nous sommes retrouvés sur une plage de sable de la Loire, à Orléans, une heure avant le coucher du soleil (séance fictive).'),
@@ -628,7 +628,7 @@ const realisations = [
     H('Le conseil de Lison', 2),
     P('Si vous n’aimez pas être photographiés, ne cherchez pas à poser : marchez, parlez, racontez-vous une histoire. Je vous guide d’un mot quand il faut, et les meilleures photos arrivent souvent au moment où vous m’oubliez.'),
     Muted('Photos publiées avec l’accord écrit des personnes photographiées.'),
-  ]),
+  ], 'couple-plage'),
 ];
 
 const site = {

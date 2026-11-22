@@ -1,5 +1,12 @@
 # Historique des versions
 
+## 1.13.2
+
+- **Photos du client par la Médiathèque** : on dépose les photos dans Médias, nommées comme dans le fichier de site (`naissance-lange.jpg` pour le repère `{{IMG:naissance-lange}}`), puis on importe. Chaque image prend la photo du même nom, y compris si WordPress l’a convertie en WebP ou renommée (`-scaled`, `-1`). Les images sont reliées à la Médiathèque : WordPress sert la bonne taille à chaque écran.
+- **Bouton « Placer les photos de la Médiathèque »** (Mon entreprise > Démarrage) : pour des photos déposées après l’import, il remplace chaque image d’exemple par la photo du même nom, dans les pages et les fiches de réalisation.
+- **Fiches de réalisation** : la clé `image` du fichier de site donne leur photo principale.
+- À la fin de l’import, la liste des photos absentes de la Médiathèque s’affiche.
+
 ## 1.13.1
 
 - **Photos dans le fichier de site** : une liste `images` (nom => adresse) remplace les images d’exemple par les vraies photos à l’import, dans les pages comme dans les fiches de réalisation. Une adresse qui commence par `/` est complétée avec celle du site. Un nom inconnu affiche une image d’exemple au lieu d’une image cassée.
