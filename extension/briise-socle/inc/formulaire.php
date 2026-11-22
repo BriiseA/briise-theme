@@ -15,8 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function briise_formulaires_types() {
 	return array(
-		'devis'   => 'Demande de devis',
-		'contact' => 'Contact',
+		'devis'       => 'Demande de devis',
+		'contact'     => 'Contact',
+		'reservation' => 'Réservation',
 	);
 }
 
@@ -62,6 +63,28 @@ function briise_formulaire_services() {
 }
 
 /**
+ * Lieux proposés dans le formulaire de réservation (« Au studio », « Chez vous »…), un par ligne.
+ * Facultatif : sans lieux, la question n'est pas posée.
+ */
+function briise_reservation_lieux() {
+	$l = get_option( 'briise_reservation_lieux', array() );
+	return array_values( array_filter( array_map( 'sanitize_text_field', (array) $l ) ) );
+}
+
+/**
+ * Libellés d'un type de formulaire : objet de l'e-mail, bouton, message de confirmation.
+ */
+function briise_formulaire_mots( $type ) {
+	$mots = array(
+		'devis'       => array( 'demande de devis', 'Envoyer ma demande', 'Votre demande de devis', 'Demande de devis', 'demande', 'e' ),
+		'contact'     => array( 'message', 'Envoyer mon message', 'Votre message', 'Message', 'message', '' ),
+		'reservation' => array( 'demande de réservation', 'Envoyer ma demande', 'Votre demande de réservation', 'Réservation', 'demande', 'e' ),
+	);
+	$m = $mots[ $type ] ?? $mots['contact'];
+	return array_combine( array( 'quoi', 'bouton', 'objet_visiteur', 'objet', 'court', 'accord' ), $m );
+}
+
+/**
  * Définition d'un formulaire au format des modèles Fluent Forms.
  */
 function briise_formulaire_definition( $type ) {
@@ -79,7 +102,33 @@ function briise_formulaire_definition( $type ) {
 			'uniqElKey'      => 'el_briise_' . $nom,
 		);
 	};
-	$champs   = array();
+	$radios = function ( $nom, $label, $options, $aide = '' ) use ( $requis, $sans_cond ) {
+		return array(
+			'element'        => 'input_radio',
+			'attributes'     => array( 'type' => 'radio', 'name' => $nom, 'value' => '' ),
+			'settings'       => array( 'container_class' => '', 'label' => $label, 'admin_field_label' => $label, 'label_placement' => '', 'display_type' => '', 'help_message' => $aide, 'validation_rules' => $requis( true, 'Choisissez une réponse.' ), 'conditional_logics' => $sans_cond ),
+			'options'        => array_combine( $options, $options ),
+			'editor_options' => array( 'title' => 'Radio Button', 'icon_class' => 'icon-dot-circle-o', 'element' => 'input-radio', 'template' => 'inputRadio' ),
+			'uniqElKey'      => 'el_briise_' . $nom,
+		);
+	};
+	$champs = array();
+	if ( 'reservation' === $type ) {
+		// D'abord ce que le visiteur veut, puis où et quand : les coordonnées viennent en dernier.
+		$services = briise_formulaire_services();
+		$champs[] = $services ? $radios( 'prestation', 'Quelle prestation ?', array_merge( $services, array( 'Je ne sais pas encore' ) ) ) : $texte( 'prestation', 'Quelle prestation ?', true );
+		$lieux    = briise_reservation_lieux();
+		if ( $lieux ) {
+			$champs[] = $radios( 'lieu', 'Où ?', $lieux );
+		}
+		$champs[] = array(
+			'element'        => 'input_date',
+			'attributes'     => array( 'type' => 'text', 'name' => 'date', 'value' => '', 'id' => '', 'class' => '', 'placeholder' => 'jj/mm/aaaa' ),
+			'settings'       => array( 'container_class' => '', 'label' => 'Date souhaitée', 'admin_field_label' => 'Date souhaitée', 'label_placement' => '', 'date_format' => 'd/m/Y', 'help_message' => 'Une date approximative suffit : nous vous proposons les créneaux libres autour.', 'is_time_enabled' => false, 'validation_rules' => $requis( false ), 'conditional_logics' => $sans_cond ),
+			'editor_options' => array( 'title' => 'Time & Date', 'icon_class' => 'icon-calendar-o', 'template' => 'inputText' ),
+			'uniqElKey'      => 'el_briise_date',
+		);
+	}
 	$champs[] = $texte( 'nom', 'Nom', true, array( 'autocomplete' => 'name' ) );
 	$champs[] = $texte( 'telephone', 'Téléphone', true, array( 'type' => 'tel', 'autocomplete' => 'tel', 'inputmode' => 'tel' ) );
 	$champs[] = array(
@@ -117,10 +166,11 @@ function briise_formulaire_definition( $type ) {
 			$champs[] = $texte( 'projet', 'Votre projet', true );
 		}
 	}
+	$labels   = array( 'devis' => 'Votre projet en quelques mots', 'reservation' => 'Un mot pour préparer (facultatif)' );
 	$champs[] = array(
 		'element'        => 'textarea',
-		'attributes'     => array( 'name' => 'message', 'value' => '', 'id' => '', 'class' => '', 'placeholder' => 'devis' === $type ? 'Ex. : garde-corps de mezzanine, 6 m, acier noir, avant l’été' : '', 'rows' => 5, 'cols' => 2 ),
-		'settings'       => array( 'container_class' => '', 'label' => 'devis' === $type ? 'Votre projet en quelques mots' : 'Votre message', 'admin_field_label' => 'Message', 'label_placement' => '', 'help_message' => '', 'validation_rules' => $requis( true ), 'conditional_logics' => $sans_cond ),
+		'attributes'     => array( 'name' => 'message', 'value' => '', 'id' => '', 'class' => '', 'placeholder' => 'devis' === $type ? 'Ex. : garde-corps de mezzanine, 6 m, acier noir, avant l’été' : '', 'rows' => 'reservation' === $type ? 3 : 5, 'cols' => 2 ),
+		'settings'       => array( 'container_class' => '', 'label' => $labels[ $type ] ?? 'Votre message', 'admin_field_label' => 'Message', 'label_placement' => '', 'help_message' => '', 'validation_rules' => $requis( 'reservation' !== $type ), 'conditional_logics' => $sans_cond ),
 		'editor_options' => array( 'title' => 'Text Area', 'icon_class' => 'ff-edit-textarea', 'template' => 'inputTextarea' ),
 		'uniqElKey'      => 'el_briise_message',
 	);
@@ -158,7 +208,7 @@ function briise_formulaire_definition( $type ) {
 					'background_color' => '',
 					'button_size'      => 'md',
 					'color'            => '',
-					'button_ui'        => array( 'type' => 'default', 'text' => 'devis' === $type ? 'Envoyer ma demande' : 'Envoyer mon message', 'img_url' => '' ),
+					'button_ui'        => array( 'type' => 'default', 'text' => briise_formulaire_mots( $type )['bouton'], 'img_url' => '' ),
 				),
 				'editor_options' => array( 'title' => 'Submit Button' ),
 			),
@@ -179,8 +229,8 @@ function briise_formulaire_notification_entreprise( $type ) {
 		'fromEmail'      => '',
 		'replyTo'        => '{inputs.email}',
 		'bcc'            => '',
-		'subject'        => ( 'devis' === $type ? 'Demande de devis' : 'Message' ) . ' : {inputs.nom}' . ( 'devis' === $type ? ', {inputs.commune}' : '' ),
-		'message'        => '<p>' . ( 'devis' === $type ? 'Nouvelle demande de devis' : 'Nouveau message' ) . ' depuis le site.</p><p>{all_data}</p><p>Envoyé depuis la page : {embed_post.permalink}</p><p>Pour répondre par e-mail, utilisez simplement « Répondre ». Pour rappeler : {inputs.telephone}.</p>',
+		'subject'        => briise_formulaire_mots( $type )['objet'] . ' : {inputs.nom}' . ( 'devis' === $type ? ', {inputs.commune}' : '' ) . ( 'reservation' === $type ? ', {inputs.prestation}' : '' ),
+		'message'        => '<p>' . ( 'contact' === $type ? 'Nouveau message' : 'Nouvelle ' . briise_formulaire_mots( $type )['quoi'] ) . ' depuis le site.</p><p>{all_data}</p><p>Envoyé depuis la page : {embed_post.permalink}</p><p>Pour répondre par e-mail, utilisez simplement « Répondre ». Pour rappeler : {inputs.telephone}.</p>',
 		'conditionals'   => array( 'status' => false, 'type' => 'all', 'conditions' => array( array( 'field' => null, 'operator' => '=', 'value' => null ) ) ),
 		'enabled'        => true,
 		'email_template' => '',
@@ -200,8 +250,8 @@ function briise_formulaire_notification_visiteur( $type ) {
 		'fromEmail'      => '',
 		'replyTo'        => $e['email'],
 		'bcc'            => '',
-		'subject'        => ( 'devis' === $type ? 'Votre demande de devis' : 'Votre message' ) . ' à ' . get_bloginfo( 'name' ),
-		'message'        => '<p>Bonjour {inputs.nom},</p><p>Nous avons bien reçu votre ' . ( 'devis' === $type ? 'demande de devis' : 'message' ) . ' et nous vous répondons rapidement.</p>'
+		'subject'        => briise_formulaire_mots( $type )['objet_visiteur'] . ' à ' . get_bloginfo( 'name' ),
+		'message'        => '<p>Bonjour {inputs.nom},</p><p>Nous avons bien reçu votre ' . briise_formulaire_mots( $type )['quoi'] . ' et nous vous répondons rapidement' . ( 'reservation' === $type ? ' avec nos disponibilités. Rien n’est réservé ni payé tant que nous n’avons pas confirmé ensemble.' : '.' ) . '</p>'
 			. ( 'devis' === $type ? '<p>Si vous avez des photos de votre projet ou de l’endroit, répondez simplement à cet e-mail en les joignant : elles nous aideront à préparer notre réponse.</p>' : '' )
 			. '<p>Pour rappel, votre demande :</p><p>{all_data}</p><p>' . esc_html( get_bloginfo( 'name' ) ) . ( $tel ? ' · ' . esc_html( $tel ) : '' ) . '</p>',
 		'conditionals'   => array( 'status' => false, 'type' => 'all', 'conditions' => array( array( 'field' => null, 'operator' => '=', 'value' => null ) ) ),
@@ -246,7 +296,7 @@ function briise_formulaire_creer( $type = 'devis' ) {
 	$e        = function_exists( 'briise_entreprise' ) ? briise_entreprise() : array( 'telephone' => '' );
 	$tel      = $e['telephone'] && function_exists( 'briise_telephone_lisible' ) ? briise_telephone_lisible( $e['telephone'] ) : '';
 	$reglages = \FluentForm\App\Models\Form::getFormsDefaultSettings();
-	$reglages['confirmation']['messageToShow']        = '<p><strong>Merci, votre ' . ( 'devis' === $type ? 'demande' : 'message' ) . ' est bien envoyé' . ( 'devis' === $type ? 'e' : '' ) . '.</strong> Nous vous répondons rapidement' . ( $tel ? ' ; pour une urgence, appelez le ' . esc_html( $tel ) : '' ) . '.</p>';
+	$reglages['confirmation']['messageToShow']        = '<p><strong>Merci, votre ' . briise_formulaire_mots( $type )['court'] . ' est bien envoyé' . briise_formulaire_mots( $type )['accord'] . '.</strong> Nous vous répondons rapidement' . ( 'reservation' === $type ? ' avec nos disponibilités' : '' ) . ( $tel ? ' ; pour une urgence, appelez le ' . esc_html( $tel ) : '' ) . '.</p>';
 	$reglages['confirmation']['samePageFormBehavior'] = 'hide_form';
 	$reglages['layout']['labelPlacement']             = 'top';
 	$reglages['layout']['asteriskPlacement']          = 'asterisk-right';
@@ -372,6 +422,9 @@ add_action( 'admin_post_briise_formulaire_creer', function () {
 		wp_die( 'Accès refusé.' );
 	}
 	$type = sanitize_key( $_POST['type'] ?? 'devis' );
+	if ( 'reservation' === $type && isset( $_POST['lieux'] ) ) {
+		update_option( 'briise_reservation_lieux', array_values( array_filter( array_map( 'sanitize_text_field', explode( "\n", wp_unslash( $_POST['lieux'] ) ) ) ) ) );
+	}
 	$r    = briise_formulaire_creer( $type );
 	set_transient( 'briise_formulaire_' . get_current_user_id(), is_wp_error( $r ) ? $r->get_error_message() : (int) $r, 120 );
 	wp_safe_redirect( admin_url( 'admin.php?page=briise-entreprise&onglet=fonctions#br-formulaires' ) );
@@ -413,11 +466,15 @@ function briise_formulaires_encadre() {
 		} else {
 			$champ = '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" style="margin:0">' . wp_nonce_field( 'briise_formulaire_creer', '_wpnonce', true, false )
 				. '<input type="hidden" name="action" value="briise_formulaire_creer"><input type="hidden" name="type" value="' . esc_attr( $type ) . '">'
+				. ( 'reservation' === $type ? '<label for="br-lieux" style="display:block;margin:0 0 4px">Lieux proposés, un par ligne (facultatif)</label><textarea id="br-lieux" name="lieux" rows="3" cols="40" placeholder="Au studio&#10;Chez vous&#10;En extérieur">' . esc_textarea( implode( "\n", briise_reservation_lieux() ) ) . '</textarea><br>' : '' )
 				. '<button type="submit" class="button">Créer le formulaire</button></form>';
 		}
-		briise_ligne( $nom, $champ, 'devis' === $type
-			? 'Nom, téléphone, e-mail (facultatif), commune, projet (liste des services du site) et description. E-mail à l’adresse de Mon entreprise (et aux autres adresses réglées dans l’onglet Entreprise), avec « Répondre » vers le visiteur ; confirmation au visiteur, qui peut y joindre ses photos.'
-			: 'Nom, téléphone, e-mail (facultatif) et message. Mêmes e-mails que pour le devis.' );
+		$aides = array(
+			'devis'       => 'Nom, téléphone, e-mail (facultatif), commune, projet (liste des services du site) et description. E-mail à l’adresse de Mon entreprise (et aux autres adresses réglées dans l’onglet Entreprise), avec « Répondre » vers le visiteur ; confirmation au visiteur, qui peut y joindre ses photos.',
+			'contact'     => 'Nom, téléphone, e-mail (facultatif) et message. Mêmes e-mails que pour le devis.',
+			'reservation' => 'Pour les métiers sur rendez-vous (photographe, institut, cours) : la prestation (choix parmi les services du site), le lieu (si vous en indiquez), la date souhaitée, puis nom, téléphone, e-mail et un mot facultatif. Mêmes e-mails que pour le devis. Section « Formulaire de réservation ».',
+		);
+		briise_ligne( $nom, $champ, $aides[ $type ] );
 	}
 	echo '</table>';
 	$smtp = defined( 'FLUENTMAIL' ) || class_exists( '\FluentMail\App\Services\Mailer\Manager' );

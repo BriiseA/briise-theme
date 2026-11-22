@@ -511,8 +511,186 @@ add('formulaire-contact', 'contact', 'Formulaire de contact', 'Le formulaire de 
     Col([Box('br-card br-formulaire', [Short('[briise_formulaire type="contact"]')])], { width: '58%' }),
   ], 'br-split')]));
 
+
+/* ----- 1.13.0 : sections des métiers de l'image (ambiance Galerie), utiles aussi à d'autres métiers ----- */
+
+/* Ouverture « choix de la prestation » : la liste des prestations avec leur prix ; au survol d'une ligne,
+   la grande photo change (CSS seul, sans script). Sur mobile, chaque ligne a sa vignette. 2 à 6 lignes. */
+const choixLigne = ([nom, prix, slug, img, alt]) => Box('br-choix-ligne', [
+  Img(img, '1/1', 'br-choix-vignette', alt), P(`<a href="${URL(slug)}">${fr(nom)}</a>`, 'br-choix-nom'), P(prix, 'br-choix-prix'),
+]);
+const choixSeance = ({ lieu, titre, second, items, dispo = true }) => Section('br-hero br-choix', [Cols([
+  Col([P(lieu, 'br-choix-lieu'), H(titre, 1, null, { fontSize: 'huge' }), MainBtns(second), Box('br-choix-liste', items.map(choixLigne))], { width: '52%', verticalAlignment: 'center' }),
+  Col([Box('br-choix-scene', [...items.map(([, , , img, alt]) => ImgFond(img, 'br-choix-photo', alt)), ...(dispo ? [Short('[briise_disponibilite]')] : [])])], { width: '48%' }),
+], 'br-split br-choix-cols')]);
+add('choix-prestation', 'ouverture', 'Ouverture : liste des prestations qui change la photo', 'Accueil : le titre, puis la liste des prestations avec leur prix. Au survol d’une ligne, la grande photo change. Chaque ligne mène à sa page. Sur mobile, une vignette par ligne. De 2 à 6 lignes.',
+  choixSeance({ lieu: 'Où vous recevez, ou jusqu’où vous vous déplacez', titre: 'Votre métier à Votre ville, en une phrase', second: ['Voir les tarifs', URL('tarifs')], items: [
+    ['Première prestation', 'dès … €', 'service-1', 'portrait', 'Photo à remplacer : la première prestation'],
+    ['Deuxième prestation', '… €', 'service-2', 'carre', 'Photo à remplacer : la deuxième prestation'],
+    ['Troisième prestation', '… €', 'service-3', 'carre-2', 'Photo à remplacer : la troisième prestation'],
+    ['Quatrième prestation', 'dès … €', 'service-4', 'carre-3', 'Photo à remplacer : la quatrième prestation'],
+  ] }));
+
+/* Ouverture en éventail : titre centré, cinq photos en arc dessous. */
+const eventail = ({ lieu, titre, second, imgs }) => Section('br-hero br-eventail', [
+  Box('br-eventail-texte', [P(lieu, 'br-choix-lieu'), H(titre, 1, null, { fontSize: 'huge' }), MainBtns(second)]),
+  Box('br-eventail-photos', imgs.map(([img, alt]) => Img(img, '3/4', 'br-eventail-photo', alt))),
+]);
+add('ouverture-eventail', 'ouverture', 'Ouverture : titre centré et photos en éventail', 'Accueil d’un métier de l’image : un grand titre centré, puis cinq photos disposées en arc. Élégante sur ordinateur ; sur mobile, trois photos restent visibles.',
+  eventail({ lieu: 'Où vous recevez, ou jusqu’où vous vous déplacez', titre: 'Votre métier à Votre ville, en une phrase', second: ['Voir les tarifs', URL('tarifs')],
+    imgs: [['portrait', 'Photo à remplacer'], ['carre', 'Photo à remplacer'], ['carre-2', 'Photo à remplacer : la plus belle, au centre'], ['carre-3', 'Photo à remplacer'], ['paysage', 'Photo à remplacer']] }));
+
+/* Où se passe la prestation : deux ou trois lieux, avec photo et faits ; le premier peut porter une pastille. */
+const lieuCol = ([img, alt, t, d, faits, pastille], large) => Col([Box('br-lieu', [
+  Box('br-lieu-media', [Img(img, '4/3', 'is-style-br-arrondi', alt), ...(pastille ? [P(pastille, 'br-pastille')] : [])]),
+  H(t, 3), Muted(d), List(faits, 'br-liste-oui'),
+])], large ? { width: '40%' } : {});
+const lieux = ({ titre, chapo, items, bg = 'surface' }) => Section('br-lieux', [
+  Row('br-section-head br-tete-deux', [H(titre, 2), Lead(chapo)]),
+  Cols(items.map((it, i) => lieuCol(it, items.length === 3 && i === 0)), 'br-lieux-grille'),
+], { backgroundColor: bg });
+add('lieux', 'offre', 'Où se passe la prestation', 'Deux ou trois lieux possibles (chez vous, dans nos locaux, en extérieur), chacun avec sa photo et ses faits. Le premier peut porter une pastille (« Idéal pour… »).',
+  lieux({ titre: 'Chez vous, dans nos locaux ou dehors : vous choisissez', chapo: 'Une phrase qui dit si le prix change selon le lieu, et jusqu’où vous vous déplacez.', items: [
+    ['paysage', 'Photo à remplacer : vos locaux', 'Dans nos locaux', 'Ce que le client y trouve, en une phrase.', ['Un premier fait concret', 'Un deuxième fait', 'Un troisième fait'], 'Idéal pour…'],
+    ['carre', 'Photo à remplacer : chez un client', 'Chez vous', 'Ce que ça change pour le client.', ['Un fait concret', 'La zone couverte sans frais']],
+    ['carre-2', 'Photo à remplacer : en extérieur', 'En extérieur', 'Les lieux, la saison, l’heure.', ['Un fait concret', 'Une solution de repli']],
+  ] }));
+
+/* Faits à icônes : six faits courts, chacun avec une icône choisie par sa classe (br-ic-…). */
+const fait = ([ic, t, d]) => Box('br-fait br-ic-' + ic, [H(t, 3), Muted(d)]);
+const faitsIcones = ({ titre, chapo, img, alt, items, bg = 'surface' }) => Section('br-faits-section', [Cols([
+  Col([Box('br-faits-cote', [H(titre, 2), Lead(chapo), Img(img, '4/5', 'is-style-br-arrondi', alt)])], { width: '40%' }),
+  Col([Box('br-faits', items.map(fait))], { width: '60%' }),
+], 'br-split')], { backgroundColor: bg });
+add('faits-icones', 'offre', 'Faits concrets avec icônes', 'Un lieu, un atelier, un service : six faits courts qui rassurent, chacun avec son icône. Icônes au choix par la classe du bloc : br-ic-soleil, thermometre, fauteuil, cintre, parking, horloge, bouclier, euro, maison, appareil, coeur, accessible.',
+  faitsIcones({ titre: 'Tout est prêt avant votre arrivée', chapo: 'Ce que le client n’a pas à prévoir, en une phrase.', img: 'portrait', alt: 'Photo à remplacer : un détail du lieu', items: [
+    ['soleil', 'Premier fait', 'Une phrase concrète, avec un chiffre si possible.'], ['thermometre', 'Deuxième fait', 'Une phrase concrète.'],
+    ['fauteuil', 'Troisième fait', 'Une phrase concrète.'], ['cintre', 'Quatrième fait', 'Une phrase concrète.'],
+    ['horloge', 'Cinquième fait', 'Une phrase concrète.'], ['parking', 'Sixième fait', 'Une phrase concrète.'],
+  ] }));
+
+/* Étapes en photos, avec le numéro posé sur la photo et une pastille pour le moment. Aussi pour raconter une journée (heures). */
+const etapeImage = ([img, alt, quand, t, d], i, numeros) => Box('br-etape-image', [
+  Box('br-etape-media', [Img(img, '3/4', 'is-style-br-arrondi', alt), P(quand, 'br-etape-quand'), ...(numeros ? [P(String(i + 1), 'br-etape-numero')] : [])]),
+  H(t, 3), Muted(d),
+]);
+const etapesImages = ({ titre, chapo, items, numeros = true, bg = 'surface', apres = [] }) => Section('br-etapes-images' + (numeros ? '' : ' br-etapes-images--journee'), [
+  Row('br-section-head br-tete-deux', [H(titre, 2), Lead(chapo)]),
+  Box('br-etapes-images-grille', items.map((it, i) => etapeImage(it, i, numeros))),
+  ...apres,
+], { backgroundColor: bg });
+add('etapes-images', 'parcours', 'Étapes en photos, numérotées', 'Comment ça se passe, en trois à cinq photos : le numéro de l’étape est posé sur la photo, le moment (« Le jour J », « Sous 3 semaines ») dans une pastille. Pour les métiers où l’on vend des images.',
+  etapesImages({ titre: 'Comment ça se passe, en quatre temps', chapo: 'Une phrase qui dit que le client sait à chaque étape ce qui l’attend.', items: [
+    ['portrait', 'Photo à remplacer : le premier échange', 'Quand vous voulez', 'Vous réservez', 'Comment, et ce qui se passe ensuite.'],
+    ['carre', 'Photo à remplacer : la préparation', 'Une semaine avant', 'On prépare', 'Ce que vous envoyez ou proposez.'],
+    ['carre-2', 'Photo à remplacer : le jour J', 'Le jour J', 'La prestation', 'Durée, lieu, déroulé.'],
+    ['carre-3', 'Photo à remplacer : le résultat', 'Sous … semaines', 'Le résultat', 'Ce que le client reçoit, et sous quel délai.'],
+  ] }));
+add('journee-racontee', 'confiance', 'Une journée racontée en photos', 'Mariage, événement, chantier d’une journée : six moments dans l’ordre, chacun avec son heure et une phrase. Montre tout ce que le client reçoit, pas seulement les plus belles photos.',
+  etapesImages({ titre: 'Une journée racontée, du matin au soir', chapo: 'Qui, où, quand (avec leur accord), et pourquoi cette histoire montre ce que le client recevra vraiment.', numeros: false, items: [
+    ['portrait', 'Photo à remplacer', '10 h', 'Premier moment', 'Une phrase.'], ['carre', 'Photo à remplacer', '12 h', 'Deuxième moment', 'Une phrase.'],
+    ['carre-2', 'Photo à remplacer', '15 h', 'Troisième moment', 'Une phrase.'], ['carre-3', 'Photo à remplacer', '16 h', 'Quatrième moment', 'Une phrase.'],
+    ['paysage', 'Photo à remplacer', '19 h 30', 'Cinquième moment', 'Une phrase.'], ['paysage-2', 'Photo à remplacer', '23 h', 'Sixième moment', 'Une phrase.'],
+  ], apres: [Arrow('Voir toute l’histoire', URL('realisations'))] }));
+
+/* Appel final sur photo : la photo à droite, un voile sombre côté texte (contraste garanti). */
+const ctaPhoto = ({ titre, texte, img = 'banniere', alt = '' }) => cb('core/cover', {
+  url: IMG(img), alt: fr(alt), dimRatio: 90, overlayColor: 'sombre', isUserOverlayColor: true, align: 'full', className: 'br-cta-photo', layout: { type: 'constrained' },
+}, [Cols([
+  Col([H(titre, 2), P(texte, 'br-lead')], { width: '60%' }),
+  Col([Btns(Btn(CTA_LABEL, CTA)), Short('[briise_appel]')], { width: '40%', verticalAlignment: 'bottom' }),
+], 'br-cta-photo-cols', { verticalAlignment: 'bottom' })]);
+add('cta-photo', 'contact', 'Appel à l’action sur photo', 'Fin de page : le dernier appel posé sur une grande photo, assombrie du côté du texte. Le pied de page, uni, s’en détache nettement.',
+  ctaPhoto({ titre: 'Une dernière invitation, courte', texte: 'Une phrase qui lève le dernier frein : prochaine date libre, réponse sous 24 h, premier échange sans engagement.' }));
+
+/* Avis avec la note : la note moyenne et le nombre d'avis, puis trois avis courts. */
+const ETOILES = '<span class="br-etoiles" aria-hidden="true">★★★★★</span>';
+const avisCourt = (txt, qui, quoi) => Col([Box('br-avis-court', [P(ETOILES, 'br-avis-etoiles'), cb('core/quote', { citation: fr(`<strong>${qui}</strong><br>${quoi}`) }, [P(txt)])])]);
+add('avis-note', 'confiance', 'Avis avec la note Google', 'La note moyenne et le nombre d’avis Google, puis trois avis courts. Uniquement la vraie note et des avis réels, recopiés mot pour mot avec l’accord de leur auteur.',
+  Section('br-avis-note', [
+    Row('br-section-head br-tete-deux', [H('Ce qu’en disent nos clients', 2), P(`<strong class="br-note-chiffre">4,9</strong> <span class="br-note-detail">${ETOILES}<span>sur 5, 62 avis Google</span></span>`, 'br-note')]),
+    Cols([
+      avisCourt('« Un avis réel, court, qui raconte une situation précise. »', 'Prénom N.', 'Prestation, ville'),
+      avisCourt('« Un deuxième avis, d’un autre type de client. »', 'Prénom N.', 'Prestation, ville'),
+      avisCourt('« Un troisième avis, qui lève une crainte fréquente. »', 'Prénom N.', 'Prestation, ville'),
+    ], 'br-avis-grille'),
+    Btns(Btn(CTA_LABEL, CTA), Btn('Lire tous les avis sur Google', '#', 'is-style-outline')),
+  ]));
+
+/* Ce que vous recevez : la livraison dessinée sur un téléphone, et trois éléments concrets. */
+add('ce-que-vous-recevez', 'offre', 'Ce que vous recevez', 'Montrer concrètement le résultat livré : une galerie en ligne, un dossier, un carnet d’entretien… dessiné sur un téléphone, avec trois éléments compris.',
+  Section('br-recevez', [Cols([
+    Col([Box('br-telephone', [
+      P('Votre galerie', 'br-telephone-titre'), P('25 photos, gardée un an', 'br-telephone-sous'),
+      cb('core/gallery', { linkTo: 'none', sizeSlug: 'medium', columns: 2, imageCrop: true, className: 'br-telephone-photos' },
+        ['carre', 'carre-2', 'carre-3', 'portrait'].map((n) => cb('core/image', { url: IMG(n), alt: '', sizeSlug: 'medium', linkDestination: 'none' }))),
+      P('Tout télécharger', 'br-telephone-bouton'),
+    ])], { width: '42%' }),
+    Col([H('Ce que vous recevez', 2), Lead('Une phrase : sous quelle forme, sous quel délai, pour combien de temps.'),
+      List(['<strong>Premier élément compris.</strong> Ce que c’est, concrètement.', '<strong>Deuxième élément.</strong> Une phrase.', '<strong>En option.</strong> Ce qui se commande en plus, avec son prix.'], 'br-liste-oui br-liste-detail')], { width: '58%', verticalAlignment: 'center' }),
+  ], 'br-split', { verticalAlignment: 'center' })]));
+
+/* Le temps derrière le prix : un tableau des étapes et de leur durée ; la barre est dessinée par ux.js. */
+add('temps-prix', 'offre', 'Pourquoi ce prix : le temps passé', 'Justifier un prix par le travail qu’il représente : chaque étape et sa durée (« 30 min », « 2 h 30 »). Une barre colorée est dessinée à partir des durées.',
+  Section('br-temps-section', [Cols([
+    Col([H('Pourquoi ce prix ?', 2), Lead('Une phrase : le prix d’une prestation, et le temps total qu’elle représente.')], { width: '42%', verticalAlignment: 'center' }),
+    Col([cb('core/table', { className: 'br-table br-temps', hasFixedLayout: false,
+      head: [{ cells: [{ content: 'Étape', tag: 'th' }, { content: 'Temps', tag: 'th' }] }],
+      body: [['Préparation', '30 min'], ['La prestation', '2 h 30'], ['Tri', '1 h'], ['Finitions', '4 h'], ['Livraison', '1 h']].map((r) => ({ cells: r.map((c) => ({ content: fr(c), tag: 'td' })) })),
+      foot: [{ cells: [{ content: 'Au total', tag: 'td' }, { content: fr('environ 9 h'), tag: 'td' }] }],
+    })], { width: '58%' }),
+  ], 'br-split')], { backgroundColor: 'surface' }));
+
+/* Carte cadeau : un visuel de carte et l'offre. */
+add('carte-cadeau', 'offre', 'Carte cadeau', 'Offrir une prestation : un visuel de carte cadeau (photo, nom, montant) et le mode d’emploi en une phrase.',
+  Section('br-cadeau', [Cols([
+    Col([cb('core/cover', { url: IMG('paysage'), alt: '', dimRatio: 50, overlayColor: 'sombre', isUserOverlayColor: true, className: 'br-cadeau-carte', contentPosition: 'bottom left', layout: { type: 'constrained' } }, [
+      P('Carte cadeau, valable un an', 'br-cadeau-texte'), P('… €', 'br-cadeau-montant'),
+    ])], { width: '45%', verticalAlignment: 'center' }),
+    Col([H('Offrir une prestation', 2), Lead('Pour quelle occasion, de quel montant, envoyée comment, valable combien de temps.'), Btns(Btn('Offrir une carte cadeau', CTA))], { width: '55%', verticalAlignment: 'center' }),
+  ], 'br-split', { verticalAlignment: 'center' })], { backgroundColor: 'surface' }));
+
+/* Tarifs en liste, avec vignettes : une ligne cliquable par prestation. */
+const tarifLigne = ([img, alt, nom, slug, details, prix]) => Box('br-tarif-ligne', [
+  Img(img, '1/1', 'br-tarif-vignette', alt), P(`<a href="${URL(slug)}">${fr(nom)}</a>`, 'br-tarif-nom'), P(details, 'br-tarif-details'), P(prix, 'br-tarif-prix'),
+]);
+add('tarifs-liste', 'offre', 'Tarifs en liste, avec photos', 'Toutes les prestations sur une liste : vignette, nom, ce qui est compris en quelques mots, prix. Chaque ligne mène à la page de la prestation.',
+  Section('br-tarifs-liste-section', [
+    Head([H('Nos tarifs, sans surprise', 2), Lead('Ce que comprennent tous les prix, en une phrase (déplacement, livraison, garantie).')]),
+    Box('br-tarifs-liste', [
+      ['carre', 'Photo à remplacer : la première prestation', 'Première prestation', 'service-1', 'Durée, ce qui est compris, où', 'dès … €'],
+      ['carre-2', 'Photo à remplacer : la deuxième prestation', 'Deuxième prestation', 'service-2', 'Durée, ce qui est compris, où', '… €'],
+      ['carre-3', 'Photo à remplacer : la troisième prestation', 'Troisième prestation', 'service-3', 'Durée, ce qui est compris, où', '… €'],
+    ].map(tarifLigne)),
+  ]));
+
+/* Galerie dont chaque photo s'agrandit au clic (fermeture au clavier, photo suivante avec les flèches). */
+add('galerie-agrandir', 'confiance', 'Galerie : photos agrandies au clic', 'Portfolio, réalisations : une mosaïque dont chaque photo s’agrandit en plein écran au clic ou au clavier. Le texte alternatif de chaque photo décrit vraiment ce qu’elle montre.',
+  Section('', [
+    Head([H('Des réalisations récentes', 2)]),
+    cb('core/gallery', { linkTo: 'none', sizeSlug: 'large', className: 'br-mosaique br-mosaique-dense', columns: 4, imageCrop: true },
+      ['portrait', 'paysage', 'carre', 'carre-2', 'carre-3', 'paysage-2', 'portrait', 'carre'].map((n, i) => cb('core/image', { url: IMG(n), alt: fr('Photo ' + (i + 1) + ' à remplacer : décrivez-la'), sizeSlug: 'large', linkDestination: 'none', lightbox: { enabled: true } }))),
+  ]));
+
+/* Formulaire de réservation : prestation, lieu, date, coordonnées ; à côté, ce qui se passe ensuite. */
+add('formulaire-reservation', 'contact', 'Formulaire de réservation', 'Page « Réserver » : le formulaire de réservation (prestation, lieu, date souhaitée, coordonnées ; créé dans Mon entreprise > Fonctions), avec à côté la prochaine date libre et ce qui se passe après l’envoi.',
+  Section('br-reservation', [Cols([
+    Col([Short('[briise_fil_ariane]'), H('Réserver', 1, null, { fontSize: 'xx-large' }), Lead('Trois questions et vos coordonnées : réponse sous 24 h avec nos disponibilités. Rien n’est payé à cette étape.'),
+      Box('br-card br-formulaire', [Short('[briise_formulaire type="reservation"]')])], { width: '60%' }),
+    Col([Box('br-reservation-cote', [
+      Box('br-lieu-media', [Img('paysage', '4/3', 'is-style-br-arrondi', 'Photo à remplacer : votre lieu ou votre travail'), Short('[briise_disponibilite]')]),
+      H('Et ensuite ?', 2, 'br-h3'),
+      cb('core/list', { ordered: true, className: 'br-ensuite' }, [
+        '<strong>Sous 24 h</strong> Nous vous répondons avec nos disponibilités.',
+        '<strong>Ensuite</strong> Un appel de 15 minutes pour préparer ensemble.',
+        '<strong>Pour confirmer</strong> L’acompte réserve votre date.',
+      ].map((c) => cb('core/list-item', { content: fr(c) }))),
+      Short('[briise_appel]'),
+    ])], { width: '40%' }),
+  ], 'br-split')]));
+
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').mkdirSync(require('path').join(__dirname, 'build'), { recursive: true });
 require('fs').writeFileSync(require('path').join(__dirname, 'build', 'br_sections.json'), JSON.stringify(out, null, 1));
-module.exports = { Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
+module.exports = { choixSeance, eventail, lieux, faitsIcones, etapesImages, ctaPhoto, avisCourt, tarifLigne, ETOILES, Row, ImgFond, Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
 console.log(Object.keys(S).length, 'sections');

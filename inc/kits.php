@@ -89,6 +89,11 @@ function briise_plan_installer( $plan ) {
 		}
 	}
 
+	// Lieux du formulaire de réservation (« Au studio », « Chez vous »…).
+	if ( ! empty( $plan['reservation_lieux'] ) && is_array( $plan['reservation_lieux'] ) ) {
+		update_option( 'briise_reservation_lieux', array_values( array_filter( array_map( 'sanitize_text_field', $plan['reservation_lieux'] ) ) ) );
+	}
+
 	// 2. Les pages, vides pour l'instant : il faut leurs adresses pour relier les liens.
 	foreach ( $plan['pages'] as $i => $p ) {
 		$slug   = sanitize_title( $p['slug'] );
@@ -212,7 +217,7 @@ function briise_plan_installer( $plan ) {
 	// 8. Formulaires (Fluent Forms) : créés d'office si une page les utilise et que l'extension est là.
 	if ( function_exists( 'briise_formulaire_creer' ) && briise_fluentforms_actif() ) {
 		$tout = implode( ' ', array_column( $plan['pages'], 'markup' ) );
-		foreach ( array( 'devis', 'contact' ) as $type ) {
+		foreach ( array( 'devis', 'contact', 'reservation' ) as $type ) {
 			if ( false !== strpos( $tout, '[briise_formulaire type="' . $type . '"]' ) ) {
 				briise_formulaire_creer( $type );
 			}

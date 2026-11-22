@@ -246,4 +246,32 @@
 		r.addEventListener('input', function () { regler(+r.value); });
 		regler(50);
 	});
+	/* Le temps derrière le prix : une barre dessinée à partir des durées du tableau (« 30 min », « 2 h 30 »).
+	   Le tableau reste la source lisible ; la barre est décorative (aria-hidden). */
+	document.querySelectorAll('.br-temps table').forEach(function (t) {
+		var lignes = t.querySelectorAll('tbody tr');
+		var minutes = function (txt) {
+			var h = /(\d+)\s*h\s*(\d+)?/.exec(txt), m = /(\d+)\s*min/.exec(txt);
+			return h ? (+h[1]) * 60 + (+(h[2] || 0)) : (m ? +m[1] : 0);
+		};
+		var barre = document.createElement('div');
+		barre.className = 'br-temps-barre';
+		barre.setAttribute('aria-hidden', 'true');
+		var total = 0;
+		lignes.forEach(function (tr, i) {
+			var c = tr.querySelectorAll('td');
+			var d = c.length > 1 ? minutes(c[c.length - 1].textContent) : 0;
+			if (!d) { return; }
+			total += d;
+			var s = document.createElement('span');
+			s.className = 'br-temps-c' + (i % 6 + 1);
+			s.style.flex = String(d);
+			barre.appendChild(s);
+			var pastille = document.createElement('span');
+			pastille.className = 'br-temps-pastille br-temps-c' + (i % 6 + 1);
+			pastille.setAttribute('aria-hidden', 'true');
+			c[0].insertBefore(pastille, c[0].firstChild);
+		});
+		if (total) { t.parentNode.insertBefore(barre, t); }
+	});
 })();

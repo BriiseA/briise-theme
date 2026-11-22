@@ -45,20 +45,41 @@ function briise_bandeau_messages() {
  * Texte de la prochaine disponibilité, ou chaîne vide si elle est passée,
  * trop ancienne (30 jours sans mise à jour) ou non renseignée.
  */
-function briise_disponibilite() {
+/**
+ * Prochaine disponibilité, en deux morceaux : le début de la phrase réglé et la date lisible
+ * (« lundi 3 mars »). Vide si la date est passée ou n'a pas été confirmée depuis 30 jours.
+ */
+function briise_disponibilite_parties() {
 	$a = briise_reglage( 'briise_annonces' );
 	if ( empty( $a['dispo_date'] ) || empty( $a['dispo_maj'] ) ) {
-		return '';
+		return array();
 	}
 	$auj = briise_aujourdhui();
 	if ( $a['dispo_date'] < $auj || $a['dispo_maj'] < wp_date( 'Y-m-d', time() - 30 * DAY_IN_SECONDS ) ) {
-		return '';
+		return array();
 	}
 	$jours = array( 'dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi' );
 	$jour  = $jours[ (int) gmdate( 'w', strtotime( $a['dispo_date'] . ' 12:00:00 UTC' ) ) ];
 	$annee = substr( $a['dispo_date'], 0, 4 ) !== wp_date( 'Y' );
-	return $a['dispo_texte'] . ' à partir du ' . $jour . ' ' . briise_date( $a['dispo_date'], $annee );
+	return array( $a['dispo_texte'], $jour . ' ' . briise_date( $a['dispo_date'], $annee ) );
 }
+
+function briise_disponibilite() {
+	$d = briise_disponibilite_parties();
+	return $d ? $d[0] . ' à partir du ' . $d[1] : '';
+}
+
+// Carte « prochaine date libre », posée sur une photo (sections d'ouverture et de réservation).
+// Rien n'est affiché si la date n'est pas à jour : jamais une date dépassée.
+add_action( 'init', function () {
+	add_shortcode( 'briise_disponibilite', function () {
+		$d = briise_disponibilite_parties();
+		if ( ! $d ) {
+			return '';
+		}
+		return '<p class="br-dispo-carte"><span>' . esc_html( $d[0] ) . '</span><strong>dès le ' . esc_html( $d[1] ) . '</strong></p>';
+	} );
+} );
 
 add_action( 'wp_body_open', function () {
 	$msgs = briise_bandeau_messages();

@@ -1,0 +1,142 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Galerie",
+	"description": "Métiers de l’image et de l’événement (photographes, vidéastes, fleuristes, décoration) : fond très clair, rose poudré, framboise en accent, grands titres, photos arrondies.",
+	"settings": {
+		"color": {
+			"palette": [
+				{
+					"slug": "fond",
+					"name": "Fond",
+					"color": "#fffcfa"
+				},
+				{
+					"slug": "clair",
+					"name": "Fond clair (cartes)",
+					"color": "#ffffff"
+				},
+				{
+					"slug": "surface",
+					"name": "Surface",
+					"color": "#f6e3e6"
+				},
+				{
+					"slug": "nuance",
+					"name": "Nuance",
+					"color": "#eee8e3"
+				},
+				{
+					"slug": "texte",
+					"name": "Texte",
+					"color": "#1d1720"
+				},
+				{
+					"slug": "texte-doux",
+					"name": "Texte secondaire",
+					"color": "#5a5059"
+				},
+				{
+					"slug": "accent",
+					"name": "Accent",
+					"color": "#b0285f"
+				},
+				{
+					"slug": "secondaire",
+					"name": "Secondaire",
+					"color": "#5c1f3d"
+				},
+				{
+					"slug": "deco",
+					"name": "Décor (formes, jamais du texte)",
+					"color": "#f4b6c8"
+				},
+				{
+					"slug": "sombre",
+					"name": "Fond sombre",
+					"color": "#1d1720"
+				}
+			]
+		},
+		"typography": {
+			"fontFamilies": [
+				{
+					"slug": "titres",
+					"name": "Titres : Bricolage Grotesque",
+					"fontFamily": "'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+					"fontFace": [
+						{
+							"fontFamily": "Bricolage Grotesque",
+							"fontStyle": "normal",
+							"fontWeight": "200 800",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/bricolage-grotesque-latin-standard-normal.woff2"
+							]
+						}
+					]
+				},
+				{
+					"slug": "texte",
+					"name": "Texte : Geist",
+					"fontFamily": "'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+					"fontFace": [
+						{
+							"fontFamily": "Geist",
+							"fontStyle": "normal",
+							"fontWeight": "100 900",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/geist-latin-wght-normal.woff2"
+							]
+						},
+						{
+							"fontFamily": "Geist",
+							"fontStyle": "italic",
+							"fontWeight": "100 900",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/geist-latin-wght-italic.woff2"
+							]
+						}
+					]
+				}
+			]
+		},
+		"custom": {
+			"rayon": {
+				"grand": "32px",
+				"moyen": "24px",
+				"petit": "12px",
+				"bouton": "999px",
+				"photo": "28px"
+			},
+			"forme": {
+				"blob": "28px"
+			}
+		}
+	},
+	"styles": {
+		"elements": {
+			"heading": {
+				"typography": {
+					"fontWeight": "600",
+					"lineHeight": "0.98",
+					"letterSpacing": "-0.035em"
+				}
+			},
+			"button": {
+				"color": {
+					"background": "var:preset|color|accent",
+					"text": "var:preset|color|clair"
+				},
+				":hover": {
+					"color": {
+						"background": "var:preset|color|secondaire",
+						"text": "var:preset|color|clair"
+					}
+				}
+			}
+		}
+	}
+}

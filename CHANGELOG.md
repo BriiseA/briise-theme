@@ -1,5 +1,13 @@
 # Historique des versions
 
+## 1.13.0
+
+- **Ambiance Galerie** pour les métiers de l’image et de l’événement : fond très clair, rose poudré, framboise en accent, grands titres serrés en Bricolage Grotesque, texte en Geist (police libre, fournie avec le thème), photos et boutons très arrondis. Contraste AA vérifié.
+- **Quatorze sections** (62 au total), nées de la maquette d’une photographe et utiles à d’autres métiers sur rendez-vous : liste des prestations qui change la photo au survol (sans script), titre et photos en éventail, lieux de la prestation, faits concrets avec icônes (douze icônes au choix par classe), étapes en photos numérotées, journée racontée en photos, ce que vous recevez (sur un téléphone), le temps derrière le prix (barre dessinée depuis le tableau), carte cadeau, tarifs en liste avec vignettes, avis avec la note Google, galerie agrandie au clic, formulaire de réservation, appel à l’action sur photo.
+- **Formulaire de réservation** (Fluent Forms) : prestation en boutons à choix, lieu (facultatif, `reservation_lieux`), date souhaitée, coordonnées et un mot facultatif. E-mails et message de confirmation adaptés : rien n’est réservé ni payé avant confirmation.
+- **Carte « Prochaine date libre »** (`[briise_disponibilite]`) : la date de Horaires et annonces posée sur une photo ; jamais affichée si elle n’est plus à jour.
+- Pied de page : le grand lien d’action s’efface aussi quand la page finit par l’appel à l’action sur photo.
+
 ## 1.12.0
 
 - **Qualifications et assurances** (fonction activable, onglet Fonctions) : jusqu’à six lignes dans Mon entreprise > Entreprise (nom, précision, numéro, date de fin, lien « Vérifier », logo). Elles s’affichent dans la nouvelle section « Qualifications » (une ligne discrète de logos) et, si c’est coché, dans une rangée du pied de page. Une qualification périmée disparaît seule le lendemain de sa date de fin ; décocher la fonction les masque partout sans les effacer. Elles sont transmises à Google (`hasCredential`).
