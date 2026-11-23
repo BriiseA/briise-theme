@@ -1,5 +1,12 @@
 # Historique des versions
 
+## 1.13.5
+
+- **Correction : étiquette de l’accueil** (« Métallerie sur mesure · Saran ») : depuis la 1.13.0, elle se plaçait dans le coin de la section au lieu d’être au-dessus du titre. Seule la pastille posée sur une photo de lieu reste en surimpression.
+- **Zones tactiles** : le bouton du menu mobile passe à 44 × 44 px (24 px avant).
+- **Questions fréquentes** : chaque question fait au moins 44 px de haut, avec un signe + qui tourne en × à l’ouverture, à la place du petit triangle du navigateur.
+- **Textes trop petits** : les étiquettes « Aujourd’hui », « Téléphone », « Adresse »… passent de 11,5 px à 12,8 px.
+
 ## 1.13.4
 
 - **Correction : prochaine date libre** : les champs « Prochaines disponibilités » (Mon entreprise > Horaires et annonces) n’apparaissaient que si le bandeau d’information était activé. Sur un site sans bandeau, la carte « Prochaine date libre » des pages ne pouvait donc pas être mise à jour. Ils sont maintenant toujours visibles, pour l’administrateur comme pour le compte Éditeur.

@@ -37,7 +37,7 @@ main [id] { scroll-margin-top: 6.5rem; }
 .br-today-badge {
 	display: inline-block;
 	margin-left: .5rem;
-	font-size: .72rem;
+	font-size: .8rem;
 	font-weight: 600;
 	letter-spacing: .06em;
 	text-transform: uppercase;
