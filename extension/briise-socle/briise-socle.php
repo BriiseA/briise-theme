@@ -3,7 +3,7 @@
  * Plugin Name: Briise Socle
  * Plugin URI: https://briise.fr
  * Description: Le fonctionnement des sites Briise, indépendant du thème : Mon entreprise (coordonnées, horaires, annonces, mentions légales), contrôle du maillage, référencement et données structurées, robots.txt, cartes Coordonnées et Zone, mesure des contacts, mises à jour et fin de collaboration.
- * Version: 1.13.2
+ * Version: 1.13.3
  * Requires at least: 6.6
  * Requires PHP: 7.4
  * Author: Briise
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BRIISE_SOCLE_VERSION', '1.13.2' );
+define( 'BRIISE_SOCLE_VERSION', '1.13.3' );
 define( 'BRIISE_SOCLE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BRIISE_SOCLE_URL', plugin_dir_url( __FILE__ ) );
 
@@ -67,6 +67,23 @@ add_action( 'wp_enqueue_scripts', function () {
 	if ( ! briise_theme_actif() ) {
 		wp_enqueue_style( 'briise-socle', BRIISE_SOCLE_URL . 'assets/socle.css', array(), BRIISE_SOCLE_VERSION );
 	}
+} );
+
+/**
+ * Éditeur : les codes [briise_…] s'affichent sous forme d'étiquette lisible.
+ */
+add_action( 'enqueue_block_editor_assets', function () {
+	wp_enqueue_script( 'briise-editeur', BRIISE_SOCLE_URL . 'assets/editeur.js', array( 'wp-hooks', 'wp-compose', 'wp-element', 'wp-block-editor' ), BRIISE_SOCLE_VERSION, true );
+	wp_add_inline_script(
+		'briise-editeur',
+		'window.briiseEditeur = ' . wp_json_encode(
+			array(
+				'admin'        => current_user_can( 'manage_options' ),
+				'realisations' => function_exists( 'briise_realisations_nom' ) ? briise_realisations_nom() : 'Réalisations',
+			)
+		) . ';',
+		'before'
+	);
 } );
 
 /**

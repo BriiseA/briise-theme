@@ -1,5 +1,9 @@
 # Historique des versions
 
+## 1.13.3
+
+- **Éditeur plus clair pour le client** : les blocs automatiques (`[briise_disponibilite]`, `[briise_fil_ariane]`, `[briise_formulaire]`, `[briise_realisations]`…) ne s’affichent plus sous forme de code dans l’éditeur. Une étiquette dit ce que c’est, où ça se règle, et qu’il ne faut pas supprimer le bloc. Un compte Éditeur lit « demandez à la personne qui gère votre site » pour ce qui relève de l’administrateur ; un administrateur peut toujours afficher le code. Sur le site, rien ne change.
+
 ## 1.13.2
 
 - **Photos du client par la Médiathèque** : on dépose les photos dans Médias, nommées comme dans le fichier de site (`naissance-lange.jpg` pour le repère `{{IMG:naissance-lange}}`), puis on importe. Chaque image prend la photo du même nom, y compris si WordPress l’a convertie en WebP ou renommée (`-scaled`, `-1`). Les images sont reliées à la Médiathèque : WordPress sert la bonne taille à chaque écran.
