@@ -1,5 +1,9 @@
 # Historique des versions
 
+## 1.13.4
+
+- **Correction : prochaine date libre** : les champs « Prochaines disponibilités » (Mon entreprise > Horaires et annonces) n’apparaissaient que si le bandeau d’information était activé. Sur un site sans bandeau, la carte « Prochaine date libre » des pages ne pouvait donc pas être mise à jour. Ils sont maintenant toujours visibles, pour l’administrateur comme pour le compte Éditeur.
+
 ## 1.13.3
 
 - **Éditeur plus clair pour le client** : les blocs automatiques (`[briise_disponibilite]`, `[briise_fil_ariane]`, `[briise_formulaire]`, `[briise_realisations]`…) ne s’affichent plus sous forme de code dans l’éditeur. Une étiquette dit ce que c’est, où ça se règle, et qu’il ne faut pas supprimer le bloc. Un compte Éditeur lit « demandez à la personne qui gère votre site » pour ce qui relève de l’administrateur ; un administrateur peut toujours afficher le code. Sur le site, rien ne change.

@@ -235,20 +235,21 @@ function briise_onglet_annonces( $o, $v ) {
 			?>
 		</table>
 
-		<h2 class="title">Prochaines disponibilités</h2>
-		<p class="description">Facultatif. Une ligne dans le bandeau, avec le bouton d’action du site : « Prochaines visites possibles à partir du lundi 1er décembre ». Elle disparaît toute seule une fois la date passée, ou 30 jours après la dernière mise à jour, pour ne jamais afficher une date fausse.</p>
-		<table class="form-table" role="presentation">
-			<?php
-			briise_ligne( 'À partir du', '<input type="date" id="br-dispo-date" name="' . briise_nom( $o, 'dispo_date' ) . '" value="' . esc_attr( $v['dispo_date'] ) . '">', 'Laissez vide pour ne rien afficher.', 'br-dispo-date' );
-			briise_texte( $o, $v, 'dispo_texte', 'Début de la phrase', 'Ex. : « Prochaines visites possibles », « Prochains rendez-vous libres », « Prochaine intervention possible ».', 'maxlength="80"' );
-			if ( $v['dispo_date'] && $v['dispo_maj'] ) {
-				$expire = wp_date( 'Y-m-d', strtotime( $v['dispo_maj'] . ' 12:00:00' ) + 30 * DAY_IN_SECONDS );
-				$etat   = briise_disponibilite() ? 'Affichée sur le site jusqu’au ' . briise_date( min( $expire, $v['dispo_date'] ), true ) . ' au plus tard.' : 'Plus affichée : la date est passée ou elle n’a pas été mise à jour depuis 30 jours.';
-				briise_ligne( 'État', '<p style="margin:0">' . esc_html( $etat ) . '</p><label><input type="checkbox" name="' . briise_nom( $o, 'dispo_confirmer' ) . '" value="1"> La date est toujours juste (repart pour 30 jours)</label>' );
-			}
-			?>
-		</table>
 	<?php endif; ?>
+
+	<h2 class="title">Prochaines disponibilités</h2>
+	<p class="description">Facultatif. « Prochaines visites possibles à partir du lundi 1er décembre » : sur la carte « Prochaine date libre » des pages qui en ont une<?php echo briise_fonction( 'bandeau' ) ? ', et dans le bandeau avec le bouton d’action du site' : ''; ?>. Elle disparaît toute seule une fois la date passée, ou 30 jours après la dernière mise à jour, pour ne jamais afficher une date fausse : pensez à la confirmer chaque mois.</p>
+	<table class="form-table" role="presentation">
+		<?php
+		briise_ligne( 'À partir du', '<input type="date" id="br-dispo-date" name="' . briise_nom( $o, 'dispo_date' ) . '" value="' . esc_attr( $v['dispo_date'] ) . '">', 'Laissez vide pour ne rien afficher.', 'br-dispo-date' );
+		briise_texte( $o, $v, 'dispo_texte', 'Début de la phrase', 'Ex. : « Prochaines visites possibles », « Prochains rendez-vous libres », « Prochaine intervention possible ».', 'maxlength="80"' );
+		if ( $v['dispo_date'] && $v['dispo_maj'] ) {
+			$expire = wp_date( 'Y-m-d', strtotime( $v['dispo_maj'] . ' 12:00:00' ) + 30 * DAY_IN_SECONDS );
+			$etat   = briise_disponibilite() ? 'Affichée sur le site jusqu’au ' . briise_date( min( $expire, $v['dispo_date'] ), true ) . ' au plus tard.' : 'Plus affichée : la date est passée ou elle n’a pas été mise à jour depuis 30 jours.';
+			briise_ligne( 'État', '<p style="margin:0">' . esc_html( $etat ) . '</p><label><input type="checkbox" name="' . briise_nom( $o, 'dispo_confirmer' ) . '" value="1"> La date est toujours juste (repart pour 30 jours)</label>' );
+		}
+		?>
+	</table>
 	<?php
 }
 

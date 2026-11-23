@@ -249,22 +249,28 @@ function briise_nettoie_annonces( $in ) {
 	$out['fermetures'] = array_pad( $fermetures, 6, array( 'du' => '', 'au' => '', 'motif' => '' ) );
 	$out['annoncer']   = ! empty( $in['annoncer'] );
 
+	$avant = briise_reglage( 'briise_annonces' );
+
 	// Bandeau absent du formulaire (fonction désactivée) : on garde l'existant.
-	if ( ! array_key_exists( 'bandeau_texte', $in ) ) {
-		$avant = briise_reglage( 'briise_annonces' );
-		foreach ( array( 'bandeau_actif', 'bandeau_texte', 'bandeau_lien', 'bandeau_url', 'bandeau_fin', 'dispo_date', 'dispo_texte', 'dispo_maj' ) as $cle ) {
+	if ( array_key_exists( 'bandeau_texte', $in ) ) {
+		$out['bandeau_actif'] = ! empty( $in['bandeau_actif'] );
+		$out['bandeau_texte'] = mb_substr( sanitize_text_field( $in['bandeau_texte'] ?? '' ), 0, 160 );
+		$out['bandeau_lien']  = sanitize_text_field( $in['bandeau_lien'] ?? '' );
+		$out['bandeau_url']   = esc_url_raw( $in['bandeau_url'] ?? '' );
+		$out['bandeau_fin']   = briise_nettoie_date( $in['bandeau_fin'] ?? '' );
+	} else {
+		foreach ( array( 'bandeau_actif', 'bandeau_texte', 'bandeau_lien', 'bandeau_url', 'bandeau_fin' ) as $cle ) {
+			$out[ $cle ] = $avant[ $cle ];
+		}
+	}
+
+	// Disponibilités : la date de mise à jour sert à les retirer après 30 jours sans nouvelle.
+	if ( ! array_key_exists( 'dispo_date', $in ) ) {
+		foreach ( array( 'dispo_date', 'dispo_texte', 'dispo_maj' ) as $cle ) {
 			$out[ $cle ] = $avant[ $cle ];
 		}
 		return $out;
 	}
-	$out['bandeau_actif'] = ! empty( $in['bandeau_actif'] );
-	$out['bandeau_texte'] = mb_substr( sanitize_text_field( $in['bandeau_texte'] ?? '' ), 0, 160 );
-	$out['bandeau_lien']  = sanitize_text_field( $in['bandeau_lien'] ?? '' );
-	$out['bandeau_url']   = esc_url_raw( $in['bandeau_url'] ?? '' );
-	$out['bandeau_fin']   = briise_nettoie_date( $in['bandeau_fin'] ?? '' );
-
-	// Disponibilités : la date de mise à jour sert à les retirer après 30 jours sans nouvelle.
-	$avant              = briise_reglage( 'briise_annonces' );
 	$out['dispo_date']  = briise_nettoie_date( $in['dispo_date'] ?? '' );
 	$out['dispo_texte'] = mb_substr( sanitize_text_field( $in['dispo_texte'] ?? '' ), 0, 80 );
 	if ( '' === $out['dispo_texte'] ) {
