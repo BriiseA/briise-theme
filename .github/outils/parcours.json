@@ -1,96 +1,342 @@
 {
-  "_lisezmoi": "Les cinq parcours de départ. Un parcours décrit comment le client final achète : la question qu'il se pose, l'action qu'on attend de lui, l'ordre de l'accueil et les pages. C'est un point de départ, ajusté ensuite à chaque client (fiche client, étude sémantique). Les noms de sections renvoient au catalogue variantes.json ; « à créer » signale une section prévue aux étapes 2 et 3.",
+  "_lisezmoi": "Les cinq parcours de départ. Un parcours décrit comment le client final achète : la question qu'il se pose, l'action qu'on attend de lui, l'ordre de l'accueil et les pages. C'est un point de départ, ajusté ensuite à chaque client (fiche client, étude sémantique). Les noms de sections renvoient au catalogue variantes.json ; « à créer » signale une section prévue aux étapes 2 et 3. Chaque parcours a ses preuves (réassurance et preuve sociale) : une bande de confiance juste après l'ouverture, puis une preuve près de chaque appel à l'action. N'afficher que des preuves réelles et vérifiables (fiche client).",
   "parcours": {
     "urgence": {
       "nom": "Urgence et dépannage",
-      "exemples": ["plombier", "serrurier", "électricien", "vitrier", "dépannage auto"],
+      "exemples": [
+        "plombier",
+        "serrurier",
+        "électricien",
+        "vitrier",
+        "dépannage auto"
+      ],
       "question": "J'ai un problème maintenant : qui vient, quand, et combien ça coûte ?",
       "action": "Appeler",
       "mobile": "Barre d'appel fixe avec le prénom de celui qui décroche",
       "accueil": [
-        ["ouverture", "Deux portes : « C'est urgent » (appel, gestes d'attente, forfaits) et « J'ai un projet »"],
-        ["tarifs-liste", "Les forfaits affichés, avec ce qui est compris"],
-        ["dirigeant", "Qui sonne à votre porte : photo, prénom, véhicule"],
-        ["etapes", "De l'appel à la facture, avec la facture type expliquée (à créer)"],
-        ["zone-liste", "Communes et délai d'intervention habituel"],
-        ["trois-cartes-photos", "Le parcours projet : installation, rénovation, entretien"],
-        ["avis-note", "Avis Google réels"],
-        ["faq", "Prix, délais, devis, assurance"],
-        ["bandeau-cta", "Appel final"]
+        [
+          "ouverture",
+          "Deux portes : « C'est urgent » (appel, gestes d'attente, forfaits) et « J'ai un projet »"
+        ],
+        [
+          "bande-confiance",
+          "Note Google et nombre d'avis, assurance décennale, qualifications (RGE…), prix annoncés avant intervention"
+        ],
+        [
+          "tarifs-liste",
+          "Les forfaits affichés, avec ce qui est compris"
+        ],
+        [
+          "valeurs",
+          "Nos engagements : prix annoncé avant de commencer, devis signé dès le premier euro, chantier laissé propre, garantie"
+        ],
+        [
+          "etapes",
+          "De l'appel à la facture, avec la facture type expliquée (à créer)"
+        ],
+        [
+          "avis-note",
+          "Avis Google réels"
+        ],
+        [
+          "zone-liste",
+          "Communes et délai d'intervention habituel"
+        ],
+        [
+          "trois-cartes-photos",
+          "Le parcours projet : installation, rénovation, entretien"
+        ],
+        [
+          "faq",
+          "Prix, délais, devis, assurance"
+        ],
+        [
+          "bandeau-cta",
+          "Appel final, avec la note Google rappelée"
+        ]
       ],
-      "pages": ["accueil", "depannage (une sous-page par panne courante)", "tarifs", "projets (une sous-page par service long)", "zone-intervention", "a-propos", "contact"]
+      "pages": [
+        "accueil",
+        "depannage (une sous-page par panne courante)",
+        "tarifs",
+        "projets (une sous-page par service long)",
+        "zone-intervention",
+        "a-propos",
+        "contact"
+      ],
+      "equipe": "Artisan seul : son portrait et son prénom dans le bouton d'appel. Équipe : une photo d'équipe et un fait vérifiable (« 4 techniciens salariés, aucune sous-traitance ») sans fiche par personne. Les portraits individuels vont sur la page À propos.",
+      "preuves": [
+        "note et nombre d'avis Google",
+        "assurance décennale et responsabilité civile",
+        "qualifications (RGE QualiPAC, Qualibat…)",
+        "forfaits affichés",
+        "engagements écrits",
+        "ancienneté réelle de l'entreprise"
+      ]
     },
     "projet": {
       "nom": "Projet sur devis",
-      "exemples": ["métallier (Ferlune)", "menuisier", "paysagiste", "cuisiniste", "maçon"],
+      "exemples": [
+        "métallier (Ferlune)",
+        "menuisier",
+        "paysagiste",
+        "cuisiniste",
+        "maçon"
+      ],
       "question": "Sait-il faire ce que je veux, est-ce beau, et combien ça coûte ?",
       "action": "Demander un devis",
       "mobile": "Bouton fixe « Devis gratuit » et téléphone",
       "accueil": [
-        ["ouverture", "Une réalisation en grand, la promesse et le devis"],
-        ["trois-cartes-photos", "Ce que nous fabriquons"],
-        ["realisations", "Dernières réalisations"],
-        ["qualifications", "Qualifié et assuré"],
-        ["etapes", "Le projet en étapes, avec les délais"],
-        ["temoignages", "Avis"],
-        ["zone-liste", "Zone d'intervention"],
-        ["bandeau-cta", "Demande de devis"]
+        [
+          "ouverture",
+          "Une réalisation en grand, la promesse et le devis"
+        ],
+        [
+          "bande-confiance",
+          "Note Google, décennale, année de création, plan 3D ou visite gratuite"
+        ],
+        [
+          "trois-cartes-photos",
+          "Ce que nous fabriquons"
+        ],
+        [
+          "realisations",
+          "Dernières réalisations"
+        ],
+        [
+          "qualifications",
+          "Qualifié et assuré"
+        ],
+        [
+          "etapes",
+          "Le projet en étapes, avec les délais"
+        ],
+        [
+          "temoignages",
+          "Avis"
+        ],
+        [
+          "zone-liste",
+          "Zone d'intervention"
+        ],
+        [
+          "bandeau-cta",
+          "Demande de devis"
+        ]
       ],
-      "pages": ["accueil", "services (une sous-page par service)", "realisations", "zone-intervention", "atelier ou a-propos", "devis", "guides (prix, normes, dimensions)"]
+      "pages": [
+        "accueil",
+        "services (une sous-page par service)",
+        "realisations",
+        "zone-intervention",
+        "atelier ou a-propos",
+        "devis",
+        "guides (prix, normes, dimensions)"
+      ],
+      "preuves": [
+        "réalisations avec ville et date",
+        "avis Google",
+        "assurance décennale et qualifications",
+        "étapes et délais annoncés",
+        "ancienneté et atelier visible"
+      ]
     },
     "reservation": {
       "nom": "Réservation d'une prestation",
-      "exemples": ["photographe (Lison)", "coach", "esthéticienne", "moniteur", "guide"],
+      "exemples": [
+        "photographe (Lison)",
+        "coach",
+        "esthéticienne",
+        "moniteur",
+        "guide"
+      ],
       "question": "Est-ce que ça me plaît, quand est-ce possible, et combien ?",
       "action": "Réserver",
       "mobile": "Bouton fixe « Réserver »",
       "accueil": [
-        ["ouverture", "Le choix de la prestation dès l'arrivée"],
-        ["galerie", "Le travail en images"],
-        ["avis-note", "Avis"],
-        ["dirigeant", "La personne"],
-        ["lieux", "Où ça se passe"],
-        ["etapes-images", "Le déroulé d'une séance"],
-        ["tarifs-cartes", "Formules et prix"],
-        ["faq", "Questions avant de réserver"]
+        [
+          "ouverture",
+          "Le choix de la prestation dès l'arrivée"
+        ],
+        [
+          "bande-confiance",
+          "Note Google, nombre de séances ou d'années, ce qui est compris"
+        ],
+        [
+          "galerie",
+          "Le travail en images"
+        ],
+        [
+          "avis-note",
+          "Avis"
+        ],
+        [
+          "dirigeant",
+          "La personne"
+        ],
+        [
+          "lieux",
+          "Où ça se passe"
+        ],
+        [
+          "etapes-images",
+          "Le déroulé d'une séance"
+        ],
+        [
+          "tarifs-cartes",
+          "Formules et prix"
+        ],
+        [
+          "faq",
+          "Questions avant de réserver"
+        ]
       ],
-      "pages": ["accueil", "prestations (une sous-page par prestation)", "portfolio", "tarifs", "a-propos", "reserver", "guides"]
+      "pages": [
+        "accueil",
+        "prestations (une sous-page par prestation)",
+        "portfolio",
+        "tarifs",
+        "a-propos",
+        "reserver",
+        "guides"
+      ],
+      "preuves": [
+        "galerie du travail réel",
+        "avis Google",
+        "formules et prix affichés",
+        "la personne, son parcours",
+        "conditions claires (report, annulation)"
+      ]
     },
     "conseil": {
       "nom": "Conseil et profession libérale",
-      "exemples": ["avocat", "expert-comptable", "ostéopathe", "architecte", "notaire"],
+      "exemples": [
+        "avocat",
+        "expert-comptable",
+        "ostéopathe",
+        "architecte",
+        "notaire"
+      ],
       "question": "Est-ce la bonne personne pour mon cas, et comment ça se passe ?",
       "action": "Prendre rendez-vous",
       "mobile": "Bouton fixe « Rendez-vous » et téléphone",
       "accueil": [
-        ["ouverture", "Sobre : qui, pour quoi, où, et le rendez-vous"],
-        ["trois-cartes", "Domaines d'intervention"],
-        ["equipe", "Les praticiens, diplômes et engagements"],
-        ["etapes", "La première consultation"],
-        ["etapes-prix", "Honoraires et remboursements"],
-        ["faq", "Questions avant de consulter"],
-        ["coordonnees-carte", "Accès et horaires"],
-        ["bandeau-cta", "Rendez-vous"]
+        [
+          "ouverture",
+          "Sobre : qui, pour quoi, où, et le rendez-vous"
+        ],
+        [
+          "bande-confiance",
+          "Diplômes, inscription à l'ordre ou au registre, honoraires annoncés, accès"
+        ],
+        [
+          "trois-cartes",
+          "Domaines d'intervention"
+        ],
+        [
+          "equipe",
+          "Les praticiens, diplômes et engagements"
+        ],
+        [
+          "etapes",
+          "La première consultation"
+        ],
+        [
+          "etapes-prix",
+          "Honoraires et remboursements"
+        ],
+        [
+          "faq",
+          "Questions avant de consulter"
+        ],
+        [
+          "coordonnees-carte",
+          "Accès et horaires"
+        ],
+        [
+          "bandeau-cta",
+          "Rendez-vous"
+        ]
       ],
       "regles": "Profession réglementée : pas d'avis ni de note, pas de promesse de résultat.",
-      "pages": ["accueil", "domaines (une sous-page par domaine)", "honoraires", "le-cabinet", "faq", "rendez-vous", "guides"]
+      "pages": [
+        "accueil",
+        "domaines (une sous-page par domaine)",
+        "honoraires",
+        "le-cabinet",
+        "faq",
+        "rendez-vous",
+        "guides"
+      ],
+      "preuves": [
+        "diplômes et inscription à l'ordre",
+        "engagements (ce que le cabinet ne fait pas)",
+        "honoraires et remboursements expliqués",
+        "déroulé de la première consultation",
+        "publications ou interventions vérifiables"
+      ]
     },
     "commerce": {
       "nom": "Commerce et lieu à visiter",
-      "exemples": ["restaurant", "boulangerie", "boutique", "bar", "fleuriste"],
+      "exemples": [
+        "restaurant",
+        "boulangerie",
+        "boutique",
+        "bar",
+        "fleuriste"
+      ],
       "question": "Qu'est-ce qu'on y trouve, est-ce ouvert, et comment j'y vais ?",
       "action": "Réserver, commander ou venir",
       "mobile": "Bouton fixe « Réserver » ou « Itinéraire » selon le commerce",
       "accueil": [
-        ["ouverture", "L'ambiance en photo et l'état du jour (ouvert jusqu'à…)"],
-        ["tarifs-liste", "La carte ou les produits phares (section carte à créer)"],
-        ["dirigeant", "L'histoire et les personnes"],
-        ["galerie", "Le lieu et les assiettes"],
-        ["avis-note", "Avis"],
-        ["coordonnees-carte", "Venir : plan, parking, horaires"],
-        ["bandeau-cta", "Réserver ou commander"]
+        [
+          "ouverture",
+          "L'ambiance en photo et l'état du jour (ouvert jusqu'à…)"
+        ],
+        [
+          "bande-confiance",
+          "Note Google, ouvert aujourd'hui jusqu'à…, labels (fait maison, produits locaux)"
+        ],
+        [
+          "tarifs-liste",
+          "La carte ou les produits phares (section carte à créer)"
+        ],
+        [
+          "dirigeant",
+          "L'histoire et les personnes"
+        ],
+        [
+          "galerie",
+          "Le lieu et les assiettes"
+        ],
+        [
+          "avis-note",
+          "Avis"
+        ],
+        [
+          "coordonnees-carte",
+          "Venir : plan, parking, horaires"
+        ],
+        [
+          "bandeau-cta",
+          "Réserver ou commander"
+        ]
       ],
-      "pages": ["accueil", "carte ou produits", "le-lieu ou notre-histoire", "evenements (si utile)", "reserver ou commander", "venir"]
+      "pages": [
+        "accueil",
+        "carte ou produits",
+        "le-lieu ou notre-histoire",
+        "evenements (si utile)",
+        "reserver ou commander",
+        "venir"
+      ],
+      "preuves": [
+        "note et avis Google",
+        "photos réelles du lieu et des produits",
+        "labels et mentions vérifiables (fait maison, maître restaurateur…)",
+        "presse locale",
+        "horaires toujours à jour"
+      ]
     }
   }
 }
