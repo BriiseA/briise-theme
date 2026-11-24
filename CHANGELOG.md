@@ -1,5 +1,9 @@
 # Historique des versions
 
+## 1.13.7
+
+- **Correction : bande « Qualifié et assuré »** : posée dans une section qui a déjà un fond, elle affichait un deuxième encadré gris, d’une autre teinte, qui ne prenait pas toute la largeur. L’encadré disparaît dans ce cas, et les qualifications s’alignent en haut (une qualification avec le lien « Vérifier » ne décale plus les autres).
+
 ## 1.13.6
 
 - **Photo principale des pages** : dans le fichier de site, `"image": "nom-de-la-photo"` sur une page lui donne son image mise en avant (en-tête avec photo des pages de service), comme pour les fiches de réalisation. La photo est cherchée dans la Médiathèque ; si elle arrive après l'import, « Placer les photos de la Médiathèque » la pose.
