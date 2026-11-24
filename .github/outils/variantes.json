@@ -1,0 +1,16 @@
+{
+  "_lisezmoi": "Catalogue des pièces qui différencient un site. « existe » : disponible dans le thème. « à créer » : prévu aux étapes 2 et 3. Le registre (registre-sites.json) note la combinaison retenue pour chaque site.",
+  "pieces": {
+    "ambiance": {"galet": "existe", "lumiere": "existe", "atelier": "existe", "cabinet": "existe", "comptoir": "existe", "galerie": "existe", "acier": "existe", "charte-client": "existe"},
+    "entete": {"classique": "existe", "logo-centre": "à créer", "transparent-photo": "à créer", "barre-infos": "à créer"},
+    "ouverture": {"photo-cote": "existe", "texte": "existe", "banniere": "existe", "choix-prestation": "existe", "eventail": "existe", "plein-cadre-carte": "à créer", "typographique": "à créer", "mosaique": "à créer", "decoupe": "à créer", "deux-portes": "à créer"},
+    "cartes": {"photo-fond": "existe", "photo-haut": "à créer", "liste-filet": "à créer"},
+    "titres": {"tete-lien": "existe", "tete-deux-colonnes": "existe", "grand-numero": "à créer"},
+    "pied": {"colonnes": "existe", "grand-appel": "à créer", "compact": "à créer"}
+  },
+  "regles": {
+    "differences_minimum": 3,
+    "pieces_comparees": ["ambiance", "entete", "ouverture", "cartes", "titres", "pied"],
+    "ouverture_differente_des_derniers": 2
+  }
+}

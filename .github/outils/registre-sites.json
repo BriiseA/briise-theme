@@ -1,0 +1,7 @@
+{
+  "_lisezmoi": "Une ligne par site livré ou par cas d'exemple. Ajouter la combinaison au moment de fabriquer le fichier de site, puis lancer : python3 registre.py <nom> (ou python3 registre.py --essai ambiance=… entete=… …).",
+  "sites": [
+    {"nom": "ferlune", "client": "Atelier Ferlune (fictif)", "parcours": "projet", "ambiance": "acier", "accent": "#a83d0c", "entete": "classique", "ouverture": "photo-cote", "cartes": "photo-fond", "titres": "tete-lien", "pied": "colonnes"},
+    {"nom": "lison", "client": "Lison Vautrin (fictif)", "parcours": "reservation", "ambiance": "galerie", "accent": "", "entete": "classique", "ouverture": "choix-prestation", "cartes": "photo-fond", "titres": "tete-deux-colonnes", "pied": "colonnes"}
+  ]
+}
