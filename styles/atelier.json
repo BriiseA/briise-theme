@@ -140,6 +140,9 @@
 			},
 			"forme": {
 				"blob": "28px"
+			},
+			"cta": {
+				"deco": "none"
 			}
 		}
 	},

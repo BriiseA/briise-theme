@@ -226,6 +226,24 @@ add_action( 'admin_post_briise_photos', function () {
 /**
  * Installe un plan. Retourne [ 'crees' => [titres], 'gardes' => [titres] ].
  */
+/**
+ * Photo principale (image mise en avant) d'une page ou d'une fiche importée : « image » = le nom de la photo,
+ * cherché dans la liste « images » du fichier, puis dans la Médiathèque. Le nom est gardé pour
+ * « Placer les photos de la Médiathèque » si la photo arrive plus tard.
+ */
+function briise_plan_photo_principale( $post_id, $nom, $liens ) {
+	$nom = sanitize_title( $nom );
+	update_post_meta( $post_id, '_briise_photo_nom', $nom );
+	$url = $liens['__images'][ $nom ] ?? '';
+	$id  = $url ? attachment_url_to_postid( 0 === strpos( $url, '/' ) ? home_url( $url ) : $url ) : 0;
+	$id  = $id ? $id : briise_photo_media( $nom );
+	if ( $id && ! has_post_thumbnail( $post_id ) ) {
+		set_post_thumbnail( $post_id, $id );
+	} elseif ( ! $id ) {
+		$GLOBALS['briise_photos_absentes'][ $nom ] = true;
+	}
+}
+
 function briise_plan_installer( $plan ) {
 	$statut = ( $plan['statut'] ?? 'publish' ) === 'draft' ? 'draft' : 'publish';
 	$ids    = array();
@@ -320,6 +338,10 @@ function briise_plan_installer( $plan ) {
 		if ( ! empty( $p['seo_description'] ) ) {
 			update_post_meta( $id, '_briise_seo_desc', sanitize_textarea_field( $p['seo_description'] ) );
 		}
+		if ( ! empty( $p['image'] ) ) {
+			// Photo principale de la page (en-tête avec photo) : même règle que les fiches de réalisation.
+			briise_plan_photo_principale( $id, $p['image'], $liens );
+		}
 		if ( ! empty( $p['menu_description'] ) ) {
 			// Une courte ligne sous le lien, dans le sous-menu (facultatif).
 			update_post_meta( $id, '_briise_menu_desc', sanitize_text_field( $p['menu_description'] ) );
@@ -379,16 +401,7 @@ function briise_plan_installer( $plan ) {
 			if ( ! $fiche ) {
 				continue;
 			}
-			$nom = sanitize_title( $r['image'] );
-			update_post_meta( $fiche->ID, '_briise_photo_nom', $nom );
-			$url = $liens['__images'][ $nom ] ?? '';
-			$id  = $url ? attachment_url_to_postid( 0 === strpos( $url, '/' ) ? home_url( $url ) : $url ) : 0;
-			$id  = $id ? $id : briise_photo_media( $nom );
-			if ( $id && ! has_post_thumbnail( $fiche ) ) {
-				set_post_thumbnail( $fiche->ID, $id );
-			} elseif ( ! $id ) {
-				$GLOBALS['briise_photos_absentes'][ $nom ] = true;
-			}
+			briise_plan_photo_principale( $fiche->ID, $r['image'], $liens );
 		}
 	}
 

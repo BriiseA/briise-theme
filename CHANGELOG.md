@@ -1,5 +1,11 @@
 # Historique des versions
 
+## 1.13.6
+
+- **Photo principale des pages** : dans le fichier de site, `"image": "nom-de-la-photo"` sur une page lui donne son image mise en avant (en-tête avec photo des pages de service), comme pour les fiches de réalisation. La photo est cherchée dans la Médiathèque ; si elle arrive après l'import, « Placer les photos de la Médiathèque » la pose.
+- **Accueil avec photo sur mobile** : la photo prend toute la largeur, au format 4/3, au lieu d'être réduite au centre.
+- **Bande d’appel finale** : les ambiances Atelier et Acier n’ont plus les formes orange en coin, qui ressemblaient à un défaut (réglage `custom.cta.deco` des ambiances).
+
 ## 1.13.5
 
 - **Correction : étiquette de l’accueil** (« Métallerie sur mesure · Saran ») : depuis la 1.13.0, elle se plaçait dans le coin de la section au lieu d’être au-dessus du titre. Seule la pastille posée sur une photo de lieu reste en surimpression.

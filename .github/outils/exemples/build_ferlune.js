@@ -23,6 +23,12 @@ const Table = (head, rows) => cb('core/table', {
 const sectionHead = (title, link) => Row('br-section-head', [H(title, 2), ...(link ? [Arrow(link[0], link[1])] : [])]);
 const Num = (n) => P(n, 'br-num');
 
+/* Photos (fichiers ferlune-*.jpg, placés par nom depuis la Médiathèque). */
+const F = (n) => 'ferlune-' + n;
+const ESC = F('escalier-droit'), HEL = F('escalier-helicoidal'), GCV = F('garde-corps-verre'), GCT = F('garde-corps-terrasse');
+const VC = F('verriere-cuisine'), VB = F('verriere-bureau'), PC = F('portail-coulissant'), PB = F('portail-battant');
+const SOUD = F('atelier-soudure'), ATEL = F('atelier'), DET = F('detail-acier'), TH = F('thomas'), PLAN = F('plan-3d');
+
 /* Rythme des couleurs : copie de rythme() de build_br_kits.js. */
 const CLAIRS = ['fond', 'surface', 'nuance'];
 const fondDe = (b) => (b.name === 'core/cover' ? 'photo' : (b.attributes.backgroundColor || 'fond'));
@@ -94,7 +100,7 @@ const guideCarte = (titre, texte, slug) => Col([Box('br-card', [H(titre, 3), Mut
 const preuve = (titre) => Section('br-section-realisations', [
   sectionHead(titre, ['Toutes nos réalisations', URL('realisations')]),
   Short('[briise_realisations service="auto" nombre="3"]'),
-  Box('br-qui', [Img('portrait', '1/1', 'Thomas Ferlune dans son atelier', 'br-qui-photo'), P(`Fabriqués par Thomas et Karim dans notre atelier de Saran, depuis 2011. ${A('L’histoire de l’Atelier Ferlune', 'atelier')}.`)]),
+  Box('br-qui', [Img(TH, '1/1', 'Thomas Ferlune au poste de soudure de l’atelier', 'br-qui-photo'), P(`Fabriqués par Thomas et Karim dans notre atelier de Saran, depuis 2011. ${A('L’histoire de l’Atelier Ferlune', 'atelier')}.`)]),
 ]);
 const prixTable = (rows, note, oui, non) => [prixCarte(rows, note), ...(oui ? [compris(oui, non)] : [])];
 
@@ -112,36 +118,25 @@ page('accueil', 'Accueil', 'Métallier à Saran : escaliers, garde-corps sur mes
     chapo: 'Nous dessinons vos ouvrages en acier, les fabriquons dans notre atelier et les posons chez vous, dans un rayon de 35 km. Le devis est gratuit.',
     second: ['Voir nos réalisations', URL('realisations')],
     coches: ['Visite et devis gratuits', 'Plan 3D sous 5 jours', 'Garantie décennale'],
-    img: 'banniere', alt: 'Escalier quart tournant en acier noir et marches en chêne, posé à Ingré',
-    etiquettes: [['Plan 3D joint au devis', 'Votre ouvrage, chez vous'], ['Fabriqué à l’atelier', '100 %']],
+    img: ESC, alt: 'Escalier en acier noir à main courante lumineuse et marches en bois clair',
+    etiquettes: [['Escalier droit posé', 'dès 4 800 €'], ['Fabriqué à Saran', 'depuis 2011']],
   }),
-  confiance(CONF),
-  tuiles('Pourquoi nous choisir', 'Les mêmes mains, du dessin à la pose', [
-    ['grande', '100 %', 'fabriqué dans notre atelier de Saran, sans sous-traitance ni catalogue.', 'paysage', 'Karim soude une rampe d’escalier à l’atelier de Saran'],
-    ['large plan', '3D', 'Un plan de votre ouvrage dans votre pièce, joint au devis : vous validez avant qu’on fabrique.'],
-    ['', '5 jours', 'pour recevoir le devis après la visite'],
-    ['accent', '1', 'seul interlocuteur, Thomas, du devis à la pose'],
-  ], null, [Arrow('Découvrir l’atelier et l’équipe', URL('atelier'))]),
-  qualifs(),
   Section('', [
     sectionHead('Ce que nous fabriquons', ['Tous nos ouvrages sur mesure', URL('ouvrages')]),
     P(`Escaliers, garde-corps et verrières d’intérieur, et aussi ${A('nos portails et portillons en acier', 'portails')}.`),
     Cols([
-      ['01', 'Escaliers métalliques', 'Droits, quart tournants ou hélicoïdaux, marches en acier ou en chêne.', 'Escaliers métalliques en détail', 'escaliers-metalliques', 'portrait', 'Escalier quart tournant en acier noir, marches en chêne, posé à Ingré'],
-      ['02', 'Garde-corps et rampes', 'Pour une mezzanine, un escalier ou une terrasse, en acier ou en acier et verre.', 'Garde-corps en détail', 'garde-corps', 'carre', 'Garde-corps de mezzanine en acier et verre à Olivet'],
-      ['03', 'Verrières d’intérieur', 'Une verrière atelier pour faire entrer la lumière sans ouvrir la pièce.', 'Verrières d’intérieur en détail', 'verrieres-interieur', 'paysage', 'Verrière atelier noire entre cuisine et séjour à Saran'],
+      ['01', 'Escaliers métalliques', 'Droits, quart tournants ou hélicoïdaux, marches en acier ou en chêne.', 'Escaliers métalliques en détail', 'escaliers-metalliques', HEL, 'Escalier hélicoïdal en acier et verre vu d’en haut'],
+      ['02', 'Garde-corps et rampes', 'Pour une mezzanine, un escalier ou une terrasse, en acier ou en acier et verre.', 'Garde-corps en détail', 'garde-corps', GCV, 'Garde-corps en verre sur une terrasse en hauteur'],
+      ['03', 'Verrières d’intérieur', 'Une verrière atelier pour faire entrer la lumière sans ouvrir la pièce.', 'Verrières d’intérieur en détail', 'verrieres-interieur', VC, 'Verrière noire entre une cuisine blanche et la salle à manger'],
     ].map(([n, t, d, l, s, img, alt]) => Col([Box('br-card', [ImgFond(img, 'br-card-fond', alt), Num(n), H(t, 3), Muted(d), Arrow(l, URL(s))])]))),
   ], { backgroundColor: 'surface' }),
+  grille('Nos dernières réalisations', ['Toutes nos réalisations', URL('realisations')]),
+  qualifs(),
   etapesFrise('Votre projet en quatre étapes', [
     ['Visite et mesures', 'Thomas vient chez vous, écoute votre projet et prend les cotes.', 'Gratuite'],
     ['Plan 3D et devis', 'Vous recevez le devis et le plan 3D de l’ouvrage dans votre pièce.', 'Sous 5 jours ouvrés'],
     ['Fabrication à l’atelier', 'Découpe, soudure et finition à Saran, selon l’ouvrage.', '3 à 8 semaines'],
     ['Pose', 'Ceux qui ont fabriqué votre ouvrage viennent le poser.'],
-  ]),
-  grille('Nos dernières réalisations', ['Toutes nos réalisations', URL('realisations')], [
-    projet('carre', 'Escalier', 'Ingré', 'Escalier quart tournant', 'Structure acier, marches en chêne, 2025 (fictif).', 'Escalier quart tournant en acier avec marches en chêne, à Ingré'),
-    projet('carre-2', 'Garde-corps', 'Olivet', 'Garde-corps de mezzanine', 'Acier et verre, 2025 (fictif).', 'Garde-corps de mezzanine en acier et verre, à Olivet'),
-    projet('carre-3', 'Verrière', 'Saran', 'Verrière de cuisine', 'Verrière atelier noire, 2026 (fictif).', 'Verrière d’intérieur noire entre une cuisine et un salon, à Saran'),
   ]),
   AVIS,
   zoneListe('Zone d’intervention', 'Nous intervenons à Saran et à 35 km autour', 'Métropole d’Orléans, Beauce et Val de Loire. La visite et le devis sont gratuits dans toute la zone.', ['Toutes les communes où nous intervenons', URL('zone-intervention')]),
@@ -153,7 +148,7 @@ page('ouvrages', 'Ouvrages sur mesure', 'Métallerie sur mesure près d’Orléa
   'Escaliers, garde-corps, verrières d’intérieur et portails en acier, dessinés en 3D et fabriqués dans notre atelier de Saran. Devis gratuit.', [
   teteSplit('Métallerie sur mesure : nos ouvrages', 'Chaque ouvrage est dessiné pour votre maison, fabriqué dans notre atelier de Saran et posé par l’équipe qui l’a fabriqué.'),
   Section('br-section-liees', [H('Chaque ouvrage en détail', 2), Short('[briise_pages_liees]')], { backgroundColor: 'surface' }),
-  alterne([['paysage', 'Thomas soudant une structure d’escalier dans l’atelier de Saran', 'L’atelier', 'Fabriqué à Saran, dans la teinte de votre choix', [
+  alterne([[ATEL, 'L’atelier de Saran : établis, pont roulant et presse plieuse', 'L’atelier', 'Fabriqué à Saran, dans la teinte de votre choix', [
     'Nous travaillons l’acier dans notre atelier de Saran : découpe, soudure, assemblage. Rien n’est sous-traité, rien ne vient d’un catalogue.',
     'Le thermolaquage est réalisé chez un partenaire situé à 15 km, dans toutes les teintes RAL. Pour les escaliers, les marches peuvent être en acier ou en chêne.',
   ]]]),
@@ -172,7 +167,7 @@ page('ouvrages', 'Ouvrages sur mesure', 'Métallerie sur mesure près d’Orléa
     ]),
   ], { backgroundColor: 'surface' }),
   bandeau('Un ouvrage sur mesure en tête ?', 'Décrivez-nous votre projet : nous venons prendre les mesures, gratuitement.'),
-], { menu: true });
+], { menu: true, image: SOUD });
 
 // Escaliers
 page('escaliers-metalliques', 'Escaliers métalliques', 'Escalier métallique sur mesure à Saran, dès 4 800 €',
@@ -180,19 +175,19 @@ page('escaliers-metalliques', 'Escaliers métalliques', 'Escalier métallique su
   teteSplit('Escaliers métalliques sur mesure', 'Un escalier en acier dessiné à vos cotes, fabriqué dans notre atelier de Saran et posé chez vous : à partir de 4 800 € posé pour un escalier droit, 6 à 8 semaines de fabrication.', 'Demander un devis pour votre escalier'),
   confiance(CONF),
   benefices('Pourquoi un escalier en acier', [
-    ['carre', 'Escalier en acier fin dans une pièce lumineuse', 'Il laisse passer la lumière', 'L’acier est si solide qu’une structure fine suffit. L’escalier paraît léger, et la pièce garde sa lumière et sa profondeur.'],
-    ['carre-2', 'Marches en chêne posées sur une structure en acier noir', 'Il ne grince pas', 'Les pièces sont soudées : rien ne prend de jeu avec les années. Avec des marches en chêne, le bruit des pas reste doux.'],
-    ['carre-3', 'Plan 3D d’un escalier dans une entrée', 'Il passe chez vous, même si rien n’est droit', 'Nous le dessinons à vos cotes, relevées au laser, et vous le voyez en 3D dans votre pièce avant la fabrication.'],
+    [HEL, 'Escalier hélicoïdal en acier et verre, baigné de lumière', 'Il laisse passer la lumière', 'L’acier est si solide qu’une structure fine suffit. L’escalier paraît léger, et la pièce garde sa lumière et sa profondeur.'],
+    [DET, 'Soudure en cours à l’atelier, sous les étincelles', 'Il ne grince pas', 'Les pièces sont soudées : rien ne prend de jeu avec les années. Avec des marches en chêne, le bruit des pas reste doux.'],
+    [PLAN, 'Plan d’un escalier en acier tracé avant la fabrication', 'Il passe chez vous, même si rien n’est droit', 'Nous le dessinons à vos cotes, relevées au laser, et vous le voyez en 3D dans votre pièce avant la fabrication.'],
   ]),
   modeles('Droit, quart tournant, hélicoïdal ou limon central ?', 'Le bon escalier dépend surtout de la place dont vous disposez et de l’endroit où il doit arriver à l’étage.', [
-    ['paysage', 'Escalier droit en acier le long d’un mur', 'Droit', [['Place : ', 'la plus longue, environ 3,5 m pour un étage.'], ['Confort : ', 'le plus confortable.'], ['Prix posé : ', 'dès 4 800 €.'], ['Idéal pour : ', 'un long mur libre.']]],
-    ['carre', 'Escalier quart tournant à marches en chêne', 'Quart tournant', [['Place : ', `il tourne dans un angle, moins long qu’un droit. ${A('Calculer la place d’un quart tournant', 'escalier-quart-tournant-dimensions')}.`], ['Confort : ', 'très bon.'], ['Prix posé : ', '7 000 à 14 000 €.'], ['Idéal pour : ', 'arriver à l’étage dans une autre direction.']]],
-    ['carre-2', 'Escalier hélicoïdal en acier brut verni', 'Hélicoïdal', [['Place : ', 'un cercle de 1,20 à 1,60 m de diamètre.'], ['À savoir : ', 'monter un meuble y est difficile.'], ['Prix posé : ', '9 000 à 16 000 € (fictif).'], ['Idéal pour : ', `une petite entrée, des combles. ${A('Tout sur l’escalier hélicoïdal', 'escalier-helicoidal')}.`]]],
-    ['carre-3', 'Escalier à limon central gris anthracite', 'Limon central', [['Ce que c’est : ', 'une seule poutre sous les marches, l’escalier semble flotter.'], ['Place : ', 'celle d’un droit ou d’un quart tournant.'], ['Prix posé : ', '9 000 à 16 000 € (fictif).'], ['Idéal pour : ', 'une pièce de vie lumineuse.']]],
+    [ESC, 'Escalier en acier noir à main courante lumineuse', 'Droit', [['Place : ', 'la plus longue, environ 3,5 m pour un étage.'], ['Confort : ', 'le plus confortable.'], ['Prix posé : ', 'dès 4 800 €.'], ['Idéal pour : ', 'un long mur libre.']]],
+    [PLAN, 'Plan d’un escalier qui tourne sur un palier', 'Quart tournant', [['Place : ', `il tourne dans un angle, moins long qu’un droit. ${A('Calculer la place d’un quart tournant', 'escalier-quart-tournant-dimensions')}.`], ['Confort : ', 'très bon.'], ['Prix posé : ', '7 000 à 14 000 €.'], ['Idéal pour : ', 'arriver à l’étage dans une autre direction.']]],
+    [HEL, 'Escalier hélicoïdal en acier et verre', 'Hélicoïdal', [['Place : ', 'un cercle de 1,20 à 1,60 m de diamètre.'], ['À savoir : ', 'monter un meuble y est difficile.'], ['Prix posé : ', '9 000 à 16 000 € (fictif).'], ['Idéal pour : ', `une petite entrée, des combles. ${A('Tout sur l’escalier hélicoïdal', 'escalier-helicoidal')}.`]]],
+    [SOUD, 'Soudure d’une pièce d’escalier à l’atelier', 'Limon central', [['Ce que c’est : ', 'une seule poutre sous les marches, l’escalier semble flotter.'], ['Place : ', 'celle d’un droit ou d’un quart tournant.'], ['Prix posé : ', '9 000 à 16 000 € (fictif).'], ['Idéal pour : ', 'une pièce de vie lumineuse.']]],
   ], [Muted(`Marches en chêne ou en acier, sur toutes les formes : le chêne apporte de la chaleur et adoucit le bruit des pas ; l’acier ne demande aucun entretien et reçoit un revêtement antidérapant discret. La rampe et ${A('le garde-corps de mezzanine', 'garde-corps')} sont fabriqués dans le même acier.`), conseil()]),
   preuve('Des escaliers réalisés près de chez vous'),
-  avantApres('Du plan 3D à la pose', 'L’escalier que vous validez, l’escalier que vous recevez', 'Avant la fabrication, vous voyez votre escalier en 3D dans votre pièce. Voici le plan validé par une cliente d’Ingré, et l’escalier posé six semaines plus tard (fictif).',
-    ['paysage-2', 'Plan 3D de l’escalier quart tournant, validé avant fabrication', 'Plan 3D'], ['paysage', 'Le même escalier quart tournant posé, marches en chêne', 'Posé']),
+  avantApres('Du plan 3D à la pose', 'L’escalier que vous validez, l’escalier que vous recevez', 'Avant la fabrication, vous voyez votre escalier en plan et en 3D. Voici le plan validé par un client, et l’escalier posé six semaines plus tard (fictif).',
+    [PLAN, 'Plan de l’escalier en acier, validé avant la fabrication', 'Plan 3D'], [ESC, 'Le même escalier posé, main courante éclairée', 'Posé']),
   etapesFil('De la visite à la pose, et le prix', [
     ['La visite', 'Thomas mesure au laser la hauteur à monter et la trémie, c’est-à-dire l’ouverture dans le plafond.', 'Gratuite'],
     ['Le plan 3D et le devis', 'Vous voyez l’escalier dans votre pièce et recevez le prix définitif.', 'Sous 5 jours ouvrés'],
@@ -210,7 +205,7 @@ page('escaliers-metalliques', 'Escaliers métalliques', 'Escalier métallique su
   ], 'nuance'),
   liees(),
   bandeau('Un projet d’escalier ?', 'Visite et devis gratuits, plan 3D sous 5 jours ouvrés.', 'Demander un devis pour votre escalier'),
-], { parent: 'ouvrages', menu: true, menu_description: 'Droits, quart tournants, à limon central' });
+], { parent: 'ouvrages', menu: true, menu_description: 'Droits, quart tournants, à limon central', image: ESC });
 
 // Escalier hélicoïdal
 page('escalier-helicoidal', 'Escalier hélicoïdal', 'Escalier hélicoïdal en métal sur mesure à Saran',
@@ -218,13 +213,13 @@ page('escalier-helicoidal', 'Escalier hélicoïdal', 'Escalier hélicoïdal en m
   teteSplit('Escalier hélicoïdal sur mesure', 'Un escalier en colimaçon en acier, dessiné au diamètre qui convient à votre pièce et fabriqué dans notre atelier de Saran : à partir de 9 000 € posé (fictif), 6 à 8 semaines de fabrication.', 'Demander un devis pour votre escalier'),
   confiance(CONF),
   benefices('Un escalier qui tient dans un coin de pièce', [
-    ['carre', 'Escalier hélicoïdal dans l’angle d’une entrée', 'Moins de 2 m² au sol', 'Un hélicoïdal de 1,40 m de diamètre tient dans un carré de 1,40 m de côté. Un escalier droit demande environ 3,5 m de long.'],
-    ['carre-2', 'Détail des marches et de la main courante d’un hélicoïdal', 'Une vraie pièce de décoration', 'Il se voit sous tous les angles : nous soignons chaque soudure, et vous choisissez la teinte, les marches et la main courante.'],
-    ['carre-3', 'Escalier hélicoïdal livré en plusieurs parties', 'Pas de gros travaux', 'Il est livré en plusieurs parties qui passent par une porte, puis assemblé chez vous en une journée.'],
+    [PLAN, 'Plan d’escalier tracé à l’atelier', 'Moins de 2 m² au sol', 'Un hélicoïdal de 1,40 m de diamètre tient dans un carré de 1,40 m de côté. Un escalier droit demande environ 3,5 m de long.'],
+    [DET, 'Soudure soignée à l’atelier, sous les étincelles', 'Une vraie pièce de décoration', 'Il se voit sous tous les angles : nous soignons chaque soudure, et vous choisissez la teinte, les marches et la main courante.'],
+    [ATEL, 'L’atelier de Saran, où l’escalier est préparé en plusieurs parties', 'Pas de gros travaux', 'Il est livré en plusieurs parties qui passent par une porte, puis assemblé chez vous en une journée.'],
   ]),
   modeles('Rond ou carré, et quel diamètre ?', 'Plus le diamètre est grand, plus l’escalier est confortable. Le bon choix dépend de la place et de l’usage : un accès de temps en temps ou l’escalier principal de la maison.', [
-    ['paysage', 'Escalier hélicoïdal rond au milieu d’une pièce', 'Rond', [['Idéal pour : ', 'le milieu d’une pièce ou une trémie ronde.'], ['Ce qui plaît : ', 'le plus léger à l’œil.'], ['Prix posé : ', '9 000 à 12 000 € (fictif).']]],
-    ['paysage-2', 'Escalier hélicoïdal carré dans un angle', 'Carré', [['Idéal pour : ', 'un angle de pièce ou une trémie carrée.'], ['Ce qui plaît : ', 'aucune place perdue dans les coins.'], ['Prix posé : ', '12 000 à 16 000 € (fictif), un peu plus d’acier.']]],
+    [HEL, 'Escalier hélicoïdal rond en acier et verre', 'Rond', [['Idéal pour : ', 'le milieu d’une pièce ou une trémie ronde.'], ['Ce qui plaît : ', 'le plus léger à l’œil.'], ['Prix posé : ', '9 000 à 12 000 € (fictif).']]],
+    [SOUD, 'Soudure d’un escalier à l’atelier', 'Carré', [['Idéal pour : ', 'un angle de pièce ou une trémie carrée.'], ['Ce qui plaît : ', 'aucune place perdue dans les coins.'], ['Prix posé : ', '12 000 à 16 000 € (fictif), un peu plus d’acier.']]],
   ], [
     Table(['Diamètre', 'Place au sol', 'Confort', 'Idéal pour'], [
       ['1,20 m', 'Environ 1,5 m²', 'Passage étroit', 'Des combles, un accès occasionnel'],
@@ -255,7 +250,7 @@ page('escalier-helicoidal', 'Escalier hélicoïdal', 'Escalier hélicoïdal en m
   ], 'nuance'),
   liees(),
   bandeau('Un escalier hélicoïdal pour votre maison ?', 'Visite et devis gratuits, avec plusieurs diamètres comparés en 3D.', 'Demander un devis pour votre escalier'),
-], { parent: 'ouvrages', menu: true, menu_description: 'Gain de place, autour d’un fût central' });
+], { parent: 'ouvrages', menu: true, menu_description: 'Gain de place, autour d’un fût central', image: HEL });
 
 // Garde-corps
 page('garde-corps', 'Garde-corps et rampes', 'Garde-corps sur mesure à Saran, dès 390 € le mètre',
@@ -263,15 +258,15 @@ page('garde-corps', 'Garde-corps et rampes', 'Garde-corps sur mesure à Saran, d
   teteSplit('Garde-corps et rampes sur mesure', 'Garde-corps de mezzanine, d’escalier ou de terrasse, fabriqués à Saran et posés en 3 à 5 semaines : à partir de 390 € le mètre linéaire posé.', 'Demander un devis pour votre garde-corps'),
   confiance(CONF),
   benefices('Un garde-corps qui protège sans enfermer', [
-    ['carre', 'Enfant sur une mezzanine protégée par un garde-corps en verre', 'Vos enfants en sécurité', `Chaque garde-corps suit la norme révisée en 2024 : hauteur, écart entre les barreaux, rien sur quoi grimper. ${A('Ce que dit la norme', 'norme-garde-corps')}.`],
-    ['carre-2', 'Mezzanine ouverte sur le séjour avec un garde-corps fin', 'La vue et la lumière gardées', 'Des montants fins, du verre ou des barreaux espacés : la mezzanine reste ouverte sur la pièce.'],
-    ['carre-3', 'Garde-corps de terrasse anthracite sous la pluie', 'Presque aucun entretien', 'L’acier est thermolaqué, c’est-à-dire recouvert d’une peinture cuite au four. Dehors, il est aussi galvanisé contre la rouille.'],
+    [GCT, 'Garde-corps à barreaux verticaux en acier le long d’une allée', 'Vos enfants en sécurité', `Chaque garde-corps suit la norme révisée en 2024 : hauteur, écart entre les barreaux, rien sur quoi grimper. ${A('Ce que dit la norme', 'norme-garde-corps')}.`],
+    [HEL, 'Garde-corps en verre le long d’un escalier hélicoïdal', 'La vue et la lumière gardées', 'Des montants fins, du verre ou des barreaux espacés : la mezzanine reste ouverte sur la pièce.'],
+    [DET, 'Soudure à l’atelier, avant galvanisation et thermolaquage', 'Presque aucun entretien', 'L’acier est thermolaqué, c’est-à-dire recouvert d’une peinture cuite au four. Dehors, il est aussi galvanisé contre la rouille.'],
   ]),
   modeles('Barreaux, verre, câbles ou tôle perforée ?', 'Le remplissage, c’est ce qui ferme l’espace entre la main courante et le sol. Il décide du style, de la vue et du prix.', [
-    ['carre', 'Garde-corps à barreaux verticaux en acier anthracite', 'Barreaux verticaux', [['Vous voyez : ', 'un style atelier, la vue en partie dégagée.'], ['Avec de jeunes enfants : ', 'très sûr, rien à escalader.'], ['Prix posé : ', 'dès 390 € le mètre.']]],
-    ['carre-2', 'Garde-corps de mezzanine en acier et verre', 'Verre', [['Vous voyez : ', 'la vue entièrement dégagée, toute la lumière.'], ['Avec de jeunes enfants : ', 'très sûr, rien à escalader.'], ['Entretien : ', 'les traces de doigts à nettoyer.'], ['Prix posé : ', 'dès 650 € le mètre (fictif).']]],
-    ['carre-3', 'Garde-corps à câbles tendus sur une terrasse', 'Câbles tendus', [['Vous voyez : ', 'presque rien, très léger.'], ['Avec de jeunes enfants : ', 'déconseillé, les câbles horizontaux s’escaladent.'], ['Prix posé : ', 'dès 450 € le mètre (fictif).']]],
-    ['paysage', 'Garde-corps en tôle perforée', 'Tôle perforée', [['Vous voyez : ', 'un écran graphique qui cache sans assombrir.'], ['Avec de jeunes enfants : ', 'très sûr, rien à escalader.'], ['Prix posé : ', 'dès 480 € le mètre (fictif).']]],
+    [GCT, 'Garde-corps à barreaux verticaux en acier', 'Barreaux verticaux', [['Vous voyez : ', 'un style atelier, la vue en partie dégagée.'], ['Avec de jeunes enfants : ', 'très sûr, rien à escalader.'], ['Prix posé : ', 'dès 390 € le mètre.']]],
+    [GCV, 'Garde-corps en verre sur une terrasse en hauteur', 'Verre', [['Vous voyez : ', 'la vue entièrement dégagée, toute la lumière.'], ['Avec de jeunes enfants : ', 'très sûr, rien à escalader.'], ['Entretien : ', 'les traces de doigts à nettoyer.'], ['Prix posé : ', 'dès 650 € le mètre (fictif).']]],
+    [ATEL, 'L’atelier de Saran, où les garde-corps sont fabriqués', 'Câbles tendus', [['Vous voyez : ', 'presque rien, très léger.'], ['Avec de jeunes enfants : ', 'déconseillé, les câbles horizontaux s’escaladent.'], ['Prix posé : ', 'dès 450 € le mètre (fictif).']]],
+    [PC, 'Tôle d’acier découpée de motifs, ici sur un portail', 'Tôle perforée', [['Vous voyez : ', 'un écran graphique qui cache sans assombrir.'], ['Avec de jeunes enfants : ', 'très sûr, rien à escalader.'], ['Prix posé : ', 'dès 480 € le mètre (fictif).']]],
   ], [Muted(`Pour un escalier, la rampe et le garde-corps sont assortis, ou dessinés avec ${A('un escalier en acier sur mesure', 'escaliers-metalliques')}.`), conseil()]),
   preuve('Garde-corps réalisés près de chez vous'),
   etapesFil('De la visite à la pose, et le prix', [
@@ -289,7 +284,7 @@ page('garde-corps', 'Garde-corps et rampes', 'Garde-corps sur mesure à Saran, d
   ], 'nuance'),
   liees(),
   bandeau('Un garde-corps à créer ou à remplacer ?', 'Visite et devis gratuits, plan 3D sous 5 jours ouvrés.', 'Demander un devis pour votre garde-corps'),
-], { parent: 'ouvrages', menu: true, menu_description: 'Mezzanines, escaliers, terrasses' });
+], { parent: 'ouvrages', menu: true, menu_description: 'Mezzanines, escaliers, terrasses', image: GCV });
 
 // Verrières
 page('verrieres-interieur', 'Verrières d’intérieur', 'Verrière d’intérieur sur mesure à Saran, dès 750 €/m²',
@@ -297,15 +292,15 @@ page('verrieres-interieur', 'Verrières d’intérieur', 'Verrière d’intérie
   teteSplit('Verrières d’intérieur sur mesure', 'Une verrière atelier en acier, dessinée à vos dimensions et fabriquée à Saran : à partir de 750 € le m² posé, 3 à 4 semaines de fabrication.', 'Demander un devis pour votre verrière'),
   confiance(CONF),
   benefices('La lumière d’une pièce ouverte, le calme d’une pièce fermée', [
-    ['carre', 'Couloir éclairé par une verrière haute', 'La lumière du jour partout', 'Une pièce sombre, un couloir ou une entrée reçoivent la lumière des fenêtres voisines.'],
-    ['carre-2', 'Verrière noire entre une cuisine et un salon', 'Les odeurs et le bruit restent de leur côté', 'Contrairement à une cuisine ouverte, la verrière sépare les pièces. Avec un vitrage acoustique, le bruit passe beaucoup moins.'],
-    ['carre-3', 'Pose d’une verrière en une journée', 'Sans gros travaux', 'Fabriquée à l’atelier et posée en une journée, sur une cloison existante ou entre le sol et le plafond.'],
+    [VB, 'Cloison vitrée à profils noirs dans un bureau lumineux', 'La lumière du jour partout', 'Une pièce sombre, un couloir ou une entrée reçoivent la lumière des fenêtres voisines.'],
+    [VC, 'Verrière noire entre une cuisine et la salle à manger', 'Les odeurs et le bruit restent de leur côté', 'Contrairement à une cuisine ouverte, la verrière sépare les pièces. Avec un vitrage acoustique, le bruit passe beaucoup moins.'],
+    [SOUD, 'Profil de verrière soudé à l’atelier', 'Sans gros travaux', 'Fabriquée à l’atelier et posée en une journée, sur une cloison existante ou entre le sol et le plafond.'],
   ]),
   modeles('Quelle verrière pour quelle pièce ?', 'Quatre façons de poser une verrière, selon ce que vous voulez séparer.', [
-    ['carre', 'Verrière sur allège au-dessus de meubles de cuisine', 'Sur un muret', [['Posée : ', 'sur un muret d’environ 1 m.'], ['Idéal pour : ', `${A('une cuisine', 'verriere-cuisine')} qui garde ses meubles hauts.`], ['Prix posé : ', 'dès 750 € le m².']]],
-    ['carre-2', 'Verrière toute hauteur entre un bureau et un séjour', 'Toute hauteur', [['Posée : ', 'du sol au plafond, sans cloison.'], ['Idéal pour : ', 'séparer un bureau ou une chambre d’un séjour.'], ['Prix posé : ', 'dès 750 € le m².']]],
-    ['carre-3', 'Verrière avec porte battante', 'Avec porte', [['Posée : ', 'toute hauteur, porte battante ou coulissante.'], ['Idéal pour : ', 'un bureau, une suite parentale.'], ['Prix posé : ', 'porte en plus (fictif).']]],
-    ['paysage', 'Petite verrière haute dans une entrée', 'Petite verrière haute', [['Posée : ', 'en bande en haut d’une cloison.'], ['Idéal pour : ', 'une entrée ou un couloir sombre, une salle de bains.'], ['Prix posé : ', 'dès 750 € le m².']]],
+    [VC, 'Verrière noire de cuisine', 'Sur un muret', [['Posée : ', 'sur un muret d’environ 1 m.'], ['Idéal pour : ', `${A('une cuisine', 'verriere-cuisine')} qui garde ses meubles hauts.`], ['Prix posé : ', 'dès 750 € le m².']]],
+    [VB, 'Cloison vitrée toute hauteur à profils noirs', 'Toute hauteur', [['Posée : ', 'du sol au plafond, sans cloison.'], ['Idéal pour : ', 'séparer un bureau ou une chambre d’un séjour.'], ['Prix posé : ', 'dès 750 € le m².']]],
+    [VB, 'Cloison vitrée avec porte, profils noirs', 'Avec porte', [['Posée : ', 'toute hauteur, porte battante ou coulissante.'], ['Idéal pour : ', 'un bureau, une suite parentale.'], ['Prix posé : ', 'porte en plus (fictif).']]],
+    [DET, 'Assemblage d’un profil en acier à l’atelier', 'Petite verrière haute', [['Posée : ', 'en bande en haut d’une cloison.'], ['Idéal pour : ', 'une entrée ou un couloir sombre, une salle de bains.'], ['Prix posé : ', 'dès 750 € le m².']]],
   ], [Muted('Côté vitrage : clair pour la lumière, dépoli pour ne pas être vu (salle de bains, chambre), feuilleté acoustique pour le bruit (bureau, séjour).'), conseil()]),
   preuve('Verrières réalisées près de chez vous'),
   etapesFil('De la visite à la pose, et le prix', [
@@ -322,7 +317,7 @@ page('verrieres-interieur', 'Verrières d’intérieur', 'Verrière d’intérie
   ], 'nuance'),
   liees(),
   bandeau('Plus de lumière dans votre maison ?', 'Visite et devis gratuits, plan 3D sous 5 jours ouvrés.', 'Demander un devis pour votre verrière'),
-], { parent: 'ouvrages', menu: true, menu_description: 'Atelier, pour faire entrer la lumière' });
+], { parent: 'ouvrages', menu: true, menu_description: 'Atelier, pour faire entrer la lumière', image: VC });
 
 // Portails
 page('portails', 'Portails et portillons', 'Portail acier sur mesure à Saran : battant, coulissant',
@@ -330,13 +325,13 @@ page('portails', 'Portails et portillons', 'Portail acier sur mesure à Saran : 
   teteSplit('Portails et portillons en acier sur mesure', 'Portails battants ou coulissants et portillons assortis, fabriqués dans notre atelier de Saran en 5 à 7 semaines : à partir de 2 900 € posé pour un portail battant (fictif).', 'Demander un devis pour votre portail'),
   confiance(CONF),
   benefices('Un portail en acier fait pour durer', [
-    ['carre', 'Portail en acier gris anthracite après plusieurs hivers', 'Pas de rouille, pas de peinture à refaire', 'Il est galvanisé, plongé dans un bain de zinc qui protège l’acier, puis thermolaqué : une peinture cuite au four, dans la teinte de votre choix.'],
-    ['carre-2', 'Portail coulissant sur une allée en pente', 'Fait pour votre entrée', 'Une allée en pente, des piliers qui ne sont pas d’aplomb, une largeur hors standard : nous le dessinons à vos mesures.'],
-    ['carre-3', 'Portail, portillon et clôture assortis', 'Tout assorti', 'Portillon, clôture et boîte aux lettres reprennent le même dessin et la même teinte.'],
+    [PB, 'Portail battant et portillon en métal blanc', 'Pas de rouille, pas de peinture à refaire', 'Il est galvanisé, plongé dans un bain de zinc qui protège l’acier, puis thermolaqué : une peinture cuite au four, dans la teinte de votre choix.'],
+    [ATEL, 'L’atelier de Saran, où chaque portail est fabriqué à vos mesures', 'Fait pour votre entrée', 'Une allée en pente, des piliers qui ne sont pas d’aplomb, une largeur hors standard : nous le dessinons à vos mesures.'],
+    [DET, 'Soudure d’un cadre de portail à l’atelier', 'Tout assorti', 'Portillon, clôture et boîte aux lettres reprennent le même dessin et la même teinte.'],
   ]),
   modeles('Battant ou coulissant ?', 'Tout dépend de la place derrière le portail et de la pente de votre allée.', [
-    ['paysage', 'Portail battant en acier à deux vantaux', 'Battant', [['Place : ', 'derrière le portail, l’ouverture des deux vantaux.'], ['Allée en pente : ', 'difficile, les vantaux frottent.'], ['Motorisation : ', 'simple et économique.'], ['Prix posé : ', 'dès 2 900 € (fictif).']]],
-    ['paysage-2', 'Portail coulissant autoportant en acier', 'Coulissant', [['Place : ', 'sur le côté, la largeur du passage.'], ['Allée en pente : ', 'aucun problème, il ne touche pas le sol.'], ['Motorisation : ', 'recommandée au-delà de 4 m.'], ['Prix posé : ', 'dès 3 800 € (fictif).']]],
+    [PB, 'Portail battant à deux vantaux et portillon', 'Battant', [['Place : ', 'derrière le portail, l’ouverture des deux vantaux.'], ['Allée en pente : ', 'difficile, les vantaux frottent.'], ['Motorisation : ', 'simple et économique.'], ['Prix posé : ', 'dès 2 900 € (fictif).']]],
+    [PC, 'Portail coulissant gris en tôle découpée', 'Coulissant', [['Place : ', 'sur le côté, la largeur du passage.'], ['Allée en pente : ', 'aucun problème, il ne touche pas le sol.'], ['Motorisation : ', 'recommandée au-delà de 4 m.'], ['Prix posé : ', 'dès 3 800 € (fictif).']]],
   ], [Muted('Acier ou aluminium ? L’acier est plus lourd et très rigide : il résiste aux chocs et se répare par soudure ; galvanisé et thermolaqué, il ne rouille pas. L’aluminium ne rouille jamais et pèse moins lourd, mais il se déforme plus facilement sous un choc. Nous ne le fabriquons pas : si c’est votre choix, nous vous le dirons honnêtement.'), conseil()]),
   preuve('Portails réalisés près de chez vous'),
   etapesFil('De la visite à la pose, et le prix', [
@@ -353,31 +348,31 @@ page('portails', 'Portails et portillons', 'Portail acier sur mesure à Saran : 
   ], 'nuance'),
   liees(),
   bandeau('Un portail à remplacer ?', 'Visite et devis gratuits, plan 3D sous 5 jours ouvrés.', 'Demander un devis pour votre portail'),
-], { parent: 'ouvrages', menu: true, menu_description: 'Battants ou coulissants, motorisés' });
+], { parent: 'ouvrages', menu: true, menu_description: 'Battants ou coulissants, motorisés', image: PC });
 
 // Réalisations
 page('realisations', 'Réalisations', 'Nos réalisations : escaliers, garde-corps, verrières',
   'Escaliers, garde-corps, verrières et portails fabriqués dans notre atelier de Saran et posés autour d’Orléans : photos de chantiers avec la commune.', [
-  tete('Nos réalisations en métallerie', 'Des chantiers récents, avec la commune et l’année. Chaque ouvrage est fabriqué dans notre atelier de Saran.'),
+  teteSplit('Nos réalisations en métallerie', 'Des chantiers récents, avec la commune et l’année. Chaque ouvrage est fabriqué dans notre atelier de Saran.', CTA_LABEL),
   Section('br-section-realisations', [
     Short('[briise_realisations filtres="1"]'),
     P(`Des chantiers dans votre secteur ? ${A('Voir notre zone d’intervention', 'zone-intervention')}. Qui viendra chez vous ? ${A('Thomas ou Karim, l’équipe de l’atelier', 'atelier')}.`),
   ]),
   Section('', [
-    Head([Label('Avant / après'), H('Un garde-corps remplacé sur une mezzanine', 2), Lead('Un garde-corps à barreaux horizontaux, facile à escalader, remplacé par un garde-corps acier et verre, à Ingré (fictif).')]),
+    Head([Label('Du plan à la pose'), H('L’escalier validé sur plan, puis posé', 2), Lead('Le plan remis avec le devis, et le même escalier six semaines plus tard (fictif).')]),
     Cols([
-      Col([Box('br-avap', [Img('avant', '4/3', 'Avant : garde-corps à barreaux horizontaux sur une mezzanine'), P('Avant', 'br-chip br-avap-tag')])]),
-      Col([Box('br-avap', [Img('apres', '4/3', 'Après : garde-corps acier et verre sur la même mezzanine'), P('Après', 'br-chip br-avap-tag')])]),
+      Col([Box('br-avap', [Img(PLAN, '4/3', 'Plan de l’escalier en acier, validé avant la fabrication'), P('Plan', 'br-chip br-avap-tag')])]),
+      Col([Box('br-avap', [Img(ESC, '4/3', 'Le même escalier posé, main courante éclairée'), P('Posé', 'br-chip br-avap-tag')])]),
     ], 'br-avant-apres'),
   ], { backgroundColor: 'nuance' }),
   AVIS,
   bandeau('Un projet comparable ?', 'Visite et devis gratuits, plan 3D sous 5 jours ouvrés.'),
-], { menu: true });
+], { menu: true, image: GCV });
 
 // Zone
 page('zone-intervention', 'Zone d’intervention', 'Métallier à Saran et autour d’Orléans',
   'Atelier Ferlune intervient à 35 km autour de Saran : Ingré, Olivet, Fleury-les-Aubrais, Chécy, Meung-sur-Loire… Devis gratuit sur place.', [
-  tete('Métallier à Saran et autour d’Orléans', 'Nous intervenons dans un rayon de 35 km autour de notre atelier de Saran : métropole d’Orléans, Beauce et Val de Loire.'),
+  teteSplit('Métallier à Saran et autour d’Orléans', 'Nous intervenons dans un rayon de 35 km autour de notre atelier de Saran : métropole d’Orléans, Beauce et Val de Loire.', CTA_LABEL),
   Section('', [
     Short('[briise_carte_zone titre="Nos communes et nos chantiers"]'),
     Muted(`Précisions sous chaque commune : chantiers fictifs pour le test. Voir aussi ${A('nos portails et portillons en acier', 'portails')}.`),
@@ -387,14 +382,14 @@ page('zone-intervention', 'Zone d’intervention', 'Métallier à Saran et autou
     ['Le déplacement pour le devis est-il payant ?', 'Non, la visite et le devis sont gratuits dans un rayon de 35 km autour de Saran (fictif).'],
   ], 'nuance'),
   bandeau('Vous êtes dans notre secteur ?', 'Demandez votre visite : elle est gratuite.'),
-], { menu: true });
+], { menu: true, image: PB });
 
 // L'atelier
 page('atelier', 'L’atelier', 'L’Atelier Ferlune, métallier à Saran depuis 2011',
   'Thomas Ferlune et son équipe dessinent, fabriquent et posent vos ouvrages en acier depuis leur atelier de Saran, ouvert en 2011.', [
-  teteMosaique('L’Atelier Ferlune à Saran', 'Trois personnes, un atelier de 400 m² et les mêmes mains du dessin à la pose, depuis 2011.', false, [['carre-2', 'Karim soudant une rampe à l’atelier'], ['carre-3', 'Échantillons de teintes RAL à l’atelier']]),
+  teteMosaique('L’Atelier Ferlune à Saran', 'Trois personnes, un atelier de 400 m² et les mêmes mains du dessin à la pose, depuis 2011.', false, [[SOUD, 'Soudeur au travail à l’atelier, sous les étincelles'], [DET, 'Soudure en cours sous la lumière de l’arc']]),
   Section('', [Cols([
-    Col([Img('portrait', '4/5', 'Portrait de Thomas Ferlune dans son atelier', 'is-style-br-galet')], { width: '42%' }),
+    Col([Img(TH, '4/5', 'Thomas Ferlune au poste de soudure de l’atelier', 'is-style-br-galet')], { width: '42%' }),
     Col([
       Label('Le fondateur'), H('Thomas Ferlune, métallier', 2),
       P('Je dessine chaque ouvrage pour la maison où il va vivre, et je viens le poser moi-même.', 'br-statement'),
@@ -413,7 +408,7 @@ page('atelier', 'L’atelier', 'L’Atelier Ferlune, métallier à Saran depuis 
         ['Aujourd’hui', 'Plus de 600 ouvrages posés à moins de 35 km de l’atelier (fictif).'],
       ].map(([an, t]) => Box('br-histoire', [P(an, 'br-histoire-an'), P(t)])),
     ], { width: '58%' }),
-    Col([Img('paysage', '4/5', 'Façade de l’Atelier Ferlune dans la zone artisanale de Saran')], { width: '42%', verticalAlignment: 'center' }),
+    Col([Img(ATEL, '4/5', 'L’atelier de 400 m² dans la zone artisanale de Saran')], { width: '42%', verticalAlignment: 'center' }),
   ], 'br-split')]),
   Section('', [
     Head([Label('Ce que ça vous garantit'), H('Pourquoi confier votre maison à un atelier comme le nôtre', 2)]),
@@ -425,34 +420,34 @@ page('atelier', 'L’atelier', 'L’Atelier Ferlune, métallier à Saran depuis 
   ], { backgroundColor: 'nuance' }),
   Section('', [
     Head([Label('L’équipe'), H('Ceux qui fabriquent et qui posent', 2)]),
-    Cols([['carre', 'Thomas Ferlune', 'Visites, plans 3D, fabrication et pose'], ['carre-2', 'Karim', 'Soudeur à l’atelier depuis 2016, fabrication et pose'], ['carre-3', 'Lucas', 'Apprenti métallier (fictif)']]
-      .map(([i, n, r]) => Col([Box('br-member', [Img(i, '1/1', 'Portrait de ' + n), H(n, 3), Muted(r)])])), 'br-team'),
+    Cols([[TH, 'Thomas Ferlune', 'Visites, plans 3D, fabrication et pose', 'Thomas Ferlune à l’atelier'], [SOUD, 'Karim', 'Soudeur à l’atelier depuis 2016, fabrication et pose', 'Karim au travail, masque de soudure baissé'], [DET, 'Lucas', 'Apprenti métallier (fictif)', 'Soudure en cours à l’atelier']]
+      .map(([i, n, r, alt]) => Col([Box('br-member', [Img(i, '1/1', alt), H(n, 3), Muted(r)])])), 'br-team'),
   ], { backgroundColor: 'surface' }),
   Section('', [
     Head([Label('En images'), H('L’atelier', 2)]),
     cb('core/gallery', { linkTo: 'none', sizeSlug: 'large', className: 'br-mosaique', columns: 3, imageCrop: true },
-      ['paysage', 'portrait', 'carre', 'carre-2', 'paysage-2', 'carre-3'].map((n, i) => cb('core/image', { url: IMG(n), alt: fr(['Vue de l’atelier', 'Poste de soudure', 'Découpe d’un profil acier', 'Marches en chêne avant pose', 'Pièce en cours de montage', 'Échantillons de teintes RAL'][i] + ' (photo à fournir)'), sizeSlug: 'large', linkDestination: 'none' }))),
+      [[ATEL, 'L’atelier : établis, pont roulant et presse plieuse'], [SOUD, 'Soudure d’une pièce à l’atelier'], [DET, 'Gerbe d’étincelles pendant une soudure'], [ESC, 'Un escalier fabriqué à l’atelier, posé chez un client'], [GCV, 'Un garde-corps en verre posé sur une terrasse'], [VC, 'Une verrière de cuisine posée']].map(([n, alt]) => cb('core/image', { url: IMG(n), alt: fr(alt), sizeSlug: 'large', linkDestination: 'none' }))),
     Arrow('Voir ce que nous avons fabriqué', URL('realisations')),
   ]),
   bandeau('Un projet à nous confier ?', 'Thomas vient vous voir, gratuitement, pour en parler sur place.'),
-], { menu: true });
+], { menu: true, image: TH });
 
 // Devis
 page('devis', 'Demander un devis', 'Demander un devis de métallerie à Saran',
   'Devis gratuit après une visite chez vous, avec un plan 3D de votre ouvrage sous 5 jours ouvrés. Escaliers, garde-corps, verrières, portails.', [
   Section('br-page-head', [Head([
     Short('[briise_fil_ariane]'), H('Demander un devis', 1, null, { fontSize: 'huge' }),
-    Lead('Le devis est gratuit. Thomas vient prendre les mesures chez vous, puis vous recevez sous 5 jours ouvrés le devis et un plan 3D de votre ouvrage.'),
+    Lead('Gratuit : Thomas vient prendre les mesures, puis vous recevez sous 5 jours ouvrés le devis et le plan 3D.'),
     Short('[briise_appel texte="Appeler Thomas"]'),
   ])]),
   Section('', [Cols([
+    Col([Box('br-card br-formulaire', [Short('[briise_formulaire type="devis"]')])], { width: '58%' }),
     Col([
-      Label('Votre projet'), H('Décrivez-nous votre ouvrage', 2),
-      P('Type d’ouvrage, commune et quelques mots sur votre projet. Thomas vous rappelle pour fixer la visite. Vous avez des photos de l’endroit ? Joignez-les en répondant à l’e-mail de confirmation.'),
+      H('Ce qui se passe ensuite', 2),
+      P('Thomas vous rappelle pour fixer la visite. Vous avez des photos de l’endroit ? Joignez-les en répondant à l’e-mail de confirmation.'),
       List(['Visite et devis gratuits dans notre zone', 'Plan 3D joint au devis', 'Vos données servent uniquement à vous répondre']),
       P(`Avant d’envoyer : ${A('vérifier que nous venons chez vous', 'zone-intervention')}.`),
     ], { width: '42%' }),
-    Col([Box('br-card br-formulaire', [Short('[briise_formulaire type="devis"]')])], { width: '58%' }),
   ], 'br-split')]),
   Section('', [Short('[briise_carte_coordonnees titre="Nous trouver"]')], { backgroundColor: 'surface' }),
   faq('Avant de demander', [
@@ -470,7 +465,7 @@ page('norme-garde-corps', 'Norme garde-corps', 'Norme garde-corps NF P01-012 : c
     Lead('Depuis le 1er janvier 2026, tout nouveau garde-corps ou rampe d’escalier doit respecter la version 2024 de la norme NF P01-012. Voici ce qui change pour un particulier.'),
   ])]),
   Section('', [Box('br-narrow', [
-    Img('paysage', '16/9', 'Garde-corps de mezzanine en acier et verre, conforme à la norme révisée'),
+    Img(GCV, '16/9', 'Garde-corps en verre sur une terrasse en hauteur'),
     H('L’essentiel en six points', 2),
     P('<strong>Une norme révisée après 36 ans.</strong> La NF P01-012 datait de 1988. Sa nouvelle version a été publiée par l’Afnor le 22 novembre 2024.'),
     P('<strong>Quand elle s’applique.</strong> Depuis juin 2025 pour les projets soumis à une autorisation d’urbanisme, et depuis le 1er janvier 2026 pour tous les autres travaux. La version de 1988 ne s’applique plus.'),
@@ -497,7 +492,7 @@ page('escalier-quart-tournant-dimensions', 'Escalier quart tournant : dimensions
     Lead('Un escalier quart tournant tourne d’un quart de tour pour arriver à l’étage dans une autre direction. Il tient dans un angle de pièce, là où un escalier droit demanderait environ 3,5 m de long.'),
   ])]),
   Section('', [Box('br-narrow', [
-    Img('paysage', '16/9', 'Escalier quart tournant en acier avec marches en chêne, à Ingré'),
+    Img(PLAN, '16/9', 'Plan d’un escalier qui tourne sur un palier'),
     H('Haut, bas, gauche, droit : les quatre mots à connaître', 2),
     P('<strong>Quart tournant haut</strong> : le virage est en haut, juste avant l’étage. On monte d’abord tout droit. C’est la forme la plus courante quand l’escalier longe un mur puis doit s’orienter vers un couloir.'),
     P('<strong>Quart tournant bas</strong> : le virage est en bas, dès les premières marches. Pratique quand l’escalier part d’un couloir ou d’une porte.'),
@@ -540,7 +535,7 @@ page('verriere-cuisine', 'Verrière de cuisine', 'Verrière de cuisine : avantag
     Lead('Une verrière de cuisine apporte la lumière d’une cuisine ouverte en gardant les odeurs et le bruit de leur côté. Voici ce qu’elle change, ses limites et ce qu’elle coûte.'),
   ])]),
   Section('', [Box('br-narrow', [
-    Img('paysage', '16/9', 'Verrière noire entre une cuisine et un salon, à Saran'),
+    Img(VC, '16/9', 'Verrière noire entre une cuisine et la salle à manger'),
     H('Ce qu’elle apporte', 2),
     List([
       'La lumière du salon arrive jusqu’au plan de travail, ou l’inverse.',
@@ -578,61 +573,61 @@ page('verriere-cuisine', 'Verrière de cuisine', 'Verrière de cuisine : avantag
 
 /* Fiches de réalisation (fictives). La dernière est volontairement courte : test du seuil de 150 mots. */
 const realisations = [
-  { titre: 'Escalier quart tournant à marches en chêne à Ingré', ville: 'Ingré', date: '2025-09', service: 'escaliers-metalliques', categories: ['Escalier'],
+  { titre: 'Escalier quart tournant à marches en chêne à Ingré', image: ESC, ville: 'Ingré', date: '2025-09', service: 'escaliers-metalliques', categories: ['Escalier'],
     resume: 'Structure acier noire et marches en chêne massif dans une maison des années 1930.',
     demande: ['Dans une maison des années 1930, la famille voulait remplacer un escalier en bois raide et bruyant par un escalier plus doux à monter, sans perdre de place dans l’entrée. La trémie n’était pas d’équerre et le mur porteur penchait de deux centimètres.'],
     solution: ['Thomas a relevé les cotes au laser, puis dessiné en 3D un quart tournant de quatorze marches qui suit le mur existant. Le limon et les crémaillères sont en acier de 8 mm, découpés et soudés à l’atelier de Saran, puis thermolaqués en noir mat.',
       'Les marches en chêne massif, huilées, sont fixées par en dessous : aucune vis ne se voit. Le chêne atténue le bruit des pas et réchauffe l’ensemble. La rampe, en fer plat de 40 mm, prolonge le garde-corps de l’étage. Fabrication en cinq semaines, pose en deux jours par l’équipe qui l’a fabriqué, sans toucher au carrelage de l’entrée (client fictif).',
       'Le devis, remis cinq jours après la visite avec le plan 3D, est resté le prix final : aucune surprise sur la facture.'] },
-  { titre: 'Escalier droit à limon central à Saran', ville: 'Saran', date: '2024-11', service: 'escaliers-metalliques', categories: ['Escalier'],
+  { titre: 'Escalier droit à limon central à Saran', image: SOUD, ville: 'Saran', date: '2024-11', service: 'escaliers-metalliques', categories: ['Escalier'],
     resume: 'Un limon central en acier anthracite pour un escalier léger dans un loft.',
     demande: ['Pour un ancien atelier transformé en loft, le propriétaire cherchait un escalier qui laisse passer la lumière et ne coupe pas la pièce en deux. Il voulait une ligne simple, en accord avec les poutres métalliques d’origine.'],
     solution: ['Nous avons proposé un escalier droit à limon central : une seule poutre en acier sous les marches, qui donne l’impression que l’escalier flotte. Le limon, en tube de 200 par 100 mm, est ancré dans la dalle et dans la mezzanine.',
       'Les marches en tôle pliée de 6 mm reçoivent un revêtement antidérapant discret. Teinte anthracite, assortie aux poutres existantes. Le garde-corps de la mezzanine a été prolongé dans le même acier. Le plan 3D a permis de vérifier la hauteur sous plafond à chaque marche avant la fabrication, ce qui a évité de reprendre la trémie. Pose en une journée (client fictif).',
       'Le client a validé la teinte sur un échantillon d’acier thermolaqué apporté lors de la deuxième visite, à côté des poutres, à la lumière du jour.'] },
-  { titre: 'Escalier hélicoïdal en acier brut verni à Olivet', ville: 'Olivet', date: '2024-05', service: 'escalier-helicoidal', categories: ['Escalier'],
+  { titre: 'Escalier hélicoïdal en acier brut verni à Olivet', image: DET, ville: 'Olivet', date: '2024-05', service: 'escalier-helicoidal', categories: ['Escalier'],
     resume: 'Un escalier hélicoïdal de 1,40 m de diamètre pour gagner de la place dans une entrée.',
     demande: ['La cliente voulait accéder à des combles aménagés depuis une entrée étroite. Un escalier droit aurait pris presque toute la pièce : il fallait un escalier compact, mais confortable à monter tous les jours.'],
     solution: ['Nous avons dessiné un escalier hélicoïdal de 1,40 m de diamètre, autour d’un fût central en acier. Chaque marche est découpée au laser et soudée sur le fût à l’atelier, puis l’ensemble est livré en trois parties pour passer par la porte d’entrée.',
       'L’acier est laissé brut, simplement verni, pour garder les traces de la fabrication que la cliente aimait sur nos photos. La main courante suit la courbe sans interruption. L’escalier occupe moins de deux mètres carrés au sol, et la porte du placard voisin s’ouvre toujours en entier. Pose en une journée, finitions comprises (client fictif).',
       'Le diamètre a été choisi avec la cliente sur le plan 3D, en comparant trois versions, pour que le passage reste confortable même avec un carton dans les bras.'] },
-  { titre: 'Escalier hélicoïdal carré pour une mezzanine à Ingré', ville: 'Ingré', date: '2025-11', service: 'escalier-helicoidal', categories: ['Escalier'],
+  { titre: 'Escalier hélicoïdal carré pour une mezzanine à Ingré', image: HEL, ville: 'Ingré', date: '2025-11', service: 'escalier-helicoidal', categories: ['Escalier'],
     resume: 'Un hélicoïdal carré de 1,50 m logé dans l’angle d’un séjour, marches en chêne.',
     demande: ['Les propriétaires avaient aménagé une mezzanine au-dessus du séjour, accessible par une échelle de meunier. Ils voulaient un vrai escalier, sûr pour leurs deux enfants, sans sacrifier le coin du séjour où se trouve le canapé.'],
     solution: ['La trémie existante était carrée : nous avons proposé un escalier hélicoïdal carré de 1,50 m de côté, qui occupe exactement l’angle sans laisser de coin perdu. Le fût central et les supports de marches sont en acier noir mat, les marches en chêne huilé.',
       'Un garde-corps à barreaux verticaux suit toute la montée et fait le tour de la trémie à l’étage, à la hauteur fixée par la norme révisée. Le plan 3D a permis de vérifier que la porte de la mezzanine s’ouvre encore entièrement. L’escalier a été livré en quatre parties et monté en une journée, sans toucher au parquet du séjour (client fictif).',
       'Les enfants montent désormais seuls à la mezzanine, et l’échelle a rejoint le grenier.'] },
-  { titre: 'Garde-corps de mezzanine en acier et verre à Olivet', ville: 'Olivet', date: '2025-06', service: 'garde-corps', categories: ['Garde-corps'],
+  { titre: 'Garde-corps de mezzanine en acier et verre à Olivet', image: GCV, ville: 'Olivet', date: '2025-06', service: 'garde-corps', categories: ['Garde-corps'],
     resume: 'Un garde-corps acier et verre conforme à la norme, pour garder la vue sur le séjour.',
     demande: ['L’ancien garde-corps de la mezzanine, à barreaux horizontaux, était facile à escalader pour les enfants et cachait la vue sur le séjour. Les propriétaires voulaient plus de sécurité sans fermer l’espace.'],
     solution: ['Nous avons dessiné un garde-corps à montants en acier noir et remplissage en verre feuilleté de 10 mm, à la hauteur fixée par la norme NF P01-012 révisée en 2024. Les montants sont fixés en applique sur le chant de la dalle, ce qui libère toute la surface de la mezzanine.',
       'Le verre arrive à 5 cm du sol : aucun jouet ne peut tomber en contrebas. Les montants ont été fabriqués et thermolaqués à l’atelier, le verre posé sur place avec des pinces en inox. La vue sur le séjour est entièrement dégagée, et le garde-corps a été posé en une matinée (client fictif).',
       'Avant la pose, nous avons remis aux propriétaires la fiche technique du verre et le certificat de conformité, utiles pour leur assurance habitation.'] },
-  { titre: 'Garde-corps de terrasse en acier thermolaqué à Fleury-les-Aubrais', ville: 'Fleury-les-Aubrais', date: '2025-04', service: 'garde-corps', categories: ['Garde-corps'],
+  { titre: 'Garde-corps de terrasse en acier thermolaqué à Fleury-les-Aubrais', image: GCT, ville: 'Fleury-les-Aubrais', date: '2025-04', service: 'garde-corps', categories: ['Garde-corps'],
     resume: 'Barreaux verticaux et acier thermolaqué anthracite pour une terrasse en hauteur.',
     demande: ['Une terrasse surélevée de 1,20 m, sans protection depuis la construction de la maison. Les propriétaires voulaient un garde-corps solide, qui résiste à la pluie sans entretien, et qui ne ressemble pas à une clôture de chantier.'],
     solution: ['Nous avons choisi des barreaux verticaux en acier, espacés de 10 cm selon la norme, avec une lisse haute large qui sert aussi d’appui. Après la soudure, chaque élément est galvanisé puis thermolaqué en anthracite : cette double protection évite la rouille pendant des années, même en plein air.',
       'Les platines de fixation ont été dessinées pour ne pas percer l’étanchéité de la terrasse. Douze mètres linéaires ont été posés en une journée, avec un portillon assorti en haut de l’escalier extérieur pour le chien de la famille. Un rinçage à l’eau une fois par an suffit comme entretien (client fictif).',
       'Les propriétaires ont choisi l’anthracite après avoir vu deux échantillons posés contre leur façade, pour que le garde-corps se fonde dans la maison plutôt que de la masquer.'] },
-  { titre: 'Verrière de cuisine noire à Saran', ville: 'Saran', date: '2026-02', service: 'verrieres-interieur', categories: ['Verrière'],
+  { titre: 'Verrière de cuisine noire à Saran', image: VC, ville: 'Saran', date: '2026-02', service: 'verrieres-interieur', categories: ['Verrière'],
     resume: 'Une verrière atelier entre la cuisine et le salon, pour la lumière sans les odeurs.',
     demande: ['La cuisine fermée de cette maison de ville manquait de lumière, mais les propriétaires ne voulaient pas d’une cuisine ouverte à cause des odeurs et du bruit de la hotte. Ils cherchaient une séparation lumineuse.'],
     solution: ['Nous avons remplacé une partie de la cloison par une verrière atelier de 2,40 m de large, sur une allège de 1 m pour garder les meubles hauts d’un côté. Les profils en acier de 30 mm, peints en noir mat, sont fabriqués à l’atelier et assemblés sur place.',
       'Le vitrage feuilleté laisse passer la lumière du salon jusqu’au plan de travail, tandis que la cuisine reste fermée. Un petit châssis ouvrant permet d’aérer. Le plan 3D a servi à choisir la hauteur des traverses pour qu’elles tombent à l’alignement des meubles. Pose en une journée, avec la reprise de plâtre par notre partenaire (client fictif).',
       'Les propriétaires ont gardé leurs meubles de cuisine : la verrière a été dessinée autour d’eux, au centimètre, plutôt que l’inverse.'] },
-  { titre: 'Verrière de bureau avec porte à Ingré', ville: 'Ingré', date: '2025-10', service: 'verrieres-interieur', categories: ['Verrière'],
+  { titre: 'Verrière de bureau avec porte à Ingré', image: VB, ville: 'Ingré', date: '2025-10', service: 'verrieres-interieur', categories: ['Verrière'],
     resume: 'Un bureau isolé du bruit dans un grand séjour, grâce à une verrière avec porte battante.',
     demande: ['En télétravail trois jours par semaine, le client voulait un vrai bureau au fond de son séjour, isolé du bruit de la maison, sans créer une pièce sombre et sans travaux de maçonnerie.'],
     solution: ['Nous avons fabriqué une verrière toute hauteur avec une porte battante intégrée, posée entre le sol et le plafond, sans cloison. Le verre feuilleté acoustique de 44.2 réduit nettement le bruit de la télévision et des conversations.',
       'La porte, en acier et verre, ferme avec une serrure magnétique silencieuse. Les profils noirs reprennent ceux des fenêtres de la maison. Le bureau reçoit la lumière des baies du séjour, et le séjour garde sa profondeur. Fabrication en trois semaines, pose en une journée, et aucun gravat dans la maison (client fictif).',
       'Le client a pu travailler dès le lendemain de la pose. Il nous a confié ensuite la rampe de son escalier, dans le même acier noir que la verrière.'] },
-  { titre: 'Portail coulissant en acier à Saint-Jean-de-Braye', ville: 'Saint-Jean-de-Braye', date: '2025-03', service: 'portails', categories: ['Portail'],
+  { titre: 'Portail coulissant en acier à Saint-Jean-de-Braye', image: PC, ville: 'Saint-Jean-de-Braye', date: '2025-03', service: 'portails', categories: ['Portail'],
     resume: 'Un portail coulissant motorisé de 4 m pour une entrée en pente.',
     demande: ['L’entrée de la propriété est en pente et étroite : un portail battant aurait frotté sur le sol en s’ouvrant. Les propriétaires voulaient un portail motorisé, solide, qui ne laisse pas voir le jardin depuis la route.'],
     solution: ['Nous avons dessiné un portail coulissant autoportant de 4 m, qui ne touche pas le sol pendant la course : il glisse sur des galets fixés sur un socle, à côté de l’entrée. La pente n’a donc aucune importance.',
       'Le remplissage en lames d’acier horizontales, à claire-voie fermée, cache le jardin tout en laissant passer le vent. Le portail est galvanisé, thermolaqué en gris anthracite, et équipé d’un moteur avec télécommande et cellules de sécurité. Le portillon voisin a été assorti. Pose en deux jours, avec le raccordement du moteur par un électricien partenaire (client fictif).',
       'Le moteur choisi fonctionne aussi en cas de coupure de courant grâce à un déverrouillage manuel, montré aux propriétaires le jour de la pose.'] },
-  { titre: 'Portail battant et portillon à Chécy', ville: 'Chécy', date: '2024-08', service: 'portails', categories: ['Portail'],
+  { titre: 'Portail battant et portillon à Chécy', image: PB, ville: 'Chécy', date: '2024-08', service: 'portails', categories: ['Portail'],
     demande: ['Un portail battant et son portillon, assortis à la clôture existante.'],
     solution: ['Acier galvanisé et thermolaqué vert sapin (client fictif).'] },
 ];
@@ -671,7 +666,7 @@ const site = {
     jours: Object.fromEntries([1, 2, 3, 4, 5, 6, 7].map((n) => [n, n <= 5 ? { ouvert: true, plages: [['07:30', '12:00'], ['13:30', '17:00']] } : { ouvert: false, plages: [['', ''], ['', '']] }])),
     note: 'Rendez-vous possibles le samedi matin.',
   },
-  ambiance: 'atelier', couleurs: {},
+  ambiance: 'acier', couleurs: { accent: '#a83d0c' },
   cta: 'devis', cta_label: 'Demander un devis', accueil: 'accueil', personne: 'atelier', blog: '',
   statut: 'publish',
   realisations,
