@@ -57,7 +57,7 @@ jobs:
         if: steps.existe.outputs.oui != '1'
         run: |
           mkdir -p build/briise
-          rsync -a --exclude ".git" --exclude ".github" --exclude "build" --exclude "extension" --exclude ".gitignore" ./ build/briise/
+          rsync -a --exclude ".git" --exclude ".github" --exclude "build" --exclude "extension" --exclude ".gitignore" --exclude "CLAUDE.md" ./ build/briise/
           cp -r extension/briise-socle build/briise-socle
           cd build && zip -rq briise.zip briise && zip -rq briise-socle.zip briise-socle
 
