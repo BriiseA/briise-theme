@@ -65,8 +65,22 @@ jobs:
         if: steps.existe.outputs.oui != '1'
         env:
           GH_TOKEN: ${{ github.token }}
+        # GitHub renvoie parfois une erreur passagère (HTTP 500) : on réessaie trois fois.
+        # Si la version a été créée sans ses fichiers, on y envoie seulement les fichiers.
         run: |
-          gh release create "${{ steps.version.outputs.tag }}" build/briise.zip build/briise-socle.zip \
-            --target "${{ github.sha }}" \
-            --title "Briise ${{ steps.version.outputs.tag }}" \
-            --notes "Première installation : briise-socle.zip (Extensions > Ajouter > Téléverser), puis briise.zip (Apparence > Thèmes > Ajouter > Téléverser). Sites déjà installés : Tableau de bord > Mises à jour. Détail des changements : CHANGELOG.md."
+          TAG="${{ steps.version.outputs.tag }}"
+          for ESSAI in 1 2 3; do
+            if gh release view "$TAG" >/dev/null 2>&1; then
+              gh release upload "$TAG" build/briise.zip build/briise-socle.zip --clobber && exit 0
+            else
+              gh release create "$TAG" build/briise.zip build/briise-socle.zip \
+                --target "${{ github.sha }}" \
+                --title "Briise $TAG" \
+                --notes "Première installation : briise-socle.zip (Extensions > Ajouter > Téléverser), puis briise.zip (Apparence > Thèmes > Ajouter > Téléverser). Sites déjà installés : Tableau de bord > Mises à jour. Détail des changements : CHANGELOG.md." && exit 0
+            fi
+            [ "$ESSAI" -lt 3 ] || break
+            echo "Essai $ESSAI sans succès, nouvel essai dans $((ESSAI * 20)) secondes."
+            sleep $((ESSAI * 20))
+          done
+          echo "La version n'a pas pu être publiée après trois essais."
+          exit 1
