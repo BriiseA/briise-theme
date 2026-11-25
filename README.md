@@ -175,7 +175,7 @@ Fiches de réalisation : liste `realisations`, créées après les pages (chacun
 
 ### Apparence : en-têtes, pieds de page, téléphone, cartes et titres
 
-Mon entreprise > Apparence (administrateur), ou les clés `entete`, `pied`, `mobile`, `cartes`, `titres`, `capitales` et `cartes_mobile` du fichier de site. Les textes, le téléphone, le bouton et les horaires viennent toujours de Mon entreprise ; seule la forme change.
+Mon entreprise > Apparence (administrateur), ou les clés `entete`, `pied`, `mobile`, `cartes`, `titres`, `capitales`, `cartes_mobile`, et pour la personnalité `angles`, `relief`, `etiquettes` et `surlignage`, du fichier de site. La personnalité s'applique aussi dans l'éditeur. Une police « chiffres » (prix, durées, compteurs, étiquettes numérotées) se choisit avec les autres polices (`"polices": { "chiffres": "IBM Plex Mono" }`). Les textes, le téléphone, le bouton et les horaires viennent toujours de Mon entreprise ; seule la forme change.
 
 | Clé | Valeurs |
 | --- | --- |
@@ -183,9 +183,13 @@ Mon entreprise > Apparence (administrateur), ou les clés `entete`, `pied`, `mob
 | `pied` | `colonnes` (par défaut), `grand-titre` (carte sombre, nom et slogan en grand), `logo-geant` (nom en très grand : pour un nom court), `grand-appel` (téléphone en très grand, bouton, itinéraire), `carte` (image du plan nommée `plan` dans la Médiathèque, horaires, coordonnées), `compact` |
 | `mobile` | `bouton` (par défaut : Appeler et l'action principale), `barre` (Appeler, l'action principale et Itinéraire) |
 | `cartes` | `photo-fond` (par défaut : la photo remplit la carte), `photo-haut` (photo en haut, texte dessous sur fond clair), `liste-filet` (une ligne par service, vignette et filet) ; s'applique aux sections « Trois cartes de service », avec ou sans photos |
+| `angles` | Personnalité. `ambiance` (par défaut), `doux` (arrondis discrets), `droits` (angles droits partout ; seuls les numéros d'étapes et les points restent ronds) |
+| `relief` | Personnalité. `ombre` (par défaut), `bordure` (un trait net de la couleur du texte autour des cartes, sans ombre), `plat` (ni ombre ni bordure) |
+| `etiquettes` | Personnalité. `texte` (par défaut), `numerotees` (« 01 / Interventions », numérotées dans l'ordre de la page) |
+| `surlignage` | Personnalité. `couleur` (par défaut : le mot surligné d'un titre prend la couleur d'accent), `aplat` (fond plein de la couleur `deco`, comme un marqueur ; le contraste texte / décor est vérifié sur le tableau de bord) |
 | `cartes_mobile` | `empilees` (par défaut), `defilement` : sur téléphone, les rangées de trois cartes ou plus (services, bénéfices des pages de service, lieux, étapes, tarifs, avis, réalisations, équipe, « Où en êtes-vous ? ») se font glisser de gauche à droite, le bord de la suivante dépasse ; les galeries de six photos ou plus montrent les quatre premières et un bouton « Voir les N photos ». Rien n'est retiré de la page (Google voit tout) ; sans script, la galerie reste entière. Sur l’accueil d’exemple de Lison Vautrin : 11,6 écrans de téléphone au lieu de 14,6 |
 | `capitales` | `ambiance` (par défaut : capitales avec Acier, minuscules ailleurs), `oui` (H1 et H2 en capitales, en plus petit ; un titre dont un mot dépasse la largeur est réduit, jusqu'à 70 %, au lieu d'être coupé ; les H3 restent en minuscules ; le mot d'accent garde ses minuscules quand une police d'accent est choisie), `non` (jamais, même avec Acier) |
-| `titres` | `tete-lien` (par défaut), `tete-deux-colonnes` (le titre à gauche, la phrase d'introduction à droite), `grand-numero` (chaque section numérotée en grand au-dessus de son titre) |
+| `titres` | `marge` (titre dans une colonne à gauche, contenu à droite, sur ordinateur), `tete-lien` (par défaut), `tete-deux-colonnes` (le titre à gauche, la phrase d'introduction à droite), `grand-numero` (chaque section numérotée en grand au-dessus de son titre) |
 
 Sur une page qui s'ouvre sur une grande photo (bannière), les en-têtes `capsule`, `ilots` et `bandeau` flottent au-dessus de la photo ; ailleurs ils restent en haut de page. Les en-têtes sombres (`capsule`, `medaillon`, `bandeau`) affichent le « Logo pour fond foncé » de Mon entreprise, sinon le nom en texte. L'état « ouvert aujourd'hui » de la barre d'infos est calculé dans le navigateur, d'après les horaires : il reste juste même avec un cache de page. Pour éviter que deux sites se ressemblent, le registre de l'agence (`.github/outils/registre.py`) vérifie la combinaison choisie.
 

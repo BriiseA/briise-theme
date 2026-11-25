@@ -2,6 +2,7 @@
 
 ## Prochaine version
 
+- **Une personnalité par site, au-delà des couleurs.** Mon entreprise > Apparence règle maintenant les angles (selon l'ambiance, doux, droits), le relief des cartes (ombre, bordure, à plat), les étiquettes de section (texte ou numérotées « 01 / Interventions »), le mot surligné (couleur ou aplat de marqueur) et un titre en marge, à gauche du contenu. Une quatrième police, pour les chiffres (prix, durées, compteurs), se choisit avec les autres. Deux sites de la même ambiance ne se ressemblent plus. L'éditeur montre le même rendu que le site.
 - **Le bouton d’appel ne déborde plus sur téléphone.** « Appeler Thomas : 06 00 00 00 00 » passe à la ligne au lieu de sortir de sa carte (ouverture « Deux portes », pages Devis et Contact) ; le numéro reste d’un seul tenant.
 - **Un menu qui se range seul.** Quand une page parente (« Nos services ») est ajoutée au menu, ses sous-pages déjà présentes passent dans son sous-menu. L’onglet Contrôle signale les sous-pages restées au premier niveau sans leur page parente.
 - **Pages de service plus courtes sur téléphone.** Avec « Cartes en défilement », les trois bénéfices en photos se font aussi glisser.

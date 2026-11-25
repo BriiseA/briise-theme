@@ -58,6 +58,10 @@ function briise_contrastes_insuffisants() {
 		array( 'fond', 'texte' ), array( 'fond', 'sombre' ), array( 'surface', 'sombre' ),
 		array( 'fond', 'secondaire' ), array( 'secondaire', 'fond' ),
 	);
+	// Mot surligné en aplat : le texte est posé sur la couleur de décor.
+	if ( function_exists( 'briise_apparence' ) && 'aplat' === briise_apparence( 'surlignage' ) ) {
+		$couples[] = array( 'texte', 'deco' );
+	}
 	$echecs = array();
 	foreach ( $couples as $c ) {
 		if ( ! isset( $palette[ $c[0] ], $palette[ $c[1] ] ) ) {

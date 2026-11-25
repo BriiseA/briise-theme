@@ -38,7 +38,7 @@ const rythme = (blocks) => {
 /* ---------- Sections paramétrées ---------- */
 // Ouverture « Deux portes » (fonction du thème).
 const deuxPortes = () => B.deuxPortes({
-  titre: 'Plombier chauffagiste à Saint-Jean-de-Braye, en urgence ou sur rendez-vous',
+  titre: `Fuite, bouchon, panne : ${B.Mark('réglé aujourd’hui')}`,
   chapo: 'Prix annoncé avant de commencer, devis signé avant les travaux, intervention en moins de 2 h dans la métropole d’Orléans (exemple fictif).',
   statut: 'Dépannage 7 j/7, de 7 h à 22 h', appel: 'Appeler Thomas',
   liens: [['Une fuite d’eau', URL('depannage-plomberie')], ['WC ou évier bouché', URL('depannage-plomberie')], ['Plus d’eau chaude', URL('chauffe-eau')], ['Chaudière en panne', URL('chaudiere-gaz')]],
@@ -344,9 +344,13 @@ const site = {
     jours: Object.fromEntries([1, 2, 3, 4, 5, 6, 7].map((n) => [n, n <= 5 ? { ouvert: true, plages: [['08:00', '12:00'], ['13:30', '18:30']] } : n === 6 ? { ouvert: true, plages: [['09:00', '12:00'], ['', '']] } : { ouvert: false, plages: [['', ''], ['', '']] }])),
     note: 'Dépannage 7 j/7 de 7 h à 22 h, majoration de 30 % le dimanche et les jours fériés (exemple fictif).',
   },
-  ambiance: 'atelier',
-  entete: 'barre-infos', pied: 'grand-appel', mobile: 'barre', cartes: 'photo-haut', titres: 'grand-numero',
-  capitales: 'oui', cartes_mobile: 'defilement',
+  // Identité « Signal » (maquette validée) : graphite, papier, jaune de signalisation.
+  ambiance: 'charte-client',
+  couleurs: { fond: '#f3f2ee', clair: '#ffffff', surface: '#e6e4dd', nuance: '#eceae4', texte: '#17191b', 'texte-doux': '#565b5f', accent: '#1d5b85', secondaire: '#17191b', deco: '#f5c518', sombre: '#17191b' },
+  polices: { titres: 'Space Grotesk', texte: 'IBM Plex Sans', chiffres: 'IBM Plex Mono' },
+  entete: 'barre-infos', pied: 'compact', mobile: 'bouton', cartes: 'liste-filet', titres: 'marge',
+  capitales: 'non', cartes_mobile: 'defilement',
+  angles: 'droits', relief: 'bordure', etiquettes: 'numerotees', surlignage: 'aplat',
   cta: 'devis', cta_label: 'Demander un devis', accueil: 'accueil', personne: 'a-propos', blog: '',
   statut: 'publish',
   realisations,

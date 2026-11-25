@@ -45,10 +45,29 @@ function briise_apparence_choix() {
 			'tete-lien'          => array( 'Titre et lien', 'Le titre à gauche, le lien « Tous nos… » à droite (titres d’origine).' ),
 			'tete-deux-colonnes' => array( 'Titre et texte côte à côte', 'Le titre à gauche, la phrase d’introduction à droite.' ),
 			'grand-numero'       => array( 'Grand numéro', 'Chaque section numérotée en grand au-dessus de son titre (01, 02…). Pour une page qui se lit comme un récit.' ),
+			'marge'              => array( 'Titre en marge', 'Sur ordinateur, le titre de la section dans une colonne à gauche, le contenu à droite. Sur téléphone, tout s’empile. Pour un site précis, presque éditorial.' ),
 		),
 		'cartes_mobile' => array(
 			'empilees'   => array( 'Empilées', 'Les cartes les unes sous les autres, toutes les photos des galeries (d’origine).' ),
 			'defilement' => array( 'En défilement', 'Les rangées de trois cartes ou plus se font glisser de gauche à droite, et les galeries montrent quatre photos puis un bouton pour voir les autres. La page est plus courte ; rien n’est retiré.' ),
+		),
+		'angles'        => array(
+			'ambiance' => array( 'Selon l’ambiance', 'Les arrondis prévus par l’ambiance.' ),
+			'doux'     => array( 'Doux', 'Des arrondis plus discrets sur les cartes, les photos et les boutons.' ),
+			'droits'   => array( 'Droits', 'Angles droits partout : cartes, photos, boutons, pastilles. Seuls les ronds voulus (numéros d’étapes, points) le restent.' ),
+		),
+		'relief'        => array(
+			'ombre'   => array( 'Ombre', 'Les cartes portent une ombre douce (d’origine).' ),
+			'bordure' => array( 'Bordure', 'Ni ombre ni flou : un trait net de la couleur du texte autour des cartes.' ),
+			'plat'    => array( 'À plat', 'Ni ombre ni bordure : les cartes se détachent seulement par leur fond.' ),
+		),
+		'etiquettes'    => array(
+			'texte'      => array( 'Texte', 'Les petites étiquettes au-dessus des titres, telles quelles (d’origine).' ),
+			'numerotees' => array( 'Numérotées', '« 01 / Interventions », « 02 / Votre appel »… numérotées dans l’ordre de la page, dans la police des chiffres si elle est choisie.' ),
+		),
+		'surlignage'    => array(
+			'couleur' => array( 'Couleur', 'Le mot surligné d’un titre prend la couleur d’accent (d’origine).' ),
+			'aplat'   => array( 'Aplat', 'Le mot surligné d’un titre est posé sur un fond plein, de la couleur de décor (comme un marqueur).' ),
 		),
 		'capitales' => array(
 			'ambiance' => array( 'Selon l’ambiance', 'Capitales avec l’ambiance Acier, minuscules avec les autres.' ),
@@ -60,7 +79,7 @@ function briise_apparence_choix() {
 
 function briise_apparence( $cle ) {
 	$choix  = briise_apparence_choix();
-	$defaut = array( 'entete' => 'classique', 'pied' => 'colonnes', 'mobile' => 'bouton', 'cartes' => 'photo-fond', 'titres' => 'tete-lien', 'capitales' => 'ambiance', 'cartes_mobile' => 'empilees' );
+	$defaut = array( 'entete' => 'classique', 'pied' => 'colonnes', 'mobile' => 'bouton', 'cartes' => 'photo-fond', 'titres' => 'tete-lien', 'capitales' => 'ambiance', 'cartes_mobile' => 'empilees', 'angles' => 'ambiance', 'relief' => 'ombre', 'etiquettes' => 'texte', 'surlignage' => 'couleur' );
 	$v      = (array) get_option( 'briise_apparence', array() );
 	$val    = $v[ $cle ] ?? $defaut[ $cle ];
 	return isset( $choix[ $cle ][ $val ] ) ? $val : $defaut[ $cle ];
@@ -113,6 +132,9 @@ add_filter( 'body_class', function ( $classes ) {
 	$classes[] = 'br-titres--' . briise_apparence( 'titres' );
 	$classes[] = 'br-capitales--' . briise_apparence( 'capitales' );
 	$classes[] = 'br-cartes-mobile--' . briise_apparence( 'cartes_mobile' );
+	foreach ( array( 'angles', 'relief', 'etiquettes', 'surlignage' ) as $cle ) {
+		$classes[] = 'br-' . $cle . '--' . briise_apparence( $cle );
+	}
 	if ( in_array( $e, array( 'capsule', 'ilots', 'bandeau' ), true ) && briise_page_sur_photo() ) {
 		$classes[] = 'br-sur-photo';
 	}
@@ -125,6 +147,49 @@ add_action( 'wp_enqueue_scripts', function () {
 	wp_style_add_data( 'briise-variantes', 'path', get_theme_file_path( 'assets/css/variantes.css' ) );
 	wp_enqueue_style( 'briise-sections', get_theme_file_uri( 'assets/css/sections.css' ), array( 'briise-ux' ), $version );
 	wp_enqueue_script( 'briise-sections', get_theme_file_uri( 'assets/js/sections.js' ), array(), $version, array( 'in_footer' => true, 'strategy' => 'defer' ) );
+} );
+
+/** Classes de personnalité actives (celles qui ne sont pas la valeur par défaut). */
+function briise_personnalite_classes() {
+	$defaut  = array( 'angles' => 'ambiance', 'relief' => 'ombre', 'etiquettes' => 'texte', 'surlignage' => 'couleur' );
+	$classes = array();
+	foreach ( $defaut as $cle => $valeur ) {
+		if ( briise_apparence( $cle ) !== $valeur ) {
+			$classes[] = 'br-' . $cle . '--' . briise_apparence( $cle );
+		}
+	}
+	if ( 'marge' === briise_apparence( 'titres' ) ) {
+		$classes[] = 'br-titres--marge';
+	}
+	if ( function_exists( 'briise_polices' ) && '' !== briise_polices()['chiffres'] ) {
+		$classes[] = 'br-police-chiffres';
+	}
+	return $classes;
+}
+
+// Personnalité : sur le site, la feuille entière (ses règles dépendent des classes de <body>).
+add_action( 'wp_enqueue_scripts', function () {
+	$version = wp_get_theme()->get( 'Version' );
+	wp_enqueue_style( 'briise-personnalite', get_theme_file_uri( 'assets/css/personnalite.css' ), array( 'briise-sections', 'briise-variantes' ), $version );
+	wp_style_add_data( 'briise-personnalite', 'path', get_theme_file_path( 'assets/css/personnalite.css' ) );
+}, 20 );
+
+// Dans l'éditeur, les réglages actifs s'appliquent aussi : leurs classes deviennent .editor-styles-wrapper.
+add_action( 'enqueue_block_assets', function () {
+	if ( ! is_admin() ) {
+		return;
+	}
+	$actives = briise_personnalite_classes();
+	if ( ! $actives ) {
+		return;
+	}
+	$css = (string) file_get_contents( get_theme_file_path( 'assets/css/personnalite.css' ) );
+	foreach ( $actives as $classe ) {
+		$css = preg_replace( '/\.' . preg_quote( $classe, '/' ) . '(?![\w-])/', '.editor-styles-wrapper', $css );
+	}
+	wp_register_style( 'briise-personnalite-editeur', false, array(), wp_get_theme()->get( 'Version' ) );
+	wp_enqueue_style( 'briise-personnalite-editeur' );
+	wp_add_inline_style( 'briise-personnalite-editeur', $css );
 } );
 
 // Les nouvelles sections s'affichent aussi correctement dans l'éditeur.
@@ -208,7 +273,7 @@ function briise_onglet_apparence() {
 	if ( isset( $_GET['ok'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 		echo '<div class="notice notice-success"><p>Apparence enregistrée.</p></div>';
 	}
-	$titres = array( 'entete' => 'En-tête', 'pied' => 'Pied de page', 'mobile' => 'Sur téléphone', 'cartes' => 'Cartes de service', 'titres' => 'Titres de section', 'capitales' => 'Titres en capitales', 'cartes_mobile' => 'Sur téléphone, cartes et galeries' );
+	$titres = array( 'entete' => 'En-tête', 'pied' => 'Pied de page', 'mobile' => 'Sur téléphone', 'cartes' => 'Cartes de service', 'titres' => 'Titres de section', 'capitales' => 'Titres en capitales', 'cartes_mobile' => 'Sur téléphone, cartes et galeries', 'angles' => 'Personnalité : angles', 'relief' => 'Personnalité : relief des cartes', 'etiquettes' => 'Personnalité : étiquettes de section', 'surlignage' => 'Personnalité : mot surligné dans un titre' );
 	echo '<p>Ces choix changent la forme de l’en-tête, du pied de page, du bas d’écran sur téléphone, des cartes de service, des titres de section et les polices, sur tout le site. Les textes, le téléphone et le bouton viennent toujours de Mon entreprise ; le contenu des pages ne change pas.</p>';
 	echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
 	wp_nonce_field( 'briise_apparence' );

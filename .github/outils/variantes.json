@@ -42,7 +42,8 @@
     "titres": {
       "tete-lien": "existe",
       "tete-deux-colonnes": "existe",
-      "grand-numero": "existe"
+      "grand-numero": "existe",
+      "marge": "existe"
     },
     "pied": {
       "colonnes": "existe",
@@ -55,6 +56,24 @@
     "mobile": {
       "bouton": "existe",
       "barre": "existe"
+    },
+    "angles": {
+      "ambiance": "existe",
+      "doux": "existe",
+      "droits": "existe"
+    },
+    "relief": {
+      "ombre": "existe",
+      "bordure": "existe",
+      "plat": "existe"
+    },
+    "etiquettes": {
+      "texte": "existe",
+      "numerotees": "existe"
+    },
+    "surlignage": {
+      "couleur": "existe",
+      "aplat": "existe"
     }
   },
   "regles": {

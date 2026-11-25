@@ -1,0 +1,111 @@
+/*
+ * Personnalité du site (Mon entreprise > Apparence, ou le fichier de site) : angles, relief des cartes,
+ * étiquettes de section, mot surligné, titre en marge, police des chiffres.
+ * Chaque règle dépend d'une classe posée sur <body> ; les valeurs par défaut n'en ont pas, donc rien ne
+ * change pour un site qui ne règle rien. Dans l'éditeur, functions.php remplace la classe par
+ * .editor-styles-wrapper pour les seuls réglages actifs : l'éditeur montre la même chose que le site.
+ * Pas de « main » dans les sélecteurs (l'éditeur n'en a pas) : :is(.wp-site-blocks, .is-root-container).
+ */
+
+/* ----- Angles ------------------------------------------------------------------ */
+.br-angles--doux {
+	--wp--custom--rayon--grand: 14px;
+	--wp--custom--rayon--moyen: 10px;
+	--wp--custom--rayon--petit: 6px;
+	--wp--custom--rayon--bouton: 10px;
+	--wp--custom--rayon--photo: 12px;
+}
+.br-angles--droits {
+	--wp--custom--rayon--grand: 0;
+	--wp--custom--rayon--moyen: 0;
+	--wp--custom--rayon--petit: 0;
+	--wp--custom--rayon--bouton: 0;
+	--wp--custom--rayon--photo: 0;
+}
+/* Les arrondis écrits en dur aussi ; restent ronds les éléments qui le sont par nature. */
+.br-angles--droits :is(.wp-site-blocks, .is-root-container) *:not(.br-fil-num, .br-rond, .wp-block-avatar, .avatar, .br-avis-initiale, input[type="radio"], input[type="checkbox"]) {
+	border-radius: 0 !important;
+}
+
+/* ----- Relief des cartes ----------------------------------------------------------- */
+.br-relief--bordure :is(.wp-site-blocks, .is-root-container) *,
+.br-relief--plat :is(.wp-site-blocks, .is-root-container) * {
+	box-shadow: none !important;
+}
+.br-relief--bordure :is(.br-card, .br-fait, .br-situation, .br-modele, .br-tarif-ligne, .br-avis-court, .br-project, .br-confiance, .br-tuile, .br-carte, .br-dispo-carte, .br-ouv-faits, .br-recit-detail, .br-formule, .br-cadeau-carte, .br-lieu, .br-etape-image, .br-etape, .br-member, .br-prix-carte, .br-compris) {
+	border: 2px solid var(--wp--preset--color--texte) !important;
+}
+/* Sur fond sombre, la bordure prend la couleur du texte clair. */
+.br-relief--bordure :is(.has-sombre-background-color, .has-secondaire-background-color, .has-texte-background-color) :is(.br-card, .br-fait, .br-situation, .br-modele, .br-tarif-ligne, .br-avis-court, .br-project, .br-tuile) {
+	border-color: var(--wp--preset--color--fond) !important;
+}
+
+/* ----- Étiquettes numérotées : « 01 / Interventions » --------------------------------- */
+.br-etiquettes--numerotees :is(.wp-site-blocks, .is-root-container) {
+	counter-reset: br-etiquette;
+}
+.br-etiquettes--numerotees .br-section .br-label {
+	counter-increment: br-etiquette;
+	letter-spacing: .06em;
+}
+.br-etiquettes--numerotees .br-section .br-label::before {
+	content: counter(br-etiquette, decimal-leading-zero) " / ";
+	content: counter(br-etiquette, decimal-leading-zero) " / " / "";
+	opacity: .7;
+}
+
+/* ----- Mot surligné en aplat ----------------------------------------------------------- */
+.br-surlignage--aplat :is(h1, h2, h3, h4, .wp-block-heading, .wp-block-post-title) mark,
+.br-surlignage--aplat :is(h1, h2, h3, h4, .wp-block-heading, .wp-block-post-title) mark.has-inline-color {
+	background: var(--wp--preset--color--deco) !important;
+	color: var(--wp--preset--color--texte) !important;
+	padding: 0 .18em;
+	-webkit-box-decoration-break: clone;
+	box-decoration-break: clone;
+}
+
+/* ----- Police des chiffres ------------------------------------------------------------- */
+.br-police-chiffres :is(.br-stat, .br-tuile-chiffre, .br-tarif-prix, .br-duree, .br-fil-num, .br-num, .br-note-chiffre, .br-prix-carte td:last-child, .br-situation-prix, .br-ft-tel, .br-appel-numero) {
+	font-family: var(--wp--preset--font-family--chiffres) !important;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: 0;
+}
+.br-police-chiffres.br-etiquettes--numerotees .br-section .br-label {
+	font-family: var(--wp--preset--font-family--chiffres);
+}
+
+/* ----- Titre en marge (ordinateur) : le titre à gauche, le contenu à droite ----------------- */
+@media (min-width: 960px) {
+	.br-titres--marge .br-section:has(> .br-head, > .br-section-head) {
+		display: grid !important;
+		grid-template-columns: minmax(220px, .38fr) minmax(0, 1fr);
+		column-gap: clamp(2rem, 5vw, 5rem);
+		align-items: start;
+		padding-left: max(var(--wp--style--root--padding-left, 1.5rem), calc((100% - var(--wp--style--global--wide-size, 1320px)) / 2)) !important;
+		padding-right: max(var(--wp--style--root--padding-right, 1.5rem), calc((100% - var(--wp--style--global--wide-size, 1320px)) / 2)) !important;
+	}
+	.br-titres--marge .br-section:has(> .br-head, > .br-section-head) > * {
+		grid-column: 2;
+		max-width: none !important;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+	}
+	.br-titres--marge .br-section:has(> .br-head, > .br-section-head) > :is(.br-head, .br-section-head) {
+		grid-column: 1;
+		grid-row: 1 / span 12;
+		position: sticky;
+		top: 6rem;
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: flex-start !important;
+		justify-content: flex-start !important;
+		gap: .75rem;
+		text-align: left !important;
+		margin-top: 0 !important;
+	}
+	.br-titres--marge .br-section:has(> .br-head, > .br-section-head) > :is(.br-head, .br-section-head) > * {
+		margin-left: 0 !important;
+		text-align: left !important;
+		max-width: 100% !important;
+	}
+}

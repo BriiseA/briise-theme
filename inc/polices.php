@@ -24,6 +24,7 @@ function briise_polices_roles() {
 		'titres' => 'Titres',
 		'texte'  => 'Texte',
 		'accent' => 'Accent (mot surligné dans un titre)',
+		'chiffres' => 'Chiffres (prix, durées, compteurs, étiquettes numérotées)',
 	);
 }
 
@@ -34,6 +35,7 @@ function briise_polices() {
 		'titres'          => (string) ( $v['titres'] ?? '' ),
 		'texte'           => (string) ( $v['texte'] ?? '' ),
 		'accent'          => (string) ( $v['accent'] ?? '' ),
+		'chiffres'        => (string) ( $v['chiffres'] ?? '' ),
 		'accent_italique' => ! empty( $v['accent_italique'] ),
 		'accent_taille'   => briise_polices_taille( $v['accent_taille'] ?? '' ),
 	);
@@ -192,7 +194,7 @@ function briise_polices_graisse_max( $faces ) {
  */
 add_filter( 'wp_theme_json_data_user', function ( $theme_json ) {
 	$choix = briise_polices();
-	if ( '' === $choix['titres'] && '' === $choix['texte'] && '' === $choix['accent'] ) {
+	if ( '' === $choix['titres'] && '' === $choix['texte'] && '' === $choix['accent'] && '' === $choix['chiffres'] ) {
 		return $theme_json;
 	}
 	$dispo = briise_polices_disponibles();
@@ -248,6 +250,15 @@ add_filter( 'wp_theme_json_data_user', function ( $theme_json ) {
 		'version'  => $data['version'] ?? 3,
 		'settings' => $ajout,
 	) );
+} );
+
+// La police des chiffres ne s'applique que si elle est choisie (sinon chaque élément garde la sienne).
+add_filter( 'body_class', function ( $classes ) {
+	$choix = briise_polices();
+	if ( '' !== $choix['chiffres'] && isset( briise_polices_disponibles()[ $choix['chiffres'] ] ) ) {
+		$classes[] = 'br-police-chiffres';
+	}
+	return $classes;
 } );
 
 /* ----- Bloc « Polices » de Mon entreprise > Apparence ------------------------- */
