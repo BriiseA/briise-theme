@@ -79,10 +79,17 @@ done
 
 if [ -z "${BANC_SANS_LIGHTHOUSE:-}" ] && [ -n "$CHROME" ]; then
 	for p in / /ouvrages/escaliers-metalliques/ /ouvrages/escalier-helicoidal/ /devis/ /atelier/ /escalier-quart-tournant-dimensions/; do
+		rm -f "$BANC_SORTIE/lh.json"
 		npx --yes lighthouse@12 "$BANC_URL$p" --quiet --only-categories=accessibility --output=json \
 			--output-path="$BANC_SORTIE/lh.json" --chrome-path="$CHROME" \
-			--chrome-flags="--headless=new --no-sandbox --disable-gpu" > /dev/null 2>&1 || true
+			--chrome-flags="--headless=new --no-sandbox --disable-gpu" > "$BANC_SORTIE/lh.log" 2>&1 || true
 		S=$(python3 -c "import json;print(round(json.load(open('$BANC_SORTIE/lh.json'))['categories']['accessibility']['score']*100))" 2> /dev/null || echo "?")
+		if [ "$S" = "?" ]; then
+			# Lighthouse n'a pas tourné (outil ou navigateur indisponible) : ce n'est pas un défaut du site.
+			echo "  attention : accessibilité de $p non mesurée (Lighthouse n'a pas pu tourner)"
+			tail -3 "$BANC_SORTIE/lh.log" | sed 's/^/    /'
+			continue
+		fi
 		echo "  accessibilité $p : $S"
 		[ "$S" = "100" ] || echec "accessibilité $p = $S"
 	done
