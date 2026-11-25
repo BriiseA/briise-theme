@@ -115,24 +115,49 @@
 	}
 
 	/* ---------- 4. Chiffres qui comptent jusqu'à leur valeur ---------- */
+	// Seule une valeur purement numérique compte : un symbole facultatif devant (+, ~, ≈, <, >),
+	// le nombre (espace des milliers acceptée), puis au plus une unité courte : %, /5, + collés,
+	// ou un mot court après une espace (ans, h, jours, km, m²). Un prix (€), un mot devant
+	// ou une phrase restent fixes : « Formule + 290 € » ou « Dès 690 € HT » ne s'animent pas.
+	var ESP = '[\\s\\u00a0\\u202f]';
+	var CHIFFRE = new RegExp( '^([+~≈<>]?' + ESP + '?)(\\d{1,3}(?:' + ESP + '\\d{3})+|\\d+)(?:([.,])(\\d+))?' +
+		'(' + ESP + '?(?:%|\\/' + ESP + '?\\d+|\\+)|' + ESP + '[a-zà-ÿ²³]{1,8}\\+?)?$', 'i' );
+	function lireChiffre( texte ) {
+		var m = texte.trim().match( CHIFFRE );
+		if ( ! m ) {
+			return null;
+		}
+		var milliers = m[ 2 ].match( new RegExp( ESP ) );
+		return {
+			avant: m[ 1 ],
+			valeur: parseFloat( m[ 2 ].replace( new RegExp( ESP, 'g' ), '' ) + ( m[ 4 ] ? '.' + m[ 4 ] : '' ) ),
+			dec: m[ 4 ] ? m[ 4 ].length : 0,
+			sep: m[ 3 ] || ',',
+			milliers: milliers ? milliers[ 0 ] : '',
+			apres: m[ 5 ] || '',
+		};
+	}
+	function ecrireChiffre( n, v ) {
+		var parts = v.toFixed( n.dec ).split( '.' );
+		if ( n.milliers ) {
+			parts[ 0 ] = parts[ 0 ].replace( /\B(?=(\d{3})+$)/g, n.milliers );
+		}
+		return n.avant + parts.join( n.sep ) + n.apres;
+	}
+
 	function compter( el ) {
 		var cibles = el.matches( '.br-tuile-chiffre, .br-stat' ) ? [ el ] : el.querySelectorAll( '.br-tuile-chiffre, .br-stat' );
 		Array.prototype.forEach.call( cibles, function ( c ) {
 			if ( c.dataset.brCompte || c.children.length ) {
 				return;
 			}
-			var m = c.textContent.match( /^(\D*?)(\d+(?:[.,]\d+)?)(\s.*|%.*|\/.*|)$/ );
-			if ( ! m ) {
+			var n = lireChiffre( c.textContent );
+			if ( ! n || ! ( n.valeur > 1 ) ) {
 				return;
 			}
 			c.dataset.brCompte = '1';
 			var final = c.textContent;
-			var dec = ( m[ 2 ].split( /[.,]/ )[ 1 ] || '' ).length;
-			var sep = m[ 2 ].indexOf( ',' ) !== -1 ? ',' : '.';
-			var cible = parseFloat( m[ 2 ].replace( ',', '.' ) );
-			if ( ! ( cible > 1 ) ) {
-				return;
-			}
+			var cible = n.valeur;
 			c.setAttribute( 'aria-label', final );
 			var t0 = null;
 			var pas = function ( t ) {
@@ -141,7 +166,7 @@
 				}
 				var k = Math.min( 1, ( t - t0 ) / 1300 );
 				var v = cible * ( 1 - Math.pow( 1 - k, 3 ) );
-				c.textContent = m[ 1 ] + v.toFixed( dec ).replace( '.', sep ) + m[ 3 ];
+				c.textContent = ecrireChiffre( n, v );
 				if ( k < 1 ) {
 					requestAnimationFrame( pas );
 				} else {

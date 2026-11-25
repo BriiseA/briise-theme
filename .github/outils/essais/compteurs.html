@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="fr" class="br-motion">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Essai des compteurs</title>
+<style>
+	:root { --fond: #faf8f5; --texte: #1f1d1a; --doux: #5c574f; --carte: #fff; --filet: #e6e1d9; --oui: #1d6b3a; --non: #8a3b12; }
+	@media (prefers-color-scheme: dark) { :root { --fond: #1b1a18; --texte: #f2efe9; --doux: #b5afa5; --carte: #262421; --filet: #3a3733; --oui: #7fd19c; --non: #f0a479; } }
+	body { margin: 0; padding: 32px 16px; background: var(--fond); color: var(--texte); font: 16px/1.5 system-ui, sans-serif; }
+	main { max-width: 960px; margin: 0 auto; }
+	h1 { font-size: 1.6rem; margin: 0 0 4px; }
+	.intro { color: var(--doux); margin: 0 0 24px; }
+	h2 { font-size: 1.1rem; margin: 32px 0 12px; }
+	.br-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+	.wp-block-column { background: var(--carte); border: 1px solid var(--filet); border-radius: 10px; padding: 14px 16px; }
+	.br-stat { font-size: 1.7rem; font-weight: 700; margin: 0; font-variant-numeric: tabular-nums; }
+	.etat { font-size: .85rem; margin: 6px 0 0; color: var(--doux); }
+	.etat.ok { color: var(--oui); } .etat.ko { color: var(--non); font-weight: 600; }
+	button { margin-top: 28px; min-height: 44px; padding: 0 20px; border-radius: 999px; border: 1px solid currentColor; background: none; color: inherit; font: inherit; cursor: pointer; }
+	button:focus-visible { outline: 3px solid var(--oui); outline-offset: 3px; }
+</style>
+</head>
+<body>
+<main>
+	<h1>Essai des compteurs animés</h1>
+	<p class="intro">La page charge le vrai <code>assets/js/motion.js</code> du thème. Sous chaque valeur : ce qui était attendu, et ce que le script a fait.</p>
+
+	<h2>Doivent compter</h2>
+	<div class="br-stats" data-attendu="compte">
+		<div class="wp-block-column"><p class="br-stat">98&nbsp;%</p></div>
+		<div class="wp-block-column"><p class="br-stat">15&nbsp;ans</p></div>
+		<div class="wp-block-column"><p class="br-stat">4,9/5</p></div>
+		<div class="wp-block-column"><p class="br-stat">48&nbsp;h</p></div>
+		<div class="wp-block-column"><p class="br-stat">+ 120</p></div>
+		<div class="wp-block-column"><p class="br-stat">500+</p></div>
+		<div class="wp-block-column"><p class="br-stat">2&nbsp;500</p></div>
+		<div class="wp-block-column"><p class="br-stat">12&nbsp;000 m²</p></div>
+	</div>
+
+	<h2>Doivent rester fixes</h2>
+	<div class="br-stats" data-attendu="fixe">
+		<div class="wp-block-column"><p class="br-stat">Formule + 290&nbsp;€</p></div>
+		<div class="wp-block-column"><p class="br-stat">Dès 690&nbsp;€ HT</p></div>
+		<div class="wp-block-column"><p class="br-stat">1&nbsp;690&#8239;€ HT</p></div>
+		<div class="wp-block-column"><p class="br-stat">290&#8239;€ HT</p></div>
+		<div class="wp-block-column"><p class="br-stat">3D</p></div>
+		<div class="wp-block-column"><p class="br-stat">Note 4,9/5</p></div>
+		<div class="wp-block-column"><p class="br-stat">15 ans d’expérience</p></div>
+		<div class="wp-block-column"><p class="br-stat">1</p></div>
+	</div>
+
+	<button type="button" onclick="location.reload()">Rejouer</button>
+</main>
+<script>
+	// Le thème coupe les animations si le visiteur le demande : on retire la classe comme lui.
+	if ( window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches ) {
+		document.documentElement.classList.remove( 'br-motion' );
+	}
+</script>
+<script src="../../../assets/js/motion.js"></script>
+<script>
+	setTimeout( function () {
+		document.querySelectorAll( '[data-attendu]' ).forEach( function ( groupe ) {
+			var attendu = groupe.dataset.attendu;
+			groupe.querySelectorAll( '.br-stat' ).forEach( function ( p ) {
+				var fait = p.dataset.brCompte ? 'compte' : 'fixe';
+				var etat = document.createElement( 'p' );
+				etat.className = 'etat ' + ( fait === attendu ? 'ok' : 'ko' );
+				etat.textContent = ( fait === attendu ? 'OK : ' : 'ERREUR : ' ) + ( fait === 'compte' ? 'a compté' : 'est resté fixe' );
+				p.after( etat );
+			} );
+		} );
+	}, 2500 );
+</script>
+</body>
+</html>
