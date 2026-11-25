@@ -343,7 +343,36 @@
 		document.querySelectorAll( '.br-faq-cherche' ).forEach( faq );
 		document.querySelectorAll( '.br-oriente' ).forEach( orientation );
 		document.querySelectorAll( '.br-estim' ).forEach( estimateur );
+		if ( document.body.classList.contains( 'br-cartes-mobile--defilement' ) ) {
+			document.querySelectorAll( '.br-mosaique' ).forEach( replier );
+		}
 	}
+	/* ----- Galerie repliée sur téléphone ------------------------------------------
+	   Réglage « Sur téléphone, cartes et galeries : en défilement ». Quatre photos, puis un bouton
+	   qui montre les autres. Le CSS ne replie que sur téléphone ; sans script, tout reste affiché. */
+	function replier( g ) {
+		var photos = g.querySelectorAll( ':scope > figure' );
+		if ( photos.length < 6 ) {
+			return;
+		}
+		g.classList.add( 'br-mosaique--repliee' );
+		var b = document.createElement( 'button' );
+		b.type = 'button';
+		b.className = 'br-mosaique-plus';
+		b.textContent = 'Voir les ' + photos.length + ' photos';
+		b.addEventListener( 'click', function () {
+			g.classList.remove( 'br-mosaique--repliee' );
+			b.remove();
+			// Le focus va sur la première photo qui vient d'apparaître (ou sur la galerie).
+			var suite = photos[ 4 ].querySelector( 'a, button' ) || g;
+			if ( suite === g ) {
+				g.setAttribute( 'tabindex', '-1' );
+			}
+			suite.focus( { preventScroll: true } );
+		} );
+		g.insertAdjacentElement( 'afterend', b );
+	}
+
 	if ( document.readyState === 'loading' ) {
 		document.addEventListener( 'DOMContentLoaded', demarrer );
 	} else {

@@ -232,6 +232,7 @@ const site = {
   logo: 'briise-logo-sombre', logo_clair: 'briise-logo-clair',
   // Polices de la charte, à téléverser avant l'import (Styles > Typographie > Gérer les polices).
   polices: { titres: 'Sora', texte: 'Figtree', accent: 'Instrument Serif', accent_italique: true, accent_taille: 1.15 },
+  capitales: 'oui', cartes_mobile: 'defilement',
   entete: 'capsule', pied: 'grand-titre', mobile: 'barre', cartes: 'photo-haut', titres: 'tete-lien',
   cta: 'contact', cta_label: 'Nous contacter', accueil: 'accueil', faq: '', personne: 'a-propos', blog: '',
   statut: 'publish',

@@ -427,3 +427,51 @@
 @media (max-width:781px){.br-merci-etapes{grid-template-columns:1fr;border-top:0;border-left:2px solid var(--wp--preset--color--texte);margin-left:.5rem!important;max-width:calc(100% - .5rem)!important}.br-merci-etape{padding:0 0 1.5rem 1.5rem}.br-merci-etape::before{top:.2rem;left:calc(-.5rem - 1px)}}
 @media (prefers-reduced-motion:reduce){.br-etapes-barre span,.br-estim-choix span,.br-merci-liens a::after{transition:none}}
 @media (max-width:781px){.br-suite .br-appel,.br-merci-appel .br-appel{align-items:stretch}.br-suite .br-appel-bouton,.br-merci-appel .br-appel-bouton{max-width:100%;justify-content:center;white-space:normal}}
+
+/* ----- Sur téléphone, cartes en défilement (Mon entreprise > Apparence) ---------------------
+   Les rangées de trois cartes ou plus se font glisser de gauche à droite au lieu de s'empiler :
+   défilement natif du navigateur, sans script ; le bord de la carte suivante dépasse pour montrer
+   qu'il y a une suite. Les galeries montrent quatre photos puis un bouton (sections.js). */
+@media (max-width: 781px) {
+	.br-cartes-mobile--defilement main :is(
+		.wp-block-columns:has(> .wp-block-column:nth-child(3) > .br-card),
+		.br-avis-grille, .br-lieux-grille, .br-prices, .br-projects, .br-team, .br-modeles-grille, .br-steps, .br-etapes-images-grille
+	):has(> :nth-child(3)) {
+		display: flex !important;
+		flex-direction: row !important;
+		flex-wrap: nowrap !important;
+		gap: 1rem !important;
+		overflow-x: auto;
+		overscroll-behavior-x: contain;
+		scroll-snap-type: x mandatory;
+		scroll-padding-inline: var(--wp--style--root--padding-left, 1rem);
+		margin-inline: calc(-1 * var(--wp--style--root--padding-left, 1rem)) !important;
+		padding: .25rem var(--wp--style--root--padding-left, 1rem) 1rem !important;
+		scrollbar-width: thin;
+	}
+	.br-cartes-mobile--defilement main :is(
+		.wp-block-columns:has(> .wp-block-column:nth-child(3) > .br-card),
+		.br-avis-grille, .br-lieux-grille, .br-prices, .br-projects, .br-team, .br-modeles-grille, .br-steps, .br-etapes-images-grille
+	):has(> :nth-child(3)) > * {
+		flex: 0 0 82% !important;
+		max-width: 82%;
+		margin: 0 !important;
+		scroll-snap-align: start;
+	}
+	.br-mosaique--repliee > figure:nth-child(n+5) { display: none !important; }
+	.br-mosaique-plus { margin: 1rem auto 0; display: block; min-height: 44px; padding: .6rem 1.4rem; border: 1px solid currentColor; border-radius: var(--wp--custom--rayon--bouton, 999px); background: none; color: inherit; font: inherit; font-weight: 600; cursor: pointer; }
+	.br-mosaique-plus:focus-visible { outline: 3px solid var(--wp--preset--color--accent); outline-offset: 3px; }
+}
+/* Tablette en hauteur : deux cartes à l'écran, la troisième dépasse. */
+@media (min-width: 600px) and (max-width: 781px) {
+	.br-cartes-mobile--defilement main :is(
+		.wp-block-columns:has(> .wp-block-column:nth-child(3) > .br-card),
+		.br-avis-grille, .br-lieux-grille, .br-prices, .br-projects, .br-team, .br-modeles-grille, .br-steps, .br-etapes-images-grille
+	):has(> :nth-child(3)) > * {
+		flex-basis: 44% !important;
+		max-width: 44%;
+	}
+}
+@media (min-width: 782px) {
+	.br-mosaique-plus { display: none; }
+}

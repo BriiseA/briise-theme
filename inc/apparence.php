@@ -46,12 +46,21 @@ function briise_apparence_choix() {
 			'tete-deux-colonnes' => array( 'Titre et texte côte à côte', 'Le titre à gauche, la phrase d’introduction à droite.' ),
 			'grand-numero'       => array( 'Grand numéro', 'Chaque section numérotée en grand au-dessus de son titre (01, 02…). Pour une page qui se lit comme un récit.' ),
 		),
+		'cartes_mobile' => array(
+			'empilees'   => array( 'Empilées', 'Les cartes les unes sous les autres, toutes les photos des galeries (d’origine).' ),
+			'defilement' => array( 'En défilement', 'Les rangées de trois cartes ou plus se font glisser de gauche à droite, et les galeries montrent quatre photos puis un bouton pour voir les autres. La page est plus courte ; rien n’est retiré.' ),
+		),
+		'capitales' => array(
+			'ambiance' => array( 'Selon l’ambiance', 'Capitales avec l’ambiance Acier, minuscules avec les autres.' ),
+			'oui'      => array( 'Oui', 'Les grands titres (H1 et H2) en capitales, un peu plus petits pour que les mots longs tiennent sur téléphone. Les petits titres restent en minuscules.' ),
+			'non'      => array( 'Non', 'Pas de capitales, même avec l’ambiance Acier.' ),
+		),
 	);
 }
 
 function briise_apparence( $cle ) {
 	$choix  = briise_apparence_choix();
-	$defaut = array( 'entete' => 'classique', 'pied' => 'colonnes', 'mobile' => 'bouton', 'cartes' => 'photo-fond', 'titres' => 'tete-lien' );
+	$defaut = array( 'entete' => 'classique', 'pied' => 'colonnes', 'mobile' => 'bouton', 'cartes' => 'photo-fond', 'titres' => 'tete-lien', 'capitales' => 'ambiance', 'cartes_mobile' => 'empilees' );
 	$v      = (array) get_option( 'briise_apparence', array() );
 	$val    = $v[ $cle ] ?? $defaut[ $cle ];
 	return isset( $choix[ $cle ][ $val ] ) ? $val : $defaut[ $cle ];
@@ -102,6 +111,8 @@ add_filter( 'body_class', function ( $classes ) {
 	$classes[] = 'br-mobile--' . briise_apparence( 'mobile' );
 	$classes[] = 'br-cartes--' . briise_apparence( 'cartes' );
 	$classes[] = 'br-titres--' . briise_apparence( 'titres' );
+	$classes[] = 'br-capitales--' . briise_apparence( 'capitales' );
+	$classes[] = 'br-cartes-mobile--' . briise_apparence( 'cartes_mobile' );
 	if ( in_array( $e, array( 'capsule', 'ilots', 'bandeau' ), true ) && briise_page_sur_photo() ) {
 		$classes[] = 'br-sur-photo';
 	}
@@ -197,7 +208,7 @@ function briise_onglet_apparence() {
 	if ( isset( $_GET['ok'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 		echo '<div class="notice notice-success"><p>Apparence enregistrée.</p></div>';
 	}
-	$titres = array( 'entete' => 'En-tête', 'pied' => 'Pied de page', 'mobile' => 'Sur téléphone', 'cartes' => 'Cartes de service', 'titres' => 'Titres de section' );
+	$titres = array( 'entete' => 'En-tête', 'pied' => 'Pied de page', 'mobile' => 'Sur téléphone', 'cartes' => 'Cartes de service', 'titres' => 'Titres de section', 'capitales' => 'Titres en capitales', 'cartes_mobile' => 'Sur téléphone, cartes et galeries' );
 	echo '<p>Ces choix changent la forme de l’en-tête, du pied de page, du bas d’écran sur téléphone, des cartes de service, des titres de section et les polices, sur tout le site. Les textes, le téléphone et le bouton viennent toujours de Mon entreprise ; le contenu des pages ne change pas.</p>';
 	echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
 	wp_nonce_field( 'briise_apparence' );

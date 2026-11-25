@@ -122,6 +122,8 @@
   "accent_italique": true,
   "accent_taille": 1.15
  },
+ "capitales": "oui",
+ "cartes_mobile": "defilement",
  "entete": "capsule",
  "pied": "grand-titre",
  "mobile": "barre",

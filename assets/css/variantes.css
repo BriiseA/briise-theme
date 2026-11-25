@@ -439,3 +439,20 @@ body.br-sur-photo .br-smart-header.br-scrolled .br-header--bandeau { background:
 .br-titres--grand-numero main{counter-reset:br-titre}
 .br-titres--grand-numero main :is(.br-section-head,.br-head)>h2::before,.br-titres--grand-numero main .br-section>.wp-block-columns>.wp-block-column>h2:first-of-type::before{counter-increment:br-titre;content:counter(br-titre,decimal-leading-zero);content:counter(br-titre,decimal-leading-zero) / "";display:block;font-size:clamp(3.2rem,7vw,6rem);line-height:.9;letter-spacing:-.03em;margin-bottom:.35em;color:var(--wp--preset--color--accent);font-weight:700}
 .br-titres--grand-numero main .br-section-head{align-items:flex-end}
+
+/* Titres en capitales (Mon entreprise > Apparence). « Oui » : H1 et H2 en capitales, en plus petit
+   (un mot en capitales est environ 20 % plus large) ; les H3 restent en minuscules. « Non » : jamais,
+   même avec l'ambiance Acier. Les tailles passent par les variables : les classes de taille des blocs suivent. */
+.br-capitales--non :is(h1, h2, h3, h4, h5, h6) { text-transform: none; }
+.br-capitales--oui :is(h1, h2) {
+	--wp--preset--font-size--huge: clamp(2.1rem, 4.8vw, 4.5rem);
+	--wp--preset--font-size--xx-large: clamp(1.6rem, 3vw, 2.7rem);
+	--wp--preset--font-size--x-large: clamp(1.35rem, 2vw, 1.7rem);
+	text-transform: uppercase;
+	letter-spacing: -.005em;
+	line-height: 1.04;
+}
+/* Les colonnes de WordPress coupent les mots trop longs (word-break: break-word) : dans un titre en capitales,
+   on laisse le mot entier et ux.js réduit le titre à la place. « contain » empêche le mot d'élargir la colonne,
+   pour que le dépassement se voie et se mesure. */
+.br-capitales--oui :is(h1, h2), .br-capitales--ambiance :is(h1, h2) { overflow-wrap: normal; word-break: normal; hyphens: manual; contain: inline-size; }

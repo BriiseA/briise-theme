@@ -511,7 +511,7 @@ function briise_plan_installer( $plan ) {
 
 	// 10. Forme de l'en-tête, du pied de page et du bas d'écran mobile.
 	if ( function_exists( 'briise_apparence_enregistrer' ) ) {
-		briise_apparence_enregistrer( array_map( 'sanitize_key', array_intersect_key( $plan, array_flip( array( 'entete', 'pied', 'mobile', 'cartes', 'titres' ) ) ) ) );
+		briise_apparence_enregistrer( array_map( 'sanitize_key', array_intersect_key( $plan, array_flip( array( 'entete', 'pied', 'mobile', 'cartes', 'titres', 'capitales', 'cartes_mobile' ) ) ) ) );
 	}
 
 	if ( ! empty( $plan['kit'] ) ) {
