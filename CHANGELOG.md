@@ -1,6 +1,6 @@
 # Historique des versions
 
-## Prochaine version
+## 1.20.1
 
 - **Le cache des pages se vide tout seul.** Avec une extension de cache (W3 Total Cache, WP Rocket, LiteSpeed, WP Super Cache, WP Fastest Cache, SiteGround, Cache Enabler, Breeze, Hummingbird), un changement dans Mon entreprise, Apparence ou Polices, dans le menu, l'en-tête, le pied de page ou les styles, et la mise à jour du thème ou de l'extension vident maintenant le cache des pages. Avant, les visiteurs pouvaient voir l'ancienne version pendant des jours, comme un logo qui n'apparaissait pas.
 
