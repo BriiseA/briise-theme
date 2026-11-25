@@ -3,7 +3,7 @@
  * Polices de la charte d'un client : titres, texte et accent.
  *
  * Réglées dans Mon entreprise > Apparence, ou par la clé « polices » du fichier de site :
- * "polices": { "titres": "Sora", "texte": "Figtree", "accent": "Instrument Serif", "accent_italique": true }
+ * "polices": { "titres": "Sora", "texte": "Figtree", "accent": "Instrument Serif", "accent_italique": true, "accent_taille": 1.15 }
  *
  * On choisit parmi les polices livrées avec le thème et celles téléversées dans
  * Styles > Typographie > Gérer les polices. Le choix est appliqué à chaque affichage
@@ -35,7 +35,28 @@ function briise_polices() {
 		'texte'           => (string) ( $v['texte'] ?? '' ),
 		'accent'          => (string) ( $v['accent'] ?? '' ),
 		'accent_italique' => ! empty( $v['accent_italique'] ),
+		'accent_taille'   => briise_polices_taille( $v['accent_taille'] ?? '' ),
 	);
+}
+
+/** Tailles proposées pour le mot d'accent (par rapport au reste du titre). */
+function briise_polices_tailles() {
+	return array(
+		''     => 'Comme le titre',
+		'1.08' => 'Un peu plus grand',
+		'1.15' => 'Plus grand',
+		'1.25' => 'Nettement plus grand',
+	);
+}
+
+/** Taille d'accent valide : un rapport entre 0,8 et 1,4, ou vide (comme le titre). */
+function briise_polices_taille( $v ) {
+	$v = str_replace( ',', '.', trim( (string) $v ) );
+	if ( '' === $v || ! is_numeric( $v ) ) {
+		return '';
+	}
+	$f = round( (float) $v, 2 );
+	return ( $f >= 0.8 && $f <= 1.4 && 1.0 !== $f ) ? rtrim( rtrim( number_format( $f, 2, '.', '' ), '0' ), '.' ) : '';
 }
 
 /**
@@ -143,6 +164,9 @@ function briise_polices_enregistrer( $valeurs ) {
 	if ( array_key_exists( 'accent_italique', $valeurs ) ) {
 		$out['accent_italique'] = ! empty( $valeurs['accent_italique'] );
 	}
+	if ( array_key_exists( 'accent_taille', $valeurs ) ) {
+		$out['accent_taille'] = briise_polices_taille( $valeurs['accent_taille'] );
+	}
 	update_option( 'briise_polices', $out );
 	if ( function_exists( 'wp_clean_theme_json_cache' ) ) {
 		wp_clean_theme_json_cache();
@@ -205,8 +229,10 @@ add_filter( 'wp_theme_json_data_user', function ( $theme_json ) {
 			$max    = briise_polices_graisse_max( $dispo[ $nom ]['fontFace'] );
 			$custom = array(
 				'accent' => array(
-					'style' => $choix['accent_italique'] ? 'italic' : 'normal',
-					'poids' => $max < 600 ? (string) $max : 'inherit',
+					'style'  => $choix['accent_italique'] ? 'italic' : 'normal',
+					'poids'  => $max < 600 ? (string) $max : 'inherit',
+					// Une police d'accent paraît souvent plus petite que celle des titres à taille égale.
+					'taille' => '' !== $choix['accent_taille'] ? $choix['accent_taille'] : '1',
 				),
 			);
 		}
@@ -246,5 +272,10 @@ function briise_polices_formulaire() {
 		'<p><label><input type="checkbox" name="polices[accent_italique]" value="1" %s> Mot d’accent en italique</label></p>',
 		checked( $choix['accent_italique'], true, false )
 	);
+	echo '<p><label for="br-police-accent-taille" style="display:inline-block;min-width:16rem">Taille du mot d’accent</label> <select id="br-police-accent-taille" name="polices[accent_taille]">';
+	foreach ( briise_polices_tailles() as $val => $libelle ) {
+		printf( '<option value="%1$s" %2$s>%3$s</option>', esc_attr( $val ), selected( $choix['accent_taille'], $val, false ), esc_html( $libelle ) );
+	}
+	echo '</select> <span class="description">Certaines polices d’accent paraissent plus petites que celle des titres. Sans police d’accent, ce réglage ne change rien.</span></p>';
 	echo '</fieldset>';
 }
