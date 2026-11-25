@@ -284,6 +284,11 @@ body.br-sur-photo .br-smart-header.br-scrolled .br-header--bandeau { background:
 .br-ft-ligne .br-footer-liens { flex-direction: row; flex-wrap: wrap; gap: .4rem 1.5rem; }
 .br-ft-nom-petit { margin: 0; font-family: var(--wp--preset--font-family--titres); font-size: 1.25rem; font-weight: 700; }
 .br-ft-nom-petit a { text-decoration: none; }
+/* Logo pour fond foncé à la place du nom (Grand titre, Compact, Grand appel). */
+.br-ft-logo { display: block; width: auto; height: auto; max-width: min(100%, 20rem); max-height: 4rem; }
+.br-ft-logo--petit { max-width: 12rem; max-height: 2.25rem; }
+.br-ft-nom--logo { line-height: 1; }
+.br-ft-nom--logo a, .br-ft-nom-petit a:has(.br-ft-logo) { display: inline-block; }
 .br-ft-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 2.5rem; }
 
 /* P1. Grand titre */

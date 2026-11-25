@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once get_theme_file_path( 'inc/socle.php' );
 require_once get_theme_file_path( 'inc/kits.php' );
 require_once get_theme_file_path( 'inc/apparence.php' );
+require_once get_theme_file_path( 'inc/polices.php' );
 require_once get_theme_file_path( 'inc/performance.php' );
 require_once get_theme_file_path( 'inc/styles-section.php' );
 require_once get_theme_file_path( 'inc/tableaux.php' );

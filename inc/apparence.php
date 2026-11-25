@@ -184,6 +184,11 @@ add_action( 'admin_post_briise_apparence', function () {
 		wp_die( 'Accès refusé.' );
 	}
 	briise_apparence_enregistrer( array_map( 'sanitize_key', wp_unslash( (array) ( $_POST['apparence'] ?? array() ) ) ) );
+	if ( function_exists( 'briise_polices_enregistrer' ) ) {
+		$polices                    = array_map( 'sanitize_text_field', wp_unslash( (array) ( $_POST['polices'] ?? array() ) ) );
+		$polices['accent_italique'] = ! empty( $polices['accent_italique'] );
+		briise_polices_enregistrer( $polices );
+	}
 	wp_safe_redirect( admin_url( 'admin.php?page=briise-entreprise&onglet=apparence&ok=1' ) );
 	exit;
 } );
@@ -193,7 +198,7 @@ function briise_onglet_apparence() {
 		echo '<div class="notice notice-success"><p>Apparence enregistrée.</p></div>';
 	}
 	$titres = array( 'entete' => 'En-tête', 'pied' => 'Pied de page', 'mobile' => 'Sur téléphone', 'cartes' => 'Cartes de service', 'titres' => 'Titres de section' );
-	echo '<p>Ces choix changent la forme de l’en-tête, du pied de page, du bas d’écran sur téléphone, des cartes de service et des titres de section, sur tout le site. Les textes, le téléphone et le bouton viennent toujours de Mon entreprise ; le contenu des pages ne change pas.</p>';
+	echo '<p>Ces choix changent la forme de l’en-tête, du pied de page, du bas d’écran sur téléphone, des cartes de service, des titres de section et les polices, sur tout le site. Les textes, le téléphone et le bouton viennent toujours de Mon entreprise ; le contenu des pages ne change pas.</p>';
 	echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
 	wp_nonce_field( 'briise_apparence' );
 	echo '<input type="hidden" name="action" value="briise_apparence">';
@@ -210,6 +215,9 @@ function briise_onglet_apparence() {
 			);
 		}
 		echo '</fieldset>';
+	}
+	if ( function_exists( 'briise_polices_formulaire' ) ) {
+		briise_polices_formulaire();
 	}
 	submit_button( 'Enregistrer' );
 	echo '</form>';

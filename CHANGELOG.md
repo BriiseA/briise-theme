@@ -1,5 +1,12 @@
 # Historique des versions
 
+## Prochaine version
+
+- **Les polices d'une charte se choisissent sans CSS.** Mon entreprise > Apparence > Polices : une liste pour les titres, une pour le texte, une pour le mot d'accent. Elle reprend les polices du thème et celles téléversées dans Styles > Typographie. Le choix reste en place si vous changez d'ambiance. Dans le fichier de site : la clé `polices`, avec le nom de chaque police.
+- **Un mot de titre dans une autre police.** Le mot passé au Surlignage dans un titre prend la police d'accent, en italique si vous cochez la case, et un peu plus grand si cette police paraît petite à côté des titres (« Taille du mot d'accent »). Sans police d'accent, rien ne change.
+- **Les logos dans le fichier de site.** Les clés `logo` et `logo_clair` donnent le logo et le logo pour fond foncé par leur nom dans la Médiathèque, comme les photos. Un logo absent est signalé à l'import, puis placé par « Placer les photos de la Médiathèque ».
+- **Le logo dans plus de pieds de page.** Grand titre, Compact et Grand appel affichent le logo pour fond foncé à la place du nom, quand il existe. Les sites qui en ont déjà un le verront apparaître à la mise à jour.
+
 ## 1.19.2
 
 - **Le CSS additionnel ne casse plus le thème.** Une seule ligne tapée dans Apparence > Éditeur > Styles > CSS additionnel remplaçait tout le CSS du thème (sections, cartes, en-têtes) : WordPress ne les additionne pas. Le thème remet désormais son CSS devant celui de l'utilisateur, qui garde le dernier mot. Utile pour la charte d'un client (titres en capitales, police d'accent).

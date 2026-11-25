@@ -48,4 +48,4 @@ Règles des sections : jamais de texte seul (une image ou un dessin à côté), 
 - `theme.json` porte l'essentiel du CSS (environ 110 Ko dans `styles.css`). WordPress remplace ce CSS par le CSS additionnel de l'utilisateur au lieu de l'y ajouter : le filtre `wp_theme_json_data_user` de `functions.php` remet le CSS du thème devant (1.19.2). Ne pas le retirer.
 - Une page dont l'adresse existe déjà n'est jamais modifiée par l'import d'un fichier de site : pour réimporter, supprimer d'abord les pages.
 - Les compteurs animés (`.br-stat`, tuiles) comptent jusqu'au nombre du texte : n'y mettre qu'une valeur courte.
-- L'ambiance « Charte du client » utilise des polices système : les polices d'un client se téléversent dans Styles > Typographie.
+- Polices d'une charte (`inc/polices.php`) : appliquées à chaque affichage par le filtre `wp_theme_json_data_user`, jamais écrites dans les styles globaux, pour survivre à un changement d'ambiance. Les variables `--wp--preset--font-family--titres`, `--texte` et `--accent` restent les seules à utiliser dans le CSS ; le mot surligné d'un titre lit `--accent` avec repli sur la police des titres.

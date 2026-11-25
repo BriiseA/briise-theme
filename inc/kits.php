@@ -220,6 +220,10 @@ function briise_photos_relier() {
 			++$photos;
 		}
 	}
+	// Logos du fichier de site déposés après l'import.
+	if ( get_option( 'briise_logos_noms' ) ) {
+		$photos += briise_logos_placer()['places'];
+	}
 	return array( $pages, $photos );
 }
 
@@ -237,6 +241,60 @@ add_action( 'admin_post_briise_photos', function () {
 /**
  * Installe un plan. Retourne [ 'crees' => [titres], 'gardes' => [titres] ].
  */
+/**
+ * Logos donnés par le fichier de site, par leur nom dans la Médiathèque :
+ * « logo » (en-tête) et « logo_clair » (pied de page sombre). Un logo déjà choisi n'est pas remplacé
+ * par « Placer les photos de la Médiathèque », seulement par un nouvel import.
+ *
+ * @return string[] Noms des logos absents de la Médiathèque.
+ */
+function briise_plan_logos( $plan ) {
+	$noms = array();
+	foreach ( array( 'logo', 'logo_clair' ) as $cle ) {
+		if ( ! empty( $plan[ $cle ] ) && is_string( $plan[ $cle ] ) ) {
+			$noms[ $cle ] = sanitize_title( $plan[ $cle ] );
+		}
+	}
+	if ( ! $noms ) {
+		return array();
+	}
+	update_option( 'briise_logos_noms', $noms, false );
+	return briise_logos_placer( (array) ( $plan['images'] ?? array() ), true )['absents'];
+}
+
+/**
+ * Règle les logos retenus à l'import. $forcer : remplace un logo déjà choisi (import) ou non (rattrapage).
+ *
+ * @return array [ 'places' => nombre de logos réglés, 'absents' => noms toujours absents ].
+ */
+function briise_logos_placer( $images = array(), $forcer = false ) {
+	$absents = array();
+	$places  = 0;
+	foreach ( (array) get_option( 'briise_logos_noms', array() ) as $cle => $nom ) {
+		$actuel = 'logo' === $cle ? (int) get_theme_mod( 'custom_logo' ) : (int) ( function_exists( 'briise_reglage' ) ? ( briise_reglage( 'briise_entreprise' )['logo_clair'] ?? 0 ) : 0 );
+		if ( $actuel && ! $forcer ) {
+			continue;
+		}
+		$url = isset( $images[ $nom ] ) ? sanitize_text_field( $images[ $nom ] ) : '';
+		$id  = $url ? attachment_url_to_postid( 0 === strpos( $url, '/' ) ? home_url( $url ) : $url ) : 0;
+		$id  = $id ? $id : briise_photo_media( $nom );
+		if ( ! $id ) {
+			$absents[] = $nom;
+			continue;
+		}
+		if ( 'logo' === $cle ) {
+			set_theme_mod( 'custom_logo', $id );
+			update_option( 'site_logo', $id );
+		} elseif ( function_exists( 'briise_reglage' ) ) {
+			$e               = briise_reglage( 'briise_entreprise' );
+			$e['logo_clair'] = $id;
+			update_option( 'briise_entreprise', $e );
+		}
+		++$places;
+	}
+	return array( 'places' => $places, 'absents' => $absents );
+}
+
 /**
  * Photo principale (image mise en avant) d'une page ou d'une fiche importée : « image » = le nom de la photo,
  * cherché dans la liste « images » du fichier, puis dans la Médiathèque. Le nom est gardé pour
@@ -267,6 +325,9 @@ function briise_plan_installer( $plan ) {
 			update_option( $option, array_merge( briise_reglage( $option ), $plan[ $cle ] ) );
 		}
 	}
+
+	// Logos, par leur nom dans la Médiathèque.
+	$logos_absents = briise_plan_logos( $plan );
 
 	// Lieux du formulaire de réservation (« Au studio », « Chez vous »…).
 	if ( ! empty( $plan['reservation_lieux'] ) && is_array( $plan['reservation_lieux'] ) ) {
@@ -442,6 +503,11 @@ function briise_plan_installer( $plan ) {
 	if ( ! empty( $plan['ambiance'] ) ) {
 		briise_appliquer_ambiance( sanitize_key( $plan['ambiance'] ), (array) ( $plan['couleurs'] ?? array() ) );
 	}
+	// Polices de la charte (« polices » : titres, texte, accent, accent_italique), par leur nom.
+	$polices_absentes = array();
+	if ( ! empty( $plan['polices'] ) && is_array( $plan['polices'] ) && function_exists( 'briise_polices_enregistrer' ) ) {
+		$polices_absentes = briise_polices_enregistrer( $plan['polices'] );
+	}
 
 	// 10. Forme de l'en-tête, du pied de page et du bas d'écran mobile.
 	if ( function_exists( 'briise_apparence_enregistrer' ) ) {
@@ -453,7 +519,7 @@ function briise_plan_installer( $plan ) {
 	}
 	$exemples = array( 'portrait', 'paysage', 'paysage-2', 'carre', 'carre-2', 'carre-3', 'banniere', 'avant', 'apres', 'logo-1', 'logo-2', 'logo-3', 'logo-4', 'logo-5' );
 	$absentes = array_values( array_diff( array_keys( $GLOBALS['briise_photos_absentes'] ?? array() ), $exemples ) );
-	return array( 'crees' => array_values( wp_list_pluck( $crees, 'titre' ) ), 'gardes' => $gardes, 'manquants' => array_keys( $manquants ), 'realisations' => $realisations, 'photos_absentes' => $absentes );
+	return array( 'crees' => array_values( wp_list_pluck( $crees, 'titre' ) ), 'gardes' => $gardes, 'manquants' => array_keys( $manquants ), 'realisations' => $realisations, 'photos_absentes' => $absentes, 'polices_absentes' => $polices_absentes, 'logos_absents' => $logos_absents );
 }
 
 /**
@@ -689,6 +755,12 @@ function briise_onglet_demarrage() {
 			}
 			if ( ! empty( $r['photos_absentes'] ) ) {
 				echo '<p><strong>Photos absentes de la Médiathèque</strong> (une image d’exemple les remplace) : ' . esc_html( implode( ', ', $r['photos_absentes'] ) ) . '. Ajoutez-les dans Médias avec ce nom de fichier (par exemple ' . esc_html( $r['photos_absentes'][0] ) . '.jpg), puis cliquez sur « Placer les photos de la Médiathèque » plus bas.</p>';
+			}
+			if ( ! empty( $r['logos_absents'] ) ) {
+				echo '<p><strong>Logos absents de la Médiathèque</strong> : ' . esc_html( implode( ', ', $r['logos_absents'] ) ) . '. Ajoutez-les dans Médias avec ce nom de fichier (PNG transparent, au moins 400 px de large), puis cliquez sur « Placer les photos de la Médiathèque » plus bas.</p>';
+			}
+			if ( ! empty( $r['polices_absentes'] ) ) {
+				echo '<p><strong>Polices introuvables</strong> (celles de l’ambiance restent en place) : ' . esc_html( implode( ', ', $r['polices_absentes'] ) ) . '. Téléversez-les dans Apparence &gt; Éditeur &gt; Styles &gt; Typographie &gt; Gérer les polices, puis choisissez-les dans Mon entreprise &gt; Apparence &gt; Polices.</p>';
 			}
 			echo '<p>Prochaines étapes : compléter les autres onglets de Mon entreprise, puis remplacer les textes et les photos d’exemple de chaque page.</p></div>';
 		}
