@@ -1,5 +1,9 @@
 # Historique des versions
 
+## Prochaine version
+
+- **Les compteurs animés ne comptent plus que les vrais chiffres.** Un texte comme « Formule + 290 € » ou « Dès 690 € HT » s'animait comme un chiffre, et « 2 890 € HT » comptait de 0 à 2 devant « 890 ». Désormais, seule une valeur purement numérique compte : un nombre, éventuellement précédé de « + » ou « ~ », suivi au plus d'une unité courte (« 98 % », « 4,9/5 », « 15 ans », « 48 h », « 500+ », « 12 000 m² »). Les prix, les phrases et les textes avec un mot devant restent affichés tels quels. Les grands nombres gardent leur espace des milliers pendant l'animation.
+
 ## 1.19.2
 
 - **Le CSS additionnel ne casse plus le thème.** Une seule ligne tapée dans Apparence > Éditeur > Styles > CSS additionnel remplaçait tout le CSS du thème (sections, cartes, en-têtes) : WordPress ne les additionne pas. Le thème remet désormais son CSS devant celui de l'utilisateur, qui garde le dernier mot. Utile pour la charte d'un client (titres en capitales, police d'accent).

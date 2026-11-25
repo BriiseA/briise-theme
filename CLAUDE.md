@@ -47,5 +47,5 @@ Règles des sections : jamais de texte seul (une image ou un dessin à côté), 
 
 - `theme.json` porte l'essentiel du CSS (environ 110 Ko dans `styles.css`). WordPress remplace ce CSS par le CSS additionnel de l'utilisateur au lieu de l'y ajouter : le filtre `wp_theme_json_data_user` de `functions.php` remet le CSS du thème devant (1.19.2). Ne pas le retirer.
 - Une page dont l'adresse existe déjà n'est jamais modifiée par l'import d'un fichier de site : pour réimporter, supprimer d'abord les pages.
-- Les compteurs animés (`.br-stat`, tuiles) comptent jusqu'au nombre du texte : n'y mettre qu'une valeur courte.
+- Les compteurs animés (`.br-stat`, tuiles) ne comptent qu'une valeur purement numérique : symbole facultatif devant (`+`, `~`), nombre, au plus une unité courte (`%`, `/5`, `ans`, `h`). Un prix (`€`) ou un texte avec un mot devant reste fixe. Essai : `.github/outils/essais/compteurs.html` (servir le dépôt en local, la page charge `assets/js/motion.js`).
 - L'ambiance « Charte du client » utilise des polices système : les polices d'un client se téléversent dans Styles > Typographie.
