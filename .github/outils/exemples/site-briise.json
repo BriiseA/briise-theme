@@ -113,6 +113,12 @@
   "deco": "#c9bcff",
   "sombre": "#24124a"
  },
+ "polices": {
+  "titres": "Sora",
+  "texte": "Figtree",
+  "accent": "Instrument Serif",
+  "accent_italique": true
+ },
  "entete": "capsule",
  "pied": "grand-titre",
  "mobile": "barre",

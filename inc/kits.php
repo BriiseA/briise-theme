@@ -442,6 +442,11 @@ function briise_plan_installer( $plan ) {
 	if ( ! empty( $plan['ambiance'] ) ) {
 		briise_appliquer_ambiance( sanitize_key( $plan['ambiance'] ), (array) ( $plan['couleurs'] ?? array() ) );
 	}
+	// Polices de la charte (« polices » : titres, texte, accent, accent_italique), par leur nom.
+	$polices_absentes = array();
+	if ( ! empty( $plan['polices'] ) && is_array( $plan['polices'] ) && function_exists( 'briise_polices_enregistrer' ) ) {
+		$polices_absentes = briise_polices_enregistrer( $plan['polices'] );
+	}
 
 	// 10. Forme de l'en-tête, du pied de page et du bas d'écran mobile.
 	if ( function_exists( 'briise_apparence_enregistrer' ) ) {
@@ -453,7 +458,7 @@ function briise_plan_installer( $plan ) {
 	}
 	$exemples = array( 'portrait', 'paysage', 'paysage-2', 'carre', 'carre-2', 'carre-3', 'banniere', 'avant', 'apres', 'logo-1', 'logo-2', 'logo-3', 'logo-4', 'logo-5' );
 	$absentes = array_values( array_diff( array_keys( $GLOBALS['briise_photos_absentes'] ?? array() ), $exemples ) );
-	return array( 'crees' => array_values( wp_list_pluck( $crees, 'titre' ) ), 'gardes' => $gardes, 'manquants' => array_keys( $manquants ), 'realisations' => $realisations, 'photos_absentes' => $absentes );
+	return array( 'crees' => array_values( wp_list_pluck( $crees, 'titre' ) ), 'gardes' => $gardes, 'manquants' => array_keys( $manquants ), 'realisations' => $realisations, 'photos_absentes' => $absentes, 'polices_absentes' => $polices_absentes );
 }
 
 /**
@@ -689,6 +694,9 @@ function briise_onglet_demarrage() {
 			}
 			if ( ! empty( $r['photos_absentes'] ) ) {
 				echo '<p><strong>Photos absentes de la Médiathèque</strong> (une image d’exemple les remplace) : ' . esc_html( implode( ', ', $r['photos_absentes'] ) ) . '. Ajoutez-les dans Médias avec ce nom de fichier (par exemple ' . esc_html( $r['photos_absentes'][0] ) . '.jpg), puis cliquez sur « Placer les photos de la Médiathèque » plus bas.</p>';
+			}
+			if ( ! empty( $r['polices_absentes'] ) ) {
+				echo '<p><strong>Polices introuvables</strong> (celles de l’ambiance restent en place) : ' . esc_html( implode( ', ', $r['polices_absentes'] ) ) . '. Téléversez-les dans Apparence &gt; Éditeur &gt; Styles &gt; Typographie &gt; Gérer les polices, puis choisissez-les dans Mon entreprise &gt; Apparence &gt; Polices.</p>';
 			}
 			echo '<p>Prochaines étapes : compléter les autres onglets de Mon entreprise, puis remplacer les textes et les photos d’exemple de chaque page.</p></div>';
 		}

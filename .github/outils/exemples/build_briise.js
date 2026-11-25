@@ -228,6 +228,8 @@ const site = {
   annonces: { jours: { 1: { ouvert: true, plages: [['09:00', '12:30'], ['14:00', '18:00']] }, 2: { ouvert: true, plages: [['09:00', '12:30'], ['14:00', '18:00']] }, 3: { ouvert: true, plages: [['09:00', '12:30'], ['14:00', '18:00']] }, 4: { ouvert: true, plages: [['09:00', '12:30'], ['14:00', '18:00']] }, 5: { ouvert: true, plages: [['09:00', '12:30'], ['14:00', '18:00']] }, 6: { ouvert: false }, 0: { ouvert: false } } },
   ambiance: 'charte-client',
   couleurs: { fond: '#ffffff', clair: '#ffffff', surface: '#f7f4ff', nuance: '#eaf7ff', texte: '#24124a', 'texte-doux': '#4e4466', accent: '#2f5bff', secondaire: '#24124a', deco: '#c9bcff', sombre: '#24124a' },
+  // Polices de la charte, à téléverser avant l'import (Styles > Typographie > Gérer les polices).
+  polices: { titres: 'Sora', texte: 'Figtree', accent: 'Instrument Serif', accent_italique: true },
   entete: 'capsule', pied: 'grand-titre', mobile: 'barre', cartes: 'photo-haut', titres: 'tete-lien',
   cta: 'contact', cta_label: 'Nous contacter', accueil: 'accueil', faq: '', personne: 'a-propos', blog: '',
   statut: 'publish',
