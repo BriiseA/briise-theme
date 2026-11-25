@@ -3,7 +3,7 @@
  * Title: Ouverture : Ouverture : titre centré et photos en éventail
  * Slug: briise/ouverture-eventail
  * Categories: briise-ouverture
- * Description: Accueil d’un métier de l’image : un grand titre centré, puis cinq photos disposées en arc. Élégante sur ordinateur ; sur mobile, trois photos restent visibles.
+ * Description: Quand les photos sont le meilleur argument : un grand titre centré, puis cinq photos disposées en arc. Élégante sur ordinateur ; sur mobile, trois photos restent visibles.
  * Viewport Width: 1400
  */
 $briise = briise_theme_entreprise();

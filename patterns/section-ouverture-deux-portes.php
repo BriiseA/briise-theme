@@ -3,7 +3,7 @@
  * Title: Ouverture : Deux portes : urgent ou projet
  * Slug: briise/ouverture-deux-portes
  * Categories: briise-ouverture
- * Description: Dépannage et métiers d’urgence : dès l’arrivée, deux chemins. « C’est urgent » : l’appel en grand, les pannes courantes qui mènent à leur page, le geste à faire en attendant. « J’ai un projet » : une photo et la demande de devis. Le téléphone vient de Mon entreprise.
+ * Description: Quand les visiteurs arrivent avec deux besoins très différents, une urgence ou un projet : dès l’arrivée, deux chemins. « C’est urgent » : l’appel en grand, les pannes courantes qui mènent à leur page, le geste à faire en attendant. « J’ai un projet » : une photo et la demande de devis. Le téléphone vient de Mon entreprise.
  * Viewport Width: 1400
  */
 $briise = briise_theme_entreprise();

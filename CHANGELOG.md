@@ -1,5 +1,12 @@
 # Historique des versions
 
+## 1.19.0
+
+- **Toutes les sections servent à tous les métiers.** Les parcours quittent le thème : Démarrage propose d'importer le fichier de site (la façon normale : l'agence compose chaque site section par section dans toute la bibliothèque) ou de créer un site de base (accueil avec une ouverture au choix parmi toutes, contact, merci, pages légales).
+- **Catalogue des sections** (`.github/outils/catalogue-sections.md`) : à quoi sert chaque section et ce dont elle a besoin pour être vraie (photos, prix réels, avis réels, fiches, communes…), vérifié par le banc d'essai.
+- Les descriptions des sections parlent de situations (« quand les photos sont le meilleur argument »), plus de métiers.
+- `parcours.json` devient une grille de réflexion : les questions du visiteur et les preuves qui y répondent.
+
 ## 1.18.0
 
 - **Cinq parcours remplacent les trois kits** dans Mon entreprise > Démarrage : urgence et dépannage, projet sur devis, réservation d'une prestation, conseil et profession libérale, commerce et lieu à visiter. Chacun part de la question du visiteur : l'ordre de l'accueil, les preuves, les pages et le bas d'écran sur téléphone en découlent.

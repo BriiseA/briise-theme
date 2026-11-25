@@ -21,21 +21,16 @@ function briise_kits() {
 }
 
 /**
- * Les cinq parcours (urgence, projet, réservation, conseil, commerce), avec leurs pages complètes
- * et les ouvertures proposées pour l'accueil. Lus seulement à l'écran Démarrage.
+ * Site de base et ouvertures proposées pour son accueil. Lus seulement à l'écran Démarrage.
+ * Toute la bibliothèque est ouverte à tous les métiers : un site client se compose section par
+ * section dans le fichier de site préparé par l'agence.
  */
-function briise_parcours() {
+function briise_demarrage() {
 	static $data = null;
 	if ( null === $data ) {
-		$data = json_decode( (string) file_get_contents( get_theme_file_path( 'inc/parcours.json' ) ), true );
+		$data = json_decode( (string) file_get_contents( get_theme_file_path( 'inc/demarrage.json' ) ), true );
 	}
 	return $data;
-}
-
-/** Parcours d'un site : les anciens kits (prestataire, artisan, libéral) gardent leurs liens. */
-function briise_parcours_du_site() {
-	$cle = (string) get_option( 'briise_kit' );
-	return briise_kits()['anciens'][ $cle ] ?? $cle;
 }
 
 /**
@@ -45,7 +40,7 @@ function briise_kit_remplir( $markup, $liens = array(), $pages = array(), $titre
 	$e = briise_theme_entreprise();
 	// Sans liens fournis (modèles de l'éditeur), ceux du kit installé.
 	if ( ! $liens ) {
-		$liens = briise_kits()['liens'][ briise_parcours_du_site() ] ?? array();
+		$liens = briise_kits()['liens'][ (string) get_option( 'briise_kit' ) ] ?? array();
 	}
 	$url = function ( $slug ) use ( $liens, $pages, &$manquants ) {
 		$cible = $liens[ $slug ] ?? $slug;
@@ -490,10 +485,10 @@ function briise_appliquer_ambiance( $slug, $couleurs = array() ) {
 }
 
 /**
- * Plan d'un parcours réglé à l'écran (Démarrage).
+ * Plan du site de base réglé à l'écran (Démarrage).
  */
 function briise_plan_depuis_kit( $cle, $choix ) {
-	$data   = array_merge( briise_kits(), briise_parcours() );
+	$data   = array_merge( briise_kits(), briise_demarrage() );
 	$kit    = $data['kits'][ $cle ];
 	$titres = (array) ( $choix['titres'] ?? array() );
 	$garder = (array) ( $choix['pages'] ?? array() );
@@ -543,7 +538,8 @@ function briise_plan_depuis_kit( $cle, $choix ) {
 		}
 	}
 	// Une page par service, rangée sous la page des services.
-	$parent = $kit['liens']['services'];
+	// Site de base : les pages de service sont au premier niveau (pas de page « Services »).
+	$parent = $kit['parent_services'] ?? $kit['liens']['services'];
 	$ville  = briise_theme_entreprise()['city'];
 	foreach ( preg_split( '/\r\n|\r|\n/', (string) ( $choix['services'] ?? '' ) ) as $service ) {
 		$service = trim( sanitize_text_field( $service ) );
@@ -644,7 +640,7 @@ add_action( 'admin_post_briise_kit', function () {
 		$plan = ( $tmp && is_uploaded_file( $tmp ) ) ? briise_plan_depuis_fichier( file_get_contents( $tmp ) ) : new WP_Error( 'fichier', 'Aucun fichier reçu.' );
 	} else {
 		$cle  = sanitize_key( $_POST['kit'] ?? '' );
-		$plan = isset( briise_parcours()['kits'][ $cle ] ) ? briise_plan_depuis_kit( $cle, wp_unslash( $_POST ) ) : new WP_Error( 'kit', 'Parcours inconnu.' );
+		$plan = isset( briise_demarrage()['kits'][ $cle ] ) ? briise_plan_depuis_kit( $cle, wp_unslash( $_POST ) ) : new WP_Error( 'kit', 'Choix inconnu.' );
 	}
 	$r = is_wp_error( $plan ) ? array( 'erreur' => $plan->get_error_message() ) : briise_plan_installer( $plan );
 	set_transient( 'briise_kit_resultat_' . get_current_user_id(), $r, 120 );
@@ -672,8 +668,8 @@ function briise_photos_encadre() {
 }
 
 function briise_onglet_demarrage() {
-	$data   = array_merge( briise_kits(), briise_parcours() );
-	$actuel = briise_parcours_du_site();
+	$data   = array_merge( briise_kits(), briise_demarrage() );
+	$actuel = get_option( 'briise_kit' );
 	$choisi = sanitize_key( $_GET['kit'] ?? '' ); // phpcs:ignore WordPress.Security.NonceVerification
 	$r      = get_transient( 'briise_kit_resultat_' . get_current_user_id() );
 	if ( $r ) {
@@ -701,31 +697,21 @@ function briise_onglet_demarrage() {
 
 	if ( ! $choisi || ! isset( $data['kits'][ $choisi ] ) ) :
 		?>
-		<h2 class="title">Partir d’un parcours</h2>
-		<p class="description">Choisissez ce que le visiteur vient faire sur le site : le parcours décide de l’accueil, de l’ordre des preuves et des pages. L’écran suivant permet de les ajuster et de choisir l’ouverture de l’accueil.</p>
-		<div class="br-kits">
-			<?php foreach ( $data['kits'] as $cle => $k ) : ?>
-				<a class="br-kit" href="<?php echo esc_url( add_query_arg( 'kit', $cle, $base ) ); ?>">
-					<strong><?php echo esc_html( $k['titre'] ); ?></strong>
-					<span class="description"><?php echo esc_html( $k['pour'] ); ?></span>
-					<span class="br-kit-question">« <?php echo esc_html( $k['question'] ); ?> »</span>
-					<span class="br-kit-pages"><?php echo esc_html( implode( ' · ', array_diff( wp_list_pluck( $k['pages'], 'titre' ), array( 'Merci' ) ) ) ); ?></span>
-					<span class="br-kit-cta">Ajuster ce parcours →</span>
-				</a>
-			<?php endforeach; ?>
-		</div>
-		<?php if ( $actuel ) : ?>
-			<p><em>Un parcours a déjà été installé sur ce site (<?php echo esc_html( $data['kits'][ $actuel ]['titre'] ?? $actuel ); ?>). Relancer ne crée que les pages manquantes.</em></p>
-		<?php endif; ?>
-
-		<h2 class="title">Ou importer un fichier de site</h2>
-		<p class="description">Le fichier préparé par l’agence à partir de la fiche client : pages, textes, référencement, menu, informations de l’entreprise, ambiance et couleurs.</p>
+		<h2 class="title">Importer un fichier de site</h2>
+		<p class="description">La façon normale de créer un site client. Toutes les sections de la bibliothèque servent à tous les métiers : l’agence choisit, pour chaque client, celles qui répondent le mieux à ses visiteurs, et les assemble dans ce fichier avec les textes, le référencement, le menu, les informations de l’entreprise, l’ambiance et l’apparence.</p>
 		<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 			<input type="hidden" name="action" value="briise_kit"><input type="hidden" name="mode" value="fichier">
 			<?php wp_nonce_field( 'briise_kit' ); ?>
 			<p><input type="file" name="fichier" accept=".json,application/json" required aria-label="Fichier de site"></p>
-			<?php submit_button( 'Importer et créer le site', 'secondary', 'submit', false ); ?>
+			<?php submit_button( 'Importer et créer le site', 'primary', 'submit', false ); ?>
 		</form>
+
+		<h2 class="title">Ou créer un site de base</h2>
+		<p class="description">Sans fichier : l’accueil (une ouverture au choix, puis l’appel à l’action), la page de contact, la page merci et les pages légales. On le complète ensuite page par page avec les sections de l’éditeur (bouton + , onglet Compositions, familles « Sections · … »).</p>
+		<p><a class="button" href="<?php echo esc_url( add_query_arg( 'kit', 'base', $base ) ); ?>">Préparer le site de base</a></p>
+		<?php if ( $actuel ) : ?>
+			<p><em>Un site a déjà été créé ici. Relancer ne crée que les pages manquantes.</em></p>
+		<?php endif; ?>
 		<?php
 		briise_photos_encadre();
 		return;
@@ -738,9 +724,8 @@ function briise_onglet_demarrage() {
 		return $p['slug'] === $k['liens']['services'];
 	} ) );
 	?>
-	<p><a href="<?php echo esc_url( $base ); ?>">← Changer de parcours</a></p>
-	<h2 class="title">Ajuster le parcours « <?php echo esc_html( $k['titre'] ); ?> »</h2>
-	<p class="description">Le visiteur se demande : « <?php echo esc_html( $k['question'] ); ?> ». L’accueil y répond dans cet ordre, avec les preuves au plus près des doutes.</p>
+	<p><a href="<?php echo esc_url( $base ); ?>">← Retour</a></p>
+	<h2 class="title">Préparer le site de base</h2>
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 		<input type="hidden" name="action" value="briise_kit"><input type="hidden" name="mode" value="kit">
 		<input type="hidden" name="kit" value="<?php echo esc_attr( $choisi ); ?>">
@@ -760,7 +745,7 @@ function briise_onglet_demarrage() {
 
 		<?php $acc = $k['pages'][0]; if ( ! empty( $acc['ouvertures'] ) ) : ?>
 			<h3>Ouverture de l’accueil</h3>
-			<p class="description">La première chose que voit le visiteur. Prenez-en une différente de celle des derniers sites de l’agence (registre des sites) : deux sites du même parcours ne se ressemblent pas. L’en-tête, le pied de page, les cartes et les titres se choisissent ensuite dans l’onglet Apparence.</p>
+			<p class="description">La première chose que voit le visiteur. Toutes conviennent à tous les métiers : choisissez celle qui montre le mieux ce que le client vend. L’en-tête, le pied de page, les cartes et les titres se choisissent ensuite dans l’onglet Apparence.</p>
 			<fieldset>
 				<legend class="screen-reader-text">Ouverture de l’accueil</legend>
 				<?php foreach ( $acc['ouvertures'] as $i => $o ) : ?>

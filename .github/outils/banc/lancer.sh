@@ -33,6 +33,7 @@ etape "1. Blocs et fichiers générés"
 	node build_br_sections.js > /dev/null 2>&1
 	python3 write_sections.py > /dev/null
 	node build_br_kits.js > /dev/null 2>&1
+	python3 catalogue.py > /dev/null
 	node exemples/build_ferlune.js > /dev/null 2>&1
 	node exemples/build_lison.js > /dev/null 2>&1
 )
@@ -46,8 +47,8 @@ done
 R=$(node "$OUTILS/validate.js" "$OUTILS/build/lison_blocs.json" 2>/dev/null | tail -1)
 echo "  lison : $R"
 case "$R" in *"invalid blocks: 0") ;; *) echec "blocs invalides dans le site de Lison" ;; esac
-if ! git -C "$DEPOT" diff --quiet -- patterns inc/kits.json inc/parcours.json .github/outils/exemples/site-ferlune.json .github/outils/exemples/site-lison.json; then
-	git -C "$DEPOT" diff --stat -- patterns inc/kits.json inc/parcours.json .github/outils/exemples/site-ferlune.json .github/outils/exemples/site-lison.json
+if ! git -C "$DEPOT" diff --quiet -- patterns inc/kits.json inc/demarrage.json .github/outils/catalogue-sections.md .github/outils/exemples/site-ferlune.json .github/outils/exemples/site-lison.json; then
+	git -C "$DEPOT" diff --stat -- patterns inc/kits.json inc/demarrage.json .github/outils/catalogue-sections.md .github/outils/exemples/site-ferlune.json .github/outils/exemples/site-lison.json
 	echec "les fichiers générés ne sont pas à jour : relancer les outils et enregistrer le résultat"
 fi
 

@@ -418,7 +418,7 @@ add('horaires', 'parcours', 'Horaires et planning', 'Horaires d’ouverture tir�
 
 /* ----- Personnes ----- */
 
-add('dirigeant', 'personnes', 'Présentation du dirigeant', 'Professions libérales et artisans : la personne derrière l’entreprise.',
+add('dirigeant', 'personnes', 'Présentation du dirigeant', 'Quand le client choisit une personne autant qu’une entreprise : la personne derrière l’entreprise, sa photo et son parcours.',
   Section('', [Cols([
     Col([Img('portrait', '4/5', 'is-style-br-galet', 'Portrait de [prénom nom]')], { width: '42%' }),
     Col([
@@ -483,7 +483,7 @@ add('contact', 'contact', 'Bloc contact complet', 'Coordonnées, itinéraire, ho
     Col([Box('br-card', [H('Horaires', 3), Short('[briise_horaires]')])], { width: '45%' }),
   ], 'br-split')]));
 
-add('zone', 'contact', 'Zone d’intervention', 'Artisans et services à domicile : les villes couvertes, tirées de « Mon entreprise ».',
+add('zone', 'contact', 'Zone d’intervention', 'Quand vous vous déplacez chez vos clients : les villes couvertes, tirées de « Mon entreprise ».',
   Section('', [
     Head([Label('Zone d’intervention'), H('Nous intervenons près de chez vous', 2), Lead('Une phrase sur votre secteur : rayon, délais de déplacement, frais éventuels.')]),
     Short('[briise_zone]'),
@@ -536,7 +536,7 @@ const eventail = ({ lieu, titre, second, imgs }) => Section('br-hero br-eventail
   Box('br-eventail-texte', [P(lieu, 'br-choix-lieu'), H(titre, 1, null, { fontSize: 'huge' }), MainBtns(second)]),
   Box('br-eventail-photos', imgs.map(([img, alt]) => Img(img, '3/4', 'br-eventail-photo', alt))),
 ]);
-add('ouverture-eventail', 'ouverture', 'Ouverture : titre centré et photos en éventail', 'Accueil d’un métier de l’image : un grand titre centré, puis cinq photos disposées en arc. Élégante sur ordinateur ; sur mobile, trois photos restent visibles.',
+add('ouverture-eventail', 'ouverture', 'Ouverture : titre centré et photos en éventail', 'Quand les photos sont le meilleur argument : un grand titre centré, puis cinq photos disposées en arc. Élégante sur ordinateur ; sur mobile, trois photos restent visibles.',
   eventail({ lieu: 'Où vous recevez, ou jusqu’où vous vous déplacez', titre: 'Votre métier à Votre ville, en une phrase', second: ['Voir les tarifs', URL('tarifs')],
     imgs: [['portrait', 'Photo à remplacer'], ['carre', 'Photo à remplacer'], ['carre-2', 'Photo à remplacer : la plus belle, au centre'], ['carre-3', 'Photo à remplacer'], ['paysage', 'Photo à remplacer']] }));
 
@@ -579,7 +579,7 @@ const etapesImages = ({ titre, chapo, items, numeros = true, bg = 'surface', apr
   Box('br-etapes-images-grille', items.map((it, i) => etapeImage(it, i, numeros))),
   ...apres,
 ], { backgroundColor: bg });
-add('etapes-images', 'parcours', 'Étapes en photos, numérotées', 'Comment ça se passe, en trois à cinq photos : le numéro de l’étape est posé sur la photo, le moment (« Le jour J », « Sous 3 semaines ») dans une pastille. Pour les métiers où l’on vend des images.',
+add('etapes-images', 'parcours', 'Étapes en photos, numérotées', 'Comment ça se passe, en trois à cinq photos : le numéro de l’étape est posé sur la photo, le moment (« Le jour J », « Sous 3 semaines ») dans une pastille. Quand chaque étape se montre mieux qu’elle ne se raconte.',
   etapesImages({ titre: 'Comment ça se passe, en quatre temps', chapo: 'Une phrase qui dit que le client sait à chaque étape ce qui l’attend.', items: [
     ['portrait', 'Photo à remplacer : le premier échange', 'Quand vous voulez', 'Vous réservez', 'Comment, et ce qui se passe ensuite.'],
     ['carre', 'Photo à remplacer : la préparation', 'Une semaine avant', 'On prépare', 'Ce que vous envoyez ou proposez.'],
@@ -693,7 +693,7 @@ add('formulaire-reservation', 'contact', 'Formulaire de réservation', 'Page « 
 const ImgLien = (name, alt, href, cls) => cb('core/image', { url: IMG(name), alt: fr(alt), sizeSlug: 'large', linkDestination: 'custom', href, ...(cls ? { className: cls } : {}) });
 const porteLien = (n) => P(`<a href="${URL('service-' + n)}">{{SERVICE:${n}}}</a>`, 'br-porte-lien');
 
-add('ouverture-deux-portes', 'ouverture', 'Deux portes : urgent ou projet', 'Dépannage et métiers d’urgence : dès l’arrivée, deux chemins. « C’est urgent » : l’appel en grand, les pannes courantes qui mènent à leur page, le geste à faire en attendant. « J’ai un projet » : une photo et la demande de devis. Le téléphone vient de Mon entreprise.',
+add('ouverture-deux-portes', 'ouverture', 'Deux portes : urgent ou projet', 'Quand les visiteurs arrivent avec deux besoins très différents, une urgence ou un projet : dès l’arrivée, deux chemins. « C’est urgent » : l’appel en grand, les pannes courantes qui mènent à leur page, le geste à faire en attendant. « J’ai un projet » : une photo et la demande de devis. Le téléphone vient de Mon entreprise.',
   Section('br-ouv-portes', [
     Box('br-ouv-portes-tete', [
       H('Votre métier à votre ville, en urgence ou sur rendez-vous', 1, null, { fontSize: 'xx-large' }),

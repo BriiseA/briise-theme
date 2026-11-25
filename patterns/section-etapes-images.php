@@ -3,7 +3,7 @@
  * Title: Parcours : Étapes en photos, numérotées
  * Slug: briise/etapes-images
  * Categories: briise-parcours
- * Description: Comment ça se passe, en trois à cinq photos : le numéro de l’étape est posé sur la photo, le moment (« Le jour J », « Sous 3 semaines ») dans une pastille. Pour les métiers où l’on vend des images.
+ * Description: Comment ça se passe, en trois à cinq photos : le numéro de l’étape est posé sur la photo, le moment (« Le jour J », « Sous 3 semaines ») dans une pastille. Quand chaque étape se montre mieux qu’elle ne se raconte.
  * Viewport Width: 1400
  */
 $briise = briise_theme_entreprise();

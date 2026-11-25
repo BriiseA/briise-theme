@@ -1,5 +1,5 @@
 {
-  "_lisezmoi": "Les cinq parcours de départ. Un parcours décrit comment le client final achète : la question qu'il se pose, l'action qu'on attend de lui, l'ordre de l'accueil et les pages. C'est un point de départ, ajusté ensuite à chaque client (fiche client, étude sémantique). Les noms de sections renvoient au catalogue variantes.json ; « à créer » signale une section prévue aux étapes 2 et 3. Chaque parcours a ses preuves (réassurance et preuve sociale) : une bande de confiance juste après l'ouverture, puis une preuve près de chaque appel à l'action. N'afficher que des preuves réelles et vérifiables (fiche client).",
+  "_lisezmoi": "Grille de réflexion, pas un kit : les questions qu'un visiteur se pose selon ce qu'il vient faire (appeler en urgence, demander un devis, réserver, consulter, venir sur place), dans l'ordre où il se les pose, et les preuves qui y répondent. Un client peut relever de plusieurs parcours à la fois. Les sections citées sont des exemples : toute section de la bibliothèque sert à tous les métiers (catalogue-sections.md).",
   "parcours": {
     "urgence": {
       "nom": "Urgence et dépannage",

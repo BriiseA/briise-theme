@@ -3,7 +3,7 @@
  * Title: Personnes : Présentation du dirigeant
  * Slug: briise/dirigeant
  * Categories: briise-personnes
- * Description: Professions libérales et artisans : la personne derrière l’entreprise.
+ * Description: Quand le client choisit une personne autant qu’une entreprise : la personne derrière l’entreprise, sa photo et son parcours.
  * Viewport Width: 1400
  */
 $briise = briise_theme_entreprise();

@@ -3,7 +3,7 @@
  * Title: Contact : Zone d’intervention
  * Slug: briise/zone
  * Categories: briise-contact
- * Description: Artisans et services à domicile : les villes couvertes, tirées de « Mon entreprise ».
+ * Description: Quand vous vous déplacez chez vos clients : les villes couvertes, tirées de « Mon entreprise ».
  * Viewport Width: 1400
  */
 $briise = briise_theme_entreprise();
