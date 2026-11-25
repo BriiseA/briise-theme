@@ -1,5 +1,9 @@
 # Historique des versions
 
+## 1.19.1
+
+- **Cartes lisibles dans une section foncée dont le texte est réglé en clair.** Quand une section « Fond foncé » a aussi une couleur de texte claire (comme une bande d'appel à l'action), les cartes posées dessus gardaient un texte clair sur leur fond clair : leurs titres disparaissaient. Le texte des cartes reste désormais foncé dans tous les cas.
+
 ## 1.19.0
 
 - **Toutes les sections servent à tous les métiers.** Les parcours quittent le thème : Démarrage propose d'importer le fichier de site (la façon normale : l'agence compose chaque site section par section dans toute la bibliothèque) ou de créer un site de base (accueil avec une ouverture au choix parmi toutes, contact, merci, pages légales).
