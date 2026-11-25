@@ -274,4 +274,29 @@
 		});
 		if (total) { t.parentNode.insertBefore(barre, t); }
 	});
+	/* Barre d'infos : « ouvert jusqu'à », « ouvre à » ou « fermé », calculé ici pour ne pas être figé par le cache. */
+	document.querySelectorAll( '.br-infos-jour[data-horaires]' ).forEach( function ( el ) {
+		var h;
+		try { h = JSON.parse( el.getAttribute( 'data-horaires' ) ); } catch ( err ) { return; }
+		var min = function ( t ) { var p = String( t ).split( /[:h]/ ); return parseInt( p[0], 10 ) * 60 + ( parseInt( p[1], 10 ) || 0 ); };
+		var heure = function ( t ) { var p = String( t ).split( /[:h]/ ); var m = parseInt( p[1], 10 ) || 0; return parseInt( p[0], 10 ) + ' h' + ( m ? ' ' + ( m < 10 ? '0' : '' ) + m : '' ); };
+		var noms = [ 'dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi' ];
+		var d = new Date(), j = d.getDay(), now = d.getHours() * 60 + d.getMinutes();
+		var plages = h[ j ] || [], texte = '', ouvert = false;
+		for ( var i = 0; i < plages.length; i++ ) {
+			if ( now >= min( plages[i][0] ) && now < min( plages[i][1] ) ) { texte = 'Ouvert aujourd’hui jusqu’à ' + heure( plages[i][1] ); ouvert = true; break; }
+			if ( now < min( plages[i][0] ) ) { texte = 'Ouvre aujourd’hui à ' + heure( plages[i][0] ); break; }
+		}
+		if ( ! texte ) {
+			for ( var k = 1; k <= 7; k++ ) {
+				var jj = ( j + k ) % 7;
+				if ( h[ jj ] && h[ jj ].length ) { texte = 'Fermé, ouvre ' + ( k === 1 ? 'demain' : noms[ jj ] ) + ' à ' + heure( h[ jj ][0][0] ); break; }
+			}
+		}
+		if ( texte ) {
+			el.textContent = texte;
+			el.classList.toggle( 'is-ferme', ! ouvert );
+			el.hidden = false;
+		}
+	} );
 })();

@@ -141,6 +141,7 @@ Fichier JSON importé dans Démarrage. Seule la liste `pages` est obligatoire. D
   "annonces": { "jours": { "1": { "ouvert": true, "plages": [["08:00", "12:00"], ["13:30", "18:00"]] } } },
   "ambiance": "atelier",
   "couleurs": { "accent": "#a83d0c" },
+  "entete": "capsule", "pied": "grand-titre", "mobile": "barre",
   "cta": "devis", "cta_label": "Demander un devis", "accueil": "accueil", "faq": "faq", "personne": "a-propos", "blog": "",
   "statut": "publish",
   "pages": [
@@ -151,6 +152,8 @@ Fichier JSON importé dans Démarrage. Seule la liste `pages` est obligatoire. D
   ]
 }
 ```
+
+`entete`, `pied` et `mobile` (facultatifs) règlent la forme de l'en-tête, du pied de page et du bas d'écran sur téléphone, comme Mon entreprise > Apparence (voir ci-dessous).
 
 Dans `markup`, les repères `{{CTA}}`, `{{CTA_LABEL}}`, `{{URL:slug}}`, `{{IMG:nom}}` et `{{TITRE}}` sont remplacés à l'import, ainsi que `{{SERVICE:n}}` (nom du n-ième service) et `{{URL:service-n}}` (sa page). Les services sont les sous-pages de la page des services, dans l'ordre du fichier. `"legales": false` évite la création des pages légales. `reservation_lieux` (facultatif) : les lieux proposés dans le formulaire de réservation. Photos : déposer les photos du client dans Médias avant l'import, nommées comme les repères (`naissance-lange.jpg` pour `{{IMG:naissance-lange}}`) ; chaque repère prend la photo du même nom, reliée à la Médiathèque. Déposées après l'import : Mon entreprise > Démarrage > « Placer les photos de la Médiathèque ». Dans `realisations` comme dans `pages`, la clé `image` donne la photo principale (image mise en avant) : celle de l'en-tête avec photo d'une page de service, ou de la vignette d'une fiche. `images` (facultatif) : des adresses de photos hors Médiathèque, `{ "naissance-lange": "https://…/naissance.jpg" }` (une adresse qui commence par `/` est complétée avec celle du site).
 
@@ -163,6 +166,18 @@ Fiches de réalisation : liste `realisations`, créées après les pages (chacun
     "demande": ["Ce que voulait le client…"], "solution": ["Ce qui a été fait…", "Deuxième paragraphe…"] }
 ]
 ```
+
+### Apparence : en-têtes, pieds de page, téléphone
+
+Mon entreprise > Apparence (administrateur), ou les clés `entete`, `pied` et `mobile` du fichier de site. Les textes, le téléphone, le bouton et les horaires viennent toujours de Mon entreprise ; seule la forme change.
+
+| Clé | Valeurs |
+| --- | --- |
+| `entete` | `classique` (par défaut), `capsule` (menu dans une capsule sombre au centre), `ilots` (logo, menu et actions en îlots semi-transparents), `logo-centre` (liens en pastilles, logo au centre, prochaine disponibilité), `medaillon` (barre sombre, logo rond au centre : pour un logo rond ou carré), `encadre` (la page dans un cadre arrondi), `bandeau` (bande teintée pleine largeur, liens en petites capitales), `barre-infos` (au-dessus du menu : ouvert ou fermé aujourd'hui, disponibilité, zone, téléphone) |
+| `pied` | `colonnes` (par défaut), `grand-titre` (carte sombre, nom et slogan en grand), `logo-geant` (nom en très grand : pour un nom court), `grand-appel` (téléphone en très grand, bouton, itinéraire), `carte` (image du plan nommée `plan` dans la Médiathèque, horaires, coordonnées), `compact` |
+| `mobile` | `bouton` (par défaut : Appeler et l'action principale), `barre` (Appeler, l'action principale et Itinéraire) |
+
+Sur une page qui s'ouvre sur une grande photo (bannière), les en-têtes `capsule`, `ilots` et `bandeau` flottent au-dessus de la photo ; ailleurs ils restent en haut de page. Les en-têtes sombres (`capsule`, `medaillon`, `bandeau`) affichent le « Logo pour fond foncé » de Mon entreprise, sinon le nom en texte. L'état « ouvert aujourd'hui » de la barre d'infos est calculé dans le navigateur, d'après les horaires : il reste juste même avec un cache de page. Pour éviter que deux sites se ressemblent, le registre de l'agence (`.github/outils/registre.py`) vérifie la combinaison choisie.
 
 ## Bibliothèque de sections
 

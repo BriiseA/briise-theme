@@ -1,5 +1,12 @@
 # Historique des versions
 
+## 1.14.0
+
+- **Huit en-têtes au choix** (Mon entreprise > Apparence, ou `"entete"` dans le fichier de site) : classique, capsule flottante, îlots semi-transparents, logo au centre avec liens en pastilles, médaillon, encadré, bandeau pleine largeur, barre d'infos (ouvert ou fermé aujourd'hui, prochaine disponibilité, zone, téléphone). Les en-têtes capsule, îlots et bandeau flottent au-dessus d'une page qui s'ouvre sur une grande photo.
+- **Six pieds de page** (`"pied"`) : colonnes, grand titre, nom géant, grand appel (téléphone en très grand), plan et horaires, compact.
+- **Barre d'actions sur téléphone** (`"mobile": "barre"`) : Appeler, l'action principale et Itinéraire en bas de l'écran, à la place des deux boutons.
+- Rien ne change pour un site existant : sans réglage, l'en-tête reste classique, le pied en colonnes et le bas d'écran en deux boutons.
+
 ## 1.13.7
 
 - **Correction : bande « Qualifié et assuré »** : posée dans une section qui a déjà un fond, elle affichait un deuxième encadré gris, d’une autre teinte, qui ne prenait pas toute la largeur. L’encadré disparaît dans ce cas, et les qualifications s’alignent en haut (une qualification avec le lien « Vérifier » ne décale plus les autres).

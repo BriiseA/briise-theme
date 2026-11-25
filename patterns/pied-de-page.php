@@ -33,6 +33,10 @@ foreach ( array( 'mentions-legales' => 'Mentions légales', 'confidentialite' =>
 		$legales[] = '<a href="' . esc_url( get_permalink( $page ) ) . '">' . esc_html( $label ) . '</a>';
 	}
 }
+$pv = function_exists( 'briise_apparence' ) ? briise_apparence( 'pied' ) : 'colonnes';
+if ( 'colonnes' !== $pv ) :
+	include get_theme_file_path( 'inc/pieds/' . $pv . '.php' );
+else :
 ?>
 <!-- wp:group {"align":"full","className":"br-footer","backgroundColor":"sombre","textColor":"fond","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull br-footer has-fond-color has-sombre-background-color has-text-color has-background"><?php if ( ! $sur_cta ) : ?><!-- wp:paragraph {"className":"br-footer-mail"} -->
@@ -106,6 +110,19 @@ foreach ( array( 'mentions-legales' => 'Mentions légales', 'confidentialite' =>
 <?php endif; ?></div>
 <!-- /wp:group -->
 
+</div>
+<!-- /wp:group -->
+<?php endif; ?>
+
+<?php
+$mobile = function_exists( 'briise_apparence' ) ? briise_apparence( 'mobile' ) : 'bouton';
+if ( 'barre' === $mobile && briise_theme_fonction( 'bouton_mobile' ) && ! $sur_cta ) :
+	$iti = function_exists( 'briise_itineraire_url' ) ? briise_itineraire_url() : '';
+	?>
+<!-- wp:html -->
+<nav class="br-actions-mobile br-sticky" aria-label="Actions rapides"><?php if ( $tel ) : ?><a class="br-action br-action--principale" href="tel:<?php echo esc_attr( $tel_url ); ?>"><?php echo briise_theme_icone( 'tel' ); // phpcs:ignore ?><span>Appeler</span></a><?php endif; ?><a class="br-action<?php echo $tel ? '' : ' br-action--principale'; ?>" href="<?php echo esc_url( $e['cta_url'] ); ?>"><?php echo briise_theme_icone( 'devis' ); // phpcs:ignore ?><span><?php echo esc_html( $e['cta_label'] ); ?></span></a><?php if ( $iti ) : ?><a class="br-action" href="<?php echo esc_url( $iti ); ?>" target="_blank" rel="noopener"><?php echo briise_theme_icone( 'lieu' ); // phpcs:ignore ?><span>Itinéraire</span><span class="screen-reader-text"> (nouvel onglet)</span></a><?php endif; ?></nav>
+<!-- /wp:html -->
+<?php else : ?>
 <?php if ( briise_theme_fonction( 'bouton_mobile' ) && ! $sur_cta ) : ?>
 <!-- wp:group {"className":"br-sticky","layout":{"type":"default"}} -->
 <div class="wp-block-group br-sticky"><!-- wp:buttons -->
@@ -118,5 +135,5 @@ foreach ( array( 'mentions-legales' => 'Mentions légales', 'confidentialite' =>
 <!-- /wp:button --></div>
 <!-- /wp:buttons --></div>
 <!-- /wp:group -->
-<?php endif; ?></div>
-<!-- /wp:group -->
+<?php endif; ?>
+<?php endif; ?>

@@ -1,0 +1,373 @@
+/* Variantes d'en-tête, de pied de page et de barre mobile (Mon entreprise > Apparence). */
+
+/* ----- Sur une page qui s'ouvre sur une grande photo : l'en-tête flotte au-dessus ----- */
+body.br-sur-photo header.wp-block-template-part {
+	position: fixed;
+	top: var(--wp-admin--admin-bar--height, 0px);
+	left: 0;
+	right: 0;
+	z-index: 40;
+}
+body.br-sur-photo .br-smart-header .br-header,
+body.br-sur-photo .br-smart-header.br-scrolled .br-header { background: transparent; box-shadow: none; }
+body.br-sur-photo .wp-block-post-content > .br-banniere:first-child,
+body.br-sur-photo .wp-block-post-content > .br-ouv-plein:first-child { padding-top: calc(7rem + var(--wp--preset--spacing--50, 2rem)) !important; }
+@media (max-width: 600px) { body.br-sur-photo header.wp-block-template-part { top: 0; } }
+
+/* Les en-têtes en forme de carte n'ont pas le fond plein de l'en-tête classique. */
+.br-smart-header .br-header--capsule,
+.br-smart-header .br-header--ilots,
+.br-smart-header .br-header--logo-centre,
+.br-smart-header .br-header--medaillon { background: transparent; }
+.br-smart-header.br-scrolled .br-header--capsule,
+.br-smart-header.br-scrolled .br-header--ilots,
+.br-smart-header.br-scrolled .br-header--logo-centre,
+.br-smart-header.br-scrolled .br-header--medaillon { box-shadow: none; }
+
+/* ----- A. Capsule flottante ----- */
+.br-header--capsule { padding: 1rem var(--wp--style--root--padding-right, 1rem) !important; }
+.br-header--capsule .br-header-inner {
+	width: auto !important;
+	max-width: max-content;
+	gap: 2rem;
+	padding: .45rem .45rem .45rem 1.6rem;
+	border-radius: 999px;
+	background: var(--wp--preset--color--sombre);
+	color: var(--wp--preset--color--fond);
+	box-shadow: 0 14px 34px -14px rgba(0, 0, 0, .45);
+}
+.br-header--capsule .br-header-right { gap: 1rem; }
+.br-header--capsule .br-nav,
+.br-header--capsule .br-logo a { color: inherit; }
+.br-header--capsule .br-header-tel-icone { background: color-mix(in srgb, currentColor 16%, transparent); }
+.br-header--capsule .br-logo a::after { display: none; }
+@media (max-width: 781px) {
+	.br-header--capsule .br-header-inner { max-width: none; width: 100% !important; gap: .75rem; padding: .35rem .35rem .35rem 1.2rem; }
+}
+
+/* ----- B. Îlots translucides ----- */
+.br-header--ilots { padding: 1rem var(--wp--style--root--padding-right, 1.25rem) !important; }
+.br-header--ilots .br-header-inner { max-width: var(--wp--style--global--wide-size, 1240px); gap: .6rem; }
+.br-header--ilots .br-ilot,
+.br-header--ilots .br-ilot--actions .br-header-tel {
+	min-height: 3.5rem;
+	padding: 0 1.25rem;
+	border-radius: 16px;
+	color: var(--wp--preset--color--texte);
+	background: color-mix(in srgb, var(--wp--preset--color--fond) 70%, transparent);
+	border: 1px solid color-mix(in srgb, var(--wp--preset--color--texte) 10%, transparent);
+	-webkit-backdrop-filter: blur(14px) saturate(140%);
+	backdrop-filter: blur(14px) saturate(140%);
+}
+.br-header--ilots .br-ilot--nav { padding: 0 .6rem; }
+.br-header--ilots .br-ilot--actions { gap: .6rem; }
+.br-header--ilots .br-ilot--actions .br-header-tel { padding: 0 1rem 0 .4rem; }
+.br-header--ilots .br-header-cta .wp-block-button__link { min-height: 3.5rem; display: inline-flex; align-items: center; border-radius: 16px; }
+.br-scrolled .br-header--ilots .br-ilot,
+.br-scrolled .br-header--ilots .br-header-tel { background: color-mix(in srgb, var(--wp--preset--color--fond) 92%, transparent); }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+	.br-header--ilots .br-ilot, .br-header--ilots .br-ilot--actions .br-header-tel { background: var(--wp--preset--color--fond); }
+}
+@media (max-width: 781px) {
+	.br-header--ilots .br-ilot { min-height: 3rem; padding: 0 .9rem; }
+	.br-header--ilots .br-ilot--nav { order: 3; padding: 0 .25rem; }
+	.br-header--ilots .br-ilot--actions .br-header-tel { min-height: 3rem; padding: 0 .3rem; }
+}
+
+/* ----- C. Logo au centre, et médaillon ----- */
+.br-header-grille {
+	display: grid !important;
+	grid-template-columns: max-content minmax(0, 1fr) max-content;
+	align-items: center;
+	gap: 1.5rem;
+}
+.br-header-centre { justify-content: center; }
+.br-header-centre .br-logo { text-align: center; }
+.br-header-statut { display: flex; align-items: center; gap: .5rem; margin: 0; font-size: .9rem; white-space: nowrap; }
+.br-point { width: .55rem; height: .55rem; border-radius: 50%; background: #2e9e57; box-shadow: 0 0 0 3px rgba(46, 158, 87, .2); flex: none; }
+@media (max-width: 1439px) { .br-header-statut { display: none; } }
+.br-header-grille .br-nav .wp-block-navigation__container { flex-wrap: nowrap; }
+.br-header-grille .br-nav { font-size: .92rem; }
+.br-header-grille .br-nav .wp-block-navigation-item__content { white-space: nowrap; }
+.br-header-grille .br-header-right { gap: .6rem; }
+.br-header-grille .br-header-tel-num { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.br-header--logo-centre { padding: 1rem var(--wp--style--root--padding-right, 1rem) !important; }
+.br-header--logo-centre .br-header-inner {
+	max-width: var(--wp--style--global--wide-size, 1240px);
+	padding: .7rem .9rem;
+	border-radius: 18px;
+	background: var(--wp--preset--color--fond);
+	border: 1px solid color-mix(in srgb, var(--wp--preset--color--texte) 12%, transparent);
+}
+@media (min-width: 782px) {
+	.br-header--logo-centre .br-nav .wp-block-navigation__container { gap: .3rem; }
+	.br-header--logo-centre .br-nav .wp-block-navigation-item__content {
+		padding: .5rem .85rem;
+		border-radius: 999px;
+		border: 1px solid color-mix(in srgb, var(--wp--preset--color--texte) 22%, transparent);
+	}
+	.br-header--logo-centre .br-nav .wp-block-navigation-item__content:hover { background: var(--wp--preset--color--surface); }
+}
+
+.br-header--medaillon { padding: 1.25rem var(--wp--style--root--padding-right, 1rem) 2rem !important; }
+.br-header--medaillon .br-header-inner {
+	max-width: var(--wp--style--global--wide-size, 1240px);
+	min-height: 3.75rem;
+	padding: .4rem .5rem .4rem 1.8rem;
+	border-radius: 999px;
+	background: var(--wp--preset--color--sombre);
+	color: var(--wp--preset--color--fond);
+}
+.br-header--medaillon .br-nav { color: inherit; font-size: .8rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.br-header--medaillon .br-nav .wp-block-navigation__container { gap: 1.25rem; }
+.br-header--medaillon .br-header-tel-icone { background: color-mix(in srgb, currentColor 16%, transparent); }
+.br-header--medaillon .br-header-centre {
+	flex-direction: column;
+	gap: .25rem;
+	width: 7.25rem;
+	height: 7.25rem;
+	margin: -1.75rem 0 -3rem;
+	border-radius: 50%;
+	background: var(--wp--preset--color--accent);
+	border: 6px solid var(--wp--preset--color--fond);
+	color: #fff;
+	z-index: 2;
+	overflow: hidden;
+}
+.br-header--medaillon .br-header-centre .br-logo { font-size: .95rem; letter-spacing: .04em; text-transform: uppercase; line-height: 1.1; padding: 0 .5rem; }
+.br-header--medaillon .br-header-centre .br-logo a { color: inherit; }
+.br-header--medaillon .br-header-centre .br-logo a::after { display: none; }
+.br-header--medaillon .br-header-centre .wp-block-site-logo img { max-width: 4.5rem !important; max-height: 4.5rem; }
+
+@media (max-width: 781px) {
+	.br-header-grille { grid-template-columns: auto minmax(0, 1fr) auto; gap: .75rem; }
+	.br-header-grille .br-header-centre { order: -1; justify-content: flex-start; }
+	.br-header-grille .br-header-centre .br-logo { text-align: left; }
+	.br-header-grille .br-nav { order: 3; }
+	.br-header--medaillon { padding-bottom: 1rem !important; }
+	.br-header--medaillon .br-header-inner { padding-left: 1.2rem; }
+	.br-header--medaillon .br-header-centre { width: auto; height: auto; margin: 0; border: 0; background: none; overflow: visible; }
+	.br-header--medaillon .br-header-centre .br-logo { font-size: 1.05rem; text-transform: none; letter-spacing: 0; padding: 0; }
+}
+
+/* ----- D. Encadré : la page dans un cadre arrondi ----- */
+@media (min-width: 782px) {
+	body.br-entete--encadre { background: color-mix(in srgb, var(--wp--preset--color--texte) 9%, var(--wp--preset--color--fond)); }
+	body.br-entete--encadre .wp-site-blocks {
+		margin: 1rem;
+		border-radius: 24px;
+		overflow: clip;
+		background: var(--wp--preset--color--fond);
+		border: 1px solid color-mix(in srgb, var(--wp--preset--color--texte) 14%, transparent);
+	}
+	.br-header--encadre { border-bottom: 1px solid color-mix(in srgb, var(--wp--preset--color--texte) 10%, transparent); }
+}
+
+/* ----- E. Bandeau pleine largeur ----- */
+.br-header--bandeau {
+	padding: .6rem !important;
+	background: color-mix(in srgb, var(--wp--preset--color--accent) 92%, var(--wp--preset--color--sombre));
+	color: #fff;
+}
+.br-smart-header .br-header--bandeau { background: color-mix(in srgb, var(--wp--preset--color--accent) 92%, var(--wp--preset--color--sombre)); }
+.br-header--bandeau .br-header-inner {
+	max-width: none !important;
+	padding: .5rem .5rem .5rem 1.4rem;
+	border-radius: 12px;
+	background: rgba(255, 255, 255, .12);
+	border: 1px solid rgba(255, 255, 255, .22);
+}
+.br-header--bandeau .br-nav,
+.br-header--bandeau .br-logo a,
+.br-header--bandeau .br-header-tel { color: #fff; }
+.br-header--bandeau .br-logo a::after { display: none; }
+.br-header--bandeau .br-nav { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; }
+.br-header--bandeau .br-header-tel-icone { background: rgba(255, 255, 255, .16); color: #fff; }
+.br-header--bandeau .br-header-cta .wp-block-button__link { background: var(--wp--preset--color--sombre); color: var(--wp--preset--color--fond); }
+body.br-sur-photo .br-smart-header .br-header--bandeau,
+body.br-sur-photo .br-header--bandeau {
+	background: color-mix(in srgb, var(--wp--preset--color--accent) 55%, transparent);
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
+}
+body.br-sur-photo .br-smart-header.br-scrolled .br-header--bandeau { background: color-mix(in srgb, var(--wp--preset--color--accent) 92%, var(--wp--preset--color--sombre)); }
+
+/* ----- F. Barre d'infos ----- */
+.br-infos { background: var(--wp--preset--color--sombre); color: var(--wp--preset--color--fond); font-size: .9rem; }
+.br-infos-inner {
+	max-width: var(--wp--style--global--wide-size, 1240px);
+	margin: 0 auto;
+	padding: .5rem var(--wp--style--root--padding-right, 1.25rem);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 1rem;
+}
+.br-infos p { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1.75rem; }
+.br-infos a { color: inherit; font-weight: 700; min-height: 32px; display: inline-flex; align-items: center; }
+.br-infos-jour { display: inline-flex; align-items: center; gap: .5rem; }
+.br-infos-jour::before { content: ""; width: .5rem; height: .5rem; border-radius: 50%; background: #7fd18b; box-shadow: 0 0 0 3px rgba(127, 209, 139, .25); }
+.br-infos-jour.is-ferme::before { background: #c9ced3; box-shadow: none; }
+.br-infos-jour[hidden] { display: none; }
+@media (max-width: 781px) { .br-infos-zone { display: none; } .br-infos { font-size: .85rem; } }
+
+/* ----- Barre d'actions mobile ----- */
+.br-actions-mobile { display: none; }
+@media (max-width: 781px) {
+	.br-actions-mobile.br-sticky {
+		display: grid;
+		grid-auto-flow: column;
+		grid-auto-columns: 1fr;
+		gap: .35rem;
+		left: .6rem;
+		right: .6rem;
+		bottom: calc(.6rem + env(safe-area-inset-bottom));
+		padding: .35rem;
+		border-radius: 20px;
+		background: var(--wp--preset--color--sombre);
+		box-shadow: 0 12px 30px rgba(0, 0, 0, .28);
+	}
+	.br-actions-mobile.br-sticky.br-sticky-off { transform: translateY(150%); }
+	.br-action {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: .2rem;
+		min-height: 3.4rem;
+		padding: .3rem .25rem;
+		border-radius: 14px;
+		color: var(--wp--preset--color--fond);
+		font-size: .8rem;
+		font-weight: 600;
+		line-height: 1.15;
+		text-align: center;
+		text-decoration: none;
+	}
+	.br-action--principale { background: var(--wp--preset--color--accent); color: #fff; }
+}
+
+/* ----- Pieds de page : briques communes ----- */
+.br-ft { padding-left: 0 !important; padding-right: 0 !important; }
+.br-ft-inner { max-width: var(--wp--style--global--wide-size, 1240px); margin: 0 auto; padding: 0 var(--wp--style--root--padding-right, 1.25rem); }
+.br-ft a:not(.wp-element-button) { color: inherit; }
+.br-footer.br-ft a.wp-element-button { color: var(--wp--preset--color--fond); }
+.br-ft-titre { margin: 0 0 .75rem; font-size: .85rem; font-weight: 600; opacity: .75; }
+.br-ft-tel { display: inline-block; font-family: var(--wp--preset--font-family--titres); font-size: 1.5rem; font-weight: 700; text-decoration: none; white-space: nowrap; }
+.br-ft .wp-element-button.br-ft-bouton { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; box-sizing: border-box; text-decoration: none; }
+.br-ft--grand-appel .br-footer-qualifs .br-label,
+.br-ft--carte .br-footer-qualifs .br-label { color: var(--wp--preset--color--texte-doux); }
+.br-ft-bas {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 1rem;
+	margin-top: 2.5rem;
+	padding-top: 1.25rem;
+	border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+	font-size: .88rem;
+	opacity: .8;
+}
+.br-ft-bas p { margin: 0; }
+.br-ft-ligne {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 1rem 2rem;
+	margin-top: 2.5rem;
+	padding-top: 1.25rem;
+	border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+}
+.br-ft-ligne .br-footer-liens { flex-direction: row; flex-wrap: wrap; gap: .4rem 1.5rem; }
+.br-ft-nom-petit { margin: 0; font-family: var(--wp--preset--font-family--titres); font-size: 1.25rem; font-weight: 700; }
+.br-ft-nom-petit a { text-decoration: none; }
+.br-ft-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 2.5rem; }
+
+/* P1. Grand titre */
+.br-ft--grand-titre { background: var(--wp--preset--color--fond); color: var(--wp--preset--color--fond); padding: var(--wp--preset--spacing--40) var(--wp--style--root--padding-right, 1rem) !important; }
+.br-ft-carte {
+	max-width: var(--wp--style--global--wide-size, 1240px);
+	margin: 0 auto;
+	padding: clamp(2rem, 5vw, 3.5rem);
+	border-radius: var(--wp--custom--rayon--grand, 28px);
+	background: var(--wp--preset--color--sombre);
+}
+.br-ft-haut { display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; padding-bottom: 2rem; border-bottom: 1px solid color-mix(in srgb, currentColor 22%, transparent); }
+.br-ft-nom { margin: 0; font-family: var(--wp--preset--font-family--titres); font-size: clamp(2.4rem, 6vw, 5rem); font-weight: 800; line-height: .92; letter-spacing: -.02em; }
+.br-ft-nom a { text-decoration: none; }
+.br-ft-slogan { margin: 0; max-width: 24ch; font-family: var(--wp--preset--font-family--titres); font-size: clamp(1.3rem, 2.6vw, 2.2rem); font-weight: 700; line-height: 1.05; text-align: right; text-transform: uppercase; }
+.br-ft-milieu { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2.5rem; padding-top: 2rem; }
+.br-ft-action { display: flex; flex-direction: column; align-items: flex-start; gap: .9rem; max-width: 22rem; }
+.br-ft-colonnes { display: flex; flex-wrap: wrap; }
+.br-ft-colonnes > div { min-width: 10rem; padding: 0 2rem; border-left: 1px solid color-mix(in srgb, currentColor 22%, transparent); }
+.br-ft--grand-titre .br-ft-colonnes .br-footer-liens a { font-family: var(--wp--preset--font-family--titres); font-size: 1.05rem; font-weight: 700; text-transform: uppercase; }
+@media (max-width: 781px) {
+	.br-ft-haut { flex-direction: column; }
+	.br-ft-slogan { text-align: left; }
+	.br-ft-colonnes > div { padding: 0; border: 0; margin-top: 1.25rem; width: 100%; }
+}
+
+/* P2. Nom géant */
+.br-ft--logo-geant { background: var(--wp--preset--color--sombre); color: var(--wp--preset--color--fond); }
+.br-ft-texte { margin: 0 0 1rem; max-width: 24rem; opacity: .85; }
+.br-ft--logo-geant .br-ft-grille > div { display: flex; flex-direction: column; align-items: flex-start; gap: .6rem; }
+.br-ft-geant {
+	margin: 3rem 0 0;
+	font-family: var(--wp--preset--font-family--titres);
+	font-size: clamp(3.5rem, 15vw, 15rem);
+	font-weight: 800;
+	line-height: .82;
+	letter-spacing: -.04em;
+	overflow-wrap: anywhere;
+}
+.br-ft--logo-geant .br-ft-bas { margin-top: 1.5rem; }
+
+/* P3. Grand appel */
+.br-ft--grand-appel { background: var(--wp--preset--color--surface); color: var(--wp--preset--color--texte); }
+.br-ft-appel { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 3rem; align-items: end; }
+.br-ft-amorce { margin: 0 0 .75rem; font-size: 1.1rem; color: var(--wp--preset--color--texte-doux); }
+.br-ft-tel-geant { display: block; font-family: var(--wp--preset--font-family--titres); font-size: clamp(2.6rem, 8vw, 7rem); font-weight: 700; line-height: .95; letter-spacing: -.02em; text-decoration: none; white-space: nowrap; }
+.br-ft-horaires { margin-top: 1rem; font-size: .95rem; }
+.br-ft-appel-droite { display: flex; flex-direction: column; gap: .75rem; }
+.br-ft .wp-element-button.br-ft-bouton--grand { width: 100%; min-height: 64px; font-size: 1.15rem; }
+.br-ft-bouton-contour { display: flex; align-items: center; justify-content: center; min-height: 56px; border: 1.5px solid currentColor; border-radius: var(--wp--custom--rayon--bouton, 999px); font-weight: 600; text-decoration: none; }
+@media (max-width: 781px) { .br-ft-appel { grid-template-columns: 1fr; gap: 2rem; } }
+
+/* P4. Plan et horaires */
+.br-ft--carte { background: var(--wp--preset--color--clair); color: var(--wp--preset--color--texte); }
+.br-ft--carte .br-ft-grille { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, .9fr); }
+.br-ft--carte .br-ft-grille > div:last-child { display: flex; flex-direction: column; align-items: flex-start; gap: .75rem; }
+.br-ft-plan { position: relative; min-height: 17rem; border-radius: var(--wp--custom--rayon--moyen, 20px); overflow: hidden; background: var(--wp--preset--color--surface); }
+.br-ft-plan img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.br-ft-plan-vide { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .5rem; padding: 1.5rem; text-align: center; }
+.br-ft-plan-vide p { margin: 0; }
+.br-ft-iti {
+	position: absolute;
+	left: 1rem;
+	bottom: 1rem;
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	padding: .6rem 1rem;
+	border-radius: 10px;
+	background: var(--wp--preset--color--fond);
+	color: var(--wp--preset--color--texte) !important;
+	font-weight: 700;
+	text-decoration: none;
+	box-shadow: 0 6px 18px rgba(0, 0, 0, .14);
+}
+@media (max-width: 781px) { .br-ft--carte .br-ft-grille { grid-template-columns: 1fr; } }
+
+/* P5. Compact */
+.br-ft--compact { background: var(--wp--preset--color--sombre); color: var(--wp--preset--color--fond); padding-top: 2rem !important; }
+.br-ft--compact .br-ft-ligne { margin-top: 0; padding-top: 0; border-top: 0; }
+.br-ft--compact .br-ft-bas { margin-top: 1.25rem; }
+
+/* Logo pour fond foncé dans les en-têtes sombres */
+.br-header--capsule .br-logo-clair img,
+.br-header--bandeau .br-logo-clair img { display: block; max-height: 40px; width: auto; max-width: 180px; }
+.br-header--medaillon .br-logo-clair img { display: block; max-height: 4.25rem; max-width: 5.5rem; width: auto; }
+@media (max-width: 781px) { .br-header--medaillon .br-logo-clair img { max-height: 2.2rem; max-width: 2.8rem; } }

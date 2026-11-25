@@ -420,6 +420,11 @@ function briise_plan_installer( $plan ) {
 		briise_appliquer_ambiance( sanitize_key( $plan['ambiance'] ), (array) ( $plan['couleurs'] ?? array() ) );
 	}
 
+	// 10. Forme de l'en-tête, du pied de page et du bas d'écran mobile.
+	if ( function_exists( 'briise_apparence_enregistrer' ) ) {
+		briise_apparence_enregistrer( array_map( 'sanitize_key', array_intersect_key( $plan, array_flip( array( 'entete', 'pied', 'mobile' ) ) ) ) );
+	}
+
 	if ( ! empty( $plan['kit'] ) ) {
 		update_option( 'briise_kit', sanitize_key( $plan['kit'] ) );
 	}

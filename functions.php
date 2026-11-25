@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Sans elle, le thème s'affiche quand même, avec des valeurs vides, et prévient l'administrateur.
 require_once get_theme_file_path( 'inc/socle.php' );
 require_once get_theme_file_path( 'inc/kits.php' );
+require_once get_theme_file_path( 'inc/apparence.php' );
 require_once get_theme_file_path( 'inc/performance.php' );
 require_once get_theme_file_path( 'inc/styles-section.php' );
 require_once get_theme_file_path( 'inc/tableaux.php' );
