@@ -75,7 +75,7 @@ Colonne « Besoins » : ce qu’il faut avoir avant de choisir la section. Une s
 | `temoignages` | Témoignages | Trois avis de clients. Uniquement des avis réels, avec l’accord de leur auteur. | avis réels, avec l’accord de leur auteur (jamais pour une profession réglementée) | — |
 | `tuiles-chiffres` | Chiffres en tuiles | Vos preuves en chiffres, en tuiles de tailles différentes : une grande pour le chiffre le plus fort, les autres autour. Les chiffres comptent jusqu’à leur valeur quand la section apparaît. | 1 photo, chiffres vérifiables | — |
 
-## Parcours et questions (8)
+## Parcours et questions (9)
 
 | Section | Titre | À quoi elle sert | Besoins | Dans le navigateur |
 | --- | --- | --- | --- | --- |
@@ -87,6 +87,7 @@ Colonne « Besoins » : ce qu’il faut avoir avant de choisir la section. Une s
 | `faq-recherche` | FAQ avec recherche et thèmes | Page FAQ ou longue liste de questions : un champ « Chercher une question » et un bouton par thème (vos intertitres) s’ajoutent seuls au-dessus. Rangez les questions sous des intertitres de niveau 3. Sur la page choisie comme FAQ, les questions sont transmises à Google. | — | recherche et thèmes ; sans script : FAQ complète |
 | `horaires` | Horaires et planning | Horaires d’ouverture tirés de « Mon entreprise », et un planning de rendez-vous ou de cours. Le jour en cours est surligné. | horaires (Mon entreprise) | — |
 | `orientation` | Orientation : la bonne page en une phrase | Accueil d’une offre large : « Je cherche [choix] pour [choix] », et le bouton mène à la page qui répond. Chaque ligne de la liste est une réponse possible, écrite « premier choix | second choix », avec le lien vers sa page. Une seule partie par ligne donne un seul menu. Ajoutez une troisième partie pour nommer la page sur le bouton. | pages de service | menus « Je cherche … pour … » ; sans script : liste de liens |
+| `ou-en-etes-vous` | Où en êtes-vous ? | Quand les visiteurs arrivent dans des situations différentes : quatre cartes qui partent de leur situation, dite comme ils la diraient, avec la réponse, le prix et la page qui y répond. Tout est visible sans clic. Icône au choix par la classe du bloc : br-ic-maison, fleches, loupe, horloge, euro, bouclier, coeur, appareil. Seulement un prix réel, ou « Sur devis ». | — | — |
 
 ## Personnes (4)
 
