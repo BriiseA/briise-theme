@@ -37,6 +37,7 @@ require_once BRIISE_SOCLE_DIR . 'inc/formulaire.php';
 require_once BRIISE_SOCLE_DIR . 'inc/mises-a-jour.php';
 require_once BRIISE_SOCLE_DIR . 'inc/securite.php';
 require_once BRIISE_SOCLE_DIR . 'inc/photos.php';
+require_once BRIISE_SOCLE_DIR . 'inc/cache.php';
 if ( is_admin() ) {
 	require_once BRIISE_SOCLE_DIR . 'inc/admin.php';
 	require_once BRIISE_SOCLE_DIR . 'inc/depart.php';

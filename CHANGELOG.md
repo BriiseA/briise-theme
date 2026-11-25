@@ -1,5 +1,9 @@
 # Historique des versions
 
+## Prochaine version
+
+- **Le cache des pages se vide tout seul.** Avec une extension de cache (W3 Total Cache, WP Rocket, LiteSpeed, WP Super Cache, WP Fastest Cache, SiteGround, Cache Enabler, Breeze, Hummingbird), un changement dans Mon entreprise, Apparence ou Polices, dans le menu, l'en-tête, le pied de page ou les styles, et la mise à jour du thème ou de l'extension vident maintenant le cache des pages. Avant, les visiteurs pouvaient voir l'ancienne version pendant des jours, comme un logo qui n'apparaissait pas.
+
 ## 1.20.0
 
 - **Nouvelle section « Où en êtes-vous ? ».** Quatre cartes qui partent de la situation du visiteur (« J'ai un site, mais il ne m'apporte rien. »), chacune avec la réponse, le prix et le lien vers la bonne page, toutes visibles sans clic. Deux icônes de plus : loupe et flèches. Le site Briise l'utilise à la place de sa version faite à la main.
