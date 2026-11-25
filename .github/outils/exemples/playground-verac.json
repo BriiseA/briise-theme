@@ -1,0 +1,28 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "meta": {
+    "title": "Briise : site d'exemple Vérac Plomberie Chauffage (fictif)",
+    "description": "Installe l'extension Briise Socle et le thème Briise depuis GitHub, dépose les photos d'exemple (Unsplash) et importe le fichier de site du plombier fictif.",
+    "author": "Briise"
+  },
+  "landingPage": "/",
+  "preferredVersions": { "php": "8.3", "wp": "latest" },
+  "features": { "networking": true },
+  "login": true,
+  "steps": [
+    {
+      "step": "installPlugin",
+      "pluginData": { "resource": "git:directory", "url": "https://github.com/BriiseA/briise-theme", "ref": "test/plombier-verac", "refType": "branch", "path": "extension/briise-socle" },
+      "options": { "activate": true, "targetFolderName": "briise-socle" }
+    },
+    {
+      "step": "installTheme",
+      "themeData": { "resource": "git:directory", "url": "https://github.com/BriiseA/briise-theme", "ref": "test/plombier-verac", "refType": "branch", "path": "/" },
+      "options": { "activate": true, "targetFolderName": "briise" }
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php\nrequire '/wordpress/wp-load.php';\nrequire_once ABSPATH . 'wp-admin/includes/media.php';\nrequire_once ABSPATH . 'wp-admin/includes/file.php';\nrequire_once ABSPATH . 'wp-admin/includes/image.php';\nwp_set_current_user( 1 );\n$photos = array(\n  'plombier' => 'photo-1749532125405-70950966b0e5', 'fuite' => 'photo-1676210134188-4c05dd172f89', 'robinet' => 'photo-1521207418485-99c705420785',\n  'chauffe-eau' => 'photo-1650551182991-b07558247564', 'chaudiere' => 'photo-1770625467384-304e461ef1be', 'pompe-a-chaleur' => 'photo-1776860155275-eee24bfb1dee',\n  'salle-de-bains' => 'photo-1584622650111-993a426fbf0a', 'douche' => 'photo-1714894691666-e8bb020c781c', 'radiateur' => 'photo-1669725341213-7379ff6c90d5',\n  'outils' => 'photo-1783587354869-de09cfffaf9a', 'camionnette' => 'photo-1641199788912-9a7385a35c82', 'thomas' => 'photo-1769200353672-4560816cfcde',\n);\n$journal = array();\nforeach ( $photos as $nom => $id ) {\n  $tmp = download_url( 'https://images.unsplash.com/' . $id . '?w=1600&q=80&fm=jpg&fit=max', 60 );\n  if ( is_wp_error( $tmp ) ) { $journal[] = $nom . ' : ' . $tmp->get_error_message(); continue; }\n  $att = media_handle_sideload( array( 'name' => 'verac-' . $nom . '.jpg', 'tmp_name' => $tmp ), 0, 'Photo d’exemple Unsplash (site fictif)' );\n  $journal[] = $nom . ' : ' . ( is_wp_error( $att ) ? $att->get_error_message() : 'ok' );\n}\nforeach ( array( 1, 2 ) as $id ) { wp_delete_post( $id, true ); }\n$json = wp_remote_retrieve_body( wp_remote_get( 'https://raw.githubusercontent.com/BriiseA/briise-theme/test/plombier-verac/.github/outils/exemples/site-verac.json', array( 'timeout' => 60 ) ) );\n$plan = briise_plan_depuis_fichier( $json );\n$r = is_wp_error( $plan ) ? array( 'erreur' => $plan->get_error_message() ) : briise_plan_installer( $plan );\nupdate_option( 'briise_essai_playground', array( 'photos' => $journal, 'import' => $r ), false );\n"
+    }
+  ]
+}
