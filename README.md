@@ -173,7 +173,7 @@ Fiches de réalisation : liste `realisations`, créées après les pages (chacun
 
 ### Apparence : en-têtes, pieds de page, téléphone, cartes et titres
 
-Mon entreprise > Apparence (administrateur), ou les clés `entete`, `pied`, `mobile`, `cartes`, `titres` et `capitales` du fichier de site. Les textes, le téléphone, le bouton et les horaires viennent toujours de Mon entreprise ; seule la forme change.
+Mon entreprise > Apparence (administrateur), ou les clés `entete`, `pied`, `mobile`, `cartes`, `titres`, `capitales` et `cartes_mobile` du fichier de site. Les textes, le téléphone, le bouton et les horaires viennent toujours de Mon entreprise ; seule la forme change.
 
 | Clé | Valeurs |
 | --- | --- |
@@ -181,6 +181,7 @@ Mon entreprise > Apparence (administrateur), ou les clés `entete`, `pied`, `mob
 | `pied` | `colonnes` (par défaut), `grand-titre` (carte sombre, nom et slogan en grand), `logo-geant` (nom en très grand : pour un nom court), `grand-appel` (téléphone en très grand, bouton, itinéraire), `carte` (image du plan nommée `plan` dans la Médiathèque, horaires, coordonnées), `compact` |
 | `mobile` | `bouton` (par défaut : Appeler et l'action principale), `barre` (Appeler, l'action principale et Itinéraire) |
 | `cartes` | `photo-fond` (par défaut : la photo remplit la carte), `photo-haut` (photo en haut, texte dessous sur fond clair), `liste-filet` (une ligne par service, vignette et filet) ; s'applique aux sections « Trois cartes de service », avec ou sans photos |
+| `cartes_mobile` | `empilees` (par défaut), `defilement` : sur téléphone, les rangées de trois cartes ou plus (services, lieux, étapes, tarifs, avis, réalisations, équipe) se font glisser de gauche à droite, le bord de la suivante dépasse ; les galeries de six photos ou plus montrent les quatre premières et un bouton « Voir les N photos ». Rien n'est retiré de la page (Google voit tout) ; sans script, la galerie reste entière. Sur l’accueil d’exemple de Lison Vautrin : 11,6 écrans de téléphone au lieu de 14,6 |
 | `capitales` | `ambiance` (par défaut : capitales avec Acier, minuscules ailleurs), `oui` (H1 et H2 en capitales, en plus petit ; un titre dont un mot dépasse la largeur est réduit, jusqu'à 70 %, au lieu d'être coupé ; les H3 restent en minuscules ; le mot d'accent garde ses minuscules quand une police d'accent est choisie), `non` (jamais, même avec Acier) |
 | `titres` | `tete-lien` (par défaut), `tete-deux-colonnes` (le titre à gauche, la phrase d'introduction à droite), `grand-numero` (chaque section numérotée en grand au-dessus de son titre) |
 
