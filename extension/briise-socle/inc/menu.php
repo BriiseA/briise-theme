@@ -117,8 +117,42 @@ function briise_menu_ajouter( $blocs, $page_id ) {
 			}
 		}
 	}
-	$blocs[] = briise_menu_lien( $page_id );
-	return $blocs;
+	// Ses sous-pages déjà au premier niveau du menu passent dans son sous-menu.
+	$enfants = array();
+	$reste   = array();
+	foreach ( $blocs as $b ) {
+		$id = (int) ( $b['attrs']['id'] ?? 0 );
+		if ( $id && (int) wp_get_post_parent_id( $id ) === (int) $page_id ) {
+			$enfants[] = $b;
+		} else {
+			$reste[] = $b;
+		}
+	}
+	$reste[] = briise_menu_lien( $page_id, $enfants );
+	return $reste;
+}
+
+/**
+ * Sous-pages au premier niveau du menu alors que leur page parente, publiée, n'y est pas :
+ * elles allongent le menu au lieu de former un sous-menu. Signalées dans Contrôle.
+ *
+ * @return WP_Post[]
+ */
+function briise_menu_orphelins() {
+	$menu_id = briise_menu_id( false );
+	if ( ! $menu_id ) {
+		return array();
+	}
+	$blocs = briise_menu_blocs( $menu_id );
+	$out   = array();
+	foreach ( $blocs as $b ) {
+		$id     = (int) ( $b['attrs']['id'] ?? 0 );
+		$parent = $id ? (int) wp_get_post_parent_id( $id ) : 0;
+		if ( $parent && 'publish' === get_post_status( $parent ) && ! briise_menu_contient( $blocs, $parent ) ) {
+			$out[] = get_post( $id );
+		}
+	}
+	return array_filter( $out );
 }
 
 /**

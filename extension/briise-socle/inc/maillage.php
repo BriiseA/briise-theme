@@ -344,7 +344,8 @@ function briise_onglet_controle() {
 	<?php
 	$photos = briise_photos_entete();
 	$secu   = function_exists( 'briise_securite_points' ) ? briise_securite_points() : array();
-	$total = $alertes + count( $r['casses'] ) + count( $r['exclues'] ) + count( $r['flous'] ) + count( (array) $rythme ) + ( function_exists( 'briise_realisations_minces' ) ? count( briise_realisations_minces() ) : 0 ) + count( $photos ) + count( $secu );
+	$orphelins = function_exists( 'briise_menu_orphelins' ) ? briise_menu_orphelins() : array();
+	$total = $alertes + count( $r['casses'] ) + count( $r['exclues'] ) + count( $r['flous'] ) + count( (array) $rythme ) + ( function_exists( 'briise_realisations_minces' ) ? count( briise_realisations_minces() ) : 0 ) + count( $photos ) + count( $secu ) + count( $orphelins );
 	echo '<p class="br-bilan' . ( $total ? ' br-a-voir' : '' ) . '">' . ( $total ? esc_html( $total . ' point' . ( $total > 1 ? 's' : '' ) . ' à corriger avant la mise en ligne.' ) : 'Aucun problème détecté : maillage et couleurs des sections en ordre.' ) . '</p>';
 	if ( ! $r['accueil'] ) {
 		echo '<p><strong>Aucune page d’accueil n’est définie</strong> (Réglages > Lecture) : la profondeur ne peut pas être calculée.</p>';
@@ -373,6 +374,13 @@ function briise_onglet_controle() {
 		echo '<h3>' . esc_html( $l[0] ) . ' (' . count( $l[2] ) . ')</h3><p>' . esc_html( $l[1] ) . '</p><ul style="list-style:disc;padding-left:1.5em">';
 		foreach ( $l[2] as $c ) {
 			echo '<li>' . $l[3]( $c ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans la fonction.
+		}
+		echo '</ul>';
+	}
+	if ( $orphelins ) {
+		echo '<h3>Sous-pages au menu sans leur page parente (' . count( $orphelins ) . ')</h3><p style="max-width:60em">Ces pages sont au premier niveau du menu parce que leur page parente n’y est pas : le menu s’allonge et devient difficile à lire. Cochez « Afficher dans le menu » sur la page parente : ses sous-pages passeront dans son sous-menu.</p><ul style="list-style:disc;padding-left:1.5em">';
+		foreach ( $orphelins as $o ) {
+			echo '<li>' . $lien( $o ) . ' : page parente « ' . esc_html( get_the_title( $o->post_parent ) ) . ' »</li>'; // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans la fonction.
 		}
 		echo '</ul>';
 	}

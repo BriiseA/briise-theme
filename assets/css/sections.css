@@ -451,7 +451,7 @@
 @media (max-width: 781px) {
 	.br-cartes-mobile--defilement main :is(
 		.wp-block-columns:has(> .wp-block-column:nth-child(3) > .br-card),
-		.br-avis-grille, .br-lieux-grille, .br-prices, .br-projects, .br-team, .br-modeles-grille, .br-steps, .br-etapes-images-grille, .br-situations
+		.br-avis-grille, .br-lieux-grille, .br-prices, .br-projects, .br-team, .br-modeles-grille, .br-steps, .br-etapes-images-grille, .br-situations, .br-benefices .wp-block-columns
 	):has(> :nth-child(3)) {
 		display: flex !important;
 		flex-direction: row !important;
@@ -467,7 +467,7 @@
 	}
 	.br-cartes-mobile--defilement main :is(
 		.wp-block-columns:has(> .wp-block-column:nth-child(3) > .br-card),
-		.br-avis-grille, .br-lieux-grille, .br-prices, .br-projects, .br-team, .br-modeles-grille, .br-steps, .br-etapes-images-grille, .br-situations
+		.br-avis-grille, .br-lieux-grille, .br-prices, .br-projects, .br-team, .br-modeles-grille, .br-steps, .br-etapes-images-grille, .br-situations, .br-benefices .wp-block-columns
 	):has(> :nth-child(3)) > * {
 		flex: 0 0 82% !important;
 		max-width: 82%;
@@ -482,7 +482,7 @@
 @media (min-width: 600px) and (max-width: 781px) {
 	.br-cartes-mobile--defilement main :is(
 		.wp-block-columns:has(> .wp-block-column:nth-child(3) > .br-card),
-		.br-avis-grille, .br-lieux-grille, .br-prices, .br-projects, .br-team, .br-modeles-grille, .br-steps, .br-etapes-images-grille, .br-situations
+		.br-avis-grille, .br-lieux-grille, .br-prices, .br-projects, .br-team, .br-modeles-grille, .br-steps, .br-etapes-images-grille, .br-situations, .br-benefices .wp-block-columns
 	):has(> :nth-child(3)) > * {
 		flex-basis: 44% !important;
 		max-width: 44%;

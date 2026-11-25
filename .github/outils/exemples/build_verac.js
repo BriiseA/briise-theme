@@ -25,7 +25,7 @@ const rythme = (blocks) => {
     if (passe(b)) { out.push(b); return; }
     const prev = [...out].reverse().find((x) => !passe(x));
     const f = fondDe(b);
-    if (prev && !/br-page-head|br-tete/.test(prev.attributes.className || '') && fondDe(prev) === f && CLAIRS.includes(f)) {
+    if (prev && !/br-page-head/.test(prev.attributes.className || '') && fondDe(prev) === f && CLAIRS.includes(f)) {
       const suite = blocks.slice(i + 1).find((x) => !passe(x));
       const next = suite ? fondDe(suite) : null;
       const choix = CLAIRS.find((c) => c !== f && c !== next);
@@ -36,34 +36,15 @@ const rythme = (blocks) => {
 };
 
 /* ---------- Sections paramétrées ---------- */
-// Ouverture « Deux portes » avec les vrais textes : la section du thème n'a pas de fonction réutilisable.
-const deuxPortes = () => Section('br-ouv-portes', [
-  Box('br-ouv-portes-tete', [
-    H('Plombier chauffagiste à Saint-Jean-de-Braye, en urgence ou sur rendez-vous', 1, null, { fontSize: 'xx-large' }),
-    Lead('Prix annoncé avant de commencer, devis signé avant les travaux, intervention en moins de 2 h dans la métropole d’Orléans (exemple fictif).'),
-  ]),
-  Cols([
-    Col([Box('br-porte br-porte--urgence', [
-      P('Dépannage 7 j/7, de 7 h à 22 h', 'br-porte-statut'),
-      H('C’est urgent', 2, 'br-porte-titre'),
-      Short('[briise_appel texte="Appeler Thomas" intro=""]'),
-      P('Votre problème', 'br-porte-sous'),
-      Box('br-porte-liens', [
-        ['Une fuite d’eau', 'depannage-plomberie'], ['WC ou évier bouché', 'depannage-plomberie'],
-        ['Plus d’eau chaude', 'chauffe-eau'], ['Chaudière en panne', 'chaudiere-gaz'],
-      ].map(([t, s]) => P(A(t, s), 'br-porte-lien'))),
-      P(`En attendant : coupez l’eau au compteur et l’électricité du chauffe-eau. ${A('Les bons gestes', 'depannage-plomberie')}`, 'br-porte-attente'),
-    ])]),
-    Col([cb('core/cover', {
-      url: IMG(PLOMBIER), alt: '', dimRatio: 60, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 100, minHeightUnit: '%',
-      contentPosition: 'bottom left', className: 'br-porte br-porte--projet', layout: { type: 'default' },
-    }, [
-      H('J’ai un projet', 2, 'br-porte-titre'),
-      P('Chauffe-eau, chaudière, pompe à chaleur ou salle de bains : visite et devis gratuits.'),
-      Btns(Btn(CTA_LABEL, CTA, 'is-style-outline')),
-    ])]),
-  ], 'br-ouv-portes-cols'),
-]);
+// Ouverture « Deux portes » (fonction du thème).
+const deuxPortes = () => B.deuxPortes({
+  titre: 'Plombier chauffagiste à Saint-Jean-de-Braye, en urgence ou sur rendez-vous',
+  chapo: 'Prix annoncé avant de commencer, devis signé avant les travaux, intervention en moins de 2 h dans la métropole d’Orléans (exemple fictif).',
+  statut: 'Dépannage 7 j/7, de 7 h à 22 h', appel: 'Appeler Thomas',
+  liens: [['Une fuite d’eau', URL('depannage-plomberie')], ['WC ou évier bouché', URL('depannage-plomberie')], ['Plus d’eau chaude', URL('chauffe-eau')], ['Chaudière en panne', URL('chaudiere-gaz')]],
+  attente: `En attendant : coupez l’eau au compteur et l’électricité du chauffe-eau. ${A('Les bons gestes', 'depannage-plomberie')}`,
+  img: PLOMBIER, projetTexte: 'Chauffe-eau, chaudière, pompe à chaleur ou salle de bains : visite et devis gratuits.',
+});
 const CONF = [['prix', 'Prix annoncé avant', 'Rien ne commence sans votre accord'], ['delai', 'Moins de 2 h', 'Pour un dépannage dans la zone'],
   ['garantie', 'Garantie décennale', 'Attestation jointe au devis'], ['local', 'À Saint-Jean-de-Braye', 'Depuis 2014 (exemple fictif)']];
 const bandeau = (titre, texte) => Section('br-cta', [Box('br-cta-inner', [
@@ -79,6 +60,7 @@ const preuve = (titre) => Section('br-section-realisations', [
   Short('[briise_realisations service="auto" nombre="3"]'),
   Box('br-qui', [Img(THOMAS, '1/1', 'br-qui-photo', 'Thomas Vérac, plombier chauffagiste, devant sa camionnette'), P(`Thomas Vérac intervient lui-même, à Saint-Jean-de-Braye et autour, depuis 2014 (exemple fictif). ${A('Qui nous sommes', 'a-propos')}.`)]),
 ]);
+const teteSimple = (h1, chapo) => Section('br-page-head', [Head([Short('[briise_fil_ariane]'), H(h1, 1, null, { fontSize: 'huge' }), Lead(chapo), Btns(Btn(CTA_LABEL, CTA))])]);
 const carteService = (img, alt, titre, texte, slug) => Col([Box('br-card', [ImgFond(img, 'br-card-fond', alt), H(titre, 3), Muted(texte), Arrow(titre + ' en détail', URL(slug))])]);
 const AVIS = Section('br-avis-note', [
   Row('br-section-head br-tete-deux', [H('Ce qu’en disent nos clients', 2), P(`<strong class="br-note-chiffre">4,8</strong> <span class="br-note-detail">${ETOILES}<span>sur 5, avis d’exemple</span></span>`, 'br-note')]),
@@ -111,7 +93,7 @@ page('accueil', 'Accueil', 'Plombier chauffagiste à Saint-Jean-de-Braye, dépan
     carteService(PAC, 'Unité extérieure de pompe à chaleur contre un mur', 'Pompe à chaleur', 'Installateur RGE : les aides de l’État déduites, le dossier monté avec vous.', 'pompe-a-chaleur'),
   ])]),
   Section('br-tarifs-liste-section', [
-    Head([H('Nos forfaits, sans surprise', 2), Lead('Prix TTC, pièces courantes comprises, dans notre zone. Le prix est confirmé au téléphone avant de venir (prix d’exemple).')]),
+    Head([H('Nos forfaits, sans surprise', 2), Lead(`Prix TTC, pièces courantes comprises, dans notre zone. Le prix est confirmé au téléphone avant de venir (prix d’exemple). ${A('Tous nos tarifs', 'tarifs')}.`)]),
     Box('br-tarifs-liste', [
       [FUITE, 'Réparation d’une fuite', 'Déplacement et diagnostic', 'depannage-plomberie', 'Déduit si vous acceptez la réparation', '59 €'],
       [ROBINET, 'Débouchage d’un évier', 'Débouchage WC ou évier', 'depannage-plomberie', 'Au furet ou à la pompe, en moins d’une heure', 'dès 120 €'],
@@ -138,7 +120,7 @@ page('services', 'Nos services', 'Plombier chauffagiste : nos services autour d�
   teteSplit('Nos services de plomberie et de chauffage', 'Du dépannage dans l’heure à la pompe à chaleur : un seul artisan, des prix annoncés avant de commencer.'),
   Section('br-section-liees', [Short('[briise_pages_liees]')], { backgroundColor: 'surface' }),
   bandeau('Un doute sur le bon service ?', 'Décrivez votre problème à Thomas : il vous oriente gratuitement.'),
-], { image: CAMION });
+], { menu: true, image: CAMION });
 
 /* Pages de service : le récit du prospect (promesse, bénéfices, choix, preuve, déroulé et prix, doutes, action). */
 const service = ({ slug, titre, seo, desc, h1, chapo, image, benef, choix, etapes, prix, note, oui, non, qs, menuDesc }) =>
@@ -165,7 +147,7 @@ service({
     [CAMION, 'Camionnette d’artisan garée devant une maison', 'Un artisan du coin', 'Basé à Saint-Jean-de-Braye : pas de plateforme, pas d’intermédiaire, pas de frais cachés.'],
   ] },
   choix: null,
-  etapes: [['Vous appelez', 'Vous décrivez le problème, Thomas vous donne le prix du déplacement et une fourchette.', '5 minutes'], ['Thomas arrive', 'Dans la zone, en moins de 2 h, de 7 h à 22 h, 7 j/7.', 'Moins de 2 h'], ['Diagnostic et prix', 'Il trouve la cause et vous donne le prix de la réparation par écrit.'], ['Réparation', 'La fuite est arrêtée, la zone essuyée, la facture remise sur place.']],
+  etapes: [['Vous appelez', 'Vous décrivez le problème, Thomas vous donne le prix du déplacement et une fourchette.', '5 minutes'], ['Thomas arrive', `Dans ${A('notre zone d’intervention', 'zone-intervention')}, en moins de 2 h, de 7 h à 22 h, 7 j/7.`, 'Moins de 2 h'], ['Diagnostic et prix', 'Il trouve la cause et vous donne le prix de la réparation par écrit.'], ['Réparation', 'La fuite est arrêtée, la zone essuyée, la facture remise sur place.']],
   prix: [['Déplacement et diagnostic', '59 €'], ['Débouchage WC ou évier', 'dès 120 €'], ['Remplacement d’un robinet', 'dès 140 €, robinet fourni'], ['Recherche de fuite simple', 'dès 150 €']],
   note: 'Prix d’exemple, TTC, dans notre zone. Majoration de 30 % le dimanche et les jours fériés, annoncée au téléphone.',
   oui: ['Le déplacement dans la zone', 'Les joints et raccords courants', 'Le nettoyage après intervention'], non: ['Les travaux de maçonnerie', 'Le remplacement d’un appareil complet'],
@@ -261,7 +243,7 @@ service({
 
 page('tarifs', 'Tarifs', 'Tarifs plombier chauffagiste autour d’Orléans, prix affichés',
   'Dépannage 59 €, débouchage dès 120 €, entretien chaudière 129 €, chauffe-eau posé dès 1 150 € : tous nos prix d’exemple (fictifs).', [
-  teteSplit('Nos tarifs, affichés avant de venir', 'Prix TTC dans notre zone, pièces courantes comprises. Le prix est confirmé au téléphone avant chaque intervention.'),
+  teteSimple('Nos tarifs, affichés avant de venir', 'Prix TTC dans notre zone, pièces courantes comprises. Le prix est confirmé au téléphone avant chaque intervention.'),
   Section('br-tarifs-liste-section', [Box('br-tarifs-liste', [
     [FUITE, 'Réparation d’une fuite', 'Déplacement et diagnostic', 'depannage-plomberie', 'Déduit si vous acceptez la réparation', '59 €'],
     [ROBINET, 'Débouchage', 'Débouchage WC ou évier', 'depannage-plomberie', 'Au furet ou à la pompe', 'dès 120 €'],
@@ -276,14 +258,14 @@ page('tarifs', 'Tarifs', 'Tarifs plombier chauffagiste autour d’Orléans, prix
 
 page('realisations', 'Réalisations', 'Nos chantiers de plomberie et de chauffage',
   'Chauffe-eau, pompes à chaleur, salles de bains : nos chantiers près d’Orléans, avec la demande et ce que nous avons fait (exemples fictifs).', [
-  teteSplit('Nos chantiers', 'Chaque fiche raconte la demande du client et ce que nous avons fait. Chantiers d’exemple, fictifs.'),
+  teteSimple('Nos chantiers', 'Chaque fiche raconte la demande du client et ce que nous avons fait. Chantiers d’exemple, fictifs.'),
   Section('br-section-realisations', [Short('[briise_realisations filtres="1"]')]),
   bandeau('Un projet comparable ?', 'Visite et devis gratuits.'),
 ], { menu: true });
 
 page('zone-intervention', 'Zone d’intervention', 'Plombier à Saint-Jean-de-Braye, Orléans, Chécy et alentours',
   'Saint-Jean-de-Braye, Orléans, Chécy, Semoy, Boigny, Mardié, Fleury, Saint-Jean-de-la-Ruelle, Olivet : délais et communes desservies (exemple fictif).', [
-  teteSplit('Où nous intervenons', 'Saint-Jean-de-Braye et la métropole d’Orléans : déplacement compris, dépannage en moins de 2 h.'),
+  teteSimple('Où nous intervenons', 'Saint-Jean-de-Braye et la métropole d’Orléans : déplacement compris, dépannage en moins de 2 h.'),
   zoneListe('Communes desservies', 'Votre commune et le délai', 'Les distances sont calculées depuis notre dépôt de Saint-Jean-de-Braye.'),
   bandeau('Vous êtes juste à côté ?', 'Appelez : nous vous disons tout de suite si nous venons.'),
 ]);
@@ -318,17 +300,20 @@ const realisations = [
     image: CHAUFFE, resume: 'Un chauffe-eau électrique de 15 ans remplacé par un thermodynamique de 270 litres (chantier d’exemple, fictif).',
     demande: ['Une famille de quatre personnes nous a appelés un lundi : plus d’eau chaude depuis la veille. Le chauffe-eau électrique de 200 litres avait quinze ans et la cuve commençait à fuir. Les parents voulaient surtout baisser leur facture d’électricité, qui avait beaucoup augmenté.'],
     solution: ['Thomas est passé le jour même pour le diagnostic. La cuve étant percée, la réparation ne valait pas le coup. Il a proposé deux solutions par écrit : un électrique de 200 litres à 1 150 € ou un thermodynamique de 270 litres à 3 200 €, avec la consommation estimée de chacun.',
-      'La famille a choisi le thermodynamique, posé dans le garage le mercredi. L’ancien appareil a été emporté au recyclage. Après un mois, la consommation liée à l’eau chaude avait baissé de près des deux tiers, selon le compteur des clients (chiffres d’exemple).'] },
+      'La famille a choisi le thermodynamique, posé dans le garage le mercredi. L’ancien appareil a été emporté au recyclage. Après un mois, la consommation liée à l’eau chaude avait baissé de près des deux tiers, selon le compteur des clients (chiffres d’exemple).',
+      'Le nouvel appareil a été réglé en mode heures creuses. Thomas a montré aux clients comment lire l’écran et vider le condensat, puis il est repassé un mois plus tard pour vérifier la température et le bruit dans le garage.'] },
   { titre: 'Pompe à chaleur air/eau à Chécy', ville: 'Chécy', date: '2026-06', service: 'pompe-a-chaleur', categories: ['Pompe à chaleur'],
     image: PAC, resume: 'Une chaudière fioul remplacée par une pompe à chaleur air/eau, avec les aides déduites (chantier d’exemple, fictif).',
     demande: ['Un couple de retraités chauffait sa maison de 120 m² avec une chaudière fioul de 1998. Le prix du fioul et la peur d’une panne en plein hiver les ont décidés. Ils ne savaient pas à quelles aides ils avaient droit.'],
     solution: ['Après une visite d’une heure, Thomas a calculé la puissance nécessaire et vérifié que les radiateurs en fonte pouvaient être gardés. Le devis montrait le prix, les aides estimées et le reste à payer.',
-      'La pompe à chaleur a été posée en trois jours, la cuve à fioul neutralisée par une entreprise partenaire. Le dossier MaPrimeRénov’ et la prime CEE ont été montés ensemble. Les réglages ont été affinés après le premier mois de chauffe.'] },
+      'La pompe à chaleur a été posée en trois jours, la cuve à fioul neutralisée par une entreprise partenaire. Le dossier MaPrimeRénov’ et la prime CEE ont été montés ensemble. Les réglages ont été affinés après le premier mois de chauffe.',
+      'L’unité extérieure a été posée sur des plots antivibratiles, à l’opposé de la chambre des voisins. Le premier hiver, la maison est restée à 20 degrés, et les clients ont reçu le versement de MaPrimeRénov’ trois mois après la fin du chantier (exemple fictif).'] },
   { titre: 'Douche à l’italienne à Saint-Jean-de-Braye', ville: 'Saint-Jean-de-Braye', date: '2026-03', service: 'salle-de-bains', categories: ['Salle de bains'],
     image: DOUCHE, resume: 'Une baignoire remplacée par une douche à l’italienne pour une personne âgée (chantier d’exemple, fictif).',
     demande: ['Une dame de 78 ans avait de plus en plus de mal à enjamber sa baignoire. Sa fille voulait une solution rapide, sans transformer toute la salle de bains, et un sol qui ne glisse pas.'],
     solution: ['Thomas a proposé une douche à l’italienne à la place de la baignoire, avec un receveur extra-plat antidérapant, une barre de maintien et un mitigeur thermostatique pour éviter les brûlures.',
-      'Le chantier a duré six jours. Le WC est resté en service tout du long. La fille de la cliente a validé chaque étape à distance, grâce aux photos envoyées chaque soir.'] },
+      'Le chantier a duré six jours. Le WC est resté en service tout du long. La fille de la cliente a validé chaque étape à distance, grâce aux photos envoyées chaque soir.',
+      'Le carrelage clair et antidérapant a été choisi avec la cliente, ainsi qu’un siège de douche rabattable fixé au mur. La salle de bains a gardé ses meubles et son lavabo : seul l’espace de la baignoire a été transformé, ce qui a limité le prix et la durée des travaux. La cliente se lave aujourd’hui seule, sans aide (exemple fictif).'] },
 ];
 
 const site = {

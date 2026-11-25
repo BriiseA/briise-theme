@@ -693,31 +693,37 @@ add('formulaire-reservation', 'contact', 'Formulaire de réservation', 'Page « 
 const ImgLien = (name, alt, href, cls) => cb('core/image', { url: IMG(name), alt: fr(alt), sizeSlug: 'large', linkDestination: 'custom', href, ...(cls ? { className: cls } : {}) });
 const porteLien = (n) => P(`<a href="${URL('service-' + n)}">{{SERVICE:${n}}}</a>`, 'br-porte-lien');
 
+// Deux portes : réutilisable dans les fichiers de site (textes, liens des pannes, photo du projet).
+// liens : [texte, adresse] ; par défaut les quatre premiers services.
+const deuxPortes = ({
+  titre = 'Votre métier à votre ville, en urgence ou sur rendez-vous',
+  chapo = 'Une phrase de preuve : prix annoncé avant de commencer, devis signé avant les travaux, note Google réelle.',
+  statut = 'Intervention possible aujourd’hui', appel = 'Appeler', sous = 'Votre problème', liens = null,
+  attente = `En attendant : le geste qui limite les dégâts. <a href="${URL('faq')}">Les bons gestes</a>`,
+  img = 'paysage', projetTitre = 'J’ai un projet', projetTexte = 'Installation, rénovation ou entretien : visite et devis gratuits.',
+} = {}) => Section('br-ouv-portes', [
+  Box('br-ouv-portes-tete', [H(titre, 1, null, { fontSize: 'xx-large' }), Lead(chapo)]),
+  Cols([
+    Col([Box('br-porte br-porte--urgence', [
+      P(statut, 'br-porte-statut'),
+      H('C’est urgent', 2, 'br-porte-titre'),
+      Short(`[briise_appel texte="${appel}" intro=""]`),
+      P(sous, 'br-porte-sous'),
+      Box('br-porte-liens', liens ? liens.map(([t, u]) => P(`<a href="${u}">${fr(t)}</a>`, 'br-porte-lien')) : [1, 2, 3, 4].map(porteLien)),
+      P(attente, 'br-porte-attente'),
+    ])]),
+    Col([cb('core/cover', {
+      url: IMG(img), alt: '', dimRatio: 60, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 100, minHeightUnit: '%',
+      contentPosition: 'bottom left', className: 'br-porte br-porte--projet', layout: { type: 'default' },
+    }, [
+      H(projetTitre, 2, 'br-porte-titre'),
+      P(projetTexte),
+      Btns(Btn(CTA_LABEL, CTA, 'is-style-outline')),
+    ])]),
+  ], 'br-ouv-portes-cols'),
+]);
 add('ouverture-deux-portes', 'ouverture', 'Deux portes : urgent ou projet', 'Quand les visiteurs arrivent avec deux besoins très différents, une urgence ou un projet : dès l’arrivée, deux chemins. « C’est urgent » : l’appel en grand, les pannes courantes qui mènent à leur page, le geste à faire en attendant. « J’ai un projet » : une photo et la demande de devis. Le téléphone vient de Mon entreprise.',
-  Section('br-ouv-portes', [
-    Box('br-ouv-portes-tete', [
-      H('Votre métier à votre ville, en urgence ou sur rendez-vous', 1, null, { fontSize: 'xx-large' }),
-      Lead('Une phrase de preuve : prix annoncé avant de commencer, devis signé avant les travaux, note Google réelle.'),
-    ]),
-    Cols([
-      Col([Box('br-porte br-porte--urgence', [
-        P('Intervention possible aujourd’hui', 'br-porte-statut'),
-        H('C’est urgent', 2, 'br-porte-titre'),
-        Short('[briise_appel texte="Appeler" intro=""]'),
-        P('Votre problème', 'br-porte-sous'),
-        Box('br-porte-liens', [1, 2, 3, 4].map(porteLien)),
-        P(`En attendant : le geste qui limite les dégâts. <a href="${URL('faq')}">Les bons gestes</a>`, 'br-porte-attente'),
-      ])]),
-      Col([cb('core/cover', {
-        url: IMG('paysage'), alt: '', dimRatio: 60, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 100, minHeightUnit: '%',
-        contentPosition: 'bottom left', className: 'br-porte br-porte--projet', layout: { type: 'default' },
-      }, [
-        H('J’ai un projet', 2, 'br-porte-titre'),
-        P('Installation, rénovation ou entretien : visite et devis gratuits.'),
-        Btns(Btn(CTA_LABEL, CTA, 'is-style-outline')),
-      ])]),
-    ], 'br-ouv-portes-cols'),
-  ]));
+  deuxPortes());
 
 add('ouverture-mosaique', 'ouverture', 'Accueil en mosaïque de réalisations', 'La preuve dès l’arrivée : le titre et les boutons à gauche, trois réalisations récentes à droite, chacune avec son ouvrage et sa commune. Chaque photo mène aux réalisations.',
   Section('br-ouv-mosaique', [Box('br-ouv-mosaique-grille', [
@@ -1018,5 +1024,5 @@ add('merci-suite', 'contact', 'Page merci : la suite', 'Pour la page qui s’aff
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').mkdirSync(require('path').join(__dirname, 'build'), { recursive: true });
 require('fs').writeFileSync(require('path').join(__dirname, 'build', 'br_sections.json'), JSON.stringify(out, null, 1));
-module.exports = { situations, choixSeance, eventail, lieux, faitsIcones, etapesImages, ctaPhoto, avisCourt, tarifLigne, ETOILES, Row, ImgFond, Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
+module.exports = { deuxPortes, situations, choixSeance, eventail, lieux, faitsIcones, etapesImages, ctaPhoto, avisCourt, tarifLigne, ETOILES, Row, ImgFond, Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
 console.log(Object.keys(S).length, 'sections');

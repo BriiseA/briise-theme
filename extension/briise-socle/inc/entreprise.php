@@ -337,7 +337,7 @@ add_action( 'init', function () {
 		$icone = function_exists( 'briise_icone' ) ? briise_icone( 'phone' ) : '';
 		return '<p class="br-appel">' . ( $atts['intro'] ? '<span class="br-appel-intro">' . esc_html( $atts['intro'] ) . '</span> ' : '' )
 			. '<a class="br-appel-bouton" href="tel:' . esc_attr( preg_replace( '/[^0-9+]/', '', $e['telephone'] ) ) . '">' . $icone
-			. '<span>' . esc_html( $atts['texte'] ) . ' : ' . esc_html( briise_telephone_lisible( $e['telephone'] ) ) . '</span></a></p>';
+			. '<span>' . esc_html( $atts['texte'] ) . ' : <span class="br-appel-numero">' . esc_html( briise_telephone_lisible( $e['telephone'] ) ) . '</span></span></a></p>';
 	} );
 	add_shortcode( 'briise_info', function ( $atts ) {
 		$atts = shortcode_atts( array( 'champ' => 'name' ), $atts );
