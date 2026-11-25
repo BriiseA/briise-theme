@@ -46,8 +46,8 @@ done
 R=$(node "$OUTILS/validate.js" "$OUTILS/build/lison_blocs.json" 2>/dev/null | tail -1)
 echo "  lison : $R"
 case "$R" in *"invalid blocks: 0") ;; *) echec "blocs invalides dans le site de Lison" ;; esac
-if ! git -C "$DEPOT" diff --quiet -- patterns inc/kits.json .github/outils/exemples/site-ferlune.json .github/outils/exemples/site-lison.json; then
-	git -C "$DEPOT" diff --stat -- patterns inc/kits.json .github/outils/exemples/site-ferlune.json .github/outils/exemples/site-lison.json
+if ! git -C "$DEPOT" diff --quiet -- patterns inc/kits.json inc/parcours.json .github/outils/exemples/site-ferlune.json .github/outils/exemples/site-lison.json; then
+	git -C "$DEPOT" diff --stat -- patterns inc/kits.json inc/parcours.json .github/outils/exemples/site-ferlune.json .github/outils/exemples/site-lison.json
 	echec "les fichiers générés ne sont pas à jour : relancer les outils et enregistrer le résultat"
 fi
 

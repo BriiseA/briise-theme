@@ -21,15 +21,31 @@ function briise_kits() {
 }
 
 /**
+ * Les cinq parcours (urgence, projet, réservation, conseil, commerce), avec leurs pages complètes
+ * et les ouvertures proposées pour l'accueil. Lus seulement à l'écran Démarrage.
+ */
+function briise_parcours() {
+	static $data = null;
+	if ( null === $data ) {
+		$data = json_decode( (string) file_get_contents( get_theme_file_path( 'inc/parcours.json' ) ), true );
+	}
+	return $data;
+}
+
+/** Parcours d'un site : les anciens kits (prestataire, artisan, libéral) gardent leurs liens. */
+function briise_parcours_du_site() {
+	$cle = (string) get_option( 'briise_kit' );
+	return briise_kits()['anciens'][ $cle ] ?? $cle;
+}
+
+/**
  * Remplace les repères ({{CTA}}, {{URL:…}}, {{IMG:…}}, {{TITRE}}) par les vraies valeurs.
  */
 function briise_kit_remplir( $markup, $liens = array(), $pages = array(), $titre = '', &$manquants = array() ) {
 	$e = briise_theme_entreprise();
 	// Sans liens fournis (modèles de l'éditeur), ceux du kit installé.
 	if ( ! $liens ) {
-		$kits  = briise_kits()['kits'];
-		$kit   = get_option( 'briise_kit' );
-		$liens = isset( $kits[ $kit ] ) ? $kits[ $kit ]['liens'] : array();
+		$liens = briise_kits()['liens'][ briise_parcours_du_site() ] ?? array();
 	}
 	$url = function ( $slug ) use ( $liens, $pages, &$manquants ) {
 		$cible = $liens[ $slug ] ?? $slug;
@@ -474,10 +490,10 @@ function briise_appliquer_ambiance( $slug, $couleurs = array() ) {
 }
 
 /**
- * Plan d'un kit réglé à l'écran.
+ * Plan d'un parcours réglé à l'écran (Démarrage).
  */
 function briise_plan_depuis_kit( $cle, $choix ) {
-	$data   = briise_kits();
+	$data   = array_merge( briise_kits(), briise_parcours() );
 	$kit    = $data['kits'][ $cle ];
 	$titres = (array) ( $choix['titres'] ?? array() );
 	$garder = (array) ( $choix['pages'] ?? array() );
@@ -491,6 +507,7 @@ function briise_plan_depuis_kit( $cle, $choix ) {
 		'accueil'   => 'accueil',
 		'blog'      => ( $kit['blog'] && in_array( 'blog', $garder, true ) ) ? 'blog' : '',
 		'liens'     => $kit['liens'],
+		'mobile'    => $kit['mobile'] ?? 'bouton',
 		'pages'     => array(),
 	);
 	foreach ( $kit['pages'] as $p ) {
@@ -498,8 +515,17 @@ function briise_plan_depuis_kit( $cle, $choix ) {
 		if ( ! $fixe && ! in_array( $p['slug'], $garder, true ) ) {
 			continue;
 		}
+		// L'accueil : l'ouverture choisie, puis la suite calculée pour le fond de cette ouverture.
+		if ( isset( $p['ouvertures'] ) ) {
+			$o = sanitize_key( $choix['ouverture'] ?? '' );
+			$o = in_array( $o, $p['ouvertures'], true ) ? $o : $p['ouvertures'][0];
+			$ouv         = $data['ouvertures'][ $o ];
+			$p['markup'] = $ouv['markup'] . "\n\n" . ( $p['reste'][ $ouv['fond'] ] ?? reset( $p['reste'] ) );
+			unset( $p['ouvertures'], $p['reste'] );
+		}
 		$p['titre']      = sanitize_text_field( $titres[ $p['slug'] ] ?? '' ) ?: $p['titre'];
-		$p['menu']       = ! $fixe;
+		// Hors du menu : l'accueil, la page d'action (bouton) et la page merci.
+		$p['menu']       = ! $fixe && 'merci' !== $p['slug'];
 		$plan['pages'][] = $p;
 	}
 	// Pages en plus, prises dans les modèles.
@@ -618,7 +644,7 @@ add_action( 'admin_post_briise_kit', function () {
 		$plan = ( $tmp && is_uploaded_file( $tmp ) ) ? briise_plan_depuis_fichier( file_get_contents( $tmp ) ) : new WP_Error( 'fichier', 'Aucun fichier reçu.' );
 	} else {
 		$cle  = sanitize_key( $_POST['kit'] ?? '' );
-		$plan = isset( briise_kits()['kits'][ $cle ] ) ? briise_plan_depuis_kit( $cle, wp_unslash( $_POST ) ) : new WP_Error( 'kit', 'Kit inconnu.' );
+		$plan = isset( briise_parcours()['kits'][ $cle ] ) ? briise_plan_depuis_kit( $cle, wp_unslash( $_POST ) ) : new WP_Error( 'kit', 'Parcours inconnu.' );
 	}
 	$r = is_wp_error( $plan ) ? array( 'erreur' => $plan->get_error_message() ) : briise_plan_installer( $plan );
 	set_transient( 'briise_kit_resultat_' . get_current_user_id(), $r, 120 );
@@ -646,8 +672,8 @@ function briise_photos_encadre() {
 }
 
 function briise_onglet_demarrage() {
-	$data   = briise_kits();
-	$actuel = get_option( 'briise_kit' );
+	$data   = array_merge( briise_kits(), briise_parcours() );
+	$actuel = briise_parcours_du_site();
 	$choisi = sanitize_key( $_GET['kit'] ?? '' ); // phpcs:ignore WordPress.Security.NonceVerification
 	$r      = get_transient( 'briise_kit_resultat_' . get_current_user_id() );
 	if ( $r ) {
@@ -675,20 +701,21 @@ function briise_onglet_demarrage() {
 
 	if ( ! $choisi || ! isset( $data['kits'][ $choisi ] ) ) :
 		?>
-		<h2 class="title">Partir d’un kit</h2>
-		<p class="description">Le kit propose les pages adaptées à un type d’activité ; l’écran suivant permet de les ajuster à la demande du client.</p>
+		<h2 class="title">Partir d’un parcours</h2>
+		<p class="description">Choisissez ce que le visiteur vient faire sur le site : le parcours décide de l’accueil, de l’ordre des preuves et des pages. L’écran suivant permet de les ajuster et de choisir l’ouverture de l’accueil.</p>
 		<div class="br-kits">
 			<?php foreach ( $data['kits'] as $cle => $k ) : ?>
 				<a class="br-kit" href="<?php echo esc_url( add_query_arg( 'kit', $cle, $base ) ); ?>">
 					<strong><?php echo esc_html( $k['titre'] ); ?></strong>
 					<span class="description"><?php echo esc_html( $k['pour'] ); ?></span>
-					<span class="br-kit-pages"><?php echo esc_html( implode( ' · ', wp_list_pluck( $k['pages'], 'titre' ) ) ); ?></span>
-					<span class="br-kit-cta">Ajuster ce kit →</span>
+					<span class="br-kit-question">« <?php echo esc_html( $k['question'] ); ?> »</span>
+					<span class="br-kit-pages"><?php echo esc_html( implode( ' · ', array_diff( wp_list_pluck( $k['pages'], 'titre' ), array( 'Merci' ) ) ) ); ?></span>
+					<span class="br-kit-cta">Ajuster ce parcours →</span>
 				</a>
 			<?php endforeach; ?>
 		</div>
 		<?php if ( $actuel ) : ?>
-			<p><em>Un kit a déjà été installé sur ce site (<?php echo esc_html( $data['kits'][ $actuel ]['titre'] ?? $actuel ); ?>). Relancer ne crée que les pages manquantes.</em></p>
+			<p><em>Un parcours a déjà été installé sur ce site (<?php echo esc_html( $data['kits'][ $actuel ]['titre'] ?? $actuel ); ?>). Relancer ne crée que les pages manquantes.</em></p>
 		<?php endif; ?>
 
 		<h2 class="title">Ou importer un fichier de site</h2>
@@ -711,8 +738,9 @@ function briise_onglet_demarrage() {
 		return $p['slug'] === $k['liens']['services'];
 	} ) );
 	?>
-	<p><a href="<?php echo esc_url( $base ); ?>">← Changer de kit</a></p>
-	<h2 class="title">Ajuster le kit « <?php echo esc_html( $k['titre'] ); ?> »</h2>
+	<p><a href="<?php echo esc_url( $base ); ?>">← Changer de parcours</a></p>
+	<h2 class="title">Ajuster le parcours « <?php echo esc_html( $k['titre'] ); ?> »</h2>
+	<p class="description">Le visiteur se demande : « <?php echo esc_html( $k['question'] ); ?> ». L’accueil y répond dans cet ordre, avec les preuves au plus près des doutes.</p>
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 		<input type="hidden" name="action" value="briise_kit"><input type="hidden" name="mode" value="kit">
 		<input type="hidden" name="kit" value="<?php echo esc_attr( $choisi ); ?>">
@@ -725,16 +753,27 @@ function briise_onglet_demarrage() {
 				<tr>
 					<td><input type="checkbox" name="pages[]" value="<?php echo esc_attr( $p['slug'] ); ?>" checked <?php disabled( $fixe ); ?> aria-label="Créer la page <?php echo esc_attr( $p['titre'] ); ?>"></td>
 					<td><input type="text" class="regular-text" name="titres[<?php echo esc_attr( $p['slug'] ); ?>]" value="<?php echo esc_attr( $p['titre'] ); ?>" aria-label="Titre de la page <?php echo esc_attr( $p['titre'] ); ?>"></td>
-					<td class="br-ferme-txt"><?php echo $fixe ? 'indispensable' : ''; ?></td>
+					<td class="br-ferme-txt"><?php echo $fixe ? 'indispensable' : ( 'merci' === $p['slug'] ? 'hors menu : s’affiche après l’envoi d’un formulaire' : '' ); ?></td>
 				</tr>
 			<?php endforeach; ?>
 		</table>
+
+		<?php $acc = $k['pages'][0]; if ( ! empty( $acc['ouvertures'] ) ) : ?>
+			<h3>Ouverture de l’accueil</h3>
+			<p class="description">La première chose que voit le visiteur. Prenez-en une différente de celle des derniers sites de l’agence (registre des sites) : deux sites du même parcours ne se ressemblent pas. L’en-tête, le pied de page, les cartes et les titres se choisissent ensuite dans l’onglet Apparence.</p>
+			<fieldset>
+				<legend class="screen-reader-text">Ouverture de l’accueil</legend>
+				<?php foreach ( $acc['ouvertures'] as $i => $o ) : ?>
+					<p><label><input type="radio" name="ouverture" value="<?php echo esc_attr( $o ); ?>" <?php checked( 0, $i ); ?>> <?php echo esc_html( $data['ouvertures'][ $o ]['titre'] ?? $o ); ?></label></p>
+				<?php endforeach; ?>
+			</fieldset>
+		<?php endif; ?>
 
 		<h3>Pages en plus</h3>
 		<table class="br-jours" role="presentation">
 			<?php
 			foreach ( $data['modeles'] as $cle => $m ) :
-				if ( in_array( $cle, array( 'service', 'atterrissage' ), true ) ) {
+				if ( in_array( $cle, array( 'service', 'atterrissage', 'merci' ), true ) ) {
 					continue;
 				}
 				?>

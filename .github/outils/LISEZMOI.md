@@ -6,7 +6,7 @@ Ces scripts fabriquent les fichiers du thème ; ils ne sont pas inclus dans `bri
 | --- | --- |
 | `build_br_sections.js` | Balisage des 40 sections (blocs générés avec `@wordpress/blocks`, donc valides) |
 | `write_sections.py` | Fichiers `patterns/section-*.php` à partir des sections |
-| `build_br_kits.js` | `inc/kits.json` : pages des trois kits et pages légales |
+| `build_br_kits.js` | `inc/parcours.json` : pages des cinq parcours et ouvertures proposées ; `inc/kits.json` : modèles de page, pages légales et liens de chaque parcours |
 | `make_variations.py` | Ambiances `styles/*.json` |
 | `contraste.py` | Vérification AA des ambiances (lancée par GitHub à chaque envoi) |
 | `validate.js` | Contrôle de validité des blocs |
@@ -17,4 +17,4 @@ Ces scripts fabriquent les fichiers du thème ; ils ne sont pas inclus dans `bri
 
 Installation : `npm ci` dans ce dossier. Les scripts écrivent leurs fichiers de travail dans `build/` (ignoré par Git) et les fichiers du thème à leur place dans le dépôt.
 
-Après toute modification d'une section ou d'un kit : `node build_br_sections.js && python3 write_sections.py && node build_br_kits.js && node exemples/build_ferlune.js`, puis `bash banc/lancer.sh`. Le banc échoue si les fichiers enregistrés ne correspondent pas à ce que produisent les outils.
+Après toute modification d'une section ou d'un parcours : `node build_br_sections.js && python3 write_sections.py && node build_br_kits.js && node exemples/build_ferlune.js`, puis `bash banc/lancer.sh`. Le banc échoue si les fichiers enregistrés ne correspondent pas à ce que produisent les outils.

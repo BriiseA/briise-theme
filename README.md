@@ -3,7 +3,7 @@
 Thème WordPress à blocs de l'agence Briise pour les sites vitrines d'entreprises locales de services, et son extension **Briise Socle**.
 
 - **Briise Socle** (`extension/briise-socle/`) : le fonctionnement, indépendant du thème. Mon entreprise (coordonnées, horaires, annonces, mentions légales, fonctions), onglet Contrôle, référencement et données structurées, robots.txt et IndexNow, cartes Coordonnées et Zone, codes courts, bandeau d'information, mesure des contacts, mises à jour depuis GitHub, fin de collaboration.
-- **Thème Briise** (racine du dépôt) : l'apparence. Ambiances, sections, gabarits, styles de section, kits et import d'un fichier de site (onglet Démarrage), animations.
+- **Thème Briise** (racine du dépôt) : l'apparence. Ambiances, sections, gabarits, styles de section, parcours et import d'un fichier de site (onglet Démarrage), animations.
 
 Un site Briise utilise les deux. Un site fait avec un autre thème peut n'utiliser que l'extension : il garde Mon entreprise, le contrôle du maillage, le référencement et les cartes (avec une apparence simple), mais pas les sections ni les ambiances. Sans l'extension, le thème s'affiche sans erreur mais sans coordonnées ni référencement, et prévient l'administrateur.
 Le cahier des charges complet est dans le document « Thème de base agence : cahier des charges ».
@@ -11,7 +11,7 @@ Le cahier des charges complet est dans le document « Thème de base agence : ca
 ## Principe
 
 Un seul thème pour tous les clients. Un site client ne contient jamais de code propre :
-seulement des réglages, un kit de pages, une variation de style et ses contenus.
+seulement des réglages, un parcours de pages, une variation de style et ses contenus.
 Corriger un défaut dans la base le corrige partout, à la prochaine mise à jour.
 
 ## Structure
@@ -26,7 +26,7 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | `assets/js/ux.js` | Menu intelligent, page active, téléphones cliquables, bouton fixe mobile, retour en haut |
 | `assets/js/motion.js` | Animations d'apparition (coupées si le visiteur le demande) |
 | `styles/` | Ambiances (variations de style) |
-| `inc/kits.php`, `inc/kits.json` | Démarrage : kits ajustables, import d'un fichier de site, modèles de page |
+| `inc/kits.php`, `inc/kits.json`, `inc/parcours.json` | Démarrage : parcours ajustables, import d'un fichier de site, modèles de page |
 | `inc/contraste.php` | Avertissement si une couleur modifiée rend un texte illisible |
 | `inc/styles-section.php` | Styles de section en un clic et contrôle du rythme des couleurs |
 | `inc/socle.php` | Lien avec l'extension : le thème lit ses données, ou des valeurs vides si elle manque |
@@ -42,7 +42,7 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | `extension/briise-socle/inc/realisations.php` | Réalisations : fiches, grilles automatiques, filtres, import et export |
 | `extension/briise-socle/inc/mises-a-jour.php` | Mises à jour du thème et de l'extension depuis les versions GitHub |
 | `extension/briise-socle/inc/depart.php` | Onglet « Fin de collaboration » |
-| `.github/outils/` | Scripts de fabrication des sections, kits et ambiances (hors thème) |
+| `.github/outils/` | Scripts de fabrication des sections, parcours et ambiances (hors thème) |
 | `assets/fonts/` | Polices hébergées et leurs licences (toutes sous licence OFL) |
 
 ## Ambiances (variations de style)
@@ -113,18 +113,24 @@ Sans secteurs, la carte Zone reprend la liste des villes. Dans le fichier de sit
 
 1. Installer WordPress, téléverser `briise.zip`, activer le thème.
 2. Mon entreprise > **Démarrage**, au choix :
-   - **ajuster un kit** : choisir le kit le plus proche, décocher ou renommer ses pages, ajouter des pages en plus, saisir les services du client (une page chacun, rangée en sous-menu), régler le bouton d'action ;
+   - **ajuster un parcours** : choisir ce que le visiteur vient faire (voir le tableau), décocher ou renommer les pages, choisir l'ouverture de l'accueil, ajouter des pages en plus, saisir les services du client (une page chacun, rangée en sous-menu), régler le bouton d'action ;
    - **importer un fichier de site** préparé par l'agence à partir de la fiche client (pages, textes, référencement, menu, informations, ambiance).
-3. Mon entreprise : compléter ce que le kit ou le fichier n'a pas rempli.
+3. Mon entreprise : compléter ce que le parcours ou le fichier n'a pas rempli ; choisir l'en-tête, le pied de page, les cartes et les titres dans Apparence.
 4. Remplacer chaque texte et chaque photo d'exemple, puis suivre la checklist de livraison.
 
-| Kit | Pages proposées | Bouton d'action |
-| --- | --- | --- |
-| Prestataire de services | Accueil, Prestations, Tarifs, À propos, Questions fréquentes, Contact, Blog | Prendre rendez-vous |
-| Artisan et entreprise locale | Accueil, Savoir-faire, Réalisations, Zone d'intervention, À propos, Devis | Demander un devis |
-| Profession libérale | Accueil, Domaines d'intervention, Honoraires, Le cabinet, Questions fréquentes, Rendez-vous | Prendre rendez-vous |
+Le parcours décide de l'accueil (l'ordre des sections suit les questions du visiteur, avec une bande de preuves adaptée juste sous l'ouverture), des pages et du bas d'écran sur téléphone. Chaque parcours propose plusieurs ouvertures : pour que deux sites du même parcours ne se ressemblent pas, l'agence en choisit une différente des derniers sites (`.github/outils/registre.py`). Chaque parcours crée aussi une page « Merci », hors menu, qui reçoit les visiteurs après l'envoi d'un formulaire.
 
-Pages en plus, et modèles proposés à la création de chaque nouvelle page : service, page simple, tarifs, réalisations, équipe, FAQ, zone d'intervention, avis clients, contact. Les pages légales (mentions, confidentialité, cookies, accessibilité) sont toujours créées. Une page dont l'adresse existe déjà n'est jamais modifiée.
+| Parcours | Le visiteur se demande | Pages proposées | Bouton d'action | Ouvertures |
+| --- | --- | --- | --- | --- |
+| Urgence et dépannage | Qui peut venir vite, et combien ? | Accueil, Dépannage, Tarifs, Zone d'intervention, Qui sommes-nous, Contact | Être rappelé (barre d'actions sur téléphone) | deux portes, demande express, bannière |
+| Projet sur devis | Savent-ils faire mon projet, à quel prix ? | Accueil, Savoir-faire, Réalisations, Zone d'intervention, L'entreprise, Devis | Demander un devis | texte et photo, mosaïque, carte de garanties, avant / après, découpe, bannière |
+| Réservation d'une prestation | Est-ce que ça me plaît, combien, quand ? | Accueil, Prestations, Portfolio, Tarifs, À propos, Questions fréquentes, Réserver, Blog | Réserver | liste des prestations, éventail, bannière, texte et photo |
+| Conseil et profession libérale | Est-ce le bon professionnel, et combien ? | Accueil, Domaines d'intervention, Honoraires, Le cabinet, Questions fréquentes, Rendez-vous | Prendre rendez-vous | photo, texte et photo, bannière (sans avis ni note : règles des professions réglementées) |
+| Commerce et lieu à visiter | Est-ce ouvert, qu'y trouve-t-on, comment venir ? | Accueil, La carte, Le lieu, Venir, Réserver | Réserver (barre d'actions sur téléphone) | bannière, éventail, texte et photo |
+
+Les sites installés avec les anciens kits (prestataire, artisan, profession libérale) gardent leurs liens : ils sont rattachés aux parcours réservation, projet et conseil.
+
+Pages en plus, et modèles proposés à la création de chaque nouvelle page : service, page simple, tarifs, réalisations, équipe, FAQ, zone d'intervention, avis clients, page de remerciement, contact. Les pages légales (mentions, confidentialité, cookies, accessibilité) sont toujours créées. Une page dont l'adresse existe déjà n'est jamais modifiée.
 
 **Page d'atterrissage pour la publicité.** Modèle de page « Page d'atterrissage (publicité) », ou `"modele": "atterrissage"` dans le fichier de site. En-tête réduit (nom, téléphone, bouton d'action, sans menu), pied de page réduit (coordonnées et pages légales), bouton d'appel fixe sur mobile. La page est exclue de Google (noindex) et du plan du site : elle sert aux annonces, pas au référencement naturel. Une page dont le contenu reprend le modèle passe d'elle-même sur ce gabarit.
 
@@ -210,7 +216,7 @@ Dans l'éditeur : bouton « + » > Compositions > catégories « Sections · …
 | Contact | Bandeau d'appel à l'action, Bloc contact complet, Coordonnées (carte), Zone d'intervention, Zone d'intervention (carte), Zone d'intervention en liste, Formulaire de demande de devis, Formulaire de contact, Formulaire de réservation, Appel à l'action sur photo |
 
 Règles :
-- Rythme des couleurs : deux sections qui se suivent n'ont jamais le même fond. Alterner le blanc (`fond`) et les teintes de l'ambiance (`surface`, `nuance`) ; garder la bande foncée (`secondaire`) pour l'appel à l'action final. Une tête de page peut précéder une section du même fond. Les kits et les modèles respectent cette règle d'eux-mêmes ; une page modifiée à la main se vérifie dans Mon entreprise > Contrôle. Changer un fond en un clic : sélectionner la section (bouton « Sélectionner le parent » ou vue en liste), puis onglet Styles > « Fond clair », « Fond teinté », « Fond nuancé » ou « Fond foncé ». Ces quatre styles suivent l'ambiance : si l'ambiance change, les sections suivent. En « Fond foncé », les textes, étiquettes, boutons et tableaux passent en clair et les cartes gardent leur fond clair ; le contraste AA est vérifié dans les ambiances Acier, Galet et Cabinet. Le client (compte Éditeur) y a accès comme l'administrateur : c'est la façon simple et sûre de lui laisser la main sur les couleurs, sans sortir de la charte.
+- Rythme des couleurs : deux sections qui se suivent n'ont jamais le même fond. Alterner le blanc (`fond`) et les teintes de l'ambiance (`surface`, `nuance`) ; garder la bande foncée (`secondaire`) pour l'appel à l'action final. Une tête de page peut précéder une section du même fond. Les parcours et les modèles respectent cette règle d'eux-mêmes ; une page modifiée à la main se vérifie dans Mon entreprise > Contrôle. Changer un fond en un clic : sélectionner la section (bouton « Sélectionner le parent » ou vue en liste), puis onglet Styles > « Fond clair », « Fond teinté », « Fond nuancé » ou « Fond foncé ». Ces quatre styles suivent l'ambiance : si l'ambiance change, les sections suivent. En « Fond foncé », les textes, étiquettes, boutons et tableaux passent en clair et les cartes gardent leur fond clair ; le contraste AA est vérifié dans les ambiances Acier, Galet et Cabinet. Le client (compte Éditeur) y a accès comme l'administrateur : c'est la façon simple et sûre de lui laisser la main sur les couleurs, sans sortir de la charte.
 - Les boutons d'action reprennent le libellé et le lien de « Mon entreprise » au moment de l'insertion.
 - Les textes d'exemple expliquent quoi écrire : chacun doit être remplacé avant la livraison.
 - Hero bannière : le voile sombre ne descend jamais sous 70 %, ce qui garantit un texte lisible sur n'importe quelle photo. Photo en WebP de 200 Ko au plus ; régler le point focal pour le recadrage mobile.
@@ -226,7 +232,7 @@ Menu « Mon entreprise » de l'administration, juste sous le tableau de bord.
 | Entreprise | Administrateur | Nom, slogan, logo (et logo pour fond foncé), type d'activité, coordonnées, GPS, zone, action principale, personne, réseaux |
 | Mentions légales | Administrateur | Éditeur, hébergeur, profession réglementée, médiateur, réalisation |
 | Fonctions | Administrateur | Fonctions activables, Bing Webmaster Tools, Search Console, Matomo |
-| Démarrage | Administrateur | Kits et import d'un fichier de site |
+| Démarrage | Administrateur | Parcours et import d'un fichier de site |
 | Contrôle | Administrateur | Contrôle du maillage interne (voir plus bas) |
 
 Tout alimente automatiquement l'en-tête, le pied de page, le bouton fixe mobile et les données structurées.

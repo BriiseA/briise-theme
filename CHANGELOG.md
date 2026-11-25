@@ -1,5 +1,14 @@
 # Historique des versions
 
+## 1.18.0
+
+- **Cinq parcours remplacent les trois kits** dans Mon entreprise > Démarrage : urgence et dépannage, projet sur devis, réservation d'une prestation, conseil et profession libérale, commerce et lieu à visiter. Chacun part de la question du visiteur : l'ordre de l'accueil, les preuves, les pages et le bas d'écran sur téléphone en découlent.
+- **Ouverture au choix** pour chaque parcours (de trois à six), pour que deux sites du même parcours ne se ressemblent pas ; le rythme des couleurs de l'accueil s'ajuste à l'ouverture choisie.
+- **Bande de preuves propre à chaque parcours** (prix annoncé pour l'urgence, horaires et labels pour le commerce…) ; aucune note ni aucun avis pour les professions réglementées.
+- Chaque parcours crée une **page Merci** hors menu, réglée d'office pour recevoir les visiteurs après l'envoi d'un formulaire.
+- Les sites installés avec un ancien kit gardent leurs liens (prestataire → réservation, artisan → projet, profession libérale → conseil). Pages légales et modèles de page inchangés.
+- Les pages des parcours sont dans `inc/parcours.json`, lu seulement à l'écran Démarrage : l'éditeur reste aussi léger qu'avant.
+
 ## 1.17.0
 
 - **Estimateur de budget** : le barème est un tableau que le client modifie ; le visiteur voit sa fourchette, puis demande son devis.

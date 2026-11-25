@@ -1,4 +1,4 @@
-// Kits de démarrage Briise : chaque kit = une liste de pages composées de sections.
+// Parcours de démarrage Briise : chaque parcours = une liste de pages composées de sections.
 const L = require('./build_br_sections.js');
 const { S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr } = L;
 
@@ -38,7 +38,7 @@ const teteP = (titre, chapo, bouton = true) => [L.teteSplit(titre, chapo, bouton
 const detail = [Section('br-section-liees', [L.cb('core/heading', { content: 'Chaque service en détail', level: 2 }), Short('[briise_pages_liees]')], { backgroundColor: 'surface' })];
 const page = (slug, titre, ...parts) => ({ slug, titre, markup: serialize(rythme(parts.flat())) });
 
-/* ----- Pages légales, communes aux trois kits ----- */
+/* ----- Pages légales, communes à tous les parcours ----- */
 
 const texte = (titre, chapo, contenu) => serialize([
   Section('br-page-head', [Head([Short('[briise_fil_ariane]'), H(titre, 1, null, { fontSize: 'huge' }), Lead(chapo)])]),
@@ -79,54 +79,117 @@ const legales = [
   ]) },
 ];
 
-/* ----- Les trois kits ----- */
+/* ----- Les cinq parcours : ce que le visiteur vient faire décide de l'accueil et des pages ----- */
+// Source : parcours.json (questions, ordre des sections, preuves). Chaque parcours propose plusieurs
+// ouvertures : on en choisit une différente d'un site à l'autre (voir registre.py).
+
+const merci = page('merci', 'Merci', sec('merci-suite'));
+// La bande de confiance, avec les preuves propres à chaque parcours (parcours.json, « preuves »).
+const NOTE = ['avis', 'Note Google', 'À n’afficher que si elle est réelle'];
+const confiance = {
+  urgence: [L.confiance([['prix', 'Prix annoncé avant de commencer', 'Devis signé dès le premier euro'], ['delai', 'Intervention rapide', '[Délai] dans [votre secteur]'], ['garantie', 'Assurance décennale', 'Attestation sur demande'], NOTE])],
+  reservation: [L.confiance([NOTE, ['equipe', '[x] séances par an', 'Depuis [année]'], ['prix', 'Prix affichés', 'Ce qui est compris, écrit'], ['delai', 'Réponse sous 24 h', 'Créneaux proposés rapidement']])],
+  commerce: [L.confiance([NOTE, ['delai', 'Ouvert aujourd’hui', 'Horaires à jour dans Mon entreprise'], ['local', 'Produits locaux', '[Fait maison, labels…]'], ['plan', 'Facile d’accès', '[Parking, transports]']])],
+};
+// L'accueil : l'ouverture choisie, puis le reste. Le reste est calculé pour chaque fond d'ouverture,
+// pour que le rythme des couleurs reste juste quelle que soit l'ouverture.
+const OUVERTURES = {};
+const accueil = (ouvertures, ...reste) => {
+  const r = {};
+  ouvertures.forEach((o) => {
+    if (!OUVERTURES[o]) OUVERTURES[o] = { titre: S[o].title, fond: fondDe(sec(o)[0]), markup: serialize(sec(o)) };
+    const f = OUVERTURES[o].fond;
+    if (!r[f]) r[f] = serialize(rythme([...sec(o), ...reste.flat()]).slice(sec(o).length));
+  });
+  return { slug: 'accueil', titre: 'Accueil', ouvertures, reste: r };
+};
 
 const KITS = {
-  prestataire: {
-    titre: 'Prestataire de services',
-    pour: 'Bien-être, coachs, formateurs, photographes',
-    cta: 'Prendre rendez-vous', page_cta: 'contact', page_personne: 'a-propos', page_faq: 'faq', blog: true,
-    liens: { services: 'prestations', realisations: 'prestations', 'a-propos': 'a-propos', blog: 'blog' },
+  urgence: {
+    titre: 'Urgence et dépannage',
+    pour: 'Plombier, serrurier, électricien, vitrier, dépannage',
+    question: 'Qui peut venir vite, et combien ça coûte ?',
+    cta: 'Être rappelé', page_cta: 'contact', page_personne: 'a-propos', page_faq: '', blog: false, mobile: 'barre',
+    liens: { services: 'depannage', realisations: 'depannage', 'a-propos': 'a-propos', blog: 'depannage', faq: 'depannage', tarifs: 'tarifs' },
     pages: [
-      page('accueil', 'Accueil', sec('hero-image'), sec('trois-cartes'), sec('etapes'), sec('temoignages'), sec('dirigeant'), sec('derniers-articles'), sec('bandeau-cta')),
-      page('prestations', 'Prestations', tete('Nos prestations', 'Une phrase qui résume l’ensemble de votre offre et à qui elle s’adresse.'), detail, sec('service-alterne'), sec('etapes'), sec('bandeau-cta')),
-      page('tarifs', 'Tarifs', tete('Tarifs', 'Des prix clairs avant de réserver : choisissez la formule qui vous convient.'), sec('tarifs-cartes'), sec('tarifs-tableau'), sec('bandeau-cta')),
-      page('a-propos', 'À propos', teteP('À propos', 'Qui vous êtes, en une phrase : ce qui rassure un client avant de vous contacter.', false), sec('dirigeant'), sec('valeurs'), sec('chiffres-cles'), sec('bandeau-cta')),
-      page('faq', 'Questions fréquentes', tete('Questions fréquentes', 'Les réponses aux questions que l’on nous pose le plus souvent.', false), sec('faq'), sec('bandeau-cta')),
-      page('contact', 'Contact', tete('Prendre rendez-vous', 'Écrivez-nous ou appelez-nous : nous répondons sous 24 heures ouvrées.', false), sec('formulaire-contact'), sec('coordonnees-carte')),
+      accueil(['ouverture-deux-portes', 'ouverture-demande', 'hero-banniere'], confiance.urgence, sec('tarifs-liste'), sec('valeurs'), sec('etapes'), sec('avis-note'), sec('zone-liste'), sec('trois-cartes-photos'), sec('faq'), sec('bandeau-cta')),
+      page('depannage', 'Dépannage', tete('Dépannage', 'Les pannes que nous réglons le plus souvent, avec le prix annoncé avant de commencer.'), detail, sec('tarifs-liste'), sec('etapes'), sec('bandeau-cta')),
+      page('tarifs', 'Tarifs', tete('Nos tarifs', 'Les prix de nos interventions courantes, annoncés avant de commencer, et ce qu’ils comprennent.'), sec('tarifs-tableau'), sec('prix-compris'), sec('bandeau-cta')),
+      page('zone-intervention', 'Zone d’intervention', tete('Zone d’intervention', 'Les communes où nous intervenons, et le délai habituel pour chacune.'), sec('zone-plan'), sec('bandeau-cta')),
+      page('a-propos', 'Qui sommes-nous', teteP('Qui sommes-nous', 'Qui vient chez vous, depuis quand, et nos engagements.', false), sec('dirigeant'), sec('equipe-photo'), sec('documents-garanties'), sec('bandeau-cta')),
+      page('contact', 'Contact', tete('Être rappelé', 'Laissez votre numéro : nous vous rappelons. Pour une urgence, appelez directement.', false), sec('formulaire'), sec('coordonnees-carte')),
+      merci,
+    ],
+  },
+  projet: {
+    titre: 'Projet sur devis',
+    pour: 'Métallier, menuisier, paysagiste, cuisiniste, maçon',
+    question: 'Est-ce qu’ils savent faire mon projet, et à quel prix ?',
+    cta: 'Demander un devis', page_cta: 'devis', page_personne: 'a-propos', page_faq: '', blog: false, mobile: 'bouton',
+    liens: { services: 'savoir-faire', realisations: 'realisations', 'a-propos': 'a-propos', blog: 'realisations', faq: 'devis' },
+    pages: [
+      accueil(['accueil-photo', 'ouverture-mosaique', 'ouverture-carte', 'ouverture-avant-apres', 'ouverture-decoupe', 'hero-banniere'], sec('bande-confiance'), sec('trois-cartes-photos'), sec('realisations'), sec('qualifications'), sec('etapes'), sec('temoignages'), sec('zone-liste'), sec('bandeau-cta')),
+      page('savoir-faire', 'Savoir-faire', tete('Notre savoir-faire', 'Ce que vous fabriquez ou réalisez, et pour qui : particuliers, professionnels, collectivités.'), detail, sec('service-alterne'), sec('etapes'), sec('logos'), sec('bandeau-cta')),
+      page('realisations', 'Réalisations', tete('Nos réalisations', 'Quelques chantiers récents, avec la demande du client et la solution apportée.'), sec('realisations-galerie'), sec('realisation-racontee'), sec('bandeau-cta')),
+      page('zone-intervention', 'Zone d’intervention', tete('Zone d’intervention', 'Les villes et le secteur où nous intervenons, et nos délais de déplacement.'), sec('zone-plan'), sec('bandeau-cta')),
+      page('a-propos', 'L’entreprise', teteP('L’entreprise', 'Votre histoire en une phrase : depuis quand, combien vous êtes, ce qui vous distingue.', false), sec('dirigeant'), sec('equipe-photo'), sec('documents-garanties'), sec('bandeau-cta')),
+      page('devis', 'Devis', tete('Demander un devis', 'Décrivez votre projet : nous revenons vers vous sous 48 heures.', false), sec('preparez-demande'), sec('formulaire-etapes'), sec('coordonnees-carte')),
+      merci,
+    ],
+  },
+  reservation: {
+    titre: 'Réservation d’une prestation',
+    pour: 'Photographe, coach, esthéticienne, moniteur, guide',
+    question: 'Est-ce que ça me plaît, combien, et quand ?',
+    cta: 'Réserver', page_cta: 'reserver', page_personne: 'a-propos', page_faq: 'faq', blog: true, mobile: 'bouton',
+    liens: { services: 'prestations', realisations: 'portfolio', 'a-propos': 'a-propos', blog: 'blog', tarifs: 'tarifs' },
+    pages: [
+      accueil(['choix-prestation', 'ouverture-eventail', 'hero-banniere', 'accueil-photo'], confiance.reservation, sec('galerie'), sec('avis-note'), sec('dirigeant'), sec('lieux'), sec('etapes-images'), sec('tarifs-cartes'), sec('faq'), sec('bandeau-cta')),
+      page('prestations', 'Prestations', tete('Nos prestations', 'Une phrase qui résume l’ensemble de votre offre et à qui elle s’adresse.'), detail, sec('service-alterne'), sec('ce-que-vous-recevez'), sec('bandeau-cta')),
+      page('portfolio', 'Portfolio', tete('Portfolio', 'Le travail en images : choisissez une photo pour l’agrandir.'), sec('galerie-agrandir'), sec('bandeau-cta')),
+      page('tarifs', 'Tarifs', tete('Tarifs', 'Des prix clairs avant de réserver : choisissez la formule qui vous convient.'), sec('tarifs-cartes'), sec('prix-compris'), sec('carte-cadeau'), sec('bandeau-cta')),
+      page('a-propos', 'À propos', teteP('À propos', 'Qui vous êtes, en une phrase : ce qui rassure avant de réserver.', false), sec('dirigeant'), sec('valeurs'), sec('bandeau-cta')),
+      page('faq', 'Questions fréquentes', tete('Questions fréquentes', 'Les réponses aux questions que l’on nous pose avant de réserver.', false), sec('faq-recherche'), sec('bandeau-cta')),
+      page('reserver', 'Réserver', tete('Réserver', 'Choisissez votre prestation et une date : nous vous confirmons le créneau rapidement.', false), sec('formulaire-reservation'), sec('coordonnees-carte')),
+      merci,
       { slug: 'blog', titre: 'Blog', markup: '' },
     ],
   },
-  artisan: {
-    titre: 'Artisan et entreprise locale',
-    pour: 'Bâtiment, métallerie, paysagistes, garages',
-    cta: 'Demander un devis', page_cta: 'devis', page_personne: 'a-propos', page_faq: '', blog: false,
-    liens: { services: 'savoir-faire', realisations: 'realisations', 'a-propos': 'a-propos', blog: 'realisations' },
-    pages: [
-      page('accueil', 'Accueil', sec('accueil-photo'), sec('bande-confiance'), sec('trois-cartes'), sec('realisations'), sec('tuiles-chiffres'), sec('temoignages'), sec('zone'), sec('bandeau-cta')),
-      page('savoir-faire', 'Savoir-faire', tete('Notre savoir-faire', 'Ce que vous fabriquez ou réalisez, et pour qui : particuliers, professionnels, collectivités.'), detail, sec('service-alterne'), sec('etapes'), sec('logos'), sec('bandeau-cta')),
-      page('realisations', 'Réalisations', tete('Nos réalisations', 'Quelques chantiers récents, avec la demande du client et la solution apportée.'), sec('realisations-toutes'), sec('avant-apres'), sec('bandeau-cta')),
-      page('zone-intervention', 'Zone d’intervention', tete('Zone d’intervention', 'Les villes et le secteur où nous intervenons, et nos délais de déplacement.'), sec('zone-carte'), sec('bandeau-cta')),
-      page('a-propos', 'À propos', teteP('L’entreprise', 'Votre histoire en une phrase : depuis quand, combien vous êtes, ce qui vous distingue.', false), sec('dirigeant'), sec('equipe'), sec('valeurs'), sec('bandeau-cta')),
-      page('devis', 'Devis', tete('Demander un devis', 'Décrivez votre projet en quelques lignes : nous revenons vers vous sous 48 heures avec une première estimation.', false), sec('formulaire'), sec('coordonnees-carte')),
-    ],
-  },
-  liberal: {
-    titre: 'Profession libérale',
-    pour: 'Avocats, experts-comptables, kinés, ostéopathes',
-    cta: 'Prendre rendez-vous', page_cta: 'rendez-vous', page_personne: 'le-cabinet', page_faq: 'faq', blog: false,
-    liens: { services: 'domaines-intervention', realisations: 'domaines-intervention', 'a-propos': 'le-cabinet', blog: 'le-cabinet' },
+  conseil: {
+    titre: 'Conseil et profession libérale',
+    pour: 'Avocat, expert-comptable, ostéopathe, architecte, notaire',
+    question: 'Est-ce le bon professionnel pour ma situation, et combien ?',
+    cta: 'Prendre rendez-vous', page_cta: 'rendez-vous', page_personne: 'le-cabinet', page_faq: 'faq', blog: false, mobile: 'bouton',
+    liens: { services: 'domaines-intervention', realisations: 'domaines-intervention', 'a-propos': 'le-cabinet', blog: 'le-cabinet', tarifs: 'honoraires' },
     // Pas de témoignages ni de note Google : règles de communication des professions réglementées.
     pages: [
-      page('accueil', 'Accueil', sec('hero-image'), sec('trois-cartes'), sec('dirigeant'), sec('etapes'), sec('faq'), sec('contact')),
+      accueil(['hero-image', 'accueil-photo', 'hero-banniere'], sec('faits-icones'), sec('trois-cartes'), sec('equipe'), sec('etapes'), sec('etapes-prix'), sec('faq'), sec('coordonnees-carte'), sec('bandeau-cta')),
       page('domaines-intervention', 'Domaines d’intervention', tete('Domaines d’intervention', 'Les situations dans lesquelles vous accompagnez vos clients ou patients, décrites simplement.'), detail, sec('service-alterne'), sec('bandeau-cta')),
-      page('honoraires', 'Honoraires', tete('Honoraires', 'Des honoraires transparents, communiqués avant tout engagement.'), sec('tarifs-tableau'), sec('bandeau-cta')),
+      page('honoraires', 'Honoraires', tete('Honoraires', 'Des honoraires transparents, communiqués avant tout engagement.'), sec('tarifs-tableau'), sec('prix-compris'), sec('bandeau-cta')),
       page('le-cabinet', 'Le cabinet', teteP('Le cabinet', 'Le cabinet, son équipe et sa façon de travailler.', false), sec('dirigeant'), sec('equipe'), sec('valeurs'), sec('contact')),
-      page('faq', 'Questions fréquentes', tete('Questions fréquentes', 'Les réponses aux questions que l’on nous pose le plus souvent avant un premier rendez-vous.', false), sec('faq'), sec('bandeau-cta')),
+      page('faq', 'Questions fréquentes', tete('Questions fréquentes', 'Les réponses aux questions que l’on nous pose avant un premier rendez-vous.', false), sec('faq-recherche'), sec('bandeau-cta')),
       page('rendez-vous', 'Rendez-vous', tete('Prendre rendez-vous', 'En ligne, par téléphone ou par e-mail : choisissez ce qui vous convient.', false), sec('formulaire-contact'), sec('coordonnees-carte')),
+      merci,
+    ],
+  },
+  commerce: {
+    titre: 'Commerce et lieu à visiter',
+    pour: 'Restaurant, boulangerie, boutique, bar, fleuriste',
+    question: 'Est-ce ouvert, qu’est-ce qu’on y trouve, et comment venir ?',
+    cta: 'Réserver', page_cta: 'reserver', page_personne: 'le-lieu', page_faq: '', blog: false, mobile: 'barre',
+    liens: { services: 'carte', realisations: 'le-lieu', 'a-propos': 'le-lieu', blog: 'le-lieu', tarifs: 'carte', contact: 'venir', faq: 'venir' },
+    pages: [
+      accueil(['hero-banniere', 'ouverture-eventail', 'accueil-photo'], confiance.commerce, sec('tarifs-liste'), sec('dirigeant'), sec('galerie'), sec('avis-note'), sec('coordonnees-carte'), sec('bandeau-cta')),
+      page('carte', 'La carte', tete('La carte', 'Ce que l’on trouve chez nous, avec les prix. Produits de saison selon les arrivages.'), sec('tarifs-liste'), sec('tarifs-tableau'), sec('bandeau-cta')),
+      page('le-lieu', 'Le lieu', teteP('Le lieu', 'L’histoire du lieu et des personnes qui le font vivre.', false), sec('dirigeant'), sec('galerie-agrandir'), sec('valeurs'), sec('bandeau-cta')),
+      page('venir', 'Venir', tete('Venir', 'L’adresse, les horaires, le stationnement et l’accès.', false), sec('coordonnees-carte'), sec('horaires')),
+      page('reserver', 'Réserver', tete('Réserver', 'Indiquez le jour, l’heure et le nombre de personnes : nous vous confirmons rapidement.', false), sec('formulaire-reservation'), sec('coordonnees-carte')),
+      merci,
     ],
   },
 };
+// Sites installés avant les parcours : leur ancien kit garde ses liens.
+const ANCIENS = { prestataire: 'reservation', artisan: 'projet', liberal: 'conseil' };
 
 /* ----- Modèles de page : catalogue du kit sur mesure et modèles proposés à la création d'une page ----- */
 
@@ -157,5 +220,9 @@ const MODELES = {
   contact: { titre: 'Page contact', desc: 'Formulaire de contact, coordonnées et horaires.', markup: serialize(rythme([tete(T, 'Écrivez-nous ou appelez-nous : nous répondons rapidement.', false), sec('formulaire-contact'), sec('coordonnees-carte')].flat())) },
 };
 
-require('fs').writeFileSync(require('path').join(__dirname, '..', '..', 'inc', 'kits.json'), JSON.stringify({ kits: KITS, legales, modeles: MODELES }, null, 1));
-console.log(Object.keys(KITS).map((k) => k + ':' + KITS[k].pages.length).join(' '), '+', legales.length, 'légales');
+// Deux fichiers : kits.json (modèles et pages légales, lu dans l'éditeur) reste léger ;
+// parcours.json (pages complètes des parcours) n'est lu qu'à l'écran Démarrage.
+const liens = Object.fromEntries(Object.entries(KITS).map(([k, v]) => [k, v.liens]));
+require('fs').writeFileSync(require('path').join(__dirname, '..', '..', 'inc', 'kits.json'), JSON.stringify({ liens, anciens: ANCIENS, legales, modeles: MODELES }));
+require('fs').writeFileSync(require('path').join(__dirname, '..', '..', 'inc', 'parcours.json'), JSON.stringify({ kits: KITS, ouvertures: OUVERTURES }));
+console.log(Object.keys(KITS).map((k) => k + ':' + KITS[k].pages.length).join(' '), '+', Object.keys(OUVERTURES).length, 'ouvertures +', legales.length, 'légales');

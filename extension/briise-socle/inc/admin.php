@@ -80,6 +80,7 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
 		.br-admin h3 { margin-top: 2em; }
 		.br-kit strong { font-size: 15px; }
 		.br-kit-pages { color: #1d2327; }
+		.br-kit-question { font-style: italic; color: #50575e; }
 		.br-kit-cta { color: #50575e; font-style: italic; }
 	' );
 } );

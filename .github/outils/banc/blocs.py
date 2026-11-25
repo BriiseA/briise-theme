@@ -1,4 +1,4 @@
-"""Prépare les fichiers que validate.js contrôle : sections, pages des kits, pages de l’Atelier Ferlune."""
+"""Prépare les fichiers que validate.js contrôle : sections, pages des parcours, pages de l’Atelier Ferlune."""
 import json
 import pathlib
 import sys
@@ -10,10 +10,17 @@ sections = json.load(open(build / 'br_sections.json'))
 json.dump({'sections': {k: v['markup'] for k, v in sections.items()}, 'home': ''}, open(build / 'banc_sections.json', 'w'))
 
 kits = json.load(open(depot / 'inc' / 'kits.json'))
+parcours = json.load(open(depot / 'inc' / 'parcours.json'))
 pages = {}
-for nom, kit in kits['kits'].items():
+for nom, kit in parcours['kits'].items():
     for p in kit['pages']:
-        pages[nom + '/' + p['slug']] = p['markup']
+        if 'ouvertures' in p:
+            # L'accueil : chaque ouverture proposée, suivie de la suite calculée pour son fond.
+            for o in p['ouvertures']:
+                ouv = parcours['ouvertures'][o]
+                pages[nom + '/accueil-' + o] = ouv['markup'] + '\n\n' + p['reste'][ouv['fond']]
+        else:
+            pages[nom + '/' + p['slug']] = p['markup']
 for nom, m in kits['modeles'].items():
     pages['modele/' + nom] = m['markup']
 for p in kits.get('legales', []):
@@ -22,4 +29,4 @@ for p in kits.get('legales', []):
 json.dump({'sections': pages, 'home': ''}, open(build / 'banc_kits.json', 'w'))
 
 (build / 'banc_ferlune.json').write_text((build / 'ferlune_blocs.json').read_text())
-print(f"  {len(sections)} sections, {len(pages)} pages de kits")
+print(f"  {len(sections)} sections, {len(pages)} pages de parcours")
