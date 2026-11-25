@@ -18,6 +18,17 @@ if ( ! function_exists( 'briise_pied_bas' ) ) {
 		}
 		return $h . '</ul>';
 	}
+	/**
+	 * Logo pour fond foncé (Mon entreprise > Entreprise), le pied de page étant sombre.
+	 * Vide sans lui : le pied garde alors le nom en texte. Le nom reste le texte de l'image.
+	 */
+	function briise_pied_logo( $e, $classe = '' ) {
+		$id = function_exists( 'briise_reglage' ) ? (int) ( briise_reglage( 'briise_entreprise' )['logo_clair'] ?? 0 ) : 0;
+		if ( ! $id || ! wp_attachment_is_image( $id ) ) {
+			return '';
+		}
+		return wp_get_attachment_image( $id, 'medium', false, array( 'alt' => $e['name'], 'loading' => 'lazy', 'class' => trim( 'br-ft-logo ' . $classe ) ) );
+	}
 	function briise_pied_cta( $e, $sur_cta, $classe = '' ) {
 		if ( $sur_cta ) {
 			return '';

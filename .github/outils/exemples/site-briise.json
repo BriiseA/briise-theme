@@ -113,6 +113,8 @@
   "deco": "#c9bcff",
   "sombre": "#24124a"
  },
+ "logo": "briise-logo-sombre",
+ "logo_clair": "briise-logo-clair",
  "polices": {
   "titres": "Sora",
   "texte": "Figtree",
