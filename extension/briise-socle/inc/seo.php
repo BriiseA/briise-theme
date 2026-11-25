@@ -51,6 +51,7 @@ function briise_est_atterrissage( $post ) {
 
 function briise_est_noindex( $post ) {
 	return $post && ( get_post_meta( $post->ID, '_briise_noindex', true ) || briise_est_page_legale( $post ) || briise_est_atterrissage( $post )
+		|| (int) $post->ID === (int) get_option( 'briise_page_merci' )
 		|| ( function_exists( 'briise_realisation_mince' ) && briise_realisation_mince( $post ) ) );
 }
 

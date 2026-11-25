@@ -106,6 +106,15 @@
     "trois-cartes-photos": [
       "orientation",
       "tarifs-liste"
+    ],
+    "formulaire": [
+      "formulaire-etapes"
+    ],
+    "qualifications": [
+      "documents-garanties"
+    ],
+    "tarifs-liste": [
+      "estimateur"
     ]
   }
 }

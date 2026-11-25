@@ -1,7 +1,7 @@
 /**
  * Briise : comportements des sections 1.16.
- * Bandes qui défilent, FAQ avec recherche, orientation « Je cherche … pour … ».
- * Sans ce script, chaque section reste lisible : bande fixe, FAQ complète, liste de liens.
+ * Bandes qui défilent, FAQ avec recherche, orientation « Je cherche … pour … », estimateur.
+ * Sans ce script, chaque section reste lisible : bande fixe, FAQ complète, liste de liens, barème.
  */
 ( function () {
 	'use strict';
@@ -219,6 +219,110 @@
 		section.classList.add( 'br-oriente--actif' );
 	}
 
+
+	/* ----- Estimateur : le tableau du barème devient trois questions --------
+	   Ligne : question | choix | montant bas | montant haut (ajoutés au total). */
+	function montant( t ) {
+		var n = parseInt( String( t || '' ).replace( /[^\d-]/g, '' ), 10 );
+		return isNaN( n ) ? 0 : n;
+	}
+	function euros( n ) {
+		// Espace insécable ordinaire : certaines polices n'ont pas l'espace fine que renvoie toLocaleString.
+		return ( Math.round( n / 100 ) * 100 ).toLocaleString( 'fr-FR' ).replace( /[\u202f\u00a0\s]/g, '\u00a0' ) + '\u00a0€';
+	}
+	function estimateur( section ) {
+		var table = section.querySelector( '.br-estim-bareme table' );
+		var sortie = section.querySelector( '.br-estim-montant' );
+		if ( ! table || ! sortie || section.querySelector( '.br-estim-questions' ) ) {
+			return;
+		}
+		var questions = [];
+		var index = {};
+		Array.prototype.slice.call( table.tBodies[ 0 ] ? table.tBodies[ 0 ].rows : [] ).forEach( function ( tr ) {
+			var c = tr.cells;
+			if ( c.length < 3 ) {
+				return;
+			}
+			var q = c[ 0 ].textContent.trim();
+			var choix = { nom: c[ 1 ].textContent.trim(), bas: montant( c[ 2 ].textContent ), haut: montant( ( c[ 3 ] || c[ 2 ] ).textContent ) };
+			if ( ! q || ! choix.nom ) {
+				return;
+			}
+			if ( ! ( q in index ) ) {
+				index[ q ] = questions.length;
+				questions.push( { nom: q, choix: [] } );
+			}
+			questions[ index[ q ] ].choix.push( choix );
+		} );
+		if ( ! questions.length ) {
+			return;
+		}
+		var etat = questions.map( function ( q ) { return q.choix.length > 1 ? 0 : -1; } );
+		var boite = document.createElement( 'div' );
+		boite.className = 'br-estim-questions';
+		var n = Math.random().toString( 36 ).slice( 2, 7 );
+		questions.forEach( function ( q, i ) {
+			if ( q.choix.length === 1 ) {
+				var lab = document.createElement( 'label' );
+				lab.className = 'br-estim-case';
+				var cb = document.createElement( 'input' );
+				cb.type = 'checkbox';
+				cb.addEventListener( 'change', function () { etat[ i ] = cb.checked ? 0 : -1; calculer(); } );
+				lab.appendChild( cb );
+				lab.appendChild( document.createTextNode( ' ' + q.nom ) );
+				boite.appendChild( lab );
+				return;
+			}
+			var groupe = document.createElement( 'fieldset' );
+			groupe.className = 'br-estim-q';
+			var leg = document.createElement( 'legend' );
+			leg.textContent = q.nom;
+			groupe.appendChild( leg );
+			var ligne = document.createElement( 'div' );
+			ligne.className = 'br-estim-choix';
+			q.choix.forEach( function ( c, j ) {
+				var l = document.createElement( 'label' );
+				var r = document.createElement( 'input' );
+				r.type = 'radio';
+				r.name = 'br-estim-' + n + '-' + i;
+				r.checked = j === 0;
+				r.addEventListener( 'change', function () { etat[ i ] = j; calculer(); } );
+				var span = document.createElement( 'span' );
+				span.textContent = c.nom;
+				l.appendChild( r );
+				l.appendChild( span );
+				ligne.appendChild( l );
+			} );
+			groupe.appendChild( ligne );
+			boite.appendChild( groupe );
+		} );
+		var bareme = section.querySelector( '.br-estim-bareme' );
+		bareme.parentNode.insertBefore( boite, bareme );
+		sortie.setAttribute( 'aria-live', 'polite' );
+		var detail = document.createElement( 'p' );
+		detail.className = 'br-estim-detail';
+		sortie.parentNode.insertBefore( detail, sortie.nextSibling );
+
+		function calculer() {
+			var bas = 0;
+			var haut = 0;
+			var mots = [];
+			questions.forEach( function ( q, i ) {
+				if ( etat[ i ] < 0 ) {
+					return;
+				}
+				var c = q.choix[ etat[ i ] ];
+				bas += c.bas;
+				haut += c.haut;
+				mots.push( q.choix.length === 1 ? q.nom.charAt( 0 ).toLowerCase() + q.nom.slice( 1 ) : c.nom.toLowerCase() );
+			} );
+			sortie.textContent = bas === haut ? euros( bas ) : euros( bas ) + ' à ' + euros( haut );
+			detail.textContent = mots.join( ', ' ).replace( /^./, function ( x ) { return x.toUpperCase(); } );
+		}
+		calculer();
+		section.classList.add( 'br-estim--actif' );
+	}
+
 	function demarrer() {
 		document.querySelectorAll( '.br-defile' ).forEach( function ( b ) {
 			// Les logos se mesurent une fois chargés.
@@ -238,6 +342,7 @@
 		} );
 		document.querySelectorAll( '.br-faq-cherche' ).forEach( faq );
 		document.querySelectorAll( '.br-oriente' ).forEach( orientation );
+		document.querySelectorAll( '.br-estim' ).forEach( estimateur );
 	}
 	if ( document.readyState === 'loading' ) {
 		document.addEventListener( 'DOMContentLoaded', demarrer );

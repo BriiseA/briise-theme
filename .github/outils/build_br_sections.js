@@ -902,6 +902,103 @@ add('zone-plan', 'contact', 'Zone d’intervention sur un plan', 'Les communes s
     Short('[briise_zone_plan]'),
   ], { backgroundColor: 'surface' }));
 
+
+/* ----- 1.17 : conversion (canevas « Briise, conversion ») ----- */
+
+// Estimateur : le tableau EST le barème. Chaque ligne : la question, un choix, le montant bas et haut
+// qu'il ajoute. Une question à un seul choix devient une case à cocher. Sans script : le tableau reste lisible.
+add('estimateur', 'offre', 'Estimateur de budget', 'Trois questions, une fourchette de prix honnête, puis la demande de devis. Le barème est le tableau : une ligne par choix (question, choix, montant bas, montant haut, ajoutés au total). Une question avec un seul choix devient une case à cocher. Les montants viennent du client, constatés sur ses chantiers.',
+  Section('br-estim', [Cols([
+    Col([
+      Label('Estimer votre budget'), H('Combien coûte votre projet ?', 2),
+      Lead('Trois questions, une fourchette honnête. Le prix exact est donné après la visite, gratuite.'),
+      Table(['Question', 'Choix', 'De (€)', 'À (€)'], [
+        ['Forme', 'Droit', '3 200', '4 500'],
+        ['Forme', 'Quart tournant', '4 200', '6 000'],
+        ['Forme', 'Hélicoïdal', '5 200', '7 800'],
+        ['Marches', 'Acier', '0', '0'],
+        ['Marches', 'Chêne', '600', '900'],
+        ['Avec garde-corps à l’étage', 'Oui', '900', '900'],
+      ], 'br-table br-estim-bareme'),
+    ], { width: '56%' }),
+    Col([Box('br-estim-resultat', [
+      P('Budget habituel, fourni et posé', 'br-estim-label'),
+      P('Choisissez vos réponses : la fourchette s’affiche ici.', 'br-estim-montant'),
+      P('Fourchette indicative, constatée sur nos chantiers de l’an passé. Le prix exact est écrit sur le devis.', 'br-estim-note'),
+      MainBtns(),
+    ])], { width: '44%' }),
+  ], 'br-split')], { backgroundColor: 'surface' }));
+
+add('formulaire-etapes', 'contact', 'Formulaire de devis en trois étapes', 'Le formulaire de devis découpé en trois étapes courtes : le projet, les détails, les coordonnées. Une demande commencée par le projet va plus souvent au bout. À côté : ce qui se passe ensuite, et le téléphone. Sans script, le formulaire s’affiche en entier.',
+  Section('br-form-etapes-section', [Cols([
+    Col([
+      Label('Demande de devis'), H('Votre projet en trois étapes', 2),
+      Lead('Une minute suffit. Nous vous rappelons pour préciser, puis nous venons mesurer.'),
+      Short('[briise_formulaire type="devis" etapes="1"]'),
+    ], { width: '60%' }),
+    Col([Box('br-card br-suite', [
+      H('Ce qui se passe ensuite', 3),
+      cb('core/list', { ordered: true, className: 'br-suite-liste' }, [
+        'Nous vous appelons sous [48 h ouvrées].',
+        'Visite gratuite pour prendre les mesures.',
+        'Devis détaillé sous [5 jours].',
+      ].map((t) => cb('core/list-item', { content: fr(t) }))),
+      Short('[briise_appel intro="Plus simple au téléphone ?"]'),
+    ])], { width: '40%' }),
+  ], 'br-split')]));
+
+const prepa = (ic, t, d) => Box('br-prepa-item br-ic-' + ic, [H(t, 3), Muted(d)]);
+add('preparez-demande', 'contact', 'Préparez votre demande', 'Juste avant le formulaire ou sur la page de devis : les trois choses à avoir sous la main pour une réponse rapide et juste. Icônes au choix par la classe du bloc (br-ic-appareil, metre, calendrier, maison, euro, horloge…).',
+  Section('br-prepa', [Cols([
+    Col([
+      Label('Avant de demander'), H('Préparez votre demande en 2 minutes', 2),
+      Lead('Avec ces trois éléments, nous vous répondons plus vite et plus juste.'),
+      Btns(Btn('J’ai tout, je fais ma demande', CTA)),
+    ], { width: '40%' }),
+    Col([Box('br-prepa-liste', [
+      prepa('appareil', 'Deux ou trois photos', 'L’endroit vu de loin, puis de près. Le téléphone suffit.'),
+      prepa('metre', 'Une mesure', 'La hauteur sous plafond, une longueur, une surface. Une estimation suffit.'),
+      prepa('calendrier', 'La commune et vos dates', 'Où se trouve le chantier, et pour quand vous aimeriez que ce soit fait.'),
+    ])], { width: '60%' }),
+  ], 'br-split')]));
+
+const doc = (t, d, nom) => Box('br-doc', [P('PDF', 'br-doc-type'), Box('br-doc-texte', [H(t, 3), Muted(d)]),
+  cb('core/file', { href: '#', fileName: fr(nom), showDownloadButton: false, className: 'br-doc-fichier' })]);
+add('documents-garanties', 'confiance', 'Garanties et documents à télécharger', 'Vos attestations en PDF : assurance décennale, qualification, Kbis. Remplacez chaque fichier (bouton « Remplacer » du bloc) et mettez la date à jour chaque année. Une attestation périmée fait plus de tort que pas d’attestation.',
+  Section('br-docs', [
+    Head([Label('Garanties'), H('Nos garanties, sur pièces', 2), Lead('Pas besoin de nous croire sur parole : téléchargez nos attestations. Elles sont mises à jour chaque année.')]),
+    Box('br-docs-liste', [
+      doc('Attestation d’assurance décennale', '[Assureur], valable jusqu’au [date]', 'Télécharger l’attestation décennale'),
+      doc('Certificat de qualification', '[Qualibat, RGE…], numéro [à compléter]', 'Télécharger le certificat'),
+      doc('Extrait Kbis de moins de 3 mois', '[Nom de l’entreprise], SIRET [à compléter]', 'Télécharger le Kbis'),
+    ]),
+  ]));
+
+const suite = (quand, quoi) => Box('br-merci-etape', [P(quand, 'br-merci-quand'), P(quoi)]);
+add('merci-suite', 'contact', 'Page merci : la suite', 'Pour la page qui s’affiche après l’envoi d’un formulaire (Mon entreprise > Fonctions > Formulaires) : la confirmation, les étapes datées, le téléphone, et de quoi patienter. La page est retirée de Google automatiquement.',
+  Section('br-merci', [
+    Box('br-merci-tete', [
+      H('Merci, votre demande est bien partie', 1, 'br-merci-titre', { fontSize: 'xx-large' }),
+      Lead('Un e-mail de confirmation vient de vous être envoyé. Voici la suite.'),
+    ]),
+    Box('br-merci-etapes', [
+      suite('Sous 48 h ouvrées', 'Nous vous appelons pour comprendre le projet.'),
+      suite('Sous 1 semaine', 'Visite gratuite chez vous pour les mesures.'),
+      suite('5 jours après', 'Vous recevez le devis détaillé.'),
+    ]),
+    Cols([
+      Col([Box('br-card br-merci-appel', [H('Une question d’ici là ?', 2, 'br-merci-sous'), Short('[briise_appel intro="Appelez-nous, c’est la même personne qui suit votre demande."]')])], { width: '45%' }),
+      Col([Box('br-merci-attente', [
+        H('En attendant', 2, 'br-merci-sous'),
+        cb('core/list', { className: 'br-merci-liens' }, [
+          `<a href="${URL('realisations')}">Voir nos dernières réalisations</a>`,
+          `<a href="${URL('service-1')}">Tout savoir sur {{SERVICE:1}}</a>`,
+          `<a href="${URL('faq')}">Les questions qu’on nous pose avant la visite</a>`,
+        ].map((t) => cb('core/list-item', { content: t }))),
+      ])], { width: '55%' }),
+    ], 'br-merci-bas'),
+  ]));
+
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').mkdirSync(require('path').join(__dirname, 'build'), { recursive: true });
 require('fs').writeFileSync(require('path').join(__dirname, 'build', 'br_sections.json'), JSON.stringify(out, null, 1));

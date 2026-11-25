@@ -323,3 +323,107 @@
 @media (max-width:781px){.br-zplan{grid-template-columns:1fr}.br-zplan-carte{order:-1}}
 @media (prefers-reduced-motion:reduce){.br-zplan-point,.br-zplan-point span{transition:none}}
 @media (max-width:781px){.br-faq-cherche .br-appel{align-items:stretch}.br-faq-cherche .br-appel-bouton{max-width:100%;justify-content:center}}
+
+/* ==========================================================================
+   1.17 : conversion
+   ========================================================================== */
+.br-ic-metre{--br-ic:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2015.5%2015.5%203%2021%208.5%208.5%2021z%22%2F%3E%3Cpath%20d%3D%22M7%2012l2%202M10%209l1.5%201.5M13%206l2%202%22%2F%3E%3C%2Fsvg%3E")}
+.br-ic-calendrier{--br-ic:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%223.5%22%20y%3D%225%22%20width%3D%2217%22%20height%3D%2215%22%20rx%3D%222%22%2F%3E%3Cpath%20d%3D%22M3.5%2010h17M8%203v4M16%203v4%22%2F%3E%3C%2Fsvg%3E")}
+
+/* Estimateur de budget */
+.br-estim-questions{display:flex;flex-direction:column;gap:1.4rem;margin-top:1.75rem}
+.br-estim-q{border:0;padding:0;margin:0;min-width:0}
+.br-estim-q legend{font-weight:600;margin-bottom:.6rem;padding:0}
+.br-estim-choix{display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:.5rem}
+.br-estim-choix label{position:relative;display:block;cursor:pointer}
+.br-estim-choix input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.br-estim-choix span{display:flex;align-items:center;justify-content:center;text-align:center;min-height:3.25rem;padding:.6rem .9rem;border-radius:var(--wp--custom--rayon--bouton);border:1.5px solid color-mix(in srgb,var(--wp--preset--color--texte) 22%,transparent);background:var(--wp--preset--color--fond);font-weight:500;transition:background .15s,color .15s,border-color .15s}
+.br-estim-choix label:hover span{border-color:var(--wp--preset--color--texte)}
+.br-estim-choix input:checked+span{background:var(--wp--preset--color--texte);border-color:var(--wp--preset--color--texte);color:var(--wp--preset--color--fond);font-weight:700}
+.br-estim-choix input:focus-visible+span{outline:3px solid var(--wp--preset--color--accent);outline-offset:2px}
+.br-estim-case{display:flex;align-items:center;gap:.7rem;font-weight:600;cursor:pointer;min-height:2.75rem}
+.br-estim-case input{width:1.4rem;height:1.4rem;accent-color:var(--wp--preset--color--texte);margin:0}
+.br-estim--actif .br-estim-bareme{display:none}
+.br-estim-resultat{position:sticky;top:6rem;padding:clamp(1.5rem,3vw,2.5rem);border-radius:var(--wp--custom--rayon--grand);background:var(--wp--preset--color--secondaire);color:var(--wp--preset--color--fond)}
+.br-estim-resultat>*{margin:0}
+.br-estim-label{font-size:.95rem;opacity:.85}
+.br-estim-montant{font-family:var(--wp--preset--font-family--titres);font-weight:700;font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.1;letter-spacing:-.02em;margin:.4rem 0 .5rem!important}
+.br-estim:not(.br-estim--actif) .br-estim-montant{font-size:1.1rem;font-weight:500;letter-spacing:0}
+.br-estim-detail{font-size:.95rem;opacity:.85;min-height:1.5em}
+.br-estim-note{font-size:.88rem;opacity:.85;margin:1.25rem 0!important;padding-top:1.25rem;border-top:1px solid color-mix(in srgb,currentColor 25%,transparent)}
+.br-estim-resultat .wp-block-button__link{background:var(--wp--preset--color--fond);color:var(--wp--preset--color--texte)}
+.br-estim-resultat .is-style-outline .wp-block-button__link{background:transparent;color:inherit;border-color:currentColor}
+@media (max-width:781px){.br-estim-resultat{position:static}}
+
+/* Formulaire en étapes */
+.br-etapes-tete{margin-bottom:1.25rem}
+.br-etapes-tete>p{margin:0}
+.br-etapes-compte{font-size:.85rem;font-weight:600;color:var(--wp--preset--color--texte-doux)}
+.br-etapes-barre{height:4px;border-radius:4px;background:color-mix(in srgb,var(--wp--preset--color--texte) 12%,transparent);margin:.6rem 0 1.1rem;overflow:hidden}
+.br-etapes-barre span{display:block;height:100%;width:33%;background:var(--wp--preset--color--accent);transition:width .35s ease}
+.br-etapes-titre{font-family:var(--wp--preset--font-family--titres);font-size:var(--wp--preset--font-size--x-large);font-weight:600;line-height:1.2}
+.br-etapes-titre:focus{outline:none}
+.br-etape[hidden],.br-form-etapes [hidden]{display:none!important}
+.br-etapes-cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:.6rem}
+.br-etapes-cases button{min-height:4rem;padding:.8rem 1rem;border-radius:var(--wp--custom--rayon--moyen);border:1.5px solid color-mix(in srgb,var(--wp--preset--color--texte) 22%,transparent);background:var(--wp--preset--color--fond);color:var(--wp--preset--color--texte);font:inherit;font-weight:600;cursor:pointer;text-align:center}
+.br-etapes-cases button:hover{border-color:var(--wp--preset--color--texte)}
+.br-etapes-cases button[aria-pressed=true]{background:var(--wp--preset--color--texte);border-color:var(--wp--preset--color--texte);color:var(--wp--preset--color--fond)}
+.br-etapes-cases button:focus-visible{outline:3px solid var(--wp--preset--color--accent);outline-offset:2px}
+.br-etapes-nav,.br-form-etapes--actif .ff_submit_btn_wrapper{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1.25rem}
+.br-etapes-nav .br-etapes-suiv{margin-left:auto}
+.br-etapes-prec{background:none;border:0;padding:.6rem 0;min-height:2.75rem;font:inherit;font-weight:600;color:var(--wp--preset--color--texte);text-decoration:underline;text-underline-offset:.25em;cursor:pointer}
+.br-form-etapes--actif .ff_submit_btn_wrapper .ff-btn-submit{margin-left:auto}
+.br-suite-liste{counter-reset:br-suite;list-style:none;padding:0;margin:1rem 0 1.5rem!important}
+.br-suite-liste li{counter-increment:br-suite;position:relative;padding:0 0 1rem 2.6rem;margin:0}
+.br-suite-liste li::before{content:counter(br-suite);position:absolute;left:0;top:-.1rem;width:1.8rem;height:1.8rem;border-radius:50%;display:grid;place-items:center;background:var(--wp--preset--color--accent);color:var(--wp--preset--color--fond);font-weight:700;font-size:.85rem}
+.br-suite .br-appel{display:flex;flex-direction:column;align-items:flex-start;gap:.6rem;padding-top:1.25rem;border-top:1px solid color-mix(in srgb,var(--wp--preset--color--texte) 14%,transparent)}
+.br-suite .br-appel-intro{color:var(--wp--preset--color--texte-doux)}
+@media (min-width:782px){.br-form-etapes-section .br-suite{position:sticky;top:6rem;height:auto!important}.br-form-etapes-section .wp-block-column:has(>.br-suite){align-self:flex-start}}
+
+/* Préparez votre demande */
+.br-prepa-liste{display:flex;flex-direction:column;gap:0;border-top:1px solid color-mix(in srgb,var(--wp--preset--color--texte) 14%,transparent)}
+.br-prepa-item{position:relative;display:grid;grid-template-columns:3.4rem 1fr;column-gap:1.25rem;padding:1.4rem 0;margin:0!important;border-bottom:1px solid color-mix(in srgb,var(--wp--preset--color--texte) 14%,transparent)}
+.br-prepa-item>*{grid-column:2;margin:0!important}
+.br-prepa-item h3{font-size:var(--wp--preset--font-size--large);margin-bottom:.3rem!important}
+.br-prepa-item::before{content:"";grid-column:1;grid-row:1/span 2;width:3.4rem;height:3.4rem;border-radius:50%;background:var(--wp--preset--color--surface)}
+.br-prepa-item::after{content:"";position:absolute;left:.85rem;top:calc(1.4rem + .85rem);width:1.7rem;height:1.7rem;background:var(--wp--preset--color--accent);-webkit-mask:var(--br-ic,var(--br-i-coche)) center/contain no-repeat;mask:var(--br-ic,var(--br-i-coche)) center/contain no-repeat}
+.has-surface-background-color .br-prepa-item::before{background:var(--wp--preset--color--fond)}
+
+/* Garanties et documents */
+.br-docs-liste{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.br-doc{position:relative;display:flex;flex-direction:column;gap:.5rem;padding:1.5rem;margin:0!important;border-radius:var(--wp--custom--rayon--moyen);background:var(--wp--preset--color--surface)}
+.has-surface-background-color .br-doc{background:var(--wp--preset--color--fond)}
+.br-doc>*{margin:0!important}
+.br-doc-type{align-self:flex-start;padding:.2rem .55rem;border-radius:var(--wp--custom--rayon--petit);background:var(--wp--preset--color--secondaire);color:var(--wp--preset--color--fond);font-size:.75rem;font-weight:700;letter-spacing:.04em}
+.br-doc-texte h3{font-size:1.15rem;margin:.5rem 0 .3rem}
+.br-doc-texte p{font-size:.92rem;margin:0}
+.br-doc-fichier{margin-top:auto!important;padding-top:.75rem}
+.br-doc-fichier a{display:inline-flex;align-items:center;gap:.5rem;font-weight:600;color:var(--wp--preset--color--texte);text-decoration:none;border-bottom:2px solid var(--wp--preset--color--accent);padding-bottom:.15rem}
+.br-doc-fichier a::before{content:"";width:1.1rem;height:1.1rem;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12%204v11M7%2010l5%205%205-5M5%2020h14%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12%204v11M7%2010l5%205%205-5M5%2020h14%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat}
+.br-doc-fichier a::after{content:"";position:absolute;inset:0}
+.br-doc:has(a:focus-visible){outline:3px solid var(--wp--preset--color--accent);outline-offset:3px}
+.br-doc-fichier a:focus-visible{outline:none}
+@media (max-width:781px){.br-docs-liste{grid-template-columns:1fr}}
+
+/* Page merci */
+.br-merci-tete>*{max-width:40rem}
+.br-merci-tete{position:relative;padding-top:5rem}
+.br-merci-tete::before{content:"";position:absolute;left:0;top:0;width:3.5rem;height:3.5rem;border-radius:50%;background:var(--wp--preset--color--accent)}
+.br-merci-tete::after{content:"";position:absolute;left:.85rem;top:.85rem;width:1.8rem;height:1.8rem;background:var(--wp--preset--color--fond);-webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m5%2012.5%204.5%204.5L19%207.5%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m5%2012.5%204.5%204.5L19%207.5%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat}
+.br-merci-tete>.br-merci-titre{margin-top:0}
+.br-merci-etapes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:clamp(2rem,5vw,3.5rem)!important;margin-bottom:clamp(2rem,5vw,3.5rem)!important;border-top:2px solid var(--wp--preset--color--texte)}
+.br-merci-etape{position:relative;padding:1.5rem 1.5rem 0 0;margin:0!important}
+.br-merci-etape>*{margin:0!important}
+.br-merci-etape::before{content:"";position:absolute;top:calc(-.5rem - 1px);left:0;width:1rem;height:1rem;border-radius:50%;background:var(--wp--preset--color--accent);border:3px solid var(--wp--preset--color--fond)}
+.br-merci-quand{font-family:var(--wp--preset--font-family--titres);font-weight:700;font-size:var(--wp--preset--font-size--large);margin-bottom:.35rem!important}
+.br-merci-sous{font-size:var(--wp--preset--font-size--x-large);margin:0 0 1rem!important}
+.br-merci-appel .br-appel{display:flex;flex-direction:column;align-items:flex-start;gap:.75rem}
+.br-merci-appel .br-appel-intro{color:var(--wp--preset--color--texte-doux)}
+.br-merci-liens{list-style:none;padding:0;margin:0}
+.br-merci-liens li{border-bottom:1px solid color-mix(in srgb,var(--wp--preset--color--texte) 14%,transparent);margin:0}
+.br-merci-liens a{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem 0;color:inherit;text-decoration:none;font-weight:600}
+.br-merci-liens a::after{content:"→";color:var(--wp--preset--color--accent);transition:transform .2s}
+.br-merci-liens a:hover::after{transform:translateX(4px)}
+@media (max-width:781px){.br-merci-etapes{grid-template-columns:1fr;border-top:0;border-left:2px solid var(--wp--preset--color--texte);margin-left:.5rem!important;max-width:calc(100% - .5rem)!important}.br-merci-etape{padding:0 0 1.5rem 1.5rem}.br-merci-etape::before{top:.2rem;left:calc(-.5rem - 1px)}}
+@media (prefers-reduced-motion:reduce){.br-etapes-barre span,.br-estim-choix span,.br-merci-liens a::after{transition:none}}
+@media (max-width:781px){.br-suite .br-appel,.br-merci-appel .br-appel{align-items:stretch}.br-suite .br-appel-bouton,.br-merci-appel .br-appel-bouton{max-width:100%;justify-content:center;white-space:normal}}

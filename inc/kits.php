@@ -409,8 +409,20 @@ function briise_plan_installer( $plan ) {
 	if ( function_exists( 'briise_formulaire_creer' ) && briise_fluentforms_actif() ) {
 		$tout = implode( ' ', array_column( $plan['pages'], 'markup' ) );
 		foreach ( array( 'devis', 'contact', 'reservation', 'rappel' ) as $type ) {
-			if ( false !== strpos( $tout, '[briise_formulaire type="' . $type . '"]' ) ) {
+			if ( false !== strpos( $tout, '[briise_formulaire type="' . $type . '"' ) ) {
 				briise_formulaire_creer( $type );
+			}
+		}
+	}
+	// Page merci : la page faite avec le modèle « Page de remerciement » reçoit les visiteurs après l'envoi.
+	if ( function_exists( 'briise_page_merci_regler' ) ) {
+		foreach ( $plan['pages'] as $p ) {
+			if ( ( $p['modele'] ?? '' ) === 'merci' || false !== strpos( (string) ( $p['markup'] ?? '' ), 'br-merci-tete' ) ) {
+				$merci = get_page_by_path( sanitize_title( $p['slug'] ?? '' ) );
+				if ( $merci ) {
+					briise_page_merci_regler( $merci->ID );
+				}
+				break;
 			}
 		}
 	}
@@ -544,6 +556,9 @@ function briise_plan_depuis_fichier( $json ) {
 		// Une page peut partir d'un modèle du thème au lieu d'un contenu complet.
 		if ( empty( $p['markup'] ) && ! empty( $p['modele'] ) && isset( $data['modeles'][ $p['modele'] ] ) ) {
 			$plan['pages'][ $i ]['markup'] = $data['modeles'][ $p['modele'] ]['markup'];
+		}
+		if ( ( $p['modele'] ?? '' ) === 'merci' && empty( $p['template'] ) ) {
+			$plan['pages'][ $i ]['template'] = 'page-sans-titre';
 		}
 		if ( ( $p['modele'] ?? '' ) === 'atterrissage' && empty( $p['template'] ) ) {
 			$plan['pages'][ $i ]['template'] = 'page-atterrissage';
@@ -760,7 +775,7 @@ add_action( 'save_post_page', function ( $post_id, $post ) {
 		update_post_meta( $post_id, '_wp_page_template', 'page-atterrissage' );
 	}
 	// Une page qui commence par un en-tête du thème (titre déjà dans l'en-tête) prend le gabarit sans titre.
-	elseif ( preg_match( '/^\s*<!-- wp:(group|cover) \{[^\n]*"className":"[^"]*\b(br-page-head|br-banniere|br-hero|br-tete)\b/', $post->post_content ) ) {
+	elseif ( preg_match( '/^\s*<!-- wp:(group|cover) \{[^\n]*"className":"[^"]*\b(br-page-head|br-banniere|br-hero|br-tete|br-merci)\b/', $post->post_content ) ) {
 		update_post_meta( $post_id, '_wp_page_template', 'page-sans-titre' );
 	}
 }, 20, 2 );

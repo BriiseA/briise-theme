@@ -311,6 +311,11 @@ function briise_formulaire_creer( $type = 'devis' ) {
 	$reglages = \FluentForm\App\Models\Form::getFormsDefaultSettings();
 	$reglages['confirmation']['messageToShow']        = '<p><strong>Merci, votre ' . briise_formulaire_mots( $type )['court'] . ' est bien envoyé' . briise_formulaire_mots( $type )['accord'] . '.</strong> Nous vous répondons rapidement' . ( 'reservation' === $type ? ' avec nos disponibilités' : '' ) . ( $tel ? ' ; pour une urgence, appelez le ' . esc_html( $tel ) : '' ) . '.</p>';
 	$reglages['confirmation']['samePageFormBehavior'] = 'hide_form';
+	$merci = (int) get_option( 'briise_page_merci' );
+	if ( $merci && 'publish' === get_post_status( $merci ) ) {
+		$reglages['confirmation']['redirectTo'] = 'customPage';
+		$reglages['confirmation']['customPage'] = $merci;
+	}
 	$reglages['layout']['labelPlacement']             = 'top';
 	$reglages['layout']['asteriskPlacement']          = 'asterisk-right';
 	$reglages['layout']['errorMessagePlacement']      = 'inline';
@@ -335,10 +340,12 @@ add_action( 'init', function () {
 } );
 
 function briise_formulaire_html( $atts = array() ) {
-	$atts = shortcode_atts( array( 'type' => 'devis' ), $atts, 'briise_formulaire' );
+	$atts = shortcode_atts( array( 'type' => 'devis', 'etapes' => '0' ), $atts, 'briise_formulaire' );
 	$id   = briise_formulaire_id( $atts['type'] );
 	if ( $id ) {
-		return '<div class="br-formulaire-ff">' . do_shortcode( '[fluentform id="' . $id . '"]' ) . '</div>';
+		// etapes="1" : le navigateur découpe le formulaire en trois étapes (projet, détails, coordonnées).
+		$etapes = '1' === (string) $atts['etapes'] ? ' br-form-etapes' : '';
+		return '<div class="br-formulaire-ff' . $etapes . '">' . do_shortcode( '[fluentform id="' . $id . '"]' ) . '</div>';
 	}
 	// Pas de formulaire : le visiteur peut toujours appeler ou écrire.
 	$rappel = current_user_can( 'manage_options' )
@@ -491,6 +498,7 @@ function briise_formulaires_encadre() {
 		briise_ligne( $nom, $champ, $aides[ $type ] );
 	}
 	echo '</table>';
+	echo briise_page_merci_choix(); // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans la fonction.
 	$smtp = defined( 'FLUENTMAIL' ) || class_exists( '\FluentMail\App\Services\Mailer\Manager' );
 	echo briise_extensions_bouton(); // phpcs:ignore WordPress.Security.EscapeOutput -- échappé dans la fonction.
 	echo '<div class="br-a-faire' . ( $smtp ? ' br-ok' : '' ) . '">' . ( $smtp
@@ -522,3 +530,68 @@ add_action( 'wp_enqueue_scripts', function () {
 		$scripts->add_data( $h, 'group', 1 );
 	}
 }, 1 );
+
+/* ----- Page merci : où va le visiteur après l'envoi ---------------------------------- */
+
+/**
+ * Règle la page affichée après l'envoi de chaque formulaire Briise (0 : message sur la même page).
+ * La page choisie sort de Google : elle n'a d'intérêt qu'après une demande.
+ */
+function briise_page_merci_regler( $page_id ) {
+	$page_id = (int) $page_id;
+	$ancien  = (int) get_option( 'briise_page_merci' );
+	if ( $ancien && $ancien !== $page_id && '1' === get_post_meta( $ancien, '_briise_noindex_merci', true ) ) {
+		delete_post_meta( $ancien, '_briise_noindex' );
+		delete_post_meta( $ancien, '_briise_noindex_merci' );
+	}
+	if ( $page_id && 'page' === get_post_type( $page_id ) ) {
+		update_option( 'briise_page_merci', $page_id );
+		if ( ! get_post_meta( $page_id, '_briise_noindex', true ) ) {
+			update_post_meta( $page_id, '_briise_noindex', '1' );
+			update_post_meta( $page_id, '_briise_noindex_merci', '1' );
+		}
+	} else {
+		$page_id = 0;
+		delete_option( 'briise_page_merci' );
+	}
+	if ( ! briise_fluentforms_actif() ) {
+		return;
+	}
+	foreach ( array_keys( briise_formulaires_types() ) as $type ) {
+		$id = briise_formulaire_id( $type );
+		if ( ! $id ) {
+			continue;
+		}
+		$reglages = \FluentForm\App\Helpers\Helper::getFormMeta( $id, 'formSettings', array() );
+		if ( ! is_array( $reglages ) || empty( $reglages['confirmation'] ) ) {
+			continue;
+		}
+		$reglages['confirmation']['redirectTo'] = $page_id ? 'customPage' : 'samePage';
+		$reglages['confirmation']['customPage'] = $page_id ? $page_id : '';
+		\FluentForm\App\Helpers\Helper::setFormMeta( $id, 'formSettings', $reglages );
+	}
+}
+
+add_action( 'admin_post_briise_page_merci', function () {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( 'Accès refusé.' );
+	}
+	check_admin_referer( 'briise_page_merci' );
+	briise_page_merci_regler( (int) ( $_POST['page_merci'] ?? 0 ) );
+	wp_safe_redirect( admin_url( 'admin.php?page=briise-entreprise&onglet=fonctions&merci=1#br-formulaires' ) );
+	exit;
+} );
+
+/** Choix de la page merci, sous la liste des formulaires. */
+function briise_page_merci_choix() {
+	$actuelle = (int) get_option( 'briise_page_merci' );
+	$h        = '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" style="margin:14px 0 0">' . wp_nonce_field( 'briise_page_merci', '_wpnonce', true, false )
+		. '<input type="hidden" name="action" value="briise_page_merci">'
+		. '<p><label for="br-page-merci"><strong>Après l’envoi d’un formulaire</strong></label><br>'
+		. wp_dropdown_pages( array( 'echo' => 0, 'name' => 'page_merci', 'id' => 'br-page-merci', 'selected' => $actuelle, 'show_option_none' => 'Rester sur la page, avec un message', 'option_none_value' => '0' ) )
+		. ' <button class="button">Enregistrer</button></p>'
+		. '<p class="description">Une page de remerciement rassure (la suite, les délais, le téléphone) et permet de compter les demandes dans Google Ads ou Analytics. Créez-la avec le modèle « Page de remerciement », puis choisissez-la ici : elle sort de Google automatiquement.</p>'
+		. ( isset( $_GET['merci'] ) ? '<p><strong>Enregistré.</strong></p>' : '' ) // phpcs:ignore WordPress.Security.NonceVerification
+		. '</form>';
+	return $h;
+}

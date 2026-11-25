@@ -121,3 +121,16 @@ a.br-carte-col:hover .br-carte-valeur, a.br-carte-col:focus .br-carte-valeur { t
 .br-galerie-legende .br-project-titre a::before { content: ""; position: absolute; inset: 0; }
 .br-galerie-legende span { font-size: .8em; opacity: .75; }
 .br-filtre-n { opacity: .7; margin-left: .2rem; font-size: .9em; }
+
+/* Formulaire en étapes */
+.br-etapes-compte { margin: 0; font-size: .85em; opacity: .75; }
+.br-etapes-barre { height: 4px; border-radius: 4px; background: color-mix(in srgb, currentColor 12%, transparent); margin: .5rem 0 1rem; overflow: hidden; }
+.br-etapes-barre span { display: block; height: 100%; background: currentColor; transition: width .3s; }
+.br-etapes-titre { margin: 0 0 1rem; font-size: 1.3em; font-weight: 600; }
+.br-etape[hidden], .br-form-etapes [hidden] { display: none !important; }
+.br-etapes-cases { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .5rem; }
+.br-etapes-cases button { min-height: 3.5rem; padding: .6rem; border-radius: 8px; border: 1.5px solid color-mix(in srgb, currentColor 25%, transparent); background: transparent; color: inherit; font: inherit; font-weight: 600; cursor: pointer; }
+.br-etapes-cases button[aria-pressed="true"] { background: var(--wp--preset--color--contrast, #1d1d1f); color: var(--wp--preset--color--base, #fff); }
+.br-etapes-nav, .br-form-etapes--actif .ff_submit_btn_wrapper { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: 1rem; }
+.br-etapes-nav .br-etapes-suiv, .br-form-etapes--actif .ff-btn-submit { margin-left: auto; }
+.br-etapes-prec { background: none; border: 0; min-height: 44px; font: inherit; text-decoration: underline; cursor: pointer; color: inherit; }

@@ -1,5 +1,13 @@
 # Historique des versions
 
+## 1.17.0
+
+- **Estimateur de budget** : le barème est un tableau que le client modifie ; le visiteur voit sa fourchette, puis demande son devis.
+- **Formulaire de devis en trois étapes** (`etapes="1"`) : projet, détails, coordonnées ; chaque étape vérifiée avant la suivante.
+- **Préparez votre demande** et **Garanties et documents à télécharger**.
+- **Page merci** : section et modèle de page ; les formulaires Briise y mènent après l'envoi (réglage dans Fonctions > Formulaires, ou à l'import) ; page retirée de Google automatiquement.
+- Import : un formulaire est créé aussi quand la page l'utilise avec des options (`etapes="1"`).
+
 ## 1.16.0
 
 - **Bandes qui défilent** : preuves, avis, clients. Pause au survol, au clavier et par un bouton ; immobiles si le visiteur a demandé moins d'animations ; sans script, une bande fixe.

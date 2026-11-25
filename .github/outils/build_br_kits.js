@@ -153,6 +153,7 @@ const MODELES = {
     ])]),
     sec('chiffres-cles'), sec('etapes'), sec('temoignages'), sec('faq'), sec('formulaire'),
   ].flat())) },
+  merci: { titre: 'Page de remerciement', desc: 'Après l’envoi d’un formulaire : la suite et ses délais, le téléphone, de quoi patienter. Exclue de Google automatiquement ; à choisir dans Mon entreprise > Fonctions > Formulaires (réglée seule à l’import).', markup: serialize(rythme([sec('merci-suite')].flat())) },
   contact: { titre: 'Page contact', desc: 'Formulaire de contact, coordonnées et horaires.', markup: serialize(rythme([tete(T, 'Écrivez-nous ou appelez-nous : nous répondons rapidement.', false), sec('formulaire-contact'), sec('coordonnees-carte')].flat())) },
 };
 
