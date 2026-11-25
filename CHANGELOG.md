@@ -1,5 +1,9 @@
 # Historique des versions
 
+## 1.19.2
+
+- **Le CSS additionnel ne casse plus le thème.** Une seule ligne tapée dans Apparence > Éditeur > Styles > CSS additionnel remplaçait tout le CSS du thème (sections, cartes, en-têtes) : WordPress ne les additionne pas. Le thème remet désormais son CSS devant celui de l'utilisateur, qui garde le dernier mot. Utile pour la charte d'un client (titres en capitales, police d'accent).
+
 ## 1.19.1
 
 - **Cartes lisibles dans une section foncée dont le texte est réglé en clair.** Quand une section « Fond foncé » a aussi une couleur de texte claire (comme une bande d'appel à l'action), les cartes posées dessus gardaient un texte clair sur leur fond clair : leurs titres disparaissaient. Le texte des cartes reste désormais foncé dans tous les cas.

@@ -107,7 +107,7 @@ Sans secteurs, la carte Zone reprend la liste des villes. Dans le fichier de sit
 
 **Logo.** Mon entreprise > Entreprise > Logo : il remplace le nom en texte dans l'en-tête (le nom reste lu par Google et les lecteurs d'écran). Le pied de page étant sombre, un « logo pour fond foncé » facultatif l'y remplace aussi ; sans lui, le nom reste en texte. Sans logo, rien ne change.
 
-**Charte du client.** Partir de l'ambiance « Charte du client », remplacer ses couleurs par celles de la charte, puis ajouter ses polices dans Styles > Typographie > Gérer les polices (fichiers WOFF2, licence web vérifiée).
+**Charte du client.** Partir de l'ambiance « Charte du client », remplacer ses couleurs par celles de la charte, puis ajouter ses polices dans Styles > Typographie > Gérer les polices (fichiers WOFF2, licence web vérifiée). Un détail de la charte que les réglages ne couvrent pas (titres en capitales, mot d’accent dans une autre police) se règle dans Styles > CSS additionnel : le CSS du thème reste en place, celui du client passe après.
 
 ## Démarrer un site client
 

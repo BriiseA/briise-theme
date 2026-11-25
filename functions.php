@@ -23,6 +23,31 @@ add_action( 'after_setup_theme', function () {
 	add_post_type_support( 'page', 'excerpt' );
 } );
 
+/*
+ * CSS additionnel (Apparence > Éditeur > Styles) : WordPress remplace le CSS de theme.json par celui
+ * de l'utilisateur au lieu de l'y ajouter. Le CSS du thème (sections, cartes, en-têtes…) disparaissait
+ * dès qu'on tapait une ligne. On le remet devant celui de l'utilisateur, qui garde le dernier mot.
+ */
+add_filter( 'wp_theme_json_data_user', function ( $theme_json ) {
+	$data = $theme_json->get_data();
+	$css  = $data['styles']['css'] ?? '';
+	if ( '' === trim( (string) $css ) || false !== strpos( $css, '/* briise:theme */' ) ) {
+		return $theme_json;
+	}
+	static $theme_css = null;
+	if ( null === $theme_css ) {
+		$brut      = json_decode( (string) file_get_contents( get_theme_file_path( 'theme.json' ) ), true );
+		$theme_css = (string) ( $brut['styles']['css'] ?? '' );
+	}
+	if ( '' === $theme_css ) {
+		return $theme_json;
+	}
+	return $theme_json->update_with( array(
+		'version' => $data['version'] ?? 3,
+		'styles'  => array( 'css' => "/* briise:theme */\n" . $theme_css . "\n/* CSS additionnel */\n" . $css ),
+	) );
+} );
+
 add_action( 'init', function () {
 	register_block_pattern_category( 'briise', array( 'label' => __( 'Briise', 'briise' ) ) );
 	$familles = array(
