@@ -233,6 +233,8 @@ add_filter( 'wp_theme_json_data_user', function ( $theme_json ) {
 					'poids'  => $max < 600 ? (string) $max : 'inherit',
 					// Une police d'accent paraît souvent plus petite que celle des titres à taille égale.
 					'taille' => '' !== $choix['accent_taille'] ? $choix['accent_taille'] : '1',
+					// Dans un titre en capitales, le mot d'accent garde ses minuscules.
+					'casse'  => 'none',
 				),
 			);
 		}

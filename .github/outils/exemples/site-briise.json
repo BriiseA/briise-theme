@@ -122,6 +122,7 @@
   "accent_italique": true,
   "accent_taille": 1.15
  },
+ "capitales": "oui",
  "entete": "capsule",
  "pied": "grand-titre",
  "mobile": "barre",

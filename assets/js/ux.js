@@ -299,4 +299,29 @@
 			el.hidden = false;
 		}
 	} );
+
+	/* Titres en capitales : un mot trop long pour la largeur fait réduire le titre (jusqu'à 70 %)
+	   au lieu d'être coupé en deux. Seuls les titres affichés en capitales sont concernés. */
+	var grands = Array.prototype.slice.call( document.querySelectorAll( 'main h1, main h2' ) );
+	var ajuster = function () {
+		grands.forEach( function ( t ) {
+			if ( 'uppercase' !== getComputedStyle( t ).textTransform ) {
+				return;
+			}
+			t.style.removeProperty( 'font-size' );
+			var base = parseFloat( getComputedStyle( t ).fontSize );
+			for ( var k = 0.95; k >= 0.7 && t.scrollWidth > t.clientWidth + 1; k -= 0.05 ) {
+				// « important » : certaines ouvertures fixent la taille de leur titre avec priorité.
+				t.style.setProperty( 'font-size', ( base * k ).toFixed( 1 ) + 'px', 'important' );
+			}
+		} );
+	};
+	if ( grands.length ) {
+		var attente;
+		( document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve() ).then( ajuster );
+		window.addEventListener( 'resize', function () {
+			clearTimeout( attente );
+			attente = setTimeout( ajuster, 150 );
+		} );
+	}
 })();
