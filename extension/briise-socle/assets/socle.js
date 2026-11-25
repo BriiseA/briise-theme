@@ -16,6 +16,33 @@
 		} );
 	}
 
+	/* Zone sur un plan : la commune choisie s'allume sur le plan, la distance s'affiche. */
+	document.querySelectorAll( '.br-zplan' ).forEach( function ( bloc ) {
+		var info = bloc.querySelector( '.br-zplan-info-txt' );
+		var depart = info ? info.textContent : '';
+		var boutons = bloc.querySelectorAll( '.br-zplan-communes button' );
+		boutons.forEach( function ( bouton ) {
+			bouton.addEventListener( 'click', function () {
+				var actif = bouton.getAttribute( 'aria-pressed' ) !== 'true';
+				boutons.forEach( function ( b ) { b.setAttribute( 'aria-pressed', b === bouton && actif ? 'true' : 'false' ); } );
+				bloc.querySelectorAll( '.br-zplan-point[data-n]' ).forEach( function ( p ) {
+					p.classList.toggle( 'is-choisi', actif && p.getAttribute( 'data-n' ) === bouton.getAttribute( 'data-n' ) );
+				} );
+				if ( info ) {
+					info.innerHTML = '';
+					if ( actif ) {
+						var fort = document.createElement( 'strong' );
+						fort.textContent = bouton.firstChild.textContent;
+						info.appendChild( fort );
+						info.appendChild( document.createTextNode( bouton.getAttribute( 'data-info' ) ) );
+					} else {
+						info.textContent = depart;
+					}
+				}
+			} );
+		} );
+	} );
+
 	/* Réalisations : filtres par catégorie, sans rechargement. */
 	document.querySelectorAll( '.br-realisations' ).forEach( function ( bloc ) {
 		var boutons = bloc.querySelectorAll( '.br-filtre' );
@@ -27,7 +54,7 @@
 				boutons.forEach( function ( b ) {
 					b.setAttribute( 'aria-pressed', b === bouton ? 'true' : 'false' );
 				} );
-				bloc.querySelectorAll( '.br-project' ).forEach( function ( carte ) {
+				bloc.querySelectorAll( '.br-project, .br-galerie-tuile' ).forEach( function ( carte ) {
 					var cats = ( ' ' + ( carte.getAttribute( 'data-cats' ) || '' ) + ' ' );
 					var visible = ! filtre || cats.indexOf( ' ' + filtre + ' ' ) !== -1;
 					carte.hidden = ! visible;

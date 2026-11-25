@@ -3,8 +3,9 @@
  * Apparence : variantes d'en-tête, de pied de page et de barre mobile.
  *
  * Réglées dans Mon entreprise > Apparence, ou par le fichier de site
- * (clés « entete », « pied » et « mobile »). Rien ne change pour un site
- * qui ne les règle pas : en-tête classique, pied en colonnes, bouton fixe.
+ * (clés « entete », « pied », « mobile », « cartes » et « titres »). Rien ne change
+ * pour un site qui ne les règle pas : en-tête classique, pied en colonnes,
+ * bouton fixe, cartes à photo en fond, titre et lien.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -35,12 +36,22 @@ function briise_apparence_choix() {
 			'bouton' => array( 'Bouton fixe', 'Appeler et l’action principale, en bas de l’écran du téléphone.' ),
 			'barre'  => array( 'Barre d’actions', 'Trois actions en bas de l’écran : Appeler, l’action principale et Itinéraire.' ),
 		),
+		'cartes' => array(
+			'photo-fond'  => array( 'Photo en fond', 'La photo remplit la carte, le texte est posé dessus (cartes d’origine).' ),
+			'photo-haut'  => array( 'Photo en haut', 'La photo en haut, le texte dessous sur fond clair. Plus sobre, plus lisible.' ),
+			'liste-filet' => array( 'Liste à filets', 'Une ligne par service, séparée par un filet, avec une vignette. Pour une offre large ou un style éditorial.' ),
+		),
+		'titres' => array(
+			'tete-lien'          => array( 'Titre et lien', 'Le titre à gauche, le lien « Tous nos… » à droite (titres d’origine).' ),
+			'tete-deux-colonnes' => array( 'Titre et texte côte à côte', 'Le titre à gauche, la phrase d’introduction à droite.' ),
+			'grand-numero'       => array( 'Grand numéro', 'Chaque section numérotée en grand au-dessus de son titre (01, 02…). Pour une page qui se lit comme un récit.' ),
+		),
 	);
 }
 
 function briise_apparence( $cle ) {
 	$choix  = briise_apparence_choix();
-	$defaut = array( 'entete' => 'classique', 'pied' => 'colonnes', 'mobile' => 'bouton' );
+	$defaut = array( 'entete' => 'classique', 'pied' => 'colonnes', 'mobile' => 'bouton', 'cartes' => 'photo-fond', 'titres' => 'tete-lien' );
 	$v      = (array) get_option( 'briise_apparence', array() );
 	$val    = $v[ $cle ] ?? $defaut[ $cle ];
 	return isset( $choix[ $cle ][ $val ] ) ? $val : $defaut[ $cle ];
@@ -49,7 +60,7 @@ function briise_apparence( $cle ) {
 function briise_apparence_enregistrer( $valeurs ) {
 	$choix = briise_apparence_choix();
 	$out   = (array) get_option( 'briise_apparence', array() );
-	foreach ( array( 'entete', 'pied', 'mobile' ) as $cle ) {
+	foreach ( array_keys( $choix ) as $cle ) {
 		if ( isset( $valeurs[ $cle ] ) && isset( $choix[ $cle ][ $valeurs[ $cle ] ] ) ) {
 			$out[ $cle ] = $valeurs[ $cle ];
 		}
@@ -89,6 +100,8 @@ add_filter( 'body_class', function ( $classes ) {
 	$classes[] = 'br-entete--' . $e;
 	$classes[] = 'br-pied--' . briise_apparence( 'pied' );
 	$classes[] = 'br-mobile--' . briise_apparence( 'mobile' );
+	$classes[] = 'br-cartes--' . briise_apparence( 'cartes' );
+	$classes[] = 'br-titres--' . briise_apparence( 'titres' );
 	if ( in_array( $e, array( 'capsule', 'ilots', 'bandeau' ), true ) && briise_page_sur_photo() ) {
 		$classes[] = 'br-sur-photo';
 	}
@@ -100,6 +113,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_style( 'briise-variantes', get_theme_file_uri( 'assets/css/variantes.css' ), array( 'briise-ux' ), $version );
 	wp_style_add_data( 'briise-variantes', 'path', get_theme_file_path( 'assets/css/variantes.css' ) );
 	wp_enqueue_style( 'briise-sections', get_theme_file_uri( 'assets/css/sections.css' ), array( 'briise-ux' ), $version );
+	wp_enqueue_script( 'briise-sections', get_theme_file_uri( 'assets/js/sections.js' ), array(), $version, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 } );
 
 // Les nouvelles sections s'affichent aussi correctement dans l'éditeur.
@@ -178,8 +192,8 @@ function briise_onglet_apparence() {
 	if ( isset( $_GET['ok'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 		echo '<div class="notice notice-success"><p>Apparence enregistrée.</p></div>';
 	}
-	$titres = array( 'entete' => 'En-tête', 'pied' => 'Pied de page', 'mobile' => 'Sur téléphone' );
-	echo '<p>Ces choix changent la forme de l’en-tête, du pied de page et du bas d’écran sur téléphone. Les textes, le téléphone et le bouton viennent toujours de Mon entreprise.</p>';
+	$titres = array( 'entete' => 'En-tête', 'pied' => 'Pied de page', 'mobile' => 'Sur téléphone', 'cartes' => 'Cartes de service', 'titres' => 'Titres de section' );
+	echo '<p>Ces choix changent la forme de l’en-tête, du pied de page, du bas d’écran sur téléphone, des cartes de service et des titres de section, sur tout le site. Les textes, le téléphone et le bouton viennent toujours de Mon entreprise ; le contenu des pages ne change pas.</p>';
 	echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
 	wp_nonce_field( 'briise_apparence' );
 	echo '<input type="hidden" name="action" value="briise_apparence">';

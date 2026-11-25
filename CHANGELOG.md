@@ -1,5 +1,16 @@
 # Historique des versions
 
+## 1.16.0
+
+- **Bandes qui défilent** : preuves, avis, clients. Pause au survol, au clavier et par un bouton ; immobiles si le visiteur a demandé moins d'animations ; sans script, une bande fixe.
+- **FAQ avec recherche et thèmes** : champ de recherche et boutons par intertitre ajoutés seuls ; message « aucune question ne correspond » modifiable.
+- **Orientation en une phrase** : « Je cherche … pour … », le bouton mène à la page qui répond.
+- **Une réalisation racontée** et **L'équipe en une photo et quatre faits**.
+- **Galerie de réalisations filtrable** (`forme="galerie"`) ; nombre de réalisations sur chaque filtre.
+- **Zone d'intervention sur un plan** : plan OpenStreetMap fabriqué une fois et gardé sur le site, distance et délai de visite par commune ; schéma dessiné en secours.
+- **Apparence** : trois habillages des cartes de service (photo en fond, photo en haut, liste à filets) et trois des titres de section (titre et lien, titre et texte côte à côte, grand numéro), aussi par le fichier de site (`cartes`, `titres`).
+- Extension : apparence de secours pour les qualifications, la zone, le plan et la galerie avec un autre thème.
+
 ## 1.15.0
 
 - **Six nouvelles ouvertures d'accueil** (Sections · Ouverture) : deux portes « urgent ou projet », mosaïque de réalisations, grande photo et carte de garanties, avant / après à faire glisser, fond sombre avec photo coupée en biais, grande photo et demande express.

@@ -36,13 +36,13 @@
     },
     "cartes": {
       "photo-fond": "existe",
-      "photo-haut": "à créer",
-      "liste-filet": "à créer"
+      "photo-haut": "existe",
+      "liste-filet": "existe"
     },
     "titres": {
       "tete-lien": "existe",
       "tete-deux-colonnes": "existe",
-      "grand-numero": "à créer"
+      "grand-numero": "existe"
     },
     "pied": {
       "colonnes": "existe",
@@ -68,5 +68,44 @@
       "pied"
     ],
     "ouverture_differente_des_derniers": 2
+  },
+  "sections_equivalentes": {
+    "_lisezmoi": "Pour chaque section d'un parcours, les sections qui remplissent le même rôle sous une autre forme. On en change d'un site à l'autre, en plus des pièces ci-dessus.",
+    "bande-confiance": [
+      "bande-preuves"
+    ],
+    "avis-note": [
+      "avis-defilants",
+      "temoignages"
+    ],
+    "temoignages": [
+      "avis-note",
+      "avis-defilants"
+    ],
+    "logos": [
+      "clients-defilants"
+    ],
+    "zone-liste": [
+      "zone-plan",
+      "zone-carte"
+    ],
+    "faq": [
+      "faq-recherche"
+    ],
+    "equipe": [
+      "equipe-photo"
+    ],
+    "dirigeant": [
+      "equipe-photo"
+    ],
+    "realisations": [
+      "realisations-galerie",
+      "realisation-racontee",
+      "ouverture-mosaique"
+    ],
+    "trois-cartes-photos": [
+      "orientation",
+      "tarifs-liste"
+    ]
   }
 }

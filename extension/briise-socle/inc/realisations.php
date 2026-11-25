@@ -7,7 +7,7 @@
  * Une fiche dont le texte fait moins de 150 mots reste visible dans les grilles mais sort de Google
  * (contenu trop mince) ; l'onglet Contrôle la signale.
  *
- * Codes courts : [briise_realisations nombre="3" service="auto|slug" categorie="slug" filtres="1"]
+ * Codes courts : [briise_realisations nombre="3" service="auto|slug" categorie="slug" filtres="1" forme="galerie"]
  *                [briise_realisation_infos]
  */
 
@@ -314,7 +314,8 @@ function briise_realisations_html( $atts = array() ) {
 		return '';
 	}
 	$brut  = is_array( $atts ) ? $atts : array();
-	$atts  = shortcode_atts( array( 'nombre' => 0, 'service' => '', 'categorie' => '', 'filtres' => '0', 'exclure' => '', 'niveau' => 3, 'autres' => '0' ), $atts, 'briise_realisations' );
+	$atts  = shortcode_atts( array( 'nombre' => 0, 'service' => '', 'categorie' => '', 'filtres' => '0', 'exclure' => '', 'niveau' => 3, 'autres' => '0', 'forme' => '' ), $atts, 'briise_realisations' );
+	$galerie = 'galerie' === $atts['forme'];
 	// Grille complète avec filtres : elle suit directement le titre de la page, ses cartes sont donc des H2.
 	if ( '1' === (string) $atts['filtres'] && ! isset( $brut['niveau'] ) ) {
 		$atts['niveau'] = 2;
@@ -345,16 +346,28 @@ function briise_realisations_html( $atts = array() ) {
 	}
 	$niveau = min( 6, max( 2, (int) $atts['niveau'] ) );
 	$cats   = array();
+	$nombre = array();
 	$cartes = '';
 	foreach ( $posts as $p ) {
 		$termes = get_the_terms( $p, BRIISE_REALISATION_CAT );
 		$termes = ( $termes && ! is_wp_error( $termes ) ) ? $termes : array();
 		$chips  = '';
 		foreach ( $termes as $t ) {
-			$cats[ $t->slug ] = $t->name;
-			$chips           .= '<p class="br-chip">' . esc_html( $t->name ) . '</p>';
+			$cats[ $t->slug ]   = $t->name;
+			$nombre[ $t->slug ] = ( $nombre[ $t->slug ] ?? 0 ) + 1;
+			$chips             .= '<p class="br-chip">' . esc_html( $t->name ) . '</p>';
 		}
 		$ville = get_post_meta( $p->ID, '_briise_ville', true );
+		if ( $galerie ) {
+			// Galerie : la photo seule, le titre et la commune dans une étiquette posée dessus.
+			$cartes .= '<li class="br-galerie-tuile" data-cats="' . esc_attr( implode( ' ', wp_list_pluck( $termes, 'slug' ) ) ) . '">'
+				// Le titre est juste dessous : une photo sans description propre n'a pas à le répéter.
+				. '<figure>' . str_replace( 'alt="' . esc_attr( get_the_title( $p ) ) . '"', 'alt=""', briise_realisation_image( $p ) ) . '</figure>'
+				. '<div class="br-galerie-legende">' . sprintf( '<h%1$d class="br-project-titre"><a href="%2$s">%3$s</a></h%1$d>', $niveau, esc_url( get_permalink( $p ) ), esc_html( get_the_title( $p ) ) )
+				. ( $ville || $termes ? '<span>' . esc_html( implode( ', ', array_filter( array( $termes ? $termes[0]->name : '', $ville ) ) ) ) . '</span>' : '' )
+				. '</div></li>';
+			continue;
+		}
 		if ( $ville ) {
 			$chips .= '<p class="br-chip">' . esc_html( $ville ) . '</p>';
 		}
@@ -369,13 +382,13 @@ function briise_realisations_html( $atts = array() ) {
 	if ( '1' === (string) $atts['filtres'] && count( $cats ) > 1 ) {
 		asort( $cats );
 		list( , , $tous ) = briise_realisations_mots();
-		$filtres = '<div class="br-filtres" role="group" aria-label="Filtrer par catégorie"><button type="button" class="br-filtre" data-filtre="" aria-pressed="true">' . esc_html( $tous ) . '</button>';
+		$filtres = '<div class="br-filtres" role="group" aria-label="Filtrer par catégorie"><button type="button" class="br-filtre" data-filtre="" aria-pressed="true">' . esc_html( $tous ) . ' <span class="br-filtre-n">' . count( $posts ) . '</span></button>';
 		foreach ( $cats as $slug => $nom ) {
-			$filtres .= '<button type="button" class="br-filtre" data-filtre="' . esc_attr( $slug ) . '" aria-pressed="false">' . esc_html( $nom ) . '</button>';
+			$filtres .= '<button type="button" class="br-filtre" data-filtre="' . esc_attr( $slug ) . '" aria-pressed="false">' . esc_html( $nom ) . ' <span class="br-filtre-n">' . (int) $nombre[ $slug ] . '</span></button>';
 		}
 		$filtres .= '</div><p class="screen-reader-text br-filtres-etat" aria-live="polite"></p>';
 	}
-	return $titre . '<div class="br-realisations">' . $filtres . '<ul class="br-projects br-projects--auto">' . $cartes . '</ul></div>';
+	return $titre . '<div class="br-realisations">' . $filtres . '<ul class="' . ( $galerie ? 'br-galerie-real' : 'br-projects br-projects--auto' ) . '">' . $cartes . '</ul></div>';
 }
 
 add_action( 'init', function () {

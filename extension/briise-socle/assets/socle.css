@@ -71,3 +71,53 @@ a.br-carte-col:hover .br-carte-valeur, a.br-carte-col:focus .br-carte-valeur { t
 .br-real-infos { list-style: none; padding: 0; margin: 1rem 0; display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
 .br-real-infos li { display: flex; align-items: center; gap: .4rem; }
 .br-real-infos svg { width: 1.1em; height: 1.1em; }
+
+/* Qualifications et assurances */
+.br-qualifs { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 2rem; }
+.br-qualifs-titre { margin: 0; font-size: .8em; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; opacity: .75; }
+.br-qualifs-liste { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 1rem 2rem; }
+.br-qualif { display: flex; align-items: center; gap: .75rem; }
+.br-qualif-logo { width: 44px; height: 44px; object-fit: contain; flex: none; }
+.br-qualif-logo--icone { display: grid; place-items: center; border-radius: 8px; background: color-mix(in srgb, currentColor 8%, transparent); }
+.br-qualif-texte { display: flex; flex-direction: column; font-size: .9em; line-height: 1.35; }
+.br-qualif-verifier { font-size: .9em; }
+
+/* Zone d'intervention en liste */
+.br-zone-liste { display: grid; gap: 1.25rem; }
+.br-zone-groupe-titre { margin: 0 0 .5rem; font-weight: 600; font-size: .85em; opacity: .75; }
+.br-zone-groupe ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+.br-zone-commune { padding: .35rem .8rem; border-radius: 999px; border: 1px solid color-mix(in srgb, currentColor 22%, transparent); }
+.br-zone-commune span { opacity: .65; font-size: .85em; }
+.br-zone-note, .br-zone-appel { font-size: .9em; opacity: .85; }
+
+/* Zone d'intervention sur un plan */
+.br-zplan { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 2rem; align-items: start; }
+.br-zplan-communes { list-style: none; padding: 0; margin: 0 0 1rem; display: flex; flex-wrap: wrap; gap: .4rem; }
+.br-zplan-communes button { min-height: 44px; padding: .4rem .9rem; border-radius: 999px; border: 1px solid color-mix(in srgb, currentColor 25%, transparent); background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.br-zplan-communes button[aria-pressed="true"] { background: var(--wp--preset--color--contrast, #1d1d1f); color: var(--wp--preset--color--base, #fff); }
+.br-zplan-communes button span { opacity: .7; margin-left: .3rem; font-size: .85em; }
+.br-zplan-info strong { display: block; }
+.br-zplan-carte { position: relative; margin: 0; border-radius: 10px; overflow: hidden; }
+.br-zplan-fond { position: relative; line-height: 0; }
+.br-zplan-fond img { width: 100%; height: auto; }
+.br-zplan-rayon { position: absolute; aspect-ratio: 1; border-radius: 50%; border: 2px dashed currentColor; transform: translate(-50%, -50%); opacity: .6; }
+.br-zplan-point { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: #333; border: 2px solid #fff; }
+.br-zplan-point span { position: absolute; left: 50%; bottom: 140%; transform: translateX(-50%); white-space: nowrap; padding: .2rem .5rem; border-radius: 4px; background: #1d1d1f; color: #fff; font-size: 12px; line-height: 1.3; opacity: 0; }
+.br-zplan-point.is-choisi { background: #c0392b; transform: scale(1.4); z-index: 2; }
+.br-zplan-point.is-choisi span, .br-zplan-point--centre span { opacity: 1; }
+.br-zplan-point--centre { width: 18px; height: 18px; margin: -9px 0 0 -9px; background: #c0392b; }
+.br-zplan-credit { position: absolute; right: 0; bottom: 0; margin: 0; padding: .15rem .4rem; font-size: 11px; line-height: 1.3; background: rgba(255,255,255,.85); color: #222; }
+@media (max-width: 781px) { .br-zplan { grid-template-columns: 1fr; } .br-zplan-carte { order: -1; } }
+
+/* Galerie de réalisations */
+.br-galerie-real { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); grid-auto-rows: 240px; gap: .75rem; }
+.br-galerie-tuile { position: relative; overflow: hidden; border-radius: 8px; }
+.br-galerie-tuile[hidden] { display: none; }
+.br-galerie-tuile figure { margin: 0; height: 100%; }
+.br-galerie-tuile img { width: 100%; height: 100%; object-fit: cover; }
+.br-galerie-legende { position: absolute; left: .5rem; right: .5rem; bottom: .5rem; padding: .5rem .7rem; border-radius: 6px; background: rgba(255,255,255,.92); color: #1d1d1f; }
+.br-galerie-legende .br-project-titre { margin: 0; font-size: 1em; }
+.br-galerie-legende .br-project-titre a { color: inherit; text-decoration: none; }
+.br-galerie-legende .br-project-titre a::before { content: ""; position: absolute; inset: 0; }
+.br-galerie-legende span { font-size: .8em; opacity: .75; }
+.br-filtre-n { opacity: .7; margin-left: .2rem; font-size: .9em; }

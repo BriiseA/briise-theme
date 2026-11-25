@@ -371,3 +371,66 @@ body.br-sur-photo .br-smart-header.br-scrolled .br-header--bandeau { background:
 .br-header--bandeau .br-logo-clair img { display: block; max-height: 40px; width: auto; max-width: 180px; }
 .br-header--medaillon .br-logo-clair img { display: block; max-height: 4.25rem; max-width: 5.5rem; width: auto; }
 @media (max-width: 781px) { .br-header--medaillon .br-logo-clair img { max-height: 2.2rem; max-width: 2.8rem; } }
+
+/* ==========================================================================
+   Cartes de service : trois habillages pour le même contenu
+   (Mon entreprise > Apparence). Cartes visées : celles qui ont un titre
+   et un lien « en détail », dans des colonnes (sections « trois cartes »).
+   ========================================================================== */
+
+/* Photo en haut : la photo au-dessus, le texte dessous, sur fond clair. */
+.br-cartes--photo-haut .wp-block-column>.br-card:has(>.br-card-fond){position:relative;display:flex;flex-direction:column;justify-content:flex-start;gap:.5rem;min-height:0;padding:0 0 1.6rem;background:var(--wp--preset--color--fond);color:var(--wp--preset--color--texte);border-radius:var(--wp--custom--rayon--grand);overflow:hidden;height:100%}
+.br-cartes--photo-haut .wp-block-column>.br-card:has(>.br-card-fond)>*:not(.br-card-fond){padding-inline:1.6rem}
+.br-cartes--photo-haut .br-card-fond{position:relative!important;inset:auto;z-index:auto;margin:0 0 .9rem!important;aspect-ratio:4/3;overflow:hidden}
+.br-cartes--photo-haut .br-card-fond::after{display:none}
+.br-cartes--photo-haut .br-card:has(>.br-card-fond) h3,.br-cartes--photo-haut .br-card:has(>.br-card-fond) .br-arrow a{color:var(--wp--preset--color--texte)}
+.br-cartes--photo-haut .br-card:has(>.br-card-fond) .br-muted{color:var(--wp--preset--color--texte-doux)}
+.br-cartes--photo-haut .br-card:has(>.br-card-fond) .br-arrow{margin-top:auto!important;padding-top:.4rem}
+.has-fond-background-color .br-cartes--photo-haut .br-card:has(>.br-card-fond),.br-cartes--photo-haut .has-fond-background-color .br-card:has(>.br-card-fond){background:var(--wp--preset--color--surface)}
+@media (max-width:781px){.br-cartes--photo-haut .wp-block-column>.br-card:has(>.br-card-fond){min-height:0}}
+
+/* Liste à filets : une ligne par service, vignette, titre, phrase, flèche. */
+.br-cartes--liste-filet .wp-block-columns:has(>.wp-block-column>.br-card>.br-arrow){display:block!important;border-bottom:1px solid color-mix(in srgb,currentColor 18%,transparent)}
+.br-cartes--liste-filet .wp-block-columns:has(>.wp-block-column>.br-card>.br-arrow)>.wp-block-column{margin:0!important}
+.br-cartes--liste-filet .wp-block-column>.br-card:has(>.br-arrow){position:relative;display:grid!important;grid-template-columns:7.5rem minmax(0,16rem) minmax(0,1fr) auto;align-items:center;column-gap:clamp(1rem,3vw,2.5rem);min-height:0;padding:1.4rem 0;margin:0;background:none!important;border:0;border-top:1px solid color-mix(in srgb,currentColor 18%,transparent);border-radius:0;box-shadow:none!important;transform:none!important;color:inherit}
+.br-cartes--liste-filet .wp-block-column>.br-card:has(>.br-arrow)>*{margin:0!important}
+.br-cartes--liste-filet .br-card:has(>.br-arrow)>.br-num{grid-column:1;justify-self:start;width:auto;height:auto;background:none;color:var(--wp--preset--color--accent);font-size:clamp(1.6rem,3vw,2.2rem);border-radius:0}
+.br-cartes--liste-filet .br-card:has(>.br-arrow)>.br-card-fond{position:relative!important;inset:auto;z-index:auto;grid-column:1;grid-row:1;width:7.5rem;aspect-ratio:4/3;border-radius:var(--wp--custom--rayon--moyen);overflow:hidden}
+.br-cartes--liste-filet .br-card:has(>.br-card-fond)>.br-num{display:none}
+.br-cartes--liste-filet .br-card-fond::after{display:none}
+.br-cartes--liste-filet .br-card:has(>.br-arrow) h3{grid-column:2;grid-row:1;font-size:var(--wp--preset--font-size--x-large);color:inherit!important}
+.br-cartes--liste-filet .br-card:has(>.br-arrow) .br-muted{grid-column:3;grid-row:1;color:var(--wp--preset--color--texte-doux)!important}
+.br-cartes--liste-filet .br-card:has(>.br-arrow) .br-arrow{grid-column:4;grid-row:1;color:inherit!important}
+.br-cartes--liste-filet .br-card:has(>.br-arrow) .br-arrow a{color:inherit!important;border:0;font-size:0;width:2.75rem;height:2.75rem;display:grid;place-items:center;border-radius:50%;border:1px solid color-mix(in srgb,currentColor 25%,transparent)}
+.br-cartes--liste-filet .br-card:has(>.br-arrow) .br-arrow a::after{content:"→";font-size:1.2rem;position:static;transition:transform .25s}
+.br-cartes--liste-filet .br-card:has(>.br-arrow) .br-arrow a::before{content:"";position:absolute;inset:0}
+.br-cartes--liste-filet .br-card:has(>.br-arrow):hover .br-arrow a{background:var(--wp--preset--color--accent);border-color:var(--wp--preset--color--accent);color:var(--wp--preset--color--fond)!important}
+.br-cartes--liste-filet .br-card:has(>.br-arrow):hover .br-card-fond img{transform:scale(1.06)}
+.br-cartes--liste-filet .br-card:has(>.br-arrow):has(a:focus-visible){outline:3px solid var(--wp--preset--color--accent);outline-offset:4px}
+.br-cartes--liste-filet .is-style-br-fonce .br-card:has(>.br-arrow) .br-muted,.br-cartes--liste-filet .has-secondaire-background-color .br-card:has(>.br-arrow) .br-muted{color:inherit!important;opacity:.8}
+@media (max-width:781px){
+.br-cartes--liste-filet .wp-block-column>.br-card:has(>.br-arrow){grid-template-columns:5rem minmax(0,1fr) auto;row-gap:.3rem;padding:1.1rem 0}
+.br-cartes--liste-filet .br-card:has(>.br-arrow)>.br-card-fond{width:5rem;grid-row:1/3}
+.br-cartes--liste-filet .br-card:has(>.br-arrow)>.br-num{grid-row:1/3}
+.br-cartes--liste-filet .br-card:has(>.br-arrow) h3{grid-column:2;font-size:var(--wp--preset--font-size--large)}
+.br-cartes--liste-filet .br-card:has(>.br-arrow) .br-muted{grid-column:2;grid-row:2;font-size:.9rem}
+.br-cartes--liste-filet .br-card:has(>.br-arrow) .br-arrow{grid-column:3;grid-row:1/3}
+}
+@media (prefers-reduced-motion:reduce){.br-cartes--liste-filet .br-card .br-arrow a::after{transition:none}}
+
+/* ==========================================================================
+   Titres de section : trois habillages (Mon entreprise > Apparence).
+   ========================================================================== */
+
+/* Titre et texte côte à côte : quand la tête a une phrase d'introduction. */
+@media (min-width:782px){
+.br-titres--tete-deux-colonnes .br-head:has(>h2+.br-lead){display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);column-gap:clamp(2rem,6vw,6rem);align-items:end;max-width:none}
+.br-titres--tete-deux-colonnes .br-head:has(>h2+.br-lead)>*{max-width:none;grid-column:1}
+.br-titres--tete-deux-colonnes .br-head:has(>h2+.br-lead)>h2{margin-bottom:0}
+.br-titres--tete-deux-colonnes .br-head:has(>h2+.br-lead)>.br-lead{grid-column:2;grid-row:1/span 3;align-self:end;margin:0}
+}
+
+/* Grand numéro : chaque titre de section porte son numéro, dans l'ordre de la page. */
+.br-titres--grand-numero main{counter-reset:br-titre}
+.br-titres--grand-numero main :is(.br-section-head,.br-head)>h2::before,.br-titres--grand-numero main .br-section>.wp-block-columns>.wp-block-column>h2:first-of-type::before{counter-increment:br-titre;content:counter(br-titre,decimal-leading-zero);content:counter(br-titre,decimal-leading-zero) / "";display:block;font-size:clamp(3.2rem,7vw,6rem);line-height:.9;letter-spacing:-.03em;margin-bottom:.35em;color:var(--wp--preset--color--accent);font-weight:700}
+.br-titres--grand-numero main .br-section-head{align-items:flex-end}

@@ -778,6 +778,130 @@ add('ouverture-demande', 'ouverture', 'Grande photo et demande express', 'La dem
     Col([Box('br-card br-ouv-form', [P('Votre projet en 30 secondes', 'br-ouv-form-titre'), Short('[briise_formulaire type="rappel"]'), P(`Vous préférez écrire ? <a href="${CTA}">Le formulaire complet</a>`, 'br-muted br-ouv-form-lien')])], { verticalAlignment: 'center', width: '45%' }),
   ], 'br-split', { verticalAlignment: 'center' })]));
 
+
+/* ----- 1.16 : sections (canevas « Briise, sections ») ----- */
+
+// Bandes qui défilent : le contenu reste du vrai texte, éditable ; le défilement est ajouté
+// par le navigateur (pause au survol, au clavier et par un bouton ; immobile si le visiteur
+// a demandé moins d'animations). Sans script ou dans l'éditeur : une bande fixe qui passe à la ligne.
+const Piste = (items, cls = '') => cb('core/group', { className: ('br-defile-piste ' + cls).trim(), layout: { type: 'flex', flexWrap: 'wrap' } }, items);
+add('bande-preuves', 'confiance', 'Bande de preuves qui défile', 'Juste sous l’ouverture : vos garanties et vos faits courts, sur une bande qui défile doucement. De 5 à 8 faits vrais, de deux à cinq mots chacun. Le défilement s’arrête au survol, au clavier ou avec le bouton pause.',
+  cb('core/group', { align: 'full', className: 'br-defile br-defile--preuves', backgroundColor: 'nuance', layout: { type: 'default' } }, [
+    Piste(['Devis gratuit sous 48 h', 'Prix annoncé avant de commencer', 'Garantie décennale', 'Atelier à [ville]', 'Depuis [année]', '4,9/5 sur Google', 'Une seule équipe, de la visite à la pose']
+      .map((t) => P(t, 'br-defile-item'))),
+  ]));
+
+const avisDefile = (txt, qui) => Box('br-defile-item br-avis-court', [P(ETOILES, 'br-avis-etoiles'), cb('core/quote', { citation: fr(`<strong>${qui}</strong>`) }, [P(txt)])]);
+add('avis-defilants', 'confiance', 'Avis qui défilent', 'Plus de trois avis à montrer : une rangée qui défile, avec la note Google au-dessus. Uniquement des avis réels, recopiés mot pour mot avec l’accord de leur auteur. Le défilement s’arrête au survol, au clavier ou avec le bouton pause.',
+  Section('br-section-defile', [
+    Row('br-section-head br-tete-deux', [H('Ce qu’en disent nos clients', 2), P(`<strong class="br-note-chiffre">4,9</strong> <span class="br-note-detail">${ETOILES}<span>sur 5, 62 avis Google</span></span>`, 'br-note')]),
+    cb('core/group', { align: 'full', className: 'br-defile br-defile--avis', layout: { type: 'default' } }, [
+      Piste([
+        avisDefile('« Un avis réel et court, qui raconte une situation précise. »', 'Prénom N., ville'),
+        avisDefile('« Un deuxième avis, d’un autre type de client. »', 'Prénom N., ville'),
+        avisDefile('« Un avis qui parle du prix ou du devis. »', 'Prénom N., ville'),
+        avisDefile('« Un avis qui parle de la propreté ou du délai. »', 'Prénom N., ville'),
+        avisDefile('« Un avis qui lève une crainte fréquente. »', 'Prénom N., ville'),
+      ]),
+    ]),
+    Btns(Btn('Lire tous les avis sur Google', '#', 'is-style-outline')),
+  ], { backgroundColor: 'surface' }));
+
+add('clients-defilants', 'confiance', 'Clients ou partenaires qui défilent', 'Les entreprises, collectivités ou architectes qui vous ont confié un chantier, en logos sur une bande qui défile. Un logo par client, avec son nom en texte alternatif. Seulement avec leur accord.',
+  Section('br-section--tight br-section-defile', [
+    P('Ils nous ont confié un chantier', 'br-label br-center'),
+    cb('core/group', { align: 'full', className: 'br-defile br-defile--logos', layout: { type: 'default' } }, [
+      Piste([1, 2, 3, 4, 5, 6].map((i) => cb('core/image', { url: IMG('logo-' + ((i - 1) % 5 + 1)), alt: fr('Nom du client ' + i), sizeSlug: 'full', linkDestination: 'none', className: 'br-defile-item' }))),
+    ]),
+  ]));
+
+// FAQ avec recherche : les questions restent des blocs « Détails » groupés sous des intertitres ;
+// le champ de recherche et les thèmes sont ajoutés par le navigateur.
+add('faq-recherche', 'parcours', 'FAQ avec recherche et thèmes', 'Page FAQ ou longue liste de questions : un champ « Chercher une question » et un bouton par thème (vos intertitres) s’ajoutent seuls au-dessus. Rangez les questions sous des intertitres de niveau 3. Sur la page choisie comme FAQ, les questions sont transmises à Google.',
+  Section('br-faq-cherche', [Cols([
+    Col([
+      Label('Questions fréquentes'), H('Vos questions avant de nous appeler', 2),
+      Short('[briise_appel intro="Pas de réponse ? Nous répondons en direct."]'),
+    ], { width: '34%' }),
+    Col([
+      H('Le devis', 3, 'br-faq-theme'),
+      Details('Le devis est-il gratuit ?', 'Oui. La visite et le devis sont gratuits et sans engagement. Vous le recevez par e-mail sous [x] jours.'),
+      Details('Combien de temps faut-il pour recevoir le devis ?', 'Comptez [x] jours après la visite. Le délai réel est écrit sur le devis.'),
+      H('Les travaux', 3, 'br-faq-theme'),
+      Details('Combien de temps durent les travaux ?', 'Donnez un délai concret, même approximatif : c’est l’une des premières choses que l’on cherche.'),
+      Details('Faut-il être présent pendant le chantier ?', 'Une réponse directe en deux ou trois phrases. Commencez par oui ou par non quand c’est possible.'),
+      H('Le prix et le paiement', 3, 'br-faq-theme'),
+      Details('Quels sont vos tarifs ?', 'Une fourchette honnête vaut mieux que « sur devis » seul. Renvoyez vers la page des tarifs si elle existe.'),
+      Details('Comment se passe le paiement ?', 'Moyens acceptés, acompte éventuel, échéances.'),
+      P('Aucune question ne correspond. Appelez-nous : nous répondons en direct.', 'br-faq-vide'),
+    ], { width: '66%' }),
+  ], 'br-split')]));
+
+// Orientation compacte : « Je cherche … pour … » ; chaque ligne de la liste est une réponse
+// possible (« choix 1 | choix 2 »), liée à la page qui y répond.
+const orient = (a, b, n) => `<a href="${URL('service-' + n)}">${fr(a)} | ${fr(b)}</a>`;
+add('orientation', 'parcours', 'Orientation : la bonne page en une phrase', 'Accueil d’une offre large : « Je cherche [choix] pour [choix] », et le bouton mène à la page qui répond. Chaque ligne de la liste est une réponse possible, écrite « premier choix | second choix », avec le lien vers sa page. Une seule partie par ligne donne un seul menu. Ajoutez une troisième partie pour nommer la page sur le bouton.',
+  Section('br-oriente br-section--tight', [
+    Box('br-oriente-boite', [
+      H('Trouvez la page faite pour vous', 2, 'br-oriente-titre'),
+      P('Je cherche … pour …', 'br-oriente-phrase'),
+      cb('core/list', { className: 'br-oriente-choix' }, [
+        orient('{{SERVICE:1}}', 'un particulier', 1), orient('{{SERVICE:1}}', 'une entreprise', 1),
+        orient('{{SERVICE:2}}', 'un particulier', 2), orient('{{SERVICE:2}}', 'une entreprise', 2),
+        orient('{{SERVICE:3}}', 'un particulier', 3),
+      ].map((c) => cb('core/list-item', { content: c }))),
+    ]),
+  ], { backgroundColor: 'surface' }));
+
+// Une réalisation racontée : le besoin, la solution, l'avis, le résultat. Tout est vrai et daté.
+const faitRecit = (t, v) => Box('br-recit-fait', [P(t, 'br-recit-fait-nom'), P(v, 'br-recit-fait-val')]);
+add('realisation-racontee', 'confiance', 'Une réalisation racontée', 'Une réalisation qui raconte votre façon de travailler : la commune et la date, trois faits (délai, durée, matériaux), le besoin, la solution, l’avis du client et le résultat. Une vraie réalisation, des photos du chantier, l’avis avec l’accord du client.',
+  Section('br-recit', [Cols([
+    Col([Box('br-recit-photos', [
+      Img('portrait', '4/5', 'br-recit-photo', 'Photo à remplacer : l’ouvrage terminé, en entier'),
+      Img('carre', '1/1', 'br-recit-detail', 'Photo à remplacer : un détail de fabrication'),
+    ])], { width: '46%' }),
+    Col([
+      Label('Réalisation, [commune], [mois année]'),
+      H('Le titre de la réalisation, avec ce qu’elle a de particulier', 2),
+      Box('br-recit-faits', [faitRecit('Fabrication', '[x] semaines'), faitRecit('Pose', '[x] jour'), faitRecit('Matériaux', '[matériaux]')]),
+      H('Le besoin', 3, 'br-recit-etape'), P('Ce que le client voulait, et ce qui le gênait avant. Deux phrases, avec ses mots.'),
+      H('Notre solution', 3, 'br-recit-etape'), P('Ce que vous avez proposé et pourquoi : le choix technique, ce qui a été dessiné ou ajusté avec lui.'),
+      cb('core/quote', { className: 'br-recit-avis', citation: fr('Prénom N., [commune]') }, [P('« L’avis réel du client, une ou deux phrases, avec son accord. »')]),
+      H('Le résultat', 3, 'br-recit-etape'), P('Ce qui a changé pour le client, concrètement.'),
+      Arrow('Voir nos réalisations du même type', URL('service-1')),
+    ], { width: '54%' }),
+  ], 'br-split')]));
+
+// L'équipe sans fiche par personne : une photo de groupe et des faits.
+const faitEquipe = (n, t) => Box('br-equipe-fait', [P(n, 'br-equipe-chiffre'), P(t, 'br-equipe-texte')]);
+add('equipe-photo', 'personnes', 'L’équipe en une photo et quatre faits', 'Quand vous êtes plusieurs : une photo de groupe devant l’atelier ou le camion, et quatre faits qui rassurent (nombre de personnes, sous-traitance, interlocuteur unique, ancienneté), sans fiche par personne. Seul ? Préférez « Présentation du dirigeant ».',
+  Section('br-equipe-photo', [Cols([
+    Col([Img('paysage', '3/2', 'is-style-br-arrondi', 'Photo à remplacer : toute l’équipe devant l’atelier ou le camion')], { width: '56%', verticalAlignment: 'center' }),
+    Col([
+      Label('L’équipe'), H('Une équipe, du premier appel à la pose', 2),
+      Box('br-equipe-faits', [
+        faitEquipe('[4]', 'personnes, toutes salariées'),
+        faitEquipe('0', 'chantier confié à un sous-traitant'),
+        faitEquipe('1', 'interlocuteur, de la visite à la pose'),
+        faitEquipe('[2011]', 'année d’ouverture de l’atelier'),
+      ]),
+      Arrow('Qui sommes-nous', URL('a-propos')),
+    ], { width: '44%', verticalAlignment: 'center' }),
+  ], 'br-split', { verticalAlignment: 'center' })]));
+
+add('realisations-galerie', 'confiance', 'Galerie de réalisations filtrable (automatique)', 'Toutes les réalisations publiées en grande galerie de photos, avec un bouton par catégorie et le nombre de réalisations. Chaque photo mène à sa fiche. Se met à jour seule.',
+  Section('br-section-realisations', [
+    sectionHead('Nos réalisations'),
+    Short('[briise_realisations filtres="1" forme="galerie" niveau="3"]'),
+  ]));
+
+add('zone-plan', 'contact', 'Zone d’intervention sur un plan', 'Les communes sur un vrai plan : le visiteur choisit la sienne et voit la distance et le délai de visite. Le plan est fabriqué une fois, à partir des communes du schéma de zone (Mon entreprise > Entreprise ; nom ; latitude ; longitude ; délai facultatif), et enregistré sur votre site : aucun service extérieur n’est chargé chez le visiteur.',
+  Section('br-zone-plan', [
+    Head([Label('Zone d’intervention'), H('Nous intervenons autour de [ville]', 2), Lead('Choisissez votre commune : vous voyez la distance et le délai habituel de visite.')]),
+    Short('[briise_zone_plan]'),
+  ], { backgroundColor: 'surface' }));
+
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').mkdirSync(require('path').join(__dirname, 'build'), { recursive: true });
 require('fs').writeFileSync(require('path').join(__dirname, 'build', 'br_sections.json'), JSON.stringify(out, null, 1));
