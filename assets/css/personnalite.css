@@ -108,4 +108,9 @@
 		text-align: left !important;
 		max-width: 100% !important;
 	}
+	/* La colonne de contenu est plus étroite : une grille de quatre cartes passe en deux sur deux,
+	   pour ne pas laisser la quatrième seule sur sa ligne. */
+	.br-titres--marge .br-section:has(> .br-head, > .br-section-head) .is-layout-grid:has(> :nth-child(4):last-child) {
+		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+	}
 }
