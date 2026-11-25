@@ -837,6 +837,22 @@ add('faq-recherche', 'parcours', 'FAQ avec recherche et thèmes', 'Page FAQ ou l
     ], { width: '66%' }),
   ], 'br-split')]));
 
+// Où en êtes-vous ? : quatre situations du visiteur, dites à la première personne, chacune avec
+// sa réponse, son prix et la page qui y répond. Tout est visible sans clic. Icône par la classe br-ic-….
+const situation = ([ic, phrase, reponse, prix, lien, url]) => Box('br-situation br-ic-' + ic, [
+  H(phrase, 3), Muted(reponse), P(`<strong>${fr(prix)}</strong>`, 'br-situation-prix'), Arrow(lien, url)]);
+const situations = ({ label, titre, chapo, items, bg }) => Section('br-situations-section', [
+  Head([Label(label), H(titre, 2), Lead(chapo)]),
+  cb('core/group', { className: 'br-situations', layout: { type: 'grid', minimumColumnWidth: '14rem' } }, items.map(situation)),
+], bg ? { backgroundColor: bg } : {});
+add('ou-en-etes-vous', 'parcours', 'Où en êtes-vous ?', 'Quand les visiteurs arrivent dans des situations différentes : quatre cartes qui partent de leur situation, dite comme ils la diraient, avec la réponse, le prix et la page qui y répond. Tout est visible sans clic. Icône au choix par la classe du bloc : br-ic-maison, fleches, loupe, horloge, euro, bouclier, coeur, appareil. Seulement un prix réel, ou « Sur devis ».',
+  situations({ label: 'Par où commencer', titre: 'Où en êtes-vous ?', chapo: 'Choisissez la phrase qui vous ressemble : vous voyez ce qui vous servira, et ce que ça coûte.', items: [
+    ['maison', 'Je découvre, je ne sais pas par où commencer.', 'Ce que vous proposez pour démarrer, en une phrase.', 'Votre prix réel, ou « Sur devis »', 'Voir ce service', URL('service-1')],
+    ['fleches', 'J’ai déjà essayé, sans le résultat espéré.', 'Ce que vous faites autrement, concrètement.', 'Votre prix réel, ou « Sur devis »', 'Voir ce service', URL('service-2')],
+    ['loupe', 'Je sais ce que je veux, je compare.', 'Ce qui vous distingue, chiffre à l’appui.', 'Votre prix réel, ou « Sur devis »', 'Voir ce service', URL('service-3')],
+    ['horloge', 'C’est pressé.', 'Votre délai réel pour intervenir ou répondre.', 'Votre prix réel, ou « Sur devis »', CTA_LABEL, CTA],
+  ] }));
+
 // Orientation compacte : « Je cherche … pour … » ; chaque ligne de la liste est une réponse
 // possible (« choix 1 | choix 2 »), liée à la page qui y répond.
 const orient = (a, b, n) => `<a href="${URL('service-' + n)}">${fr(a)} | ${fr(b)}</a>`;
@@ -1002,5 +1018,5 @@ add('merci-suite', 'contact', 'Page merci : la suite', 'Pour la page qui s’aff
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').mkdirSync(require('path').join(__dirname, 'build'), { recursive: true });
 require('fs').writeFileSync(require('path').join(__dirname, 'build', 'br_sections.json'), JSON.stringify(out, null, 1));
-module.exports = { choixSeance, eventail, lieux, faitsIcones, etapesImages, ctaPhoto, avisCourt, tarifLigne, ETOILES, Row, ImgFond, Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
+module.exports = { situations, choixSeance, eventail, lieux, faitsIcones, etapesImages, ctaPhoto, avisCourt, tarifLigne, ETOILES, Row, ImgFond, Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
 console.log(Object.keys(S).length, 'sections');

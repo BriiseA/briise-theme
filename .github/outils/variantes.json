@@ -105,7 +105,12 @@
     ],
     "trois-cartes-photos": [
       "orientation",
-      "tarifs-liste"
+      "tarifs-liste",
+      "ou-en-etes-vous"
+    ],
+    "ou-en-etes-vous": [
+      "orientation",
+      "trois-cartes-photos"
     ],
     "formulaire": [
       "formulaire-etapes"

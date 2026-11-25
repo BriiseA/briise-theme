@@ -15,7 +15,6 @@ const faq = (titre, qs, c) => Section('', [Cols([
   Col([Label('Questions fréquentes'), H(titre, 2), Muted('Une autre question ? Je vous réponds sous un jour ouvré.'), Arrow('Poser votre question', CTA)], { width: '38%' }),
   Col(qs.map(([q, a]) => Details(q, a)), { width: '62%' }),
 ], 'br-split')], bg(c));
-const carte = (n, phrase, reponse, prix, offre, slug) => Col([Box('br-card', [Num(n), H(phrase, 3), Muted(reponse), P(`<strong>${prix}</strong>`), Arrow(offre, URL(slug))])]);
 const tarif = (nom, prix, pour, items, vedette) => Col([Box('br-card br-price' + (vedette ? ' br-price--vedette' : ''), [
   ...(vedette ? [P('Recommandé', 'br-chip')] : []), H(nom, 3), P(prix, 'br-stat'), Muted(pour), List(items),
   Btns(Btn('Demander un devis', CTA, vedette ? null : 'is-style-outline'))])]);
@@ -35,14 +34,12 @@ const accueil = [
     img: 'briise-site-construit', alt: 'Dessin d’un site internet terminé, avec la pastille « En ligne »',
     etiquettes: [['Site vitrine', 'dès 690 € HT'], ['Mini-audit', 'offert']] }),
   confiance([['prix', 'Prix affichés', 'Avant même de nous appeler'], ['garantie', 'Votre site vous appartient', 'Nom de domaine à votre nom'], ['local', 'À Saint-Jean-de-la-Ruelle', 'Métropole d’Orléans et Loiret'], ['devis', 'Mini-audit offert', 'Rendu sous 3 jours ouvrés']]),
-  Section('', [Head([Label('Nos offres'), H('Où en êtes-vous avec votre site ?', 2), Lead('Choisissez la phrase qui vous ressemble : on vous montre ce qui vous servira, et ce que ça coûte.')]),
-    Cols([
-      carte('+', 'Je n’ai pas encore de site.', 'On crée un site clair, que vos clients trouvent et que vous modifiez vous-même.', 'Dès 690 € HT', 'Création de site', 'creation-site-vitrine'),
-      carte('↻', 'J’ai un site, mais il ne m’apporte rien.', 'On le remet à neuf, sans perdre ce que Google connaît déjà de vous.', 'Dès 1 980 € HT', 'Refonte de site', 'creation-site-vitrine'),
-      carte('⌖', 'On ne me trouve pas sur Google.', 'Votre fiche Google, vos pages et vos réponses, travaillées pour votre ville.', '390 € HT une fois', 'Référencement local', 'tarifs'),
-      carte('✓', 'Je veux qu’on s’en occupe pour moi.', 'Mises à jour, sauvegardes et retouches, même pour un site WordPress existant.', '59 € HT par mois', 'Abonnement', 'tarifs'),
-    ], 'br-cards-4'),
-  ]),
+  B.situations({ label: 'Nos offres', titre: 'Où en êtes-vous avec votre site ?', chapo: 'Choisissez la phrase qui vous ressemble : on vous montre ce qui vous servira, et ce que ça coûte.', items: [
+    ['maison', 'Je n’ai pas encore de site.', 'On crée un site clair, que vos clients trouvent et que vous modifiez vous-même.', 'Dès 690 € HT', 'Création de site', URL('creation-site-vitrine')],
+    ['fleches', 'J’ai un site, mais il ne m’apporte rien.', 'On le remet à neuf, sans perdre ce que Google connaît déjà de vous.', 'Dès 1 980 € HT', 'Refonte de site', URL('creation-site-vitrine')],
+    ['loupe', 'On ne me trouve pas sur Google.', 'Votre fiche Google, vos pages et vos réponses, travaillées pour votre ville.', '390 € HT une fois', 'Référencement local', URL('tarifs')],
+    ['bouclier', 'Je veux qu’on s’en occupe pour moi.', 'Mises à jour, sauvegardes et retouches, même pour un site WordPress existant.', '59 € HT par mois', 'Abonnement', URL('tarifs')],
+  ] }),
   Section('', [sectionHead('Voyez à quoi ça ressemble', ['Nos réalisations expliquées', URL('realisations')]),
     Muted('Des sites d’exemple faits avec notre méthode, pour des entreprises imaginaires. Nos premiers projets clients prendront leur place.'),
     Cols([

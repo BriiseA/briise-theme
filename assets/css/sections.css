@@ -428,6 +428,22 @@
 @media (prefers-reduced-motion:reduce){.br-etapes-barre span,.br-estim-choix span,.br-merci-liens a::after{transition:none}}
 @media (max-width:781px){.br-suite .br-appel,.br-merci-appel .br-appel{align-items:stretch}.br-suite .br-appel-bouton,.br-merci-appel .br-appel-bouton{max-width:100%;justify-content:center;white-space:normal}}
 
+/* ----- Où en êtes-vous ? ------------------------------------------------------------
+   Quatre situations du visiteur : icône, phrase, réponse, prix, lien. Toutes visibles sans clic. */
+.br-situations { gap: 1.1rem; margin-top: var(--wp--preset--spacing--50, 2rem); }
+/* Quatre cartes au plus par ligne, qui prennent toute la largeur (pas de colonne vide). */
+.br-situations.is-layout-grid { grid-template-columns: repeat(auto-fit, minmax(max(min(14rem, 100%), calc((100% - 3.3rem) / 4)), 1fr)); }
+.br-situation { position: relative; display: flex; flex-direction: column; background: var(--wp--preset--color--clair); color: var(--wp--preset--color--texte); border-radius: var(--wp--custom--rayon--moyen); padding: 5.4rem 1.6rem 1.6rem; margin: 0 !important; }
+.br-situation > * { margin: 0 0 .6rem !important; }
+.br-situation h3 { font-size: 1.25rem; line-height: 1.2; }
+.br-situation .br-muted { font-size: .96rem; }
+.br-situation .br-situation-prix { margin-top: auto !important; padding-top: .6rem; font-size: 1.05rem; }
+.br-situation .br-arrow { margin-bottom: 0 !important; }
+.br-situation::before { content: ""; position: absolute; left: 1.6rem; top: 1.6rem; width: 52px; height: 52px; border-radius: 50%; background: var(--wp--preset--color--surface); }
+.br-situation::after { content: ""; position: absolute; left: calc(1.6rem + 13px); top: calc(1.6rem + 13px); width: 26px; height: 26px; background: var(--wp--preset--color--accent); -webkit-mask: var(--br-ic, var(--br-i-coche)) center/contain no-repeat; mask: var(--br-ic, var(--br-i-coche)) center/contain no-repeat; }
+.br-ic-loupe { --br-ic: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2210.5%22%20cy%3D%2210.5%22%20r%3D%226.5%22%2F%3E%3Cpath%20d%3D%22M20%2020l-4.8-4.8%22%2F%3E%3C%2Fsvg%3E"); }
+.br-ic-fleches { --br-ic: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M19.5%2011A7.6%207.6%200%200%200%205.2%208.4M4.5%204.5v4h4%22%2F%3E%3Cpath%20d%3D%22M4.5%2013a7.6%207.6%200%200%200%2014.3%202.6M19.5%2019.5v-4h-4%22%2F%3E%3C%2Fsvg%3E"); }
+
 /* ----- Sur téléphone, cartes en défilement (Mon entreprise > Apparence) ---------------------
    Les rangées de trois cartes ou plus se font glisser de gauche à droite au lieu de s'empiler :
    défilement natif du navigateur, sans script ; le bord de la carte suivante dépasse pour montrer
@@ -435,7 +451,7 @@
 @media (max-width: 781px) {
 	.br-cartes-mobile--defilement main :is(
 		.wp-block-columns:has(> .wp-block-column:nth-child(3) > .br-card),
-		.br-avis-grille, .br-lieux-grille, .br-prices, .br-projects, .br-team, .br-modeles-grille, .br-steps, .br-etapes-images-grille
+		.br-avis-grille, .br-lieux-grille, .br-prices, .br-projects, .br-team, .br-modeles-grille, .br-steps, .br-etapes-images-grille, .br-situations
 	):has(> :nth-child(3)) {
 		display: flex !important;
 		flex-direction: row !important;
@@ -451,7 +467,7 @@
 	}
 	.br-cartes-mobile--defilement main :is(
 		.wp-block-columns:has(> .wp-block-column:nth-child(3) > .br-card),
-		.br-avis-grille, .br-lieux-grille, .br-prices, .br-projects, .br-team, .br-modeles-grille, .br-steps, .br-etapes-images-grille
+		.br-avis-grille, .br-lieux-grille, .br-prices, .br-projects, .br-team, .br-modeles-grille, .br-steps, .br-etapes-images-grille, .br-situations
 	):has(> :nth-child(3)) > * {
 		flex: 0 0 82% !important;
 		max-width: 82%;
@@ -466,7 +482,7 @@
 @media (min-width: 600px) and (max-width: 781px) {
 	.br-cartes-mobile--defilement main :is(
 		.wp-block-columns:has(> .wp-block-column:nth-child(3) > .br-card),
-		.br-avis-grille, .br-lieux-grille, .br-prices, .br-projects, .br-team, .br-modeles-grille, .br-steps, .br-etapes-images-grille
+		.br-avis-grille, .br-lieux-grille, .br-prices, .br-projects, .br-team, .br-modeles-grille, .br-steps, .br-etapes-images-grille, .br-situations
 	):has(> :nth-child(3)) > * {
 		flex-basis: 44% !important;
 		max-width: 44%;
