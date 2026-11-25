@@ -1,5 +1,11 @@
 # Historique des versions
 
+## 1.15.0
+
+- **Six nouvelles ouvertures d'accueil** (Sections · Ouverture) : deux portes « urgent ou projet », mosaïque de réalisations, grande photo et carte de garanties, avant / après à faire glisser, fond sombre avec photo coupée en biais, grande photo et demande express.
+- **Formulaire « Demande de rappel »** : projet, commune, nom et téléphone, rien de plus. Pour l'ouverture « demande express » et les pages de publicité. Créé dans Mon entreprise > Fonctions, ou seul à l'import d'un fichier de site qui l'utilise.
+- Les nouvelles sections ont leur propre feuille de style, chargée aussi dans l'éditeur : la page se modifie comme elle s'affiche.
+
 ## 1.14.0
 
 - **Huit en-têtes au choix** (Mon entreprise > Apparence, ou `"entete"` dans le fichier de site) : classique, capsule flottante, îlots semi-transparents, logo au centre avec liens en pastilles, médaillon, encadré, bandeau pleine largeur, barre d'infos (ouvert ou fermé aujourd'hui, prochaine disponibilité, zone, téléphone). Les en-têtes capsule, îlots et bandeau flottent au-dessus d'une page qui s'ouvre sur une grande photo.

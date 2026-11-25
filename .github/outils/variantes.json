@@ -27,11 +27,12 @@
       "banniere": "existe",
       "choix-prestation": "existe",
       "eventail": "existe",
-      "plein-cadre-carte": "à créer",
-      "typographique": "à créer",
-      "mosaique": "à créer",
-      "decoupe": "à créer",
-      "deux-portes": "à créer"
+      "deux-portes": "existe",
+      "mosaique": "existe",
+      "carte": "existe",
+      "avant-apres": "existe",
+      "decoupe": "existe",
+      "demande": "existe"
     },
     "cartes": {
       "photo-fond": "existe",

@@ -18,6 +18,7 @@ function briise_formulaires_types() {
 		'devis'       => 'Demande de devis',
 		'contact'     => 'Contact',
 		'reservation' => 'Réservation',
+		'rappel'      => 'Demande de rappel',
 	);
 }
 
@@ -79,6 +80,7 @@ function briise_formulaire_mots( $type ) {
 		'devis'       => array( 'demande de devis', 'Envoyer ma demande', 'Votre demande de devis', 'Demande de devis', 'demande', 'e' ),
 		'contact'     => array( 'message', 'Envoyer mon message', 'Votre message', 'Message', 'message', '' ),
 		'reservation' => array( 'demande de réservation', 'Envoyer ma demande', 'Votre demande de réservation', 'Réservation', 'demande', 'e' ),
+		'rappel'      => array( 'demande de rappel', 'Être rappelé', 'Votre demande de rappel', 'Demande de rappel', 'demande', 'e' ),
 	);
 	$m = $mots[ $type ] ?? $mots['contact'];
 	return array_combine( array( 'quoi', 'bouton', 'objet_visiteur', 'objet', 'court', 'accord' ), $m );
@@ -131,6 +133,7 @@ function briise_formulaire_definition( $type ) {
 	}
 	$champs[] = $texte( 'nom', 'Nom', true, array( 'autocomplete' => 'name' ) );
 	$champs[] = $texte( 'telephone', 'Téléphone', true, array( 'type' => 'tel', 'autocomplete' => 'tel', 'inputmode' => 'tel' ) );
+	if ( 'rappel' !== $type ) {
 	$champs[] = array(
 		'element'        => 'input_email',
 		'attributes'     => array( 'type' => 'email', 'name' => 'email', 'value' => '', 'id' => '', 'class' => '', 'placeholder' => '', 'autocomplete' => 'email' ),
@@ -149,7 +152,8 @@ function briise_formulaire_definition( $type ) {
 		'editor_options' => array( 'title' => 'Email Address', 'icon_class' => 'ff-edit-email', 'template' => 'inputText' ),
 		'uniqElKey'      => 'el_briise_email',
 	);
-	if ( 'devis' === $type ) {
+	}
+	if ( in_array( $type, array( 'devis', 'rappel' ), true ) ) {
 		$champs[] = $texte( 'commune', 'Commune', true, array( 'autocomplete' => 'address-level2' ) );
 		$services = briise_formulaire_services();
 		if ( $services ) {
@@ -166,6 +170,7 @@ function briise_formulaire_definition( $type ) {
 			$champs[] = $texte( 'projet', 'Votre projet', true );
 		}
 	}
+	if ( 'rappel' !== $type ) {
 	$labels   = array( 'devis' => 'Votre projet en quelques mots', 'reservation' => 'Un mot pour préparer (facultatif)' );
 	$champs[] = array(
 		'element'        => 'textarea',
@@ -174,6 +179,7 @@ function briise_formulaire_definition( $type ) {
 		'editor_options' => array( 'title' => 'Text Area', 'icon_class' => 'ff-edit-textarea', 'template' => 'inputTextarea' ),
 		'uniqElKey'      => 'el_briise_message',
 	);
+	}
 	$confidentialite = get_privacy_policy_url();
 	if ( ! $confidentialite ) {
 		$p               = get_page_by_path( 'confidentialite' );
@@ -189,6 +195,13 @@ function briise_formulaire_definition( $type ) {
 		'editor_options' => array( 'title' => 'Custom HTML', 'icon_class' => 'icon-code', 'template' => 'customHTML' ),
 		'uniqElKey'      => 'el_briise_info',
 	);
+	// Rappel : le projet et la commune d'abord, le nom et le téléphone ensuite.
+	if ( 'rappel' === $type ) {
+		$ordre = array( 'projet' => 0, 'commune' => 1, 'nom' => 2, 'telephone' => 3 );
+		usort( $champs, function ( $a, $b ) use ( $ordre ) {
+			return ( $ordre[ $a['attributes']['name'] ?? '' ] ?? 9 ) - ( $ordre[ $b['attributes']['name'] ?? '' ] ?? 9 );
+		} );
+	}
 	foreach ( $champs as $i => $c ) {
 		$champs[ $i ]['index'] = $i + 1;
 	}
@@ -229,7 +242,7 @@ function briise_formulaire_notification_entreprise( $type ) {
 		'fromEmail'      => '',
 		'replyTo'        => '{inputs.email}',
 		'bcc'            => '',
-		'subject'        => briise_formulaire_mots( $type )['objet'] . ' : {inputs.nom}' . ( 'devis' === $type ? ', {inputs.commune}' : '' ) . ( 'reservation' === $type ? ', {inputs.prestation}' : '' ),
+		'subject'        => briise_formulaire_mots( $type )['objet'] . ' : {inputs.nom}' . ( in_array( $type, array( 'devis', 'rappel' ), true ) ? ', {inputs.commune}' : '' ) . ( 'reservation' === $type ? ', {inputs.prestation}' : '' ),
 		'message'        => '<p>' . ( 'contact' === $type ? 'Nouveau message' : 'Nouvelle ' . briise_formulaire_mots( $type )['quoi'] ) . ' depuis le site.</p><p>{all_data}</p><p>Envoyé depuis la page : {embed_post.permalink}</p><p>Pour répondre par e-mail, utilisez simplement « Répondre ». Pour rappeler : {inputs.telephone}.</p>',
 		'conditionals'   => array( 'status' => false, 'type' => 'all', 'conditions' => array( array( 'field' => null, 'operator' => '=', 'value' => null ) ) ),
 		'enabled'        => true,
@@ -472,6 +485,7 @@ function briise_formulaires_encadre() {
 		$aides = array(
 			'devis'       => 'Nom, téléphone, e-mail (facultatif), commune, projet (liste des services du site) et description. E-mail à l’adresse de Mon entreprise (et aux autres adresses réglées dans l’onglet Entreprise), avec « Répondre » vers le visiteur ; confirmation au visiteur, qui peut y joindre ses photos.',
 			'contact'     => 'Nom, téléphone, e-mail (facultatif) et message. Mêmes e-mails que pour le devis.',
+			'rappel'      => 'Projet, commune, nom et téléphone : quatre champs, pour l’ouverture « demande express » et les pages de publicité. E-mail à l’entreprise.',
 			'reservation' => 'Pour les métiers sur rendez-vous (photographe, institut, cours) : la prestation (choix parmi les services du site), le lieu (si vous en indiquez), la date souhaitée, puis nom, téléphone, e-mail et un mot facultatif. Mêmes e-mails que pour le devis. Section « Formulaire de réservation ».',
 		);
 		briise_ligne( $nom, $champ, $aides[ $type ] );

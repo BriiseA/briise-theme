@@ -99,6 +99,13 @@ add_action( 'wp_enqueue_scripts', function () {
 	$version = wp_get_theme()->get( 'Version' );
 	wp_enqueue_style( 'briise-variantes', get_theme_file_uri( 'assets/css/variantes.css' ), array( 'briise-ux' ), $version );
 	wp_style_add_data( 'briise-variantes', 'path', get_theme_file_path( 'assets/css/variantes.css' ) );
+	wp_enqueue_style( 'briise-sections', get_theme_file_uri( 'assets/css/sections.css' ), array( 'briise-ux' ), $version );
+} );
+
+// Les nouvelles sections s'affichent aussi correctement dans l'éditeur.
+add_action( 'after_setup_theme', function () {
+	add_theme_support( 'editor-styles' );
+	add_editor_style( 'assets/css/sections.css' );
 } );
 
 /* ----- Petites briques communes aux en-têtes et pieds ------------------------ */

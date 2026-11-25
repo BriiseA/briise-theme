@@ -1,0 +1,163 @@
+/* Sections ajoutées depuis la 1.15 (ouvertures du canevas). Chargé sur le site et dans l'éditeur. */
+
+/* ----- Deux portes : urgent ou projet ----- */
+.br-ouv-portes-tete { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 1rem 3rem; align-items: end; margin-bottom: var(--wp--preset--spacing--50) !important; }
+.br-ouv-portes-tete > * { margin: 0 !important; }
+.br-ouv-portes-cols { gap: 1rem !important; align-items: stretch !important; }
+.br-ouv-portes-cols > .wp-block-column { display: flex; flex-direction: column; }
+.br-porte { flex: 1; border-radius: var(--wp--custom--rayon--grand, 24px); padding: clamp(1.75rem, 3vw, 2.5rem) !important; margin: 0 !important; }
+.br-porte--urgence {
+	display: flex;
+	flex-direction: column;
+	gap: 1.1rem;
+	background: var(--wp--preset--color--sombre);
+	color: var(--wp--preset--color--fond);
+	border: 2px solid var(--wp--preset--color--accent);
+}
+.br-porte--urgence > * { margin: 0 !important; }
+.br-porte-titre { font-size: clamp(2.2rem, 4vw, 3.4rem) !important; line-height: .98 !important; color: inherit !important; }
+.br-porte-statut { display: inline-flex; align-self: flex-start; align-items: center; gap: .6rem; padding: .45rem .9rem; border-radius: 999px; background: rgba(127, 209, 139, .14); color: #a9ebbd; font-weight: 600; font-size: .95rem; }
+.br-porte-statut::before { content: ""; width: .55rem; height: .55rem; border-radius: 50%; background: #7fd18b; box-shadow: 0 0 0 4px rgba(127, 209, 139, .22); }
+.br-porte--urgence .br-appel { margin: 0; }
+.br-porte--urgence .br-appel-bouton {
+	display: flex;
+	align-items: center;
+	gap: .9rem;
+	width: 100%;
+	box-sizing: border-box;
+	min-height: 4.5rem;
+	padding: .9rem 1.4rem;
+	border-radius: 16px;
+	background: var(--wp--preset--color--accent);
+	color: #fff;
+	font-family: var(--wp--preset--font-family--titres);
+	font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+	font-weight: 700;
+	text-decoration: none;
+}
+.br-porte--urgence .br-appel-bouton svg { width: 1.6rem; height: 1.6rem; flex: none; }
+.br-porte-sous { font-size: .95rem; opacity: .75; }
+.br-porte-liens { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; margin-top: -.5rem !important; }
+.br-porte-liens > p { margin: 0 !important; }
+.br-porte-lien a {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	min-height: 48px;
+	padding: 0 1rem;
+	border-radius: 12px;
+	background: rgba(255, 255, 255, .07);
+	border: 1px solid rgba(255, 255, 255, .16);
+	color: inherit;
+	font-weight: 600;
+	text-decoration: none;
+}
+.br-porte-lien a::after { content: "›"; font-size: 1.3rem; line-height: 1; }
+.br-porte-lien a:hover { background: rgba(255, 255, 255, .14); }
+.br-porte-attente { margin-top: auto !important; font-size: .95rem; opacity: .9; }
+.br-porte-attente a { color: inherit; font-weight: 700; }
+.br-porte--projet { min-height: 24rem !important; overflow: hidden; color: var(--wp--preset--color--fond); }
+.br-porte--projet .wp-block-cover__inner-container > * { margin-top: .75rem; }
+.br-porte--projet .wp-block-button.is-style-outline .wp-block-button__link { color: var(--wp--preset--color--fond); border-color: currentColor; }
+@media (max-width: 781px) {
+	.br-ouv-portes-tete { grid-template-columns: 1fr; }
+	.br-porte-liens { grid-template-columns: 1fr; }
+	.br-porte--projet { min-height: 18rem !important; }
+}
+
+/* ----- Mosaïque de réalisations ----- */
+.br-ouv-mosaique-grille {
+	display: grid;
+	grid-template-columns: minmax(0, 4fr) minmax(0, 3fr) minmax(0, 3fr);
+	grid-template-rows: repeat(2, minmax(13rem, 1fr));
+	gap: 1rem;
+	min-height: min(78vh, 46rem);
+}
+.br-ouv-mosaique-grille > * { margin: 0 !important; }
+.br-ouv-mosaique-texte { grid-row: 1 / span 2; display: flex; flex-direction: column; justify-content: center; gap: 1.25rem; padding-right: 1.5rem; }
+.br-ouv-mosaique-texte > * { margin: 0 !important; }
+.br-ouv-tuile { position: relative; overflow: hidden; border-radius: var(--wp--custom--rayon--photo, 20px); }
+.br-ouv-tuile--haute { grid-row: 1 / span 2; }
+.br-ouv-tuile figure, .br-ouv-tuile .wp-block-image { margin: 0; height: 100%; }
+.br-ouv-tuile .wp-block-image a { display: block; height: 100%; }
+.br-ouv-tuile img { width: 100%; height: 100% !important; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+.br-ouv-tuile:hover img { transform: scale(1.04); }
+.br-ouv-legende { position: absolute; left: .9rem; bottom: .9rem; max-width: calc(100% - 1.8rem); margin: 0 !important; padding: .45rem .85rem; border-radius: 999px; background: var(--wp--preset--color--clair); color: var(--wp--preset--color--texte); font-size: .9rem; font-weight: 600; pointer-events: none; }
+@media (max-width: 781px) {
+	.br-ouv-mosaique-grille { grid-template-columns: 1fr 1fr; grid-template-rows: auto 14rem 10rem; min-height: 0; }
+	.br-ouv-mosaique-texte { grid-row: auto; grid-column: 1 / span 2; padding: 0; }
+	.br-ouv-tuile--haute { grid-row: auto; grid-column: 1 / span 2; }
+}
+
+/* ----- Grande photo et carte de garanties ----- */
+.br-ouv-carte { padding-bottom: calc(var(--wp--preset--spacing--70) + 4rem) !important; }
+.br-ouv-faits-zone { position: relative; z-index: 2; margin-top: -5rem !important; padding-left: var(--wp--style--root--padding-left, 1.25rem); padding-right: var(--wp--style--root--padding-right, 1.25rem); }
+.br-ouv-faits {
+	max-width: var(--wp--style--global--wide-size, 1240px) !important;
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+	align-items: center;
+	background: var(--wp--preset--color--clair);
+	color: var(--wp--preset--color--texte);
+	border-radius: var(--wp--custom--rayon--grand, 24px);
+	box-shadow: 0 24px 60px -24px rgba(0, 0, 0, .3);
+}
+.br-ouv-faits > * { margin: 0 !important; }
+.br-ouv-fait { padding: 1.75rem 2rem; border-right: 1px solid color-mix(in srgb, var(--wp--preset--color--texte) 12%, transparent); }
+.br-ouv-fait > * { margin: 0 !important; }
+.br-ouv-fait-chiffre { font-family: var(--wp--preset--font-family--titres); font-size: clamp(1.6rem, 2.6vw, 2.2rem); font-weight: 700; line-height: 1.05; }
+.br-ouv-fait-texte { margin-top: .3rem !important; color: var(--wp--preset--color--texte-doux); font-size: .95rem; }
+.br-ouv-faits > .wp-block-buttons { padding: 1.25rem 1.75rem; }
+@media (max-width: 781px) {
+	.br-ouv-faits { grid-template-columns: 1fr; }
+	.br-ouv-fait { border-right: 0; border-bottom: 1px solid color-mix(in srgb, var(--wp--preset--color--texte) 12%, transparent); padding: 1.1rem 1.4rem; }
+	.br-ouv-faits > .wp-block-buttons { padding: 1.1rem 1.4rem 1.4rem; }
+}
+
+/* ----- Accueil avec avant / après ----- */
+.br-ouv-avap .br-avant-apres { margin-bottom: .5rem; }
+.br-ouv-avap .br-pastille { margin-bottom: 1.25rem; }
+
+/* ----- Accueil sombre, photo coupée en biais ----- */
+.br-ouv-decoupe { position: relative; overflow: hidden; padding-top: 0 !important; padding-bottom: 0 !important; }
+.br-ouv-decoupe-cols { gap: 0 !important; align-items: stretch !important; min-height: min(80vh, 44rem); }
+.br-ouv-decoupe-cols > .wp-block-column:first-child { padding: var(--wp--preset--spacing--70) 3rem var(--wp--preset--spacing--70) 0; position: relative; z-index: 1; }
+.br-ouv-decoupe h1 { color: inherit; }
+.br-ouv-decoupe .br-lead { color: inherit; opacity: .85; }
+.br-ouv-decoupe .wp-block-button.is-style-outline .wp-block-button__link { color: var(--wp--preset--color--fond); border-color: currentColor; }
+.br-ouv-decoupe .wp-block-button:not(.is-style-outline) .wp-block-button__link { background: var(--wp--preset--color--accent); color: #fff; }
+@media (min-width: 782px) {
+	.br-ouv-decoupe-cols > .wp-block-column:last-child { position: relative; }
+	.br-ouv-decoupe-img {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		width: calc(100% + max(var(--wp--style--root--padding-right, 1.25rem), (100vw - var(--wp--style--global--content-size, 1200px)) / 2));
+		margin: 0 !important;
+		clip-path: polygon(21% 0, 100% 0, 100% 100%, 3% 100%);
+	}
+	.br-ouv-decoupe-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 0 !important; }
+	.br-ouv-decoupe-img::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: var(--wp--preset--color--accent);
+		clip-path: polygon(21% 0, 23.5% 0, 5.5% 100%, 3% 100%);
+	}
+}
+@media (max-width: 781px) {
+	.br-ouv-decoupe-cols > .wp-block-column:first-child { padding: var(--wp--preset--spacing--50) 0; }
+	.br-ouv-decoupe-img { margin: 0 calc(-1 * var(--wp--style--root--padding-left, 1.25rem)) !important; }
+	.br-ouv-decoupe-img img { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
+}
+
+/* ----- Grande photo et demande express ----- */
+.br-ouv-demande .br-coches { color: inherit; }
+.br-ouv-form { color: var(--wp--preset--color--texte); padding: 1.75rem !important; box-shadow: 0 24px 60px -20px rgba(0, 0, 0, .45); }
+.br-ouv-form > * { margin: 0 !important; }
+.br-ouv-form-titre { font-family: var(--wp--preset--font-family--titres); font-size: 1.5rem; font-weight: 700; line-height: 1.15; margin-bottom: 1rem !important; }
+.br-ouv-form-lien { margin-top: .9rem !important; font-size: .9rem; }
+.br-ouv-form-lien a { color: var(--wp--preset--color--texte); font-weight: 600; }
+.br-ouv-form .ff-el-group { margin-bottom: .9rem; }
+@media (max-width: 781px) { .br-ouv-legende { left: .5rem; bottom: .5rem; max-width: calc(100% - 1rem); font-size: .8rem; padding: .35rem .7rem; } }

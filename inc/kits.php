@@ -408,7 +408,7 @@ function briise_plan_installer( $plan ) {
 	// 8. Formulaires (Fluent Forms) : créés d'office si une page les utilise et que l'extension est là.
 	if ( function_exists( 'briise_formulaire_creer' ) && briise_fluentforms_actif() ) {
 		$tout = implode( ' ', array_column( $plan['pages'], 'markup' ) );
-		foreach ( array( 'devis', 'contact', 'reservation' ) as $type ) {
+		foreach ( array( 'devis', 'contact', 'reservation', 'rappel' ) as $type ) {
 			if ( false !== strpos( $tout, '[briise_formulaire type="' . $type . '"]' ) ) {
 				briise_formulaire_creer( $type );
 			}

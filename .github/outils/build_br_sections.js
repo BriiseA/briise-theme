@@ -689,6 +689,95 @@ add('formulaire-reservation', 'contact', 'Formulaire de réservation', 'Page « 
     ])], { width: '40%' }),
   ], 'br-split')]));
 
+/* ----- 1.15 : ouvertures (canevas « Briise, en-têtes et pieds de page ») ----- */
+const ImgLien = (name, alt, href, cls) => cb('core/image', { url: IMG(name), alt: fr(alt), sizeSlug: 'large', linkDestination: 'custom', href, ...(cls ? { className: cls } : {}) });
+const porteLien = (n) => P(`<a href="${URL('service-' + n)}">{{SERVICE:${n}}}</a>`, 'br-porte-lien');
+
+add('ouverture-deux-portes', 'ouverture', 'Deux portes : urgent ou projet', 'Dépannage et métiers d’urgence : dès l’arrivée, deux chemins. « C’est urgent » : l’appel en grand, les pannes courantes qui mènent à leur page, le geste à faire en attendant. « J’ai un projet » : une photo et la demande de devis. Le téléphone vient de Mon entreprise.',
+  Section('br-ouv-portes', [
+    Box('br-ouv-portes-tete', [
+      H('Votre métier à votre ville, en urgence ou sur rendez-vous', 1, null, { fontSize: 'xx-large' }),
+      Lead('Une phrase de preuve : prix annoncé avant de commencer, devis signé avant les travaux, note Google réelle.'),
+    ]),
+    Cols([
+      Col([Box('br-porte br-porte--urgence', [
+        P('Intervention possible aujourd’hui', 'br-porte-statut'),
+        H('C’est urgent', 2, 'br-porte-titre'),
+        Short('[briise_appel texte="Appeler" intro=""]'),
+        P('Votre problème', 'br-porte-sous'),
+        Box('br-porte-liens', [1, 2, 3, 4].map(porteLien)),
+        P(`En attendant : le geste qui limite les dégâts. <a href="${URL('faq')}">Les bons gestes</a>`, 'br-porte-attente'),
+      ])]),
+      Col([cb('core/cover', {
+        url: IMG('paysage'), alt: '', dimRatio: 60, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 100, minHeightUnit: '%',
+        contentPosition: 'bottom left', className: 'br-porte br-porte--projet', layout: { type: 'default' },
+      }, [
+        H('J’ai un projet', 2, 'br-porte-titre'),
+        P('Installation, rénovation ou entretien : visite et devis gratuits.'),
+        Btns(Btn(CTA_LABEL, CTA, 'is-style-outline')),
+      ])]),
+    ], 'br-ouv-portes-cols'),
+  ]));
+
+add('ouverture-mosaique', 'ouverture', 'Accueil en mosaïque de réalisations', 'La preuve dès l’arrivée : le titre et les boutons à gauche, trois réalisations récentes à droite, chacune avec son ouvrage et sa commune. Chaque photo mène aux réalisations.',
+  Section('br-ouv-mosaique', [Box('br-ouv-mosaique-grille', [
+    Box('br-ouv-mosaique-texte', [
+      P('Votre métier · Votre ville', 'br-pastille'),
+      H('Nos derniers ouvrages, posés près de chez vous', 1, null, { fontSize: 'xx-large' }),
+      Lead('Chaque projet est dessiné pour sa pièce. Voici les trois derniers, avec leur commune.'),
+      MainBtns(['Toutes nos réalisations', URL('realisations')]),
+    ]),
+    Box('br-ouv-tuile br-ouv-tuile--haute', [ImgLien('portrait', 'Photo à remplacer : une réalisation récente', URL('realisations')), P('Type d’ouvrage, commune', 'br-ouv-legende')]),
+    Box('br-ouv-tuile', [ImgLien('carre', 'Photo à remplacer : une autre réalisation', URL('realisations')), P('Type d’ouvrage, commune', 'br-ouv-legende')]),
+    Box('br-ouv-tuile', [ImgLien('carre-2', 'Photo à remplacer : une troisième réalisation', URL('realisations')), P('Type d’ouvrage, commune', 'br-ouv-legende')]),
+  ])]));
+
+add('ouverture-carte', 'ouverture', 'Grande photo et carte de garanties', 'Une grande photo pleine largeur avec le titre, puis une carte posée à cheval sur la section suivante : trois faits vérifiables (délai, ancienneté, garantie) et le bouton d’action.',
+  [
+    cb('core/cover', {
+      url: IMG('banniere'), alt: '', dimRatio: 70, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 72, minHeightUnit: 'vh',
+      contentPosition: 'center left', align: 'full', className: 'br-banniere br-ouv-plein br-ouv-carte', layout: { type: 'constrained' },
+    }, [Box('br-banniere-inner', [
+      H('Le titre qui dit ce que vous faites, et où', 1, null, { fontSize: 'huge' }),
+      Lead('Une phrase qui complète le titre : pour qui, et ce que le visiteur gagne à vous appeler.'),
+    ])]),
+    cb('core/group', { align: 'full', className: 'br-ouv-faits-zone', layout: { type: 'constrained' } }, [
+      Box('br-ouv-faits', [
+        Box('br-ouv-fait', [P('5 jours', 'br-ouv-fait-chiffre'), P('pour recevoir le devis', 'br-ouv-fait-texte')]),
+        Box('br-ouv-fait', [P('Depuis 2010', 'br-ouv-fait-chiffre'), P('une entreprise locale', 'br-ouv-fait-texte')]),
+        Box('br-ouv-fait', [P('Décennale', 'br-ouv-fait-chiffre'), P('sur chaque chantier', 'br-ouv-fait-texte')]),
+        Btns(Btn(CTA_LABEL, CTA)),
+      ]),
+    ]),
+  ]);
+
+add('ouverture-avant-apres', 'ouverture', 'Accueil avec avant / après', 'Rénovation, nettoyage, aménagement : le titre à gauche, une photo avant / après à faire glisser à droite. Les deux photos doivent être prises du même endroit, avec le même cadrage.',
+  Section('br-ouv-avap', [Cols([
+    Col([P('Votre métier · Votre ville', 'br-pastille'), H('Le titre de la transformation', 1, null, { fontSize: 'xx-large' }), Lead('Faites glisser pour comparer : même endroit, avant et après notre passage.'), MainBtns(['Voir nos réalisations', URL('realisations')])], { verticalAlignment: 'center', width: '40%' }),
+    Col([
+      Cols([
+        Col([Box('br-avap', [Img('avant', '4/3', 'is-style-br-arrondi', 'Avant : décrivez l’état de départ'), P('Avant', 'br-chip br-avap-tag')])]),
+        Col([Box('br-avap', [Img('apres', '4/3', 'is-style-br-arrondi', 'Après : décrivez le résultat'), P('Après', 'br-chip br-avap-tag')])]),
+      ], 'br-avant-apres br-glisse'),
+      P('Faites glisser le curseur, ou passez la souris sur la photo.', 'br-muted br-glisse-aide'),
+    ], { verticalAlignment: 'center', width: '60%' }),
+  ], 'br-split', { verticalAlignment: 'center' })]));
+
+add('ouverture-decoupe', 'ouverture', 'Accueil sombre, photo coupée en biais', 'Une ouverture plus industrielle : fond sombre, titre en grand, la photo coupée en biais avec un trait de la couleur d’accent. Sur mobile, la photo passe sous le texte.',
+  Section('br-ouv-decoupe', [Cols([
+    Col([Label('Votre métier, votre ville'), H('Le titre qui dit ce que vous fabriquez', 1, null, { fontSize: 'huge' }), Lead('Une phrase : ce que vous faites, où, et ce qui vous distingue.'), MainBtns(['Voir l’atelier', URL('a-propos')])], { verticalAlignment: 'center', width: '46%' }),
+    Col([ImgFond('paysage', 'br-ouv-decoupe-img', 'Photo à remplacer : votre atelier ou votre travail en cours')], { width: '54%' }),
+  ], 'br-ouv-decoupe-cols')], { backgroundColor: 'sombre', textColor: 'fond' }));
+
+add('ouverture-demande', 'ouverture', 'Grande photo et demande express', 'La demande dès l’arrivée : une grande photo, le titre, et à droite un formulaire de quatre champs (projet, commune, nom, téléphone) pour être rappelé. Le formulaire « Demande de rappel » se crée dans Mon entreprise > Fonctions. Idéale aussi pour une page de publicité.',
+  cb('core/cover', {
+    url: IMG('banniere'), alt: '', dimRatio: 70, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 80, minHeightUnit: 'vh',
+    contentPosition: 'center center', align: 'full', className: 'br-banniere br-ouv-plein br-ouv-demande', layout: { type: 'constrained' },
+  }, [Cols([
+    Col([Label('Votre métier, votre ville'), H('Le titre qui dit ce que vous faites, et où', 1, null, { fontSize: 'huge' }), Lead('Laissez votre numéro : nous vous rappelons dans la journée ouvrée pour fixer la visite.'), List(['Visite gratuite', 'Devis sous 5 jours', 'Garantie décennale'], 'br-coches')], { verticalAlignment: 'center', width: '55%' }),
+    Col([Box('br-card br-ouv-form', [P('Votre projet en 30 secondes', 'br-ouv-form-titre'), Short('[briise_formulaire type="rappel"]'), P(`Vous préférez écrire ? <a href="${CTA}">Le formulaire complet</a>`, 'br-muted br-ouv-form-lien')])], { verticalAlignment: 'center', width: '45%' }),
+  ], 'br-split', { verticalAlignment: 'center' })]));
+
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').mkdirSync(require('path').join(__dirname, 'build'), { recursive: true });
 require('fs').writeFileSync(require('path').join(__dirname, 'build', 'br_sections.json'), JSON.stringify(out, null, 1));
