@@ -1,6 +1,6 @@
 # Historique des versions
 
-## Prochaine version
+## 1.20.0
 
 - **Nouvelle section « Où en êtes-vous ? ».** Quatre cartes qui partent de la situation du visiteur (« J'ai un site, mais il ne m'apporte rien. »), chacune avec la réponse, le prix et le lien vers la bonne page, toutes visibles sans clic. Deux icônes de plus : loupe et flèches. Le site Briise l'utilise à la place de sa version faite à la main.
 - **Un accueil plus court sur téléphone.** Mon entreprise > Apparence > Sur téléphone, cartes et galeries : « En défilement ». Les rangées de trois cartes ou plus se font glisser de gauche à droite au lieu de s'empiler, et les galeries montrent quatre photos puis un bouton pour voir les autres. Rien n'est retiré de la page. Sur l'accueil d'exemple de Lison Vautrin : 11,6 écrans de téléphone au lieu de 14,6. Dans le fichier de site : `"cartes_mobile": "defilement"`.
