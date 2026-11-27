@@ -1,16 +1,6 @@
 {
   "_lisezmoi": "Catalogue des pièces qui différencient un site. « existe » : disponible dans le thème. « à créer » : prévu aux étapes 2 et 3. Le registre (registre-sites.json) note la combinaison retenue pour chaque site.",
   "pieces": {
-    "ambiance": {
-      "galet": "existe",
-      "lumiere": "existe",
-      "atelier": "existe",
-      "cabinet": "existe",
-      "comptoir": "existe",
-      "galerie": "existe",
-      "acier": "existe",
-      "charte-client": "existe"
-    },
     "entete": {
       "classique": "existe",
       "capsule": "existe",
@@ -22,16 +12,22 @@
       "barre-infos": "existe"
     },
     "ouverture": {
-      "photo-cote": "existe",
-      "texte": "existe",
+      "cote": "existe",
       "banniere": "existe",
+      "biais": "existe",
+      "moitie": "existe",
+      "arche": "existe",
+      "geant": "existe",
+      "diaporama": "existe",
+      "tuiles": "existe",
+      "mots": "existe",
+      "agrandi": "existe",
       "choix-prestation": "existe",
       "eventail": "existe",
       "deux-portes": "existe",
       "mosaique": "existe",
       "carte": "existe",
       "avant-apres": "existe",
-      "decoupe": "existe",
       "demande": "existe"
     },
     "cartes": {
@@ -58,9 +54,16 @@
       "barre": "existe"
     },
     "angles": {
-      "ambiance": "existe",
+      "standard": "existe",
       "doux": "existe",
-      "droits": "existe"
+      "droits": "existe",
+      "feuille": "existe",
+      "biseau": "existe"
+    },
+    "photos": {
+      "standard": "existe",
+      "arche": "existe",
+      "galet": "existe"
     },
     "relief": {
       "ombre": "existe",
@@ -79,12 +82,13 @@
   "regles": {
     "differences_minimum": 3,
     "pieces_comparees": [
-      "ambiance",
       "entete",
       "ouverture",
       "cartes",
       "titres",
-      "pied"
+      "pied",
+      "angles",
+      "relief"
     ],
     "ouverture_differente_des_derniers": 2
   },
@@ -122,14 +126,9 @@
       "realisation-racontee",
       "ouverture-mosaique"
     ],
-    "trois-cartes-photos": [
-      "orientation",
-      "tarifs-liste",
-      "ou-en-etes-vous"
-    ],
     "ou-en-etes-vous": [
       "orientation",
-      "trois-cartes-photos"
+      "services"
     ],
     "formulaire": [
       "formulaire-etapes"
@@ -139,6 +138,11 @@
     ],
     "tarifs-liste": [
       "estimateur"
+    ],
+    "services": [
+      "orientation",
+      "tarifs-liste",
+      "ou-en-etes-vous"
     ]
   }
 }

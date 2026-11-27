@@ -1,6 +1,6 @@
 name: Vérifications
 
-# À chaque envoi : syntaxe PHP, validité des JSON et contrastes AA de chaque ambiance.
+# À chaque envoi : syntaxe PHP, validité des JSON et contrastes AA (palette de base et sites d'exemple).
 
 on:
   push:
@@ -14,6 +14,6 @@ jobs:
       - name: Syntaxe PHP
         run: find . -name "*.php" -not -path "./.git/*" -print0 | xargs -0 -n1 php -l
       - name: Fichiers JSON
-        run: for f in theme.json styles/*.json; do python3 -m json.tool "$f" > /dev/null || exit 1; done
-      - name: Contrastes des ambiances
+        run: for f in theme.json inc/polices-livrees.json; do python3 -m json.tool "$f" > /dev/null || exit 1; done
+      - name: Contrastes des couleurs
         run: python3 .github/outils/contraste.py .

@@ -499,9 +499,17 @@ function briise_plan_installer( $plan ) {
 		}
 	}
 
-	// 9. L'ambiance et ses couleurs.
-	if ( ! empty( $plan['ambiance'] ) ) {
-		briise_appliquer_ambiance( sanitize_key( $plan['ambiance'] ), (array) ( $plan['couleurs'] ?? array() ) );
+	// 9. Les couleurs du client (« couleurs » : nom de la couleur => #rrggbb), ses réglages de style
+	// (« styles » : arrondis, boutons, titres…), puis le contraste.
+	if ( ! empty( $plan['styles'] ) && is_array( $plan['styles'] ) ) {
+		briise_appliquer_styles( $plan['styles'] );
+	}
+	$contrastes = array();
+	if ( ! empty( $plan['couleurs'] ) && is_array( $plan['couleurs'] ) ) {
+		briise_appliquer_couleurs( $plan['couleurs'] );
+		// Le contrôle n'est chargé d'office que dans l'administration (l'import peut venir d'ailleurs).
+		require_once get_theme_file_path( 'inc/contraste.php' );
+		$contrastes = briise_contrastes_insuffisants();
 	}
 	// Polices de la charte (« polices » : titres, texte, accent, accent_italique), par leur nom.
 	$polices_absentes = array();
@@ -511,7 +519,7 @@ function briise_plan_installer( $plan ) {
 
 	// 10. Forme de l'en-tête, du pied de page et du bas d'écran mobile.
 	if ( function_exists( 'briise_apparence_enregistrer' ) ) {
-		briise_apparence_enregistrer( array_map( 'sanitize_key', array_intersect_key( $plan, array_flip( array( 'entete', 'pied', 'mobile', 'cartes', 'titres', 'capitales', 'cartes_mobile', 'angles', 'relief', 'etiquettes', 'surlignage' ) ) ) ) );
+		briise_apparence_enregistrer( array_map( 'sanitize_key', array_intersect_key( $plan, array_flip( array( 'entete', 'pied', 'mobile', 'cartes', 'titres', 'capitales', 'cartes_mobile', 'angles', 'photos', 'relief', 'etiquettes', 'surlignage' ) ) ) ) );
 	}
 
 	if ( ! empty( $plan['kit'] ) ) {
@@ -519,34 +527,63 @@ function briise_plan_installer( $plan ) {
 	}
 	$exemples = array( 'portrait', 'paysage', 'paysage-2', 'carre', 'carre-2', 'carre-3', 'banniere', 'avant', 'apres', 'logo-1', 'logo-2', 'logo-3', 'logo-4', 'logo-5' );
 	$absentes = array_values( array_diff( array_keys( $GLOBALS['briise_photos_absentes'] ?? array() ), $exemples ) );
-	return array( 'crees' => array_values( wp_list_pluck( $crees, 'titre' ) ), 'gardes' => $gardes, 'manquants' => array_keys( $manquants ), 'realisations' => $realisations, 'photos_absentes' => $absentes, 'polices_absentes' => $polices_absentes, 'logos_absents' => $logos_absents );
+	return array( 'crees' => array_values( wp_list_pluck( $crees, 'titre' ) ), 'gardes' => $gardes, 'manquants' => array_keys( $manquants ), 'realisations' => $realisations, 'photos_absentes' => $absentes, 'polices_absentes' => $polices_absentes, 'logos_absents' => $logos_absents, 'contrastes' => $contrastes, 'ambiance_ignoree' => ! empty( $plan['ambiance'] ) );
 }
 
 /**
- * Applique une ambiance (styles/*.json), avec d'éventuelles couleurs du client.
+ * Réglages de style propres à un site (clé « styles » du fichier) : un morceau de theme.json,
+ * fusionné dans les styles globaux. Seuls « settings.custom » (arrondis, formes, ombres) et
+ * « styles » (titres, boutons, liens…) sont pris : couleurs et polices ont leurs propres clés.
  */
-function briise_appliquer_ambiance( $slug, $couleurs = array() ) {
-	$fichier = get_theme_file_path( 'styles/' . $slug . '.json' );
-	$data    = ( 'galet' === $slug || ! file_exists( $fichier ) ) ? array( 'version' => 3 ) : json_decode( file_get_contents( $fichier ), true );
-	unset( $data['$schema'], $data['description'] );
+function briise_appliquer_styles( $styles ) {
+	$ajout = array();
+	if ( ! empty( $styles['settings']['custom'] ) && is_array( $styles['settings']['custom'] ) ) {
+		$ajout['settings']['custom'] = $styles['settings']['custom'];
+	}
+	if ( ! empty( $styles['styles'] ) && is_array( $styles['styles'] ) ) {
+		$ajout['styles'] = $styles['styles'];
+	}
+	if ( ! $ajout ) {
+		return;
+	}
+	$post = WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles( wp_get_theme(), true );
+	if ( empty( $post['ID'] ) ) {
+		return;
+	}
+	$data = json_decode( (string) get_post_field( 'post_content', $post['ID'] ), true );
+	$data = array_replace_recursive( is_array( $data ) ? $data : array(), $ajout );
+	$data['version']                     = $data['version'] ?? 3;
+	$data['isGlobalStylesUserThemeJSON'] = true;
+	wp_update_post( wp_slash( array( 'ID' => $post['ID'], 'post_content' => wp_json_encode( $data ) ) ) );
+	if ( function_exists( 'wp_clean_theme_json_cache' ) ) {
+		wp_clean_theme_json_cache();
+	}
+}
+
+/**
+ * Applique les couleurs du client à la palette de base (theme.json), dans les styles globaux.
+ * Une couleur absente du fichier garde sa valeur de base. Le reste des styles globaux est conservé.
+ */
+function briise_appliquer_couleurs( $couleurs ) {
 	$theme   = json_decode( file_get_contents( get_theme_file_path( 'theme.json' ) ), true );
-	$palette = $data['settings']['color']['palette'] ?? $theme['settings']['color']['palette'];
+	$palette = $theme['settings']['color']['palette'];
 	foreach ( $palette as $i => $c ) {
-		if ( isset( $couleurs[ $c['slug'] ] ) && preg_match( '/^#[0-9a-f]{6}$/i', $couleurs[ $c['slug'] ] ) ) {
+		if ( isset( $couleurs[ $c['slug'] ] ) && preg_match( '/^#[0-9a-f]{6}$/i', (string) $couleurs[ $c['slug'] ] ) ) {
 			$palette[ $i ]['color'] = strtolower( $couleurs[ $c['slug'] ] );
 		}
 	}
-	$data['settings']['color']['palette'] = array( 'theme' => $palette );
-	if ( isset( $data['settings']['typography']['fontFamilies'] ) ) {
-		$data['settings']['typography']['fontFamilies'] = array( 'theme' => $data['settings']['typography']['fontFamilies'] );
-	}
-	$data['isGlobalStylesUserThemeJSON'] = true;
 	$post = WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles( wp_get_theme(), true );
-	if ( ! empty( $post['ID'] ) ) {
-		wp_update_post( wp_slash( array( 'ID' => $post['ID'], 'post_content' => wp_json_encode( $data ) ) ) );
-		if ( function_exists( 'wp_clean_theme_json_cache' ) ) {
-			wp_clean_theme_json_cache();
-		}
+	if ( empty( $post['ID'] ) ) {
+		return;
+	}
+	$data = json_decode( (string) get_post_field( 'post_content', $post['ID'] ), true );
+	$data = is_array( $data ) ? $data : array();
+	$data['version']                      = $data['version'] ?? 3;
+	$data['isGlobalStylesUserThemeJSON']  = true;
+	$data['settings']['color']['palette'] = array( 'theme' => $palette );
+	wp_update_post( wp_slash( array( 'ID' => $post['ID'], 'post_content' => wp_json_encode( $data ) ) ) );
+	if ( function_exists( 'wp_clean_theme_json_cache' ) ) {
+		wp_clean_theme_json_cache();
 	}
 }
 
@@ -760,7 +797,13 @@ function briise_onglet_demarrage() {
 				echo '<p><strong>Logos absents de la Médiathèque</strong> : ' . esc_html( implode( ', ', $r['logos_absents'] ) ) . '. Ajoutez-les dans Médias avec ce nom de fichier (PNG transparent, au moins 400 px de large), puis cliquez sur « Placer les photos de la Médiathèque » plus bas.</p>';
 			}
 			if ( ! empty( $r['polices_absentes'] ) ) {
-				echo '<p><strong>Polices introuvables</strong> (celles de l’ambiance restent en place) : ' . esc_html( implode( ', ', $r['polices_absentes'] ) ) . '. Téléversez-les dans Apparence &gt; Éditeur &gt; Styles &gt; Typographie &gt; Gérer les polices, puis choisissez-les dans Mon entreprise &gt; Apparence &gt; Polices.</p>';
+				echo '<p><strong>Polices introuvables</strong> (celles de base du thème restent en place) : ' . esc_html( implode( ', ', $r['polices_absentes'] ) ) . '. Téléversez-les dans Apparence &gt; Éditeur &gt; Styles &gt; Typographie &gt; Gérer les polices, puis choisissez-les dans Mon entreprise &gt; Apparence &gt; Polices.</p>';
+			}
+			if ( ! empty( $r['contrastes'] ) ) {
+				echo '<p><strong>Couleurs difficiles à lire</strong> (contraste sous 4,5:1) : ' . esc_html( implode( ' ; ', $r['contrastes'] ) ) . '. Corrigez la clé « couleurs » du fichier, ou la couleur dans Apparence &gt; Éditeur &gt; Styles &gt; Couleurs.</p>';
+			}
+			if ( ! empty( $r['ambiance_ignoree'] ) ) {
+				echo '<p>La clé « ambiance » du fichier est ignorée : les ambiances n’existent plus. Les couleurs viennent de la clé « couleurs », les polices de la clé « polices ».</p>';
 			}
 			echo '<p>Prochaines étapes : compléter les autres onglets de Mon entreprise, puis remplacer les textes et les photos d’exemple de chaque page.</p></div>';
 		}
@@ -770,7 +813,7 @@ function briise_onglet_demarrage() {
 	if ( ! $choisi || ! isset( $data['kits'][ $choisi ] ) ) :
 		?>
 		<h2 class="title">Importer un fichier de site</h2>
-		<p class="description">La façon normale de créer un site client. Toutes les sections de la bibliothèque servent à tous les métiers : l’agence choisit, pour chaque client, celles qui répondent le mieux à ses visiteurs, et les assemble dans ce fichier avec les textes, le référencement, le menu, les informations de l’entreprise, l’ambiance et l’apparence.</p>
+		<p class="description">La façon normale de créer un site client. Toutes les sections de la bibliothèque servent à tous les métiers : l’agence choisit, pour chaque client, celles qui répondent le mieux à ses visiteurs, et les assemble dans ce fichier avec les textes, le référencement, le menu, les informations de l’entreprise, les couleurs, les polices et l’apparence.</p>
 		<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 			<input type="hidden" name="action" value="briise_kit"><input type="hidden" name="mode" value="fichier">
 			<?php wp_nonce_field( 'briise_kit' ); ?>

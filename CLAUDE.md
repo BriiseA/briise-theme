@@ -14,20 +14,21 @@ Thème de bloc (Full Site Editing) de l'agence web Briise, et son extension Brii
 | Dossier | Rôle |
 | --- | --- |
 | racine (`style.css`, `theme.json`, `functions.php`, `templates/`, `parts/`, `styles/`, `assets/`) | Le thème : l'apparence |
-| `inc/` | Code du thème : ambiances et import d'un fichier de site (`kits.php`), apparence (`apparence.php`), styles de section, performance |
+| `inc/` | Code du thème : import d'un fichier de site, couleurs comprises (`kits.php`), polices (`polices.php`, `polices-livrees.json`), apparence (`apparence.php`), styles de section, performance |
 | `patterns/section-*.php` | Les sections (compositions). **Générées : ne pas les modifier à la main.** |
 | `extension/briise-socle/` | L'extension : Mon entreprise, référencement, formulaires, contrôle du maillage, cartes. Livrée à part (`briise-socle.zip`) |
 | `.github/outils/` | Outils de fabrication (Node et Python), hors thème. Voir `.github/outils/LISEZMOI.md` |
-| `.github/outils/exemples/` | Sites d'exemple fictifs : Atelier Ferlune (métallier, Saran), Lison Vautrin (photographe, Olivet) |
-| `.github/outils/banc/` | Banc d'essai : WordPress neuf (SQLite), import de Ferlune, vérifications, captures |
+| `.github/outils/exemples/` | Site d'exemple fictif Lison Vautrin (photographe, Olivet), et le site de l'agence (`site-briise.json`) |
+| `.github/outils/banc/` | Banc d'essai : WordPress neuf (SQLite), import de Lison, vérifications, captures |
 
 ## Modifier une section
 
 1. Changer la section dans `.github/outils/build_br_sections.js` (blocs créés avec `@wordpress/blocks`, donc toujours valides).
 2. Régénérer, depuis `.github/outils` (après `npm ci`) :
-   `node build_br_sections.js && python3 write_sections.py && node build_br_kits.js && python3 catalogue.py && node exemples/build_ferlune.js && node exemples/build_lison.js`
-3. Le CSS des sections est dans `theme.json` (`styles.css`) et dans `assets/css/` (`sections.css`, `variantes.css`, `ux.css`, `motion.css`).
-4. Chaque section doit fonctionner avec les huit ambiances (`styles/*.json`) et garder un contraste AA (`python3 contraste.py`).
+   `node build_br_sections.js && python3 write_sections.py && node build_br_kits.js && python3 catalogue.py && node exemples/build_lison.js`
+3. Le CSS des sections est dans `theme.json` (`styles.css`) et dans `assets/css/` (`sections.css`, `variantes.css`, `ux.css`, `motion.css`, `familles.css`).
+   Familles (une section, plusieurs versions) : la version est la classe `br-<famille>--<version>` ; liste et panneau « Version » de l'éditeur dans `inc/familles.php`, CSS dans `familles.css`, comportements dans `assets/js/familles.js`. Une version doit rester lisible sans script.
+4. Il n'y a plus d'ambiances : chaque section doit fonctionner avec n'importe quelles couleurs de client qui passent le contrôle AA (`python3 contraste.py`, et le rapport de l'import). Arrondis, ombres et capitales se règlent par site (Mon entreprise > Apparence).
 
 Règles des sections : jamais de texte seul (une image ou un dessin à côté), deux sections voisines n'ont jamais le même fond (fonction `rythme()` de `build_br_kits.js`), animations coupées si le visiteur demande à réduire les animations, cibles tactiles de 44 px, focus visible.
 
@@ -51,4 +52,4 @@ Règles des sections : jamais de texte seul (une image ou un dessin à côté), 
 - Titres en capitales (`br-capitales--oui`) : les colonnes de WordPress coupent les mots trop longs (`word-break: break-word`). Les grands titres en capitales l'annulent et portent `contain: inline-size` pour qu'un mot ne puisse pas élargir la colonne ; `ux.js` réduit alors le titre (jusqu'à 70 %, avec `!important` car certaines ouvertures fixent leur taille).
 - Cache des pages : `extension/briise-socle/inc/cache.php` vide les extensions de cache à la fin de la requête dès qu'une option `briise_…` change (sauf mémoires internes listées dans le fichier). Une nouvelle option interne qui change souvent doit y être ajoutée à la liste d'exclusion, sinon chaque changement vide le cache.
 - Personnalité (`assets/css/personnalite.css`) : chaque règle dépend d'une classe de `<body>` (`br-angles--droits`, `br-relief--bordure`, `br-etiquettes--numerotees`, `br-surlignage--aplat`, `br-titres--marge`, `br-police-chiffres`). Dans l'éditeur, `inc/apparence.php` remplace les classes actives par `.editor-styles-wrapper` : ne jamais écrire `main` dans ces sélecteurs (l'éditeur n'en a pas), utiliser `:is(.wp-site-blocks, .is-root-container)`.
-- Polices d'une charte (`inc/polices.php`) : appliquées à chaque affichage par le filtre `wp_theme_json_data_user`, jamais écrites dans les styles globaux, pour survivre à un changement d'ambiance. Les variables `--wp--preset--font-family--titres`, `--texte` et `--accent` restent les seules à utiliser dans le CSS ; le mot surligné d'un titre lit `--accent` avec repli sur la police des titres.
+- Polices d'une charte (`inc/polices.php`) : appliquées à chaque affichage par le filtre `wp_theme_json_data_user`, jamais écrites dans les styles globaux. Les polices proposées viennent de `theme.json` et de `inc/polices-livrees.json` (fichiers dans `assets/fonts`). Les variables `--wp--preset--font-family--titres`, `--texte` et `--accent` restent les seules à utiliser dans le CSS ; le mot surligné d'un titre lit `--accent` avec repli sur la police des titres.

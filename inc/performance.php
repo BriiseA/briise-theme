@@ -2,7 +2,7 @@
 /**
  * Vitesse d'affichage.
  *
- * Précharge les deux polices de l'ambiance active (titres et texte) : le navigateur les
+ * Précharge les deux polices actives (titres et texte) : le navigateur les
  * télécharge dès le début de la page au lieu de les découvrir dans la feuille de style.
  * Le grand titre s'affiche donc d'emblée dans sa police, sans changer de hauteur ni
  * pousser le texte qui suit (décalage de mise en page, CLS).

@@ -1,4 +1,4 @@
-"""Prépare les fichiers que validate.js contrôle : sections, pages de démarrage, pages de l’Atelier Ferlune."""
+"""Prépare les fichiers que validate.js contrôle : sections et pages de démarrage."""
 import json
 import pathlib
 import sys
@@ -28,5 +28,4 @@ for p in kits.get('legales', []):
         pages['legale/' + p.get('slug', '')] = p['markup']
 json.dump({'sections': pages, 'home': ''}, open(build / 'banc_kits.json', 'w'))
 
-(build / 'banc_ferlune.json').write_text((build / 'ferlune_blocs.json').read_text())
 print(f"  {len(sections)} sections, {len(pages)} pages de démarrage")

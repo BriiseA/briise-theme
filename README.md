@@ -3,9 +3,9 @@
 Thème WordPress à blocs de l'agence Briise pour les sites vitrines d'entreprises locales de services, et son extension **Briise Socle**.
 
 - **Briise Socle** (`extension/briise-socle/`) : le fonctionnement, indépendant du thème. Mon entreprise (coordonnées, horaires, annonces, mentions légales, fonctions), onglet Contrôle, référencement et données structurées, robots.txt et IndexNow, cartes Coordonnées et Zone, codes courts, bandeau d'information, mesure des contacts, mises à jour depuis GitHub, fin de collaboration.
-- **Thème Briise** (racine du dépôt) : l'apparence. Ambiances, sections, gabarits, styles de section, import d'un fichier de site et site de base (onglet Démarrage), animations.
+- **Thème Briise** (racine du dépôt) : l'apparence. Sections, gabarits, styles de section, import d'un fichier de site et site de base (onglet Démarrage), animations.
 
-Un site Briise utilise les deux. Un site fait avec un autre thème peut n'utiliser que l'extension : il garde Mon entreprise, le contrôle du maillage, le référencement et les cartes (avec une apparence simple), mais pas les sections ni les ambiances. Sans l'extension, le thème s'affiche sans erreur mais sans coordonnées ni référencement, et prévient l'administrateur.
+Un site Briise utilise les deux. Un site fait avec un autre thème peut n'utiliser que l'extension : il garde Mon entreprise, le contrôle du maillage, le référencement et les cartes (avec une apparence simple), mais pas les sections ni l'apparence du thème. Sans l'extension, le thème s'affiche sans erreur mais sans coordonnées ni référencement, et prévient l'administrateur.
 Le cahier des charges complet est dans le document « Thème de base agence : cahier des charges ».
 
 ## Principe
@@ -25,7 +25,6 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | `assets/images/sections/` | Images de remplacement des sections, à remplacer par les photos du client |
 | `assets/js/ux.js` | Menu intelligent, page active, téléphones cliquables, bouton fixe mobile, retour en haut |
 | `assets/js/motion.js` | Animations d'apparition (coupées si le visiteur le demande) |
-| `styles/` | Ambiances (variations de style) |
 | `inc/kits.php`, `inc/kits.json`, `inc/demarrage.json` | Démarrage : import d'un fichier de site, site de base, modèles de page |
 | `inc/contraste.php` | Avertissement si une couleur modifiée rend un texte illisible |
 | `inc/styles-section.php` | Styles de section en un clic et contrôle du rythme des couleurs |
@@ -42,37 +41,28 @@ Corriger un défaut dans la base le corrige partout, à la prochaine mise à jou
 | `extension/briise-socle/inc/realisations.php` | Réalisations : fiches, grilles automatiques, filtres, import et export |
 | `extension/briise-socle/inc/mises-a-jour.php` | Mises à jour du thème et de l'extension depuis les versions GitHub |
 | `extension/briise-socle/inc/depart.php` | Onglet « Fin de collaboration » |
-| `.github/outils/` | Scripts de fabrication des sections et des ambiances, catalogue des sections, grille des questions du visiteur, registre des sites (hors thème) |
+| `.github/outils/` | Scripts de fabrication des sections, catalogue des sections, grille des questions du visiteur, registre des sites (hors thème) |
 | `assets/fonts/` | Polices hébergées et leurs licences (toutes sous licence OFL) |
 
-## Ambiances (variations de style)
+## Couleurs et polices
 
-Apparence > Éditeur > Styles > Parcourir les styles. Huit ambiances, toutes vérifiées en contraste AA :
+Le thème n'a plus d'ambiances : une seule base (`theme.json`), et chaque site reçoit les couleurs et les polices de son client. La base est vérifiée en contraste AA ; les couleurs d'un client sont vérifiées à l'import du fichier de site (rapport de l'import) puis sur le tableau de bord.
 
-| Ambiance | Pour qui | Titres / texte |
-| --- | --- | --- |
-| Galet (par défaut) | Bien-être, artisans d'art, créatifs | Bricolage Grotesque / Figtree |
-| Lumière | Photographes, esthétique, événementiel | Cormorant Garamond / DM Sans |
-| Atelier | Bâtiment, garages, artisans du bois | Barlow Condensed / Barlow |
-| Acier | Métallerie, serrurerie, chaudronnerie : gris acier, graphite, rouille | Barlow Condensed / Barlow |
-| Cabinet | Avocats, experts-comptables, santé | Source Serif 4 / Source Sans 3 |
-| Comptoir | Restaurants, commerces, loisirs | Fredoka / Nunito |
-| Galerie | Métiers de l'image et de l'événement (photographes, vidéastes, fleuristes) : fond très clair, rose poudré, framboise | Bricolage Grotesque / Geist |
-| Charte du client | Client qui a déjà sa charte graphique | Polices système, à remplacer |
-
-Toutes les ambiances partagent les mêmes noms de couleurs, ce qui permet à chaque section de fonctionner avec chacune :
+Toutes les sections utilisent les mêmes noms de couleurs : changer une couleur change tout le site, sans toucher aux sections.
 
 | Couleur | Rôle |
 | --- | --- |
 | `fond`, `clair` | Fond de page, fond des cartes |
 | `surface`, `nuance` | Fonds de sections |
 | `texte`, `texte-doux` | Texte principal, texte secondaire |
-| `accent` | Liens au survol, boutons de certaines ambiances |
-| `secondaire` | Chiffres, badges |
+| `accent` | Liens au survol, mot surligné d'un titre |
+| `secondaire` | Chiffres, badges, bande foncée |
 | `deco` | Formes décoratives, jamais du texte |
 | `sombre` | Pied de page et bandeau |
 
-Arrondis et formes : `--wp--custom--rayon--grand|moyen|petit|bouton` et `--wp--custom--forme--blob`, propres à chaque ambiance.
+Dans le fichier de site : `"couleurs": { "fond": "#fffcfa", "accent": "#b0285f", … }` (une couleur absente garde sa valeur de base) et `"polices": { "titres": "…", "texte": "…" }`. Polices livrées avec le thème : Bricolage Grotesque et Figtree (base), Barlow, Barlow Condensed, Cormorant Garamond, DM Sans, Fredoka, Geist, Nunito, Source Sans 3, Source Serif 4 (`inc/polices-livrees.json`).
+
+Arrondis, ombres, capitales : réglés au cas par cas dans Mon entreprise > Apparence (`angles`, `relief`, `capitales`), voir plus bas. Pour un réglage plus fin, propre à un seul site, la clé `styles` du fichier de site reçoit un morceau de `theme.json`, fusionné dans les styles globaux à l'import : `settings.custom` (arrondis `rayon`, formes `forme`, ombres `ombre`) et `styles` (titres, boutons, liens). Exemple, les boutons dans la couleur d'accent : `"styles": { "styles": { "elements": { "button": { "color": { "background": "var:preset|color|accent", "text": "var:preset|color|clair" } } } } }`. Le site de Lison s'en sert pour garder exactement l'apparence présentée.
 
 **Couleur du logo du client.** Styles > Couleurs > Palette > Modifier, puis changer `accent`. Si une couleur rend un texte illisible (contraste inférieur à 4,5:1), un avertissement apparaît sur le tableau de bord.
 
@@ -88,7 +78,7 @@ Arrondis et formes : `--wp--custom--rayon--grand|moyen|petit|bouton` et `--wp--c
 
 **Photos.** Chaque photo JPEG ou PNG envoyée est enregistrée en WebP (Fonctions > Photos en WebP) ; WordPress réduit celles de plus de 2 560 px.
 
-**Banc d'essai.** `.github/outils/banc/lancer.sh` installe un WordPress neuf, importe le site d'exemple Atelier Ferlune (métallerie fictive à Saran) et vérifie tout (blocs, pages, Contrôle, sécurité, accessibilité). Il vérifie aussi les blocs du second site d'exemple, Lison Vautrin (photographe fictive à Olivet, ambiance Galerie, `exemples/build_lison.js`). GitHub le lance à chaque envoi ; une version n'est publiée que s'il est au vert.
+**Banc d'essai.** `.github/outils/banc/lancer.sh` installe un WordPress neuf, importe le site d'exemple Lison Vautrin (photographe fictive à Olivet, `exemples/build_lison.js`) et vérifie tout (blocs, pages, Contrôle, couleurs, sécurité, accessibilité). GitHub le lance à chaque envoi ; une version n'est publiée que s'il est au vert.
 
 **Crédit de l'agence.** Mon entreprise > Fonctions > « Crédit de l'agence en pied de page » : « Site réalisé par Briise » (texte du début modifiable), en petit à côté des mentions légales, lien en nofollow vers briise.fr. Désactivé par défaut, à activer avec l'accord du client ; coupé automatiquement quand on fige les contenus en fin de collaboration.
 
@@ -96,7 +86,7 @@ Arrondis et formes : `--wp--custom--rayon--grand|moyen|petit|bouton` et `--wp--c
 
 **Réseaux sociaux.** Instagram, Facebook, LinkedIn, fiche Google, TikTok, YouTube et Pinterest (Mon entreprise > Entreprise) s'affichent en icônes dans le pied de page, avec leur nom pour les lecteurs d'écran (Fonctions : « Réseaux sociaux en icônes », décocher pour du texte).
 
-**Cartes Coordonnées et Zone.** Deux sections de la catégorie Contact, colorées par l'ambiance. Elles lisent Mon entreprise : rien n'est tapé deux fois. Champs facultatifs (Mon entreprise > Entreprise, « Cartes Coordonnées et Zone d'intervention ») : une précision sous le téléphone, l'e-mail et l'adresse, un badge par carte, et les secteurs de la zone :
+**Cartes Coordonnées et Zone.** Deux sections de la catégorie Contact, aux couleurs du site. Elles lisent Mon entreprise : rien n'est tapé deux fois. Champs facultatifs (Mon entreprise > Entreprise, « Cartes Coordonnées et Zone d'intervention ») : une précision sous le téléphone, l'e-mail et l'adresse, un badge par carte, et les secteurs de la zone :
 
 ```
 # Alpes-Maritimes | Autour de l'atelier
@@ -109,13 +99,13 @@ Sans secteurs, la carte Zone reprend la liste des villes. Dans le fichier de sit
 
 **Logo.** Mon entreprise > Entreprise > Logo : il remplace le nom en texte dans l'en-tête (le nom reste lu par Google et les lecteurs d'écran). Le pied de page étant sombre, un « logo pour fond foncé » facultatif l'y remplace aussi, dans les pieds Colonnes, Grand titre, Compact et Grand appel (Nom géant garde le nom, c'est son principe) ; sans lui, le nom reste en texte. Sans logo, rien ne change. Dans le fichier de site : `"logo": "briise-logo-sombre", "logo_clair": "briise-logo-clair"`, par le nom du fichier dans la Médiathèque (ou dans la liste `images`). Un logo absent est signalé à l'import ; « Placer les photos de la Médiathèque » le règle une fois déposé, sans remplacer un logo déjà choisi.
 
-**Charte du client.** Partir de l'ambiance « Charte du client » et remplacer ses couleurs par celles de la charte. Pour les polices : les téléverser dans Styles > Typographie > Gérer les polices (fichiers WOFF2, licence web vérifiée), puis les choisir dans Mon entreprise > Apparence > **Polices** : titres, texte et accent. La liste reprend aussi les onze polices livrées avec le thème. Le choix passe devant les polices de l'ambiance et reste en place si l'on change d'ambiance ; « Selon l'ambiance » revient aux polices d'origine. La **police d'accent** s'applique au mot passé au Surlignage dans un titre (case « Mot d'accent en italique ») ; sans elle, ce mot garde la police des titres. Une police d'accent qui n'a qu'une graisse fine n'est pas grossie artificiellement. « Taille du mot d'accent » l'agrandit un peu quand elle paraît plus petite que celle des titres (comme le titre, 108 %, 115 % ou 125 %). Dans le fichier de site : `"polices": { "titres": "Sora", "texte": "Figtree", "accent": "Instrument Serif", "accent_italique": true, "accent_taille": 1.15 }` (taille entre 0.8 et 1.4), par le nom de la police ; une police introuvable est signalée à l'import et celle de l'ambiance reste en place. Les titres en capitales se règlent dans Mon entreprise > Apparence (voir plus bas). Un détail que les réglages ne couvrent pas se règle dans Styles > CSS additionnel : le CSS du thème reste en place, celui du client passe après.
+**Charte du client.** Ses couleurs vont dans la clé `couleurs` du fichier de site (ou Styles > Couleurs > Palette). Pour les polices : les téléverser dans Styles > Typographie > Gérer les polices (fichiers WOFF2, licence web vérifiée), puis les choisir dans Mon entreprise > Apparence > **Polices** : titres, texte et accent. La liste reprend aussi les onze polices livrées avec le thème. « Police du thème » revient aux polices de base. La **police d'accent** s'applique au mot passé au Surlignage dans un titre (case « Mot d'accent en italique ») ; sans elle, ce mot garde la police des titres. Une police d'accent qui n'a qu'une graisse fine n'est pas grossie artificiellement. « Taille du mot d'accent » l'agrandit un peu quand elle paraît plus petite que celle des titres (comme le titre, 108 %, 115 % ou 125 %). Dans le fichier de site : `"polices": { "titres": "Sora", "texte": "Figtree", "accent": "Instrument Serif", "accent_italique": true, "accent_taille": 1.15 }` (taille entre 0.8 et 1.4), par le nom de la police ; une police introuvable est signalée à l'import et celle de base reste en place. Les titres en capitales se règlent dans Mon entreprise > Apparence (voir plus bas). Un détail que les réglages ne couvrent pas se règle dans Styles > CSS additionnel : le CSS du thème reste en place, celui du client passe après.
 
 ## Démarrer un site client
 
 1. Installer WordPress, téléverser `briise.zip`, activer le thème.
 2. Mon entreprise > **Démarrage**, au choix :
-   - **importer un fichier de site** : la façon normale. L'agence compose le site du client section par section, dans toute la bibliothèque, et prépare le fichier (pages, textes, référencement, menu, informations, ambiance, apparence) ;
+   - **importer un fichier de site** : la façon normale. L'agence compose le site du client section par section, dans toute la bibliothèque, et prépare le fichier (pages, textes, référencement, menu, informations, couleurs, polices, apparence) ;
    - **créer un site de base** : l'accueil (une ouverture au choix parmi toutes, puis l'appel à l'action), la page de contact, la page merci et les pages légales, à compléter ensuite avec les sections de l'éditeur. On peut y ajouter des pages faites avec les modèles et une page par service (rangée en sous-menu).
 3. Mon entreprise : compléter ce que le fichier n'a pas rempli ; choisir l'en-tête, le pied de page, les cartes et les titres dans Apparence.
 4. Remplacer chaque texte et chaque photo d'exemple, puis suivre la checklist de livraison.
@@ -126,7 +116,7 @@ Sans secteurs, la carte Zone reprend la liste des villes. Dans le fichier de sit
 | --- | --- |
 | `parcours.json` | Grille de réflexion : les questions qu'un visiteur se pose selon ce qu'il vient faire (appeler en urgence, demander un devis, réserver, consulter, venir sur place), dans l'ordre, et les preuves qui y répondent. Un client peut relever de plusieurs. |
 | `catalogue-sections.md` | Les 83 sections, avec ce que fait chacune et ce dont elle a besoin pour être vraie (photos, prix réels, avis réels, fiches Réalisations, communes…). Produit par `catalogue.py`. |
-| `variantes.json`, `registre-sites.json`, `registre.py` | Les pièces qui différencient un site (ambiance, en-tête, ouverture, cartes, titres, pied de page) et les sections qui jouent le même rôle sous une autre forme ; le registre vérifie qu'un nouveau site diffère des précédents. |
+| `variantes.json`, `registre-sites.json`, `registre.py` | Les pièces qui différencient un site (en-tête, ouverture, cartes, titres, pied de page, angles, relief) et les sections qui jouent le même rôle sous une autre forme ; le registre vérifie qu'un nouveau site diffère des précédents. |
 
 Les sites installés avec les anciens kits (prestataire, artisan, profession libérale) gardent leurs liens dans les modèles de page.
 
@@ -145,8 +135,8 @@ Fichier JSON importé dans Démarrage. Seule la liste `pages` est obligatoire. D
   "entreprise": { "name": "Atelier Ferrum", "slogan": "Métallier à Milly-la-Forêt", "type": "HomeAndConstructionBusiness", "telephone": "06 12 34 56 78", "city": "Milly-la-Forêt" },
   "legal": { "raison_sociale": "Atelier Ferrum SARL", "siren": "123 456 789" },
   "annonces": { "jours": { "1": { "ouvert": true, "plages": [["08:00", "12:00"], ["13:30", "18:00"]] } } },
-  "ambiance": "atelier",
   "couleurs": { "accent": "#a83d0c" },
+  "polices": { "titres": "Barlow Condensed", "texte": "Barlow" },
   "entete": "capsule", "pied": "grand-titre", "mobile": "barre", "cartes": "photo-haut", "titres": "tete-lien",
   "cta": "devis", "cta_label": "Demander un devis", "accueil": "accueil", "faq": "faq", "personne": "a-propos", "blog": "",
   "statut": "publish",
@@ -175,7 +165,7 @@ Fiches de réalisation : liste `realisations`, créées après les pages (chacun
 
 ### Apparence : en-têtes, pieds de page, téléphone, cartes et titres
 
-Mon entreprise > Apparence (administrateur), ou les clés `entete`, `pied`, `mobile`, `cartes`, `titres`, `capitales`, `cartes_mobile`, et pour la personnalité `angles`, `relief`, `etiquettes` et `surlignage`, du fichier de site. La personnalité s'applique aussi dans l'éditeur. Une police « chiffres » (prix, durées, compteurs, étiquettes numérotées) se choisit avec les autres polices (`"polices": { "chiffres": "IBM Plex Mono" }`). Les textes, le téléphone, le bouton et les horaires viennent toujours de Mon entreprise ; seule la forme change.
+Mon entreprise > Apparence (administrateur), ou les clés `entete`, `pied`, `mobile`, `cartes`, `titres`, `capitales`, `cartes_mobile`, et pour la personnalité `angles`, `photos`, `relief`, `etiquettes` et `surlignage`, du fichier de site. La personnalité s'applique aussi dans l'éditeur. Une police « chiffres » (prix, durées, compteurs, étiquettes numérotées) se choisit avec les autres polices (`"polices": { "chiffres": "IBM Plex Mono" }`). Les textes, le téléphone, le bouton et les horaires viennent toujours de Mon entreprise ; seule la forme change.
 
 | Clé | Valeurs |
 | --- | --- |
@@ -183,12 +173,13 @@ Mon entreprise > Apparence (administrateur), ou les clés `entete`, `pied`, `mob
 | `pied` | `colonnes` (par défaut), `grand-titre` (carte sombre, nom et slogan en grand), `logo-geant` (nom en très grand : pour un nom court), `grand-appel` (téléphone en très grand, bouton, itinéraire), `carte` (image du plan nommée `plan` dans la Médiathèque, horaires, coordonnées), `compact` |
 | `mobile` | `bouton` (par défaut : Appeler et l'action principale), `barre` (Appeler, l'action principale et Itinéraire) |
 | `cartes` | `photo-fond` (par défaut : la photo remplit la carte), `photo-haut` (photo en haut, texte dessous sur fond clair), `liste-filet` (une ligne par service, vignette et filet) ; s'applique aux sections « Trois cartes de service », avec ou sans photos |
-| `angles` | Personnalité. `ambiance` (par défaut), `doux` (arrondis discrets), `droits` (angles droits partout ; seuls les numéros d'étapes et les points restent ronds) |
+| `angles` | Personnalité. `standard` (par défaut), `doux` (arrondis discrets), `droits` (angles droits partout ; seuls les numéros d'étapes et les points restent ronds), `feuille` (deux coins opposés arrondis), `biseau` (angles droits, photos aux coins coupés) |
+| `photos` | Personnalité. `standard` (par défaut : selon les angles), `arche` (haut des photos en demi-cercle), `galet` (contours irréguliers et doux). Passe devant les angles pour les photos de contenu. |
 | `relief` | Personnalité. `ombre` (par défaut), `bordure` (un trait net de la couleur du texte autour des cartes, sans ombre), `plat` (ni ombre ni bordure) |
 | `etiquettes` | Personnalité. `texte` (par défaut), `numerotees` (« 01 / Interventions », numérotées dans l'ordre de la page) |
 | `surlignage` | Personnalité. `couleur` (par défaut : le mot surligné d'un titre prend la couleur d'accent), `aplat` (fond plein de la couleur `deco`, comme un marqueur ; le contraste texte / décor est vérifié sur le tableau de bord) |
 | `cartes_mobile` | `empilees` (par défaut), `defilement` : sur téléphone, les rangées de trois cartes ou plus (services, bénéfices des pages de service, lieux, étapes, tarifs, avis, réalisations, équipe, « Où en êtes-vous ? ») se font glisser de gauche à droite, le bord de la suivante dépasse ; les galeries de six photos ou plus montrent les quatre premières et un bouton « Voir les N photos ». Rien n'est retiré de la page (Google voit tout) ; sans script, la galerie reste entière. Sur l’accueil d’exemple de Lison Vautrin : 11,6 écrans de téléphone au lieu de 14,6 |
-| `capitales` | `ambiance` (par défaut : capitales avec Acier, minuscules ailleurs), `oui` (H1 et H2 en capitales, en plus petit ; un titre dont un mot dépasse la largeur est réduit, jusqu'à 70 %, au lieu d'être coupé ; les H3 restent en minuscules ; le mot d'accent garde ses minuscules quand une police d'accent est choisie), `non` (jamais, même avec Acier) |
+| `capitales` | `non` (par défaut), `oui` (H1 et H2 en capitales, en plus petit ; un titre dont un mot dépasse la largeur est réduit, jusqu'à 70 %, au lieu d'être coupé ; les H3 restent en minuscules ; le mot d'accent garde ses minuscules quand une police d'accent est choisie) |
 | `titres` | `marge` (titre dans une colonne à gauche, contenu à droite, sur ordinateur), `tete-lien` (par défaut), `tete-deux-colonnes` (le titre à gauche, la phrase d'introduction à droite), `grand-numero` (chaque section numérotée en grand au-dessus de son titre) |
 
 Sur une page qui s'ouvre sur une grande photo (bannière), les en-têtes `capsule`, `ilots` et `bandeau` flottent au-dessus de la photo ; ailleurs ils restent en haut de page. Les en-têtes sombres (`capsule`, `medaillon`, `bandeau`) affichent le « Logo pour fond foncé » de Mon entreprise, sinon le nom en texte. L'état « ouvert aujourd'hui » de la barre d'infos est calculé dans le navigateur, d'après les horaires : il reste juste même avec un cache de page. Pour éviter que deux sites se ressemblent, le registre de l'agence (`.github/outils/registre.py`) vérifie la combinaison choisie.
@@ -211,12 +202,16 @@ Sur une page qui s'ouvre sur une grande photo (bannière), les en-têtes `capsul
 
 **Nouveautés 1.13.3.** Dans l'éditeur, les blocs automatiques (prochaine date libre, fil d'Ariane, formulaire, fiches de réalisation, coordonnées, zone…) s'affichent sous forme d'étiquette : ce que c'est, où ça se règle, et « ne le supprimez pas ». Un administrateur peut afficher le code ; un compte Éditeur ne voit jamais de crochets.
 
-Dans l'éditeur : bouton « + » > Compositions > catégories « Sections · … ». Chaque section fonctionne avec les huit ambiances.
+**Familles de sections (versions).** Certaines sections existent en plusieurs formes pour le même contenu. Sélectionner la section : le panneau « Version » de la barre latérale change sa forme, le texte et les photos restent en place. Famille Services (composition « Services (7 versions) », catégorie Offre) : grille, grille asymétrique, liste en deux colonnes, service phare, défilement, onglets, volets ; de 3 à 6 services. Dans le fichier de site, la version est la classe `br-services--<version>` de la section. Code : `inc/familles.php` (liste des familles et des versions, panneau de l'éditeur), `assets/css/familles.css`, `assets/js/familles.js` (onglets, flèches ; sans script, chaque version reste lisible). Famille Ouverture (composition « Ouverture (7 versions) », catégorie Ouverture) : photo à côté, bannière plein écran, photo coupée en biais, moitié-moitié, arche, titre géant, diaporama (les quatre photos de la section en fondu, bouton pause). Une vidéo (bloc Vidéo dans la zone photo) remplace la photo dans toutes les versions : muette, en boucle, bouton pause. Une nouvelle famille s'ajoute dans `inc/familles.json` (liste et textes du panneau) et `familles.css`.
+
+**Place du titre, section par section.** Toute section dont le titre est un bloc direct (`.br-head` ou `.br-section-head`) reçoit le panneau « Titre » : à gauche, centré, à droite, titre et phrase côte à côte, titre géant, titre et filet, en marge à gauche, en marge à droite. La classe posée est `br-titre--<position>` ; « Selon le site » n'en pose aucune et suit le réglage général (`titres` du fichier de site), qui ne s'applique plus aux sections qui ont leur propre position. Sur téléphone, le titre revient en haut (le centré reste centré). Liste des positions : `briise_titres_section()` dans `inc/familles.php` ; CSS dans `familles.css`.
+
+Dans l'éditeur : bouton « + » > Compositions > catégories « Sections · … ». Chaque section fonctionne avec toutes les couleurs de client qui passent le contrôle de contraste.
 
 | Famille | Sections |
 | --- | --- |
-| Ouverture | Liste des prestations qui change la photo, Titre centré et photos en éventail, Accueil texte et photo avec étiquettes, Hero avec image, Hero bannière plein écran, Hero texte seul, En-tête de page avec photo, En-tête de page avec trois photos, En-tête bandeau photo pleine largeur, En-tête de page avec fil d'Ariane |
-| Offre et tarifs | Où se passe la prestation, Faits concrets avec icônes, Ce que vous recevez, Pourquoi ce prix : le temps passé, Carte cadeau, Tarifs en liste avec photos, Ce que ça change, en photos ; Quel modèle choisir, en cartes ; Trois cartes de service, Service détaillé alterné, Tableau comparatif, Grille de tarifs en cartes, Tableau de tarifs simple |
+| Ouverture | Ouverture (10 versions), Ouverture avec bande de services, Liste des prestations qui change la photo, Titre centré et photos en éventail, En-tête de page avec photo, En-tête de page avec trois photos, En-tête bandeau photo pleine largeur, En-tête de page avec fil d'Ariane |
+| Offre et tarifs | Où se passe la prestation, Faits concrets avec icônes, Ce que vous recevez, Pourquoi ce prix : le temps passé, Carte cadeau, Tarifs en liste avec photos, Ce que ça change, en photos ; Quel modèle choisir, en cartes ; Services (7 versions), Service détaillé alterné, Tableau comparatif, Grille de tarifs en cartes, Tableau de tarifs simple |
 | Confiance et preuves | Avis avec la note Google, Une journée racontée en photos, Galerie : photos agrandies au clic, Bande de confiance, Chiffres en tuiles, Chiffres clés, Témoignages, Logos ou labels, Dernières réalisations, Toutes les réalisations avec filtres, Réalisations de ce service (les trois automatiques), Réalisations en grille (à la main), Avant / après, Avant / après à faire glisser, Galerie en mosaïque |
 | Parcours et FAQ | Étapes en photos, numérotées ; Déroulé et prix, en photos ; Étapes numérotées, FAQ en accordéon, Horaires et planning |
 | Personnes | Présentation du dirigeant, Équipe, Citation ou valeurs |
@@ -224,7 +219,7 @@ Dans l'éditeur : bouton « + » > Compositions > catégories « Sections · …
 | Contact | Bandeau d'appel à l'action, Bloc contact complet, Coordonnées (carte), Zone d'intervention, Zone d'intervention (carte), Zone d'intervention en liste, Formulaire de demande de devis, Formulaire de contact, Formulaire de réservation, Appel à l'action sur photo |
 
 Règles :
-- Rythme des couleurs : deux sections qui se suivent n'ont jamais le même fond. Alterner le blanc (`fond`) et les teintes de l'ambiance (`surface`, `nuance`) ; garder la bande foncée (`secondaire`) pour l'appel à l'action final. Une tête de page peut précéder une section du même fond. Le site de base, les modèles et la fonction `rythme()` des outils respectent cette règle d'eux-mêmes ; une page modifiée à la main se vérifie dans Mon entreprise > Contrôle. Changer un fond en un clic : sélectionner la section (bouton « Sélectionner le parent » ou vue en liste), puis onglet Styles > « Fond clair », « Fond teinté », « Fond nuancé » ou « Fond foncé ». Ces quatre styles suivent l'ambiance : si l'ambiance change, les sections suivent. En « Fond foncé », les textes, étiquettes, boutons et tableaux passent en clair et les cartes gardent leur fond clair ; le contraste AA est vérifié dans les ambiances Acier, Galet et Cabinet. Le client (compte Éditeur) y a accès comme l'administrateur : c'est la façon simple et sûre de lui laisser la main sur les couleurs, sans sortir de la charte.
+- Rythme des couleurs : deux sections qui se suivent n'ont jamais le même fond. Alterner le blanc (`fond`) et les teintes du site (`surface`, `nuance`) ; garder la bande foncée (`secondaire`) pour l'appel à l'action final. Une tête de page peut précéder une section du même fond. Le site de base, les modèles et la fonction `rythme()` des outils respectent cette règle d'eux-mêmes ; une page modifiée à la main se vérifie dans Mon entreprise > Contrôle. Changer un fond en un clic : sélectionner la section (bouton « Sélectionner le parent » ou vue en liste), puis onglet Styles > « Fond clair », « Fond teinté », « Fond nuancé » ou « Fond foncé ». Ces quatre styles suivent les couleurs du site : si une couleur change, les sections suivent. En « Fond foncé », les textes, étiquettes, boutons et tableaux passent en clair et les cartes gardent leur fond clair ; le contraste AA est vérifié dans les ambiances Acier, Galet et Cabinet. Le client (compte Éditeur) y a accès comme l'administrateur : c'est la façon simple et sûre de lui laisser la main sur les couleurs, sans sortir de la charte.
 - Les boutons d'action reprennent le libellé et le lien de « Mon entreprise » au moment de l'insertion.
 - Les textes d'exemple expliquent quoi écrire : chacun doit être remplacé avant la livraison.
 - Hero bannière : le voile sombre ne descend jamais sous 70 %, ce qui garantit un texte lisible sur n'importe quelle photo. Photo en WebP de 200 Ko au plus ; régler le point focal pour le recadrage mobile.

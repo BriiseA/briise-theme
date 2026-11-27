@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Vérifie qu'un nouveau site ne ressemble pas trop aux sites déjà faits.
 
-  python3 registre.py ferlune                   contrôle un site du registre contre les autres
-  python3 registre.py --essai ambiance=galet entete=barre-infos ouverture=deux-portes cartes=photo-haut titres=grand-numero pied=compact
+  python3 registre.py lison                     contrôle un site du registre contre les autres
+  python3 registre.py --essai entete=barre-infos ouverture=deux-portes cartes=photo-haut titres=grand-numero pied=compact angles=droits relief=bordure
                                                 contrôle une combinaison avant de l'ajouter
   python3 registre.py --libres                  pièces disponibles les moins utilisées
 """

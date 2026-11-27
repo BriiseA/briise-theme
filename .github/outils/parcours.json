@@ -43,7 +43,7 @@
           "Communes et délai d'intervention habituel"
         ],
         [
-          "trois-cartes-photos",
+          "services",
           "Le parcours projet : installation, rénovation, entretien"
         ],
         [
@@ -77,7 +77,7 @@
     "projet": {
       "nom": "Projet sur devis",
       "exemples": [
-        "métallier (Ferlune)",
+        "métallier",
         "menuisier",
         "paysagiste",
         "cuisiniste",
@@ -96,7 +96,7 @@
           "Note Google, décennale, année de création, plan 3D ou visite gratuite"
         ],
         [
-          "trois-cartes-photos",
+          "services",
           "Ce que nous fabriquons"
         ],
         [
@@ -230,7 +230,7 @@
           "Diplômes, inscription à l'ordre ou au registre, honoraires annoncés, accès"
         ],
         [
-          "trois-cartes",
+          "services",
           "Domaines d'intervention"
         ],
         [

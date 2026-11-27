@@ -52,37 +52,6 @@ const add = (slug, cat, title, desc, blocks) => { const b = Array.isArray(blocks
 
 /* ----- Ouverture ----- */
 
-add('hero-image', 'ouverture', 'Hero avec image', 'Ouverture de l’accueil ou d’une page de service : titre, phrase d’accroche, deux boutons, photo.',
-  Section('br-hero', [Cols([
-    Col([
-      Chips(['Atout n° 1', 'Atout n° 2', 'Votre ville']),
-      H('Le titre qui dit ce que vous faites, et où', 1, null, { fontSize: 'huge' }),
-      Lead('Une ou deux phrases pour dire à qui vous vous adressez et ce qui vous distingue. Restez concret : un visiteur décide en quelques secondes s’il est au bon endroit.'),
-      MainBtns(['Découvrir nos services', URL('services')]),
-    ], { verticalAlignment: 'center', width: '56%' }),
-    Col([Img('portrait', '4/5', 'is-style-br-galet')], { verticalAlignment: 'center', width: '44%' }),
-  ], 'br-split', { verticalAlignment: 'center' })]));
-
-add('hero-banniere', 'ouverture', 'Hero bannière plein écran', 'Grande photo pleine largeur, titre et bouton posés dessus. Le voile sombre garantit la lisibilité, quelle que soit la photo.',
-  cb('core/cover', {
-    url: IMG('banniere'), alt: '', dimRatio: 70, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 68, minHeightUnit: 'vh',
-    contentPosition: 'bottom left', align: 'full', className: 'br-banniere', layout: { type: 'constrained' },
-  }, [
-    Box('br-banniere-inner', [
-      Label('Votre activité, votre ville'),
-      H('Un titre court, qui donne envie', 1, null, { fontSize: 'huge' }),
-      Lead('Une phrase qui complète le titre. La photo doit montrer votre travail, votre lieu ou votre équipe : pas une image de banque d’images.'),
-      MainBtns(['Voir nos réalisations', URL('realisations')]),
-    ]),
-  ]));
-
-add('hero-texte', 'ouverture', 'Hero texte seul', 'Ouverture sobre, sans image : pages intérieures, pages légales, pages de contenu.',
-  Section('br-page-head', [Head([
-    Label('Rubrique'),
-    H('Le titre de la page', 1, null, { fontSize: 'huge' }),
-    Lead('Une phrase d’introduction qui résume ce que le visiteur va trouver sur cette page.'),
-  ])]));
-
 /* En-têtes de page : la photo est l'image mise en avant de la page, affichée à sa taille réelle (nette dès 1 400 px). */
 const FeatImg = (ratio = '4/3', cls = 'br-tete-media') => cb('core/post-featured-image', { aspectRatio: ratio, scale: 'cover', sizeSlug: 'full', className: cls });
 const teteTexte = (titre, chapo, bouton = CTA_LABEL) => [Short('[briise_fil_ariane]'), H(titre, 1, null, { fontSize: 'huge' }), Lead(chapo), ...(bouton ? [Btns(Btn(bouton, CTA))] : [])];
@@ -146,9 +115,6 @@ const zoneSchema = (label, titre, chapo, lien) => Section('br-zone-schema', [Col
   Col([Short('[briise_zone_schema]')], { verticalAlignment: 'center', width: '56%' }),
 ], 'br-split', { verticalAlignment: 'center' })]);
 
-add('accueil-photo', 'ouverture', 'Accueil texte et photo avec étiquettes', 'Ouverture de l’accueil : titre, phrase et boutons à gauche, une vraie photo à droite avec deux étiquettes posées dessus (prix de départ, délai, garantie). Sur mobile, le titre et le bouton restent visibles sans défiler.',
-  heroPhoto({ pastille: 'Votre métier · Votre ville', titre: 'Le titre qui dit ce que vous faites,', accent: 'et où', chapo: 'Une ou deux phrases : pour qui, ce qui vous distingue, et ce que le visiteur gagne à vous appeler.', second: ['Voir nos réalisations', URL('realisations')], coches: ['Devis gratuit', 'Votre délai de réponse', 'Votre garantie'], img: 'portrait', alt: 'Photo à remplacer : votre travail, votre atelier ou votre équipe', etiquettes: [['À partir de', '000 € posé'], ['Délai', '2 semaines']] }));
-
 add('bande-confiance', 'confiance', 'Bande de confiance', 'Juste sous l’ouverture, une carte qui chevauche la section du dessus : quatre garanties réelles avec leur icône. L’icône se change dans Avancé > Classes CSS : is-icone-garantie, is-icone-plan, is-icone-atelier, is-icone-avis, is-icone-delai, is-icone-prix, is-icone-local, is-icone-devis, is-icone-equipe.',
   confiance([['garantie', 'Garantie décennale', 'Attestation jointe au devis'], ['devis', 'Devis gratuit', 'Sous 5 jours ouvrés'], ['local', 'Une équipe locale', 'À votre ville et alentour'], ['avis', 'Note Google', 'À n’afficher que si elle est réelle']]));
 
@@ -164,26 +130,80 @@ add('qualifications', 'confiance', 'Qualifications et assurances', 'Une ligne di
 /* ----- Offre ----- */
 
 // {{SERVICE:n}} : nom du n-ième service du client, {{URL:service-n}} : sa page (remplis à l'installation).
-const carte = (n) => Col([Box('br-card', [
-  Num('0' + n), H(`{{SERVICE:${n}}}`, 3), Muted('Deux phrases pour décrire ce service, pour qui il est fait et ce qu’il apporte.'),
-  Arrow(`{{SERVICE:${n}}} en détail`, URL(`service-${n}`)),
-])]);
-const cartePhoto = (n) => Col([Box('br-card', [
-  ImgFond(n === 1 ? 'portrait' : n === 2 ? 'carre' : 'paysage', 'br-card-fond', 'Photo à remplacer : une réalisation de ce service'),
-  Num('0' + n), H(`{{SERVICE:${n}}}`, 3), Muted('Deux phrases pour décrire ce service, pour qui il est fait et ce qu’il apporte.'),
-  Arrow(`{{SERVICE:${n}}} en détail`, URL(`service-${n}`)),
-])]);
-add('trois-cartes-photos', 'offre', 'Trois cartes de service avec photos', 'Chaque carte est une photo pleine hauteur, avec le titre et le texte sur un dégradé sombre ; toute la carte mène à la page du service. Retirez la photo d’une carte : elle reprend l’aspect simple.',
-  Section('', [
-    sectionHead('Ce que nous faisons', ['Tous nos services', URL('services')]),
-    Cols([cartePhoto(1), cartePhoto(2), cartePhoto(3)]),
-  ], { backgroundColor: 'surface' }));
+// Les anciennes « Trois cartes de service » (avec ou sans photos) sont devenues la famille Services ci-dessous.
 
-add('trois-cartes', 'offre', 'Trois cartes de service', 'Présenter l’offre en trois blocs, chacun menant à sa page.',
-  Section('', [
-    sectionHead('Ce que nous faisons', ['Tous nos services', URL('services')]),
-    Cols([carte(1), carte(2), carte(3)]),
-  ], { backgroundColor: 'surface' }));
+/* ----- Familles de sections : un même contenu, plusieurs versions ------------------------
+   La version est une classe de la section (br-services--bento…), choisie dans l'éditeur
+   (panneau « Version », inc/familles.php) ou écrite dans le fichier de site. Le CSS est dans
+   assets/css/familles.css, les onglets et les flèches dans assets/js/familles.js. */
+
+// Services : une photo, le nom, deux phrases et le lien vers la page, pour chaque service.
+const PHOTOS_SERVICES = ['paysage', 'portrait', 'carre', 'paysage-2', 'carre-2', 'carre-3'];
+const PhotoService = (name, alt) => cb('core/image', { url: IMG(name), alt: fr(alt || 'Photo à remplacer : une réalisation de ce service'), sizeSlug: 'large', linkDestination: 'none', className: 'br-service-photo' });
+const serviceItem = (n, o = {}) => Box('br-service', [
+  PhotoService(o.img || PHOTOS_SERVICES[(n - 1) % PHOTOS_SERVICES.length], o.alt),
+  Box('br-service-texte', [
+    Num(String(n).padStart(2, '0')),
+    H(o.nom || `{{SERVICE:${n}}}`, 3, 'br-service-nom'),
+    Muted(o.texte || 'Deux phrases : pour qui est ce service, et ce qu’il change pour le client.'),
+    Arrow(o.lien ? o.lien[0] : `{{SERVICE:${n}}} en détail`, o.lien ? o.lien[1] : URL(`service-${n}`)),
+  ]),
+]);
+const VERSIONS_SERVICES = ['grille', 'bento', 'liste', 'phare', 'defile', 'onglets', 'volets'];
+// La phrase d'introduction (chapo) est facultative : retirez-la, le titre reste correct seul.
+// position : la place du titre (br-titre--centre…, voir inc/familles.php) ; vide = selon le site.
+const services = ({ version = 'grille', titre = 'Ce que nous faisons', chapo = 'Une phrase qui présente vos services : pour qui ils sont faits, et où vous intervenez.', lien = ['Tous nos services', URL('services')], items = 4, bg = 'surface', position = '' } = {}) =>
+  Section(`br-services br-services--${version}${position ? ' br-titre--' + position : ''}`, [
+    Row('br-section-head', [H(titre, 2), ...(chapo ? [Lead(chapo)] : []), ...(lien ? [Arrow(lien[0], lien[1])] : [])]),
+    Box('br-services-liste', (Array.isArray(items) ? items : Array.from({ length: items }, () => ({}))).map((o, i) => serviceItem(i + 1, o))),
+  ], bg ? { backgroundColor: bg } : {});
+
+add('services', 'offre', 'Services (7 versions)', 'Vos services, chacun avec sa photo, son nom, deux phrases et le lien vers sa page. Choisissez la forme dans le panneau « Version » de la section : grille, grille asymétrique, liste en deux colonnes, service phare, défilement, onglets ou volets ; et la place du titre dans le panneau « Titre ». Le texte et les photos restent en place quand vous changez de version. Retirez ou dupliquez un service : chaque version s’adapte de 3 à 6 services.',
+  services());
+
+// Ouverture : pastille, grand titre (un mot surligné), phrase, bouton d'action et second bouton,
+// trois atouts, et les photos. Les versions autres que « diaporama » n'affichent que la première photo.
+// Une vidéo (bloc Vidéo) peut remplacer la photo dans n'importe quelle version.
+const PHOTOS_OUVERTURE = ['banniere', 'paysage', 'paysage-2', 'carre'];
+const PhotoOuverture = (name, alt) => cb('core/image', { url: IMG(name), alt: fr(alt || 'Photo à remplacer : votre meilleure réalisation, ou vous au travail'), sizeSlug: 'full', linkDestination: 'none', className: 'br-ouv-photo' });
+const VERSIONS_OUVERTURE = ['cote', 'banniere', 'biais', 'moitie', 'arche', 'geant', 'diaporama', 'tuiles', 'mots', 'agrandi'];
+// Petite photo glissée dans le titre (version « mots ») ; décorative, masquée dans les autres versions.
+const PhotoMot = (name) => `<img class="br-mot-photo" src="${IMG(name)}" alt=""/>`;
+const titreOuverture = (titre, motsPhotos) => {
+  if (!motsPhotos.length) return titre;
+  const mots = titre.split(' ');
+  const coupe = Math.min(3, mots.length - 1);
+  return mots.slice(0, coupe).join(' ') + ' ' + PhotoMot(motsPhotos[0]) + ' ' + mots.slice(coupe).join(' ') + (motsPhotos[1] ? ' ' + PhotoMot(motsPhotos[1]) : '');
+};
+// Options : infos = la carte d'infos réelles posée sur la photo (horaires du jour, prochaine date libre,
+// ville : rien ne s'affiche sans données) ; bande = les services en grand, sur une bande qui défile
+// (true : les quatre premiers services du client ; ou une liste de noms).
+const ouverture = ({ version = 'cote', pastille = 'Votre métier · Votre ville', titre = 'Le titre qui dit ce que vous faites,', accent = 'et où', chapo = 'Une ou deux phrases : pour qui, ce qui vous distingue, et ce que le visiteur gagne à vous appeler.', second = ['Voir nos réalisations', URL('realisations')], atouts = ['Devis gratuit', 'Votre délai de réponse', 'Votre garantie'], photos = PHOTOS_OUVERTURE, motsPhotos = ['paysage', 'paysage-2'], infos = true, bande = false } = {}) => {
+  const noms = bande === true ? [1, 2, 3, 4].map((n) => `{{SERVICE:${n}}}`) : (bande || []);
+  return Section(`br-hero br-ouverture br-ouverture--${version}`, [
+    Box('br-ouv-grille', [
+      Box('br-ouv-texte', [
+        P(pastille, 'br-pastille'),
+        H(titreOuverture(titre, motsPhotos) + (accent ? ' ' + Mark(accent) : ''), 1, null, { fontSize: 'huge' }),
+        Lead(chapo),
+        MainBtns(second),
+        ...(atouts.length ? [List(atouts, 'br-coches')] : []),
+      ]),
+      Box('br-ouv-media', [
+        ...photos.map((p) => (Array.isArray(p) ? PhotoOuverture(p[0], p[1]) : PhotoOuverture(p))),
+        ...(infos ? [Short('[briise_infos_ouverture]')] : []),
+      ]),
+    ]),
+    ...(noms.length ? [cb('core/group', { align: 'full', className: 'br-defile br-defile--services', layout: { type: 'default' } }, [
+      cb('core/group', { className: 'br-defile-piste', layout: { type: 'flex', flexWrap: 'wrap' } }, noms.map((t) => P(t, 'br-defile-item'))),
+    ])] : []),
+  ]);
+};
+
+add('ouverture', 'ouverture', 'Ouverture (10 versions)', 'Le haut de l’accueil : pastille, grand titre, phrase, bouton d’action et second bouton, trois atouts, et vos photos. Choisissez la forme dans le panneau « Version » : photo à côté, bannière plein écran, photo coupée en biais, moitié-moitié, arche, titre géant, diaporama, mosaïque en tuiles, titre avec photos ou photo qui s’agrandit. Le diaporama fait défiler en fondu les quatre photos ; la mosaïque en montre trois ; les autres versions, la première. Une carte d’infos se pose sur la photo : ouvert aujourd’hui, prochaine date libre (Horaires et annonces) et votre ville ; sans ces données, elle ne s’affiche pas. Une vidéo courte (bloc Vidéo, sans son) peut remplacer la photo : elle joue en boucle, avec un bouton pause.',
+  ouverture());
+add('ouverture-bande', 'ouverture', 'Ouverture avec bande de services', 'La même ouverture, avec en bas vos services en grand sur une bande qui défile doucement (pause au survol, au clavier ou avec le bouton). Les noms viennent de vos pages de service : vérifiez qu’il y en a au moins quatre, ou retirez les noms en trop.',
+  ouverture({ version: 'banniere', bande: true }));
 
 const bloc = (titre) => [
   Label('Service'), H(titre, 2),
@@ -769,12 +789,6 @@ add('ouverture-avant-apres', 'ouverture', 'Accueil avec avant / après', 'Rénov
     ], { verticalAlignment: 'center', width: '60%' }),
   ], 'br-split', { verticalAlignment: 'center' })]));
 
-add('ouverture-decoupe', 'ouverture', 'Accueil sombre, photo coupée en biais', 'Une ouverture plus industrielle : fond sombre, titre en grand, la photo coupée en biais avec un trait de la couleur d’accent. Sur mobile, la photo passe sous le texte.',
-  Section('br-ouv-decoupe', [Cols([
-    Col([Label('Votre métier, votre ville'), H('Le titre qui dit ce que vous fabriquez', 1, null, { fontSize: 'huge' }), Lead('Une phrase : ce que vous faites, où, et ce qui vous distingue.'), MainBtns(['Voir l’atelier', URL('a-propos')])], { verticalAlignment: 'center', width: '46%' }),
-    Col([ImgFond('paysage', 'br-ouv-decoupe-img', 'Photo à remplacer : votre atelier ou votre travail en cours')], { width: '54%' }),
-  ], 'br-ouv-decoupe-cols')], { backgroundColor: 'sombre', textColor: 'fond' }));
-
 add('ouverture-demande', 'ouverture', 'Grande photo et demande express', 'La demande dès l’arrivée : une grande photo, le titre, et à droite un formulaire de quatre champs (projet, commune, nom, téléphone) pour être rappelé. Le formulaire « Demande de rappel » se crée dans Mon entreprise > Fonctions. Idéale aussi pour une page de publicité.',
   cb('core/cover', {
     url: IMG('banniere'), alt: '', dimRatio: 70, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 80, minHeightUnit: 'vh',
@@ -1024,5 +1038,5 @@ add('merci-suite', 'contact', 'Page merci : la suite', 'Pour la page qui s’aff
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').mkdirSync(require('path').join(__dirname, 'build'), { recursive: true });
 require('fs').writeFileSync(require('path').join(__dirname, 'build', 'br_sections.json'), JSON.stringify(out, null, 1));
-module.exports = { deuxPortes, situations, choixSeance, eventail, lieux, faitsIcones, etapesImages, ctaPhoto, avisCourt, tarifLigne, ETOILES, Row, ImgFond, Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
+module.exports = { services, serviceItem, VERSIONS_SERVICES, ouverture, VERSIONS_OUVERTURE, deuxPortes, situations, choixSeance, eventail, lieux, faitsIcones, etapesImages, ctaPhoto, avisCourt, tarifLigne, ETOILES, Row, ImgFond, Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
 console.log(Object.keys(S).length, 'sections');

@@ -23,16 +23,55 @@
 	--wp--custom--rayon--photo: 0;
 }
 /* Les arrondis écrits en dur aussi ; restent ronds les éléments qui le sont par nature. */
-.br-angles--droits :is(.wp-site-blocks, .is-root-container) *:not(.br-fil-num, .br-rond, .wp-block-avatar, .avatar, .br-avis-initiale, input[type="radio"], input[type="checkbox"]) {
+:is(.br-angles--droits, .br-angles--biseau) :is(.wp-site-blocks, .is-root-container) *:not(.br-fil-num, .br-rond, .wp-block-avatar, .avatar, .br-avis-initiale, input[type="radio"], input[type="checkbox"]) {
 	border-radius: 0 !important;
 }
 
+/* Feuille : deux coins opposés arrondis (un rayon à deux valeurs : haut gauche et bas droit, puis
+   haut droit et bas gauche). « moyen » et « petit » restent simples : ils servent aussi dans des calculs. */
+.br-angles--feuille {
+	--wp--custom--rayon--grand: 32px 6px;
+	--wp--custom--rayon--photo: 44px 6px;
+	--wp--custom--rayon--bouton: 16px 4px;
+	--wp--custom--rayon--moyen: 14px;
+	--wp--custom--rayon--petit: 6px;
+}
+/* Coins coupés : tout à angle droit, et les photos aux coins coupés en biais (un découpage, pas un
+   arrondi). Seules les photos sont découpées : le focus des liens et des boutons reste visible. */
+.br-angles--biseau {
+	--wp--custom--rayon--grand: 0;
+	--wp--custom--rayon--moyen: 0;
+	--wp--custom--rayon--petit: 0;
+	--wp--custom--rayon--bouton: 0;
+	--wp--custom--rayon--photo: 0;
+	--br-biseau: clamp(12px, 2vw, 22px);
+}
+.br-angles--biseau :is(.wp-site-blocks, .is-root-container) :is(.wp-block-image.is-style-br-arrondi img, .br-tete-media img, .br-hero-media img, .br-service-photo, .br-choix-photo img) {
+	clip-path: polygon(var(--br-biseau) 0, 100% 0, 100% calc(100% - var(--br-biseau)), calc(100% - var(--br-biseau)) 100%, 0 100%, 0 var(--br-biseau));
+}
+
+/* ----- Forme des photos ---------------------------------------------------------------
+   Les photos de contenu (style « arrondi », têtes de page, ouvertures). Passe devant les angles. */
+.br-photos--arche {
+	--wp--custom--rayon--photo: 999px 999px 10px 10px;
+}
+.br-photos--arche :is(.wp-site-blocks, .is-root-container) :is(.wp-block-image.is-style-br-arrondi img, .br-tete-media img, .br-hero-media img, .br-choix-photo img) {
+	border-radius: 999px 999px 10px 10px !important;
+	clip-path: none;
+}
+.br-photos--galet {
+	--wp--custom--rayon--photo: 42% 58% 55% 45% / 48% 42% 58% 52%;
+}
+.br-photos--galet :is(.wp-site-blocks, .is-root-container) :is(.wp-block-image.is-style-br-arrondi img, .br-tete-media img, .br-hero-media img, .br-choix-photo img) {
+	border-radius: 42% 58% 55% 45% / 48% 42% 58% 52% !important;
+	clip-path: none;
+}
 /* ----- Relief des cartes ----------------------------------------------------------- */
 .br-relief--bordure :is(.wp-site-blocks, .is-root-container) *,
 .br-relief--plat :is(.wp-site-blocks, .is-root-container) * {
 	box-shadow: none !important;
 }
-.br-relief--bordure :is(.br-card, .br-fait, .br-situation, .br-modele, .br-tarif-ligne, .br-avis-court, .br-project, .br-confiance, .br-tuile, .br-carte, .br-dispo-carte, .br-ouv-faits, .br-recit-detail, .br-formule, .br-cadeau-carte, .br-lieu, .br-etape-image, .br-etape, .br-member, .br-prix-carte, .br-compris) {
+.br-relief--bordure :is(.br-card, .br-service, .br-fait, .br-situation, .br-modele, .br-tarif-ligne, .br-avis-court, .br-project, .br-confiance, .br-tuile, .br-carte, .br-dispo-carte, .br-ouv-faits, .br-recit-detail, .br-formule, .br-cadeau-carte, .br-lieu, .br-etape-image, .br-etape, .br-member, .br-prix-carte, .br-compris) {
 	border: 2px solid var(--wp--preset--color--texte) !important;
 }
 /* Sur fond sombre, la bordure prend la couleur du texte clair. */
@@ -75,8 +114,9 @@
 }
 
 /* ----- Titre en marge (ordinateur) : le titre à gauche, le contenu à droite ----------------- */
+/* Une section qui choisit sa propre position de titre (br-titre--…, familles.css) n'est pas concernée. */
 @media (min-width: 960px) {
-	.br-titres--marge .br-section:has(> .br-head, > .br-section-head) {
+	.br-titres--marge .br-section:not([class*="br-titre--"]):has(> .br-head, > .br-section-head) {
 		display: grid !important;
 		grid-template-columns: minmax(220px, .38fr) minmax(0, 1fr);
 		column-gap: clamp(2rem, 5vw, 5rem);
@@ -84,13 +124,13 @@
 		padding-left: max(var(--wp--style--root--padding-left, 1.5rem), calc((100% - var(--wp--style--global--wide-size, 1320px)) / 2)) !important;
 		padding-right: max(var(--wp--style--root--padding-right, 1.5rem), calc((100% - var(--wp--style--global--wide-size, 1320px)) / 2)) !important;
 	}
-	.br-titres--marge .br-section:has(> .br-head, > .br-section-head) > * {
+	.br-titres--marge .br-section:not([class*="br-titre--"]):has(> .br-head, > .br-section-head) > * {
 		grid-column: 2;
 		max-width: none !important;
 		margin-left: 0 !important;
 		margin-right: 0 !important;
 	}
-	.br-titres--marge .br-section:has(> .br-head, > .br-section-head) > :is(.br-head, .br-section-head) {
+	.br-titres--marge .br-section:not([class*="br-titre--"]):has(> .br-head, > .br-section-head) > :is(.br-head, .br-section-head) {
 		grid-column: 1;
 		grid-row: 1 / span 12;
 		position: sticky;
@@ -103,14 +143,14 @@
 		text-align: left !important;
 		margin-top: 0 !important;
 	}
-	.br-titres--marge .br-section:has(> .br-head, > .br-section-head) > :is(.br-head, .br-section-head) > * {
+	.br-titres--marge .br-section:not([class*="br-titre--"]):has(> .br-head, > .br-section-head) > :is(.br-head, .br-section-head) > * {
 		margin-left: 0 !important;
 		text-align: left !important;
 		max-width: 100% !important;
 	}
 	/* La colonne de contenu est plus étroite : une grille de quatre cartes passe en deux sur deux,
 	   pour ne pas laisser la quatrième seule sur sa ligne. */
-	.br-titres--marge .br-section:has(> .br-head, > .br-section-head) .is-layout-grid:has(> :nth-child(4):last-child) {
+	.br-titres--marge .br-section:not([class*="br-titre--"]):has(> .br-head, > .br-section-head) .is-layout-grid:has(> :nth-child(4):last-child) {
 		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
 	}
 }

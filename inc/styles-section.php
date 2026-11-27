@@ -3,7 +3,7 @@
  * Styles de section en un clic (onglet Styles d'une section dans l'éditeur).
  *
  * Chaque style règle le fond, le texte, les liens et les boutons ensemble, avec les couleurs
- * de l'ambiance : le résultat reste lisible quelle que soit la charte. Le CSS est dans theme.json.
+ * du site : le résultat reste lisible quelle que soit la charte. Le CSS est dans theme.json.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

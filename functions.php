@@ -16,6 +16,7 @@ require_once get_theme_file_path( 'inc/polices.php' );
 require_once get_theme_file_path( 'inc/performance.php' );
 require_once get_theme_file_path( 'inc/styles-section.php' );
 require_once get_theme_file_path( 'inc/tableaux.php' );
+require_once get_theme_file_path( 'inc/familles.php' );
 if ( is_admin() ) {
 	require_once get_theme_file_path( 'inc/contraste.php' );
 }
@@ -103,6 +104,17 @@ add_action( 'wp_enqueue_scripts', function () {
 add_filter( 'render_block_core/cover', function ( $html, $block ) {
 	static $fait = false;
 	if ( $fait || false === strpos( $block['attrs']['className'] ?? '', 'br-banniere' ) ) {
+		return $html;
+	}
+	$fait = true;
+	$html = str_replace( ' loading="lazy"', '', $html );
+	return preg_replace( '/<img (?![^>]*fetchpriority)/', '<img fetchpriority="high" ', $html, 1 );
+}, 10, 2 );
+
+// De même pour la première photo d'une ouverture (famille Ouverture).
+add_filter( 'render_block_core/image', function ( $html, $block ) {
+	static $fait = false;
+	if ( $fait || false === strpos( $block['attrs']['className'] ?? '', 'br-ouv-photo' ) ) {
 		return $html;
 	}
 	$fait = true;

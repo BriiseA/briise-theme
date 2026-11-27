@@ -1,6 +1,6 @@
 /*
  * Briise Socle : apparence de secours, chargée seulement quand le thème actif
- * n'est pas le thème Briise (qui a ses propres styles, accordés aux ambiances).
+ * n'est pas le thème Briise (qui a ses propres styles, accordés aux couleurs du client).
  * Couleurs reprises du thème actif quand il les nomme, sinon neutres.
  */
 .br-bandeau { display: flex; align-items: center; justify-content: center; gap: 1rem; padding: .6rem 1rem; background: var(--wp--preset--color--contrast, #1d1d1f); color: var(--wp--preset--color--base, #fff); font-size: .95em; text-align: center; }

@@ -90,5 +90,49 @@ for fam, nom in FAMILLES.items():
     sortie += [f'## {nom} ({len(items)})', '', '| Section | Titre | À quoi elle sert | Besoins | Dans le navigateur |', '| --- | --- | --- | --- | --- |']
     sortie += [ligne(k, v) for k, v in items]
     sortie.append('')
+
+# Versions des familles et place du titre : depuis inc/familles.json, comme les panneaux de l'éditeur.
+F = json.load(open(ICI.parent.parent / 'inc' / 'familles.json', encoding='utf-8'))
+sortie += [
+    '## Versions des sections (familles)',
+    '',
+    'Une même section, plusieurs formes pour le même contenu. Dans le fichier de site : la classe `br-<famille>--<version>` de la section (dans l’éditeur : panneau « Version »). Dans les outils : `services({ version, position })` de `build_br_sections.js`.',
+    '',
+]
+for cle, fam in F['familles'].items():
+    sortie += [f"### {fam['nom']} (section `{fam['section']}`, par défaut : `{fam['defaut']}`)", '', '| Version | Classe | Forme |', '| --- | --- | --- |']
+    sortie += [f"| {v[0]} | `{fam['classe']}--{k}` | {v[1]} |" for k, v in fam['variantes'].items()]
+    sortie.append('')
+    if fam.get('titres'):
+        sortie += ['Place du texte (panneau « Titre ») :', '']
+        sortie += [f"- **{v[0]}** ({'aucune classe' if k == 'site' else '`br-titre--' + k + '`'}) : {v[1]}" for k, v in fam['titres'].items()]
+        sortie.append('')
+    if fam.get('options'):
+        sortie += ['Options, combinables avec toutes les versions :', '']
+        sortie += [f"- **{v[0]}** : {v[1]}" for v in fam['options'].values()]
+        sortie.append('')
+sortie += [
+    '## Place du titre (toute section dont le titre est en haut)',
+    '',
+    'Dans le fichier de site : la classe `br-titre--<position>` de la section (dans l’éditeur : panneau « Titre »). Sans classe, la section suit le réglage général `titres` du site. Sur téléphone, le titre revient en haut ; seul le titre centré reste centré.',
+    '',
+    '| Position | Classe | Rendu |',
+    '| --- | --- | --- |',
+]
+sortie += [f"| {v[0]} | {'aucune' if k == 'site' else '`br-titre--' + k + '`'} | {v[1]} |" for k, v in F['titres'].items()]
+sortie.append('')
+
+# Habillage du site : les pièces qui se choisissent une fois pour tout le site (fichier de site ou Mon entreprise > Apparence).
+V = json.load(open(ICI / 'variantes.json', encoding='utf-8'))
+sortie += [
+    '## Habillage du site (une fois pour tout le site)',
+    '',
+    'Clés du fichier de site (`"entete": "capsule"`…) ou Mon entreprise > Apparence. Ce que fait chaque valeur : `README.md`, « Apparence ». L’ouverture n’est pas une clé : c’est la première section de l’accueil. Couleurs et polices : clés `couleurs` et `polices` ; réglage fin : clé `styles`.',
+    '',
+    '| Pièce | Valeurs |',
+    '| --- | --- |',
+]
+sortie += [f"| `{p}` | {', '.join('`' + v + '`' for v, e in vals.items() if e == 'existe')} |" for p, vals in V['pieces'].items()]
+sortie.append('')
 (ICI / 'catalogue-sections.md').write_text('\n'.join(sortie))
 print(f'  catalogue : {len(S)} sections')

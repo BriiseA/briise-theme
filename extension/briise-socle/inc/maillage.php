@@ -411,7 +411,7 @@ function briise_onglet_controle() {
 	}
 	?>
 	<h2 style="margin-top:2.5em">Couleurs des sections</h2>
-	<p style="max-width:60em">Deux sections qui se suivent avec le même fond se lisent comme un seul bloc : le visiteur ne voit plus où commence le sujet suivant. Alterner le blanc et les teintes de l’ambiance (fond, surface, nuance) ; garder la bande foncée pour l’appel à l’action. Pour changer un fond : sélectionner la section dans l’éditeur, puis onglet Styles > « Fond clair », « Fond teinté », « Fond nuancé » ou « Fond foncé ».</p>
+	<p style="max-width:60em">Deux sections qui se suivent avec le même fond se lisent comme un seul bloc : le visiteur ne voit plus où commence le sujet suivant. Alterner le blanc et les teintes du site (fond, surface, nuance) ; garder la bande foncée pour l’appel à l’action. Pour changer un fond : sélectionner la section dans l’éditeur, puis onglet Styles > « Fond clair », « Fond teinté », « Fond nuancé » ou « Fond foncé ».</p>
 	<?php
 	if ( ! $rythme ) {
 		echo '<p>Aucune section voisine de même couleur.</p>';

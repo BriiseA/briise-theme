@@ -52,9 +52,16 @@ function briise_apparence_choix() {
 			'defilement' => array( 'En défilement', 'Les rangées de trois cartes ou plus se font glisser de gauche à droite, et les galeries montrent quatre photos puis un bouton pour voir les autres. La page est plus courte ; rien n’est retiré.' ),
 		),
 		'angles'        => array(
-			'ambiance' => array( 'Selon l’ambiance', 'Les arrondis prévus par l’ambiance.' ),
+			'standard' => array( 'Standard', 'Les arrondis de base : cartes et photos bien arrondies, boutons en pilule.' ),
 			'doux'     => array( 'Doux', 'Des arrondis plus discrets sur les cartes, les photos et les boutons.' ),
 			'droits'   => array( 'Droits', 'Angles droits partout : cartes, photos, boutons, pastilles. Seuls les ronds voulus (numéros d’étapes, points) le restent.' ),
+			'feuille'  => array( 'Feuille', 'Deux coins opposés bien arrondis, les deux autres presque droits : cartes, photos et boutons. Une forme douce mais affirmée.' ),
+			'biseau'   => array( 'Coins coupés', 'Angles droits, et les photos aux coins coupés en biais. Un style net, technique.' ),
+		),
+		'photos'        => array(
+			'standard' => array( 'Selon les angles', 'Les photos suivent le réglage des angles.' ),
+			'arche'    => array( 'Arche', 'Le haut des photos en demi-cercle, comme une fenêtre d’église. Élégant, pour l’image, le bien-être, l’événementiel.' ),
+			'galet'    => array( 'Galet', 'Des photos aux contours irréguliers et doux, comme un galet. Chaleureux, créatif.' ),
 		),
 		'relief'        => array(
 			'ombre'   => array( 'Ombre', 'Les cartes portent une ombre douce (d’origine).' ),
@@ -70,16 +77,15 @@ function briise_apparence_choix() {
 			'aplat'   => array( 'Aplat', 'Le mot surligné d’un titre est posé sur un fond plein, de la couleur de décor (comme un marqueur).' ),
 		),
 		'capitales' => array(
-			'ambiance' => array( 'Selon l’ambiance', 'Capitales avec l’ambiance Acier, minuscules avec les autres.' ),
+			'non'      => array( 'Non', 'Titres en minuscules (d’origine).' ),
 			'oui'      => array( 'Oui', 'Les grands titres (H1 et H2) en capitales, un peu plus petits pour que les mots longs tiennent sur téléphone. Les petits titres restent en minuscules.' ),
-			'non'      => array( 'Non', 'Pas de capitales, même avec l’ambiance Acier.' ),
 		),
 	);
 }
 
 function briise_apparence( $cle ) {
 	$choix  = briise_apparence_choix();
-	$defaut = array( 'entete' => 'classique', 'pied' => 'colonnes', 'mobile' => 'bouton', 'cartes' => 'photo-fond', 'titres' => 'tete-lien', 'capitales' => 'ambiance', 'cartes_mobile' => 'empilees', 'angles' => 'ambiance', 'relief' => 'ombre', 'etiquettes' => 'texte', 'surlignage' => 'couleur' );
+	$defaut = array( 'entete' => 'classique', 'pied' => 'colonnes', 'mobile' => 'bouton', 'cartes' => 'photo-fond', 'titres' => 'tete-lien', 'capitales' => 'non', 'cartes_mobile' => 'empilees', 'angles' => 'standard', 'photos' => 'standard', 'relief' => 'ombre', 'etiquettes' => 'texte', 'surlignage' => 'couleur' );
 	$v      = (array) get_option( 'briise_apparence', array() );
 	$val    = $v[ $cle ] ?? $defaut[ $cle ];
 	return isset( $choix[ $cle ][ $val ] ) ? $val : $defaut[ $cle ];
@@ -117,7 +123,7 @@ function briise_page_sur_photo() {
 		if ( empty( $b['blockName'] ) ) {
 			continue;
 		}
-		$r = (bool) preg_match( '/\bbr-(banniere|ouv-plein)\b/', $b['attrs']['className'] ?? '' );
+		$r = (bool) preg_match( '/\bbr-(banniere|ouv-plein|ouverture--banniere|ouverture--diaporama|ouverture--moitie)\b/', $b['attrs']['className'] ?? '' );
 		break;
 	}
 	return $r;
@@ -132,7 +138,7 @@ add_filter( 'body_class', function ( $classes ) {
 	$classes[] = 'br-titres--' . briise_apparence( 'titres' );
 	$classes[] = 'br-capitales--' . briise_apparence( 'capitales' );
 	$classes[] = 'br-cartes-mobile--' . briise_apparence( 'cartes_mobile' );
-	foreach ( array( 'angles', 'relief', 'etiquettes', 'surlignage' ) as $cle ) {
+	foreach ( array( 'angles', 'photos', 'relief', 'etiquettes', 'surlignage' ) as $cle ) {
 		$classes[] = 'br-' . $cle . '--' . briise_apparence( $cle );
 	}
 	if ( in_array( $e, array( 'capsule', 'ilots', 'bandeau' ), true ) && briise_page_sur_photo() ) {
@@ -151,7 +157,7 @@ add_action( 'wp_enqueue_scripts', function () {
 
 /** Classes de personnalité actives (celles qui ne sont pas la valeur par défaut). */
 function briise_personnalite_classes() {
-	$defaut  = array( 'angles' => 'ambiance', 'relief' => 'ombre', 'etiquettes' => 'texte', 'surlignage' => 'couleur' );
+	$defaut  = array( 'angles' => 'standard', 'photos' => 'standard', 'relief' => 'ombre', 'etiquettes' => 'texte', 'surlignage' => 'couleur' );
 	$classes = array();
 	foreach ( $defaut as $cle => $valeur ) {
 		if ( briise_apparence( $cle ) !== $valeur ) {
@@ -273,7 +279,7 @@ function briise_onglet_apparence() {
 	if ( isset( $_GET['ok'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 		echo '<div class="notice notice-success"><p>Apparence enregistrée.</p></div>';
 	}
-	$titres = array( 'entete' => 'En-tête', 'pied' => 'Pied de page', 'mobile' => 'Sur téléphone', 'cartes' => 'Cartes de service', 'titres' => 'Titres de section', 'capitales' => 'Titres en capitales', 'cartes_mobile' => 'Sur téléphone, cartes et galeries', 'angles' => 'Personnalité : angles', 'relief' => 'Personnalité : relief des cartes', 'etiquettes' => 'Personnalité : étiquettes de section', 'surlignage' => 'Personnalité : mot surligné dans un titre' );
+	$titres = array( 'entete' => 'En-tête', 'pied' => 'Pied de page', 'mobile' => 'Sur téléphone', 'cartes' => 'Cartes de service', 'titres' => 'Titres de section', 'capitales' => 'Titres en capitales', 'cartes_mobile' => 'Sur téléphone, cartes et galeries', 'angles' => 'Personnalité : angles', 'photos' => 'Personnalité : forme des photos', 'relief' => 'Personnalité : relief des cartes', 'etiquettes' => 'Personnalité : étiquettes de section', 'surlignage' => 'Personnalité : mot surligné dans un titre' );
 	echo '<p>Ces choix changent la forme de l’en-tête, du pied de page, du bas d’écran sur téléphone, des cartes de service, des titres de section et les polices, sur tout le site. Les textes, le téléphone et le bouton viennent toujours de Mon entreprise ; le contenu des pages ne change pas.</p>';
 	echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
 	wp_nonce_field( 'briise_apparence' );

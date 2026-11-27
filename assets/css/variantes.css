@@ -429,10 +429,10 @@ body.br-sur-photo .br-smart-header.br-scrolled .br-header--bandeau { background:
 
 /* Titre et texte côte à côte : quand la tête a une phrase d'introduction. */
 @media (min-width:782px){
-.br-titres--tete-deux-colonnes .br-head:has(>h2+.br-lead){display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);column-gap:clamp(2rem,6vw,6rem);align-items:end;max-width:none}
-.br-titres--tete-deux-colonnes .br-head:has(>h2+.br-lead)>*{max-width:none;grid-column:1}
-.br-titres--tete-deux-colonnes .br-head:has(>h2+.br-lead)>h2{margin-bottom:0}
-.br-titres--tete-deux-colonnes .br-head:has(>h2+.br-lead)>.br-lead{grid-column:2;grid-row:1/span 3;align-self:end;margin:0}
+.br-titres--tete-deux-colonnes :not([class*="br-titre--"])>.br-head:has(>h2+.br-lead){display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);column-gap:clamp(2rem,6vw,6rem);align-items:end;max-width:none}
+.br-titres--tete-deux-colonnes :not([class*="br-titre--"])>.br-head:has(>h2+.br-lead)>*{max-width:none;grid-column:1}
+.br-titres--tete-deux-colonnes :not([class*="br-titre--"])>.br-head:has(>h2+.br-lead)>h2{margin-bottom:0}
+.br-titres--tete-deux-colonnes :not([class*="br-titre--"])>.br-head:has(>h2+.br-lead)>.br-lead{grid-column:2;grid-row:1/span 3;align-self:end;margin:0}
 }
 
 /* Grand numéro : chaque titre de section porte son numéro, dans l'ordre de la page. */
@@ -441,8 +441,8 @@ body.br-sur-photo .br-smart-header.br-scrolled .br-header--bandeau { background:
 .br-titres--grand-numero main .br-section-head{align-items:flex-end}
 
 /* Titres en capitales (Mon entreprise > Apparence). « Oui » : H1 et H2 en capitales, en plus petit
-   (un mot en capitales est environ 20 % plus large) ; les H3 restent en minuscules. « Non » : jamais,
-   même avec l'ambiance Acier. Les tailles passent par les variables : les classes de taille des blocs suivent. */
+   (un mot en capitales est environ 20 % plus large) ; les H3 restent en minuscules. « Non » (par défaut) :
+   jamais. Les tailles passent par les variables : les classes de taille des blocs suivent. */
 .br-capitales--non :is(h1, h2, h3, h4, h5, h6) { text-transform: none; }
 .br-capitales--oui :is(h1, h2) {
 	--wp--preset--font-size--huge: clamp(2.1rem, 4.8vw, 4.5rem);
@@ -455,4 +455,7 @@ body.br-sur-photo .br-smart-header.br-scrolled .br-header--bandeau { background:
 /* Les colonnes de WordPress coupent les mots trop longs (word-break: break-word) : dans un titre en capitales,
    on laisse le mot entier et ux.js réduit le titre à la place. « contain » empêche le mot d'élargir la colonne,
    pour que le dépassement se voie et se mesure. */
-.br-capitales--oui :is(h1, h2), .br-capitales--ambiance :is(h1, h2) { overflow-wrap: normal; word-break: normal; hyphens: manual; contain: inline-size; }
+.br-capitales--oui :is(h1, h2) { overflow-wrap: normal; word-break: normal; hyphens: manual; contain: inline-size; }
+/* Avec « contain », un titre posé dans une rangée flexible (titre et lien) n'a plus de largeur propre
+   et tombait à zéro (un mot par ligne) : on lui donne une largeur de départ. */
+.br-capitales--oui .is-layout-flex > :is(h1, h2) { flex: 1 1 min(100%, 22rem); }

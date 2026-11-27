@@ -7,8 +7,8 @@
  *
  * On choisit parmi les polices livrées avec le thème et celles téléversées dans
  * Styles > Typographie > Gérer les polices. Le choix est appliqué à chaque affichage
- * (filtre wp_theme_json_data_user) : il passe devant les polices de l'ambiance sans les effacer,
- * et reste en place si l'on change d'ambiance. Une valeur vide (« Selon l'ambiance ») ne change rien.
+ * (filtre wp_theme_json_data_user) : il passe devant les polices de base du thème (theme.json) sans les effacer.
+ * Une valeur vide (« Police du thème ») ne change rien.
  *
  * La police d'accent sert au mot passé au Surlignage dans un titre (balise mark).
  * Sans police d'accent, ce mot garde la police des titres.
@@ -28,7 +28,7 @@ function briise_polices_roles() {
 	);
 }
 
-/** Choix enregistrés. Valeur vide : la police de l'ambiance. */
+/** Choix enregistrés. Valeur vide : la police de base du thème. */
 function briise_polices() {
 	$v = (array) get_option( 'briise_polices', array() );
 	return array(
@@ -62,7 +62,7 @@ function briise_polices_taille( $v ) {
 }
 
 /**
- * Polices disponibles, par nom : celles du thème (theme.json et ambiances) et celles
+ * Polices disponibles, par nom : celles du thème (theme.json et inc/polices-livrees.json) et celles
  * de la bibliothèque de polices de WordPress. Les polices système (sans fichier) sont exclues.
  *
  * @return array nom => array( 'nom', 'fontFamily', 'fontFace', 'source' )
@@ -91,13 +91,14 @@ function briise_polices_disponibles() {
 		}
 	}
 
-	// 2. Polices livrées avec le thème.
-	$fichiers = array_merge( array( get_theme_file_path( 'theme.json' ) ), (array) glob( get_theme_file_path( 'styles' ) . '/*.json' ) );
-	foreach ( array_filter( $fichiers ) as $f ) {
-		$d = json_decode( (string) file_get_contents( $f ), true );
-		foreach ( (array) ( $d['settings']['typography']['fontFamilies'] ?? array() ) as $ff ) {
-			briise_polices_ajouter( $liste, $ff, 'theme' );
-		}
+	// 2. Polices livrées avec le thème : celles de theme.json et celles de inc/polices-livrees.json.
+	$d = json_decode( (string) file_get_contents( get_theme_file_path( 'theme.json' ) ), true );
+	foreach ( (array) ( $d['settings']['typography']['fontFamilies'] ?? array() ) as $ff ) {
+		briise_polices_ajouter( $liste, $ff, 'theme' );
+	}
+	$d = json_decode( (string) file_get_contents( get_theme_file_path( 'inc/polices-livrees.json' ) ), true );
+	foreach ( (array) ( $d['fontFamilies'] ?? array() ) as $ff ) {
+		briise_polices_ajouter( $liste, $ff, 'theme' );
 	}
 
 	uksort( $liste, 'strnatcasecmp' );
@@ -141,7 +142,7 @@ function briise_polices_trouver( $nom ) {
 /**
  * Enregistre les polices choisies. Seules les clés présentes changent.
  *
- * @return string[] Noms demandés mais introuvables (la police de l'ambiance reste en place).
+ * @return string[] Noms demandés mais introuvables (la police de base reste en place).
  */
 function briise_polices_enregistrer( $valeurs ) {
 	$valeurs  = (array) $valeurs;
@@ -188,7 +189,7 @@ function briise_polices_graisse_max( $faces ) {
 }
 
 /*
- * Application : les polices choisies remplacent celles de l'ambiance dans les réglages lus
+ * Application : les polices choisies remplacent celles de base dans les réglages lus
  * par WordPress. Il imprime alors les fichiers de police (@font-face) et les variables
  * --wp--preset--font-family--titres, --texte et --accent, sur le site comme dans l'éditeur.
  */
@@ -200,7 +201,7 @@ add_filter( 'wp_theme_json_data_user', function ( $theme_json ) {
 	$dispo = briise_polices_disponibles();
 	$data  = $theme_json->get_data();
 
-	// Polices actuelles : celles de l'ambiance enregistrée, sinon celles de theme.json.
+	// Polices actuelles : celles déjà enregistrées dans les styles globaux, sinon celles de theme.json.
 	$liste = $data['settings']['typography']['fontFamilies']['theme'] ?? null;
 	if ( ! is_array( $liste ) ) {
 		static $base = null;
@@ -267,10 +268,10 @@ function briise_polices_formulaire() {
 	$choix = briise_polices();
 	$dispo = briise_polices_disponibles();
 	echo '<fieldset style="margin:1.5rem 0"><legend style="font-size:1.1em;font-weight:600;margin-bottom:.5rem">Polices</legend>';
-	echo '<p class="description" style="margin-bottom:.8rem">Pour la charte d’un client. La liste reprend les polices du thème et celles téléversées dans Apparence &gt; Éditeur &gt; Styles &gt; Typographie &gt; Gérer les polices (fichiers WOFF2, licence web vérifiée). Le choix passe devant les polices de l’ambiance et reste en place si vous changez d’ambiance.</p>';
+	echo '<p class="description" style="margin-bottom:.8rem">Pour la charte d’un client. La liste reprend les polices du thème et celles téléversées dans Apparence &gt; Éditeur &gt; Styles &gt; Typographie &gt; Gérer les polices (fichiers WOFF2, licence web vérifiée). Sans choix, le site garde les polices de base du thème.</p>';
 	foreach ( briise_polices_roles() as $role => $libelle ) {
 		printf( '<p><label for="br-police-%1$s" style="display:inline-block;min-width:16rem">%2$s</label> <select id="br-police-%1$s" name="polices[%1$s]">', esc_attr( $role ), esc_html( $libelle ) );
-		printf( '<option value="">%s</option>', esc_html( 'accent' === $role ? 'Comme les titres' : 'Selon l’ambiance' ) );
+		printf( '<option value="">%s</option>', esc_html( 'accent' === $role ? 'Comme les titres' : 'Police du thème' ) );
 		foreach ( $dispo as $nom => $p ) {
 			printf(
 				'<option value="%1$s" %2$s>%3$s</option>',

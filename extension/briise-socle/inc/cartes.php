@@ -4,7 +4,7 @@
  *
  * Construction reprise des cartes du site DEFI No Limit, remplies depuis Mon entreprise
  * (une seule source pour le téléphone, l'adresse, les horaires et la zone) et colorées
- * par l'ambiance du client. Icônes : Tabler Icons (licence MIT, © Paweł Kuna), intégrées en SVG.
+ * par les couleurs du client. Icônes : Tabler Icons (licence MIT, © Paweł Kuna), intégrées en SVG.
  *
  * Codes courts : [briise_carte_coordonnees] et [briise_carte_zone].
  */

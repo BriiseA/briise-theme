@@ -223,7 +223,8 @@ const site = {
     person_name: 'Patrick Junior Malamba', person_job: 'Fondateur de Briise',
     precision_telephone: 'Je décroche moi-même, du lundi au vendredi (numéro fictif)', precision_email: 'Réponse sous un jour ouvré', precision_adresse: 'Rendez-vous chez vous ou à distance' },
   annonces: { jours: { 1: { ouvert: true, plages: [['09:00', '12:30'], ['14:00', '18:00']] }, 2: { ouvert: true, plages: [['09:00', '12:30'], ['14:00', '18:00']] }, 3: { ouvert: true, plages: [['09:00', '12:30'], ['14:00', '18:00']] }, 4: { ouvert: true, plages: [['09:00', '12:30'], ['14:00', '18:00']] }, 5: { ouvert: true, plages: [['09:00', '12:30'], ['14:00', '18:00']] }, 6: { ouvert: false }, 0: { ouvert: false } } },
-  ambiance: 'charte-client',
+  // Arrondis discrets, proches de l'ancienne ambiance « Charte du client ».
+  angles: 'doux',
   couleurs: { fond: '#ffffff', clair: '#ffffff', surface: '#f7f4ff', nuance: '#eaf7ff', texte: '#24124a', 'texte-doux': '#4e4466', accent: '#2f5bff', secondaire: '#24124a', deco: '#c9bcff', sombre: '#24124a' },
   // Logos, par leur nom dans la Médiathèque (briise-logo-sombre.png, briise-logo-clair.png).
   logo: 'briise-logo-sombre', logo_clair: 'briise-logo-clair',

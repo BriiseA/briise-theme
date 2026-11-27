@@ -15,7 +15,12 @@ def check(name,pal):
     return not bad
 ok=True
 root=sys.argv[1] if len(sys.argv)>1 else '.'
-t=json.load(open(root+'/theme.json')); ok&=check('Galet (défaut)',{c['slug']:c['color'] for c in t['settings']['color']['palette']})
-for f in sorted(glob.glob(root+'/styles/*.json')):
-    v=json.load(open(f)); ok&=check(v['title'],{c['slug']:c['color'] for c in v['settings']['color']['palette']})
+# La palette de base (theme.json), puis celle de chaque site d'exemple : la base, avec les couleurs du client
+# (clé « couleurs » du fichier de site) par-dessus.
+t=json.load(open(root+'/theme.json',encoding='utf-8')); base={c['slug']:c['color'] for c in t['settings']['color']['palette']}
+ok&=check('Palette de base',base)
+for f in sorted(glob.glob(root+'/.github/outils/exemples/site-*.json')):
+    v=json.load(open(f,encoding='utf-8'))
+    if v.get('couleurs'):
+        ok&=check(os.path.basename(f),{**base,**{k:c for k,c in v['couleurs'].items() if k in base}})
 sys.exit(0 if ok else 1)

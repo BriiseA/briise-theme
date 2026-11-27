@@ -6,28 +6,25 @@ Toutes les sections servent à tous les métiers. Pour composer un site : partir
 
 Colonne « Besoins » : ce qu’il faut avoir avant de choisir la section. Une section sans son contenu réel ne doit pas être publiée.
 
-## Ouverture (haut de l’accueil ou d’une page) (16)
+## Ouverture (haut de l’accueil ou d’une page) (13)
 
 | Section | Titre | À quoi elle sert | Besoins | Dans le navigateur |
 | --- | --- | --- | --- | --- |
-| `accueil-photo` | Accueil texte et photo avec étiquettes | Ouverture de l’accueil : titre, phrase et boutons à gauche, une vraie photo à droite avec deux étiquettes posées dessus (prix de départ, délai, garantie). Sur mobile, le titre et le bouton restent visibles sans défiler. | 1 photo, prix réels | — |
 | `choix-prestation` | Ouverture : liste des prestations qui change la photo | Accueil : le titre, puis la liste des prestations avec leur prix. Au survol d’une ligne, la grande photo change. Chaque ligne mène à sa page. Sur mobile, une vignette par ligne. De 2 à 6 lignes. | 4 photos, prix réels, prochaine date libre (Horaires et annonces) | — |
 | `en-tete-bandeau` | En-tête bandeau photo pleine largeur | Photo de la page en bandeau sur toute la largeur, texte posé dessus. Réservé aux très grandes photos (2 400 px de large au moins) : sinon, préférer l’en-tête avec photo à côté. | — | — |
 | `en-tete-mosaique` | En-tête de page avec trois photos | Variante quand vous avez trois bonnes photos : titre à gauche, mosaïque à droite. La grande photo est l’image mise en avant de la page ; les deux petites se remplacent d’un clic. | 2 photos | — |
 | `en-tete-page` | En-tête de page avec fil d’Ariane | Pour toutes les pages intérieures : fil d’Ariane automatique, titre, introduction et bouton d’action. | — | — |
 | `en-tete-photo` | En-tête de page avec photo | Pages de service, à propos : titre et introduction à gauche, photo nette à droite. La photo est l’image mise en avant de la page (1 400 px de large au moins) ; sans elle, le texte prend toute la largeur. | — | — |
-| `hero-banniere` | Hero bannière plein écran | Grande photo pleine largeur, titre et bouton posés dessus. Le voile sombre garantit la lisibilité, quelle que soit la photo. | 1 photo | — |
-| `hero-image` | Hero avec image | Ouverture de l’accueil ou d’une page de service : titre, phrase d’accroche, deux boutons, photo. | 1 photo | — |
-| `hero-texte` | Hero texte seul | Ouverture sobre, sans image : pages intérieures, pages légales, pages de contenu. | — | — |
+| `ouverture` | Ouverture (10 versions) | Le haut de l’accueil : pastille, grand titre, phrase, bouton d’action et second bouton, trois atouts, et vos photos. Choisissez la forme dans le panneau « Version » : photo à côté, bannière plein écran, photo coupée en biais, moitié-moitié, arche, titre géant, diaporama, mosaïque en tuiles, titre avec photos ou photo qui s’agrandit. Le diaporama fait défiler en fondu les quatre photos ; la mosaïque en montre trois ; les autres versions, la première. Une carte d’infos se pose sur la photo : ouvert aujourd’hui, prochaine date libre (Horaires et annonces) et votre ville ; sans ces données, elle ne s’affiche pas. Une vidéo courte (bloc Vidéo, sans son) peut remplacer la photo : elle joue en boucle, avec un bouton pause. | 4 photos | — |
 | `ouverture-avant-apres` | Accueil avec avant / après | Rénovation, nettoyage, aménagement : le titre à gauche, une photo avant / après à faire glisser à droite. Les deux photos doivent être prises du même endroit, avec le même cadrage. | 2 photos | curseur avant / après ; sans script : deux photos |
+| `ouverture-bande` | Ouverture avec bande de services | La même ouverture, avec en bas vos services en grand sur une bande qui défile doucement (pause au survol, au clavier ou avec le bouton). Les noms viennent de vos pages de service : vérifiez qu’il y en a au moins quatre, ou retirez les noms en trop. | 4 photos, pages de service | défile (pause, immobile si moins d’animations) ; sans script : bande fixe |
 | `ouverture-carte` | Grande photo et carte de garanties | Une grande photo pleine largeur avec le titre, puis une carte posée à cheval sur la section suivante : trois faits vérifiables (délai, ancienneté, garantie) et le bouton d’action. | 1 photo | — |
-| `ouverture-decoupe` | Accueil sombre, photo coupée en biais | Une ouverture plus industrielle : fond sombre, titre en grand, la photo coupée en biais avec un trait de la couleur d’accent. Sur mobile, la photo passe sous le texte. | 1 photo | — |
 | `ouverture-demande` | Grande photo et demande express | La demande dès l’arrivée : une grande photo, le titre, et à droite un formulaire de quatre champs (projet, commune, nom, téléphone) pour être rappelé. Le formulaire « Demande de rappel » se crée dans Mon entreprise > Fonctions. Idéale aussi pour une page de publicité. | 1 photo, formulaire de rappel (Fluent Forms) | — |
 | `ouverture-deux-portes` | Deux portes : urgent ou projet | Quand les visiteurs arrivent avec deux besoins très différents, une urgence ou un projet : dès l’arrivée, deux chemins. « C’est urgent » : l’appel en grand, les pannes courantes qui mènent à leur page, le geste à faire en attendant. « J’ai un projet » : une photo et la demande de devis. Le téléphone vient de Mon entreprise. | 1 photo, pages de service | — |
 | `ouverture-eventail` | Ouverture : titre centré et photos en éventail | Quand les photos sont le meilleur argument : un grand titre centré, puis cinq photos disposées en arc. Élégante sur ordinateur ; sur mobile, trois photos restent visibles. | 5 photos | — |
 | `ouverture-mosaique` | Accueil en mosaïque de réalisations | La preuve dès l’arrivée : le titre et les boutons à gauche, trois réalisations récentes à droite, chacune avec son ouvrage et sa commune. Chaque photo mène aux réalisations. | 3 photos | — |
 
-## Offre et tarifs (16)
+## Offre et tarifs (15)
 
 | Section | Titre | À quoi elle sert | Besoins | Dans le navigateur |
 | --- | --- | --- | --- | --- |
@@ -40,13 +37,12 @@ Colonne « Besoins » : ce qu’il faut avoir avant de choisir la section. Une s
 | `modeles-cartes` | Quel modèle choisir, en cartes | Une carte par modèle ou par option, avec sa photo, sa place, son prix, pour qui il est fait et ses limites. Lisible sur mobile, plus parlant qu’un tableau. | 3 photos, prix réels | — |
 | `prix-compris` | Prix et ce qu’il comprend | Les prix, puis deux listes courtes : ce qui est compris, ce qui ne l’est pas. Elles répondent à la peur numéro un du prospect, les mauvaises surprises sur le devis. | prix réels | — |
 | `service-alterne` | Service détaillé, image et texte alternés | Pages de service : chaque service avec sa photo, en alternance gauche et droite. | 2 photos | — |
+| `services` | Services (7 versions) | Vos services, chacun avec sa photo, son nom, deux phrases et le lien vers sa page. Choisissez la forme dans le panneau « Version » de la section : grille, grille asymétrique, liste en deux colonnes, service phare, défilement, onglets ou volets ; et la place du titre dans le panneau « Titre ». Le texte et les photos restent en place quand vous changez de version. Retirez ou dupliquez un service : chaque version s’adapte de 3 à 6 services. | 4 photos, pages de service | — |
 | `tableau-comparatif` | Tableau comparatif | Aider à choisir entre deux ou trois formules. | prix réels | — |
 | `tarifs-cartes` | Grille de tarifs en cartes | Deux à quatre formules avec leur prix ; celle du milieu est mise en avant. | prix réels, chiffres vérifiables | — |
 | `tarifs-liste` | Tarifs en liste, avec photos | Toutes les prestations sur une liste : vignette, nom, ce qui est compris en quelques mots, prix. Chaque ligne mène à la page de la prestation. | 3 photos, prix réels | — |
 | `tarifs-tableau` | Tableau de tarifs simple | Pour une liste de prestations nombreuses : une ligne par prestation. | prix réels | — |
 | `temps-prix` | Pourquoi ce prix : le temps passé | Justifier un prix par le travail qu’il représente : chaque étape et sa durée (« 30 min », « 2 h 30 »). Une barre colorée est dessinée à partir des durées. | — | — |
-| `trois-cartes` | Trois cartes de service | Présenter l’offre en trois blocs, chacun menant à sa page. | pages de service | — |
-| `trois-cartes-photos` | Trois cartes de service avec photos | Chaque carte est une photo pleine hauteur, avec le titre et le texte sur un dégradé sombre ; toute la carte mène à la page du service. Retirez la photo d’une carte : elle reprend l’aspect simple. | 3 photos, pages de service | — |
 
 ## Confiance et preuves (22)
 
@@ -123,3 +119,80 @@ Colonne « Besoins » : ce qu’il faut avoir avant de choisir la section. Une s
 | `zone-carte` | Zone d’intervention (carte) | Les communes regroupées par secteur, avec téléphone et contact en bas. Se remplit depuis Mon entreprise (Secteurs de la zone). | communes et rayon (Mon entreprise) | — |
 | `zone-liste` | Zone d’intervention en liste | Les communes où vous intervenez, groupées par distance (moins de 10 km, 10 à 20 km…), puis une invitation à appeler. Les distances se calculent seules à partir de Mon entreprise > Entreprise > Communes du schéma de zone (nom ; latitude ; longitude, votre adresse en premier). | communes avec coordonnées (Mon entreprise > Entreprise) | — |
 | `zone-plan` | Zone d’intervention sur un plan | Les communes sur un vrai plan : le visiteur choisit la sienne et voit la distance et le délai de visite. Le plan est fabriqué une fois, à partir des communes du schéma de zone (Mon entreprise > Entreprise ; nom ; latitude ; longitude ; délai facultatif), et enregistré sur votre site : aucun service extérieur n’est chargé chez le visiteur. | communes avec coordonnées (Mon entreprise > Entreprise) ; plan fabriqué à l’enregistrement | — |
+
+## Versions des sections (familles)
+
+Une même section, plusieurs formes pour le même contenu. Dans le fichier de site : la classe `br-<famille>--<version>` de la section (dans l’éditeur : panneau « Version »). Dans les outils : `services({ version, position })` de `build_br_sections.js`.
+
+### Ouverture (section `ouverture`, par défaut : `cote`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| Photo à côté | `br-ouverture--cote` | Le texte à gauche, la photo à droite. La forme sûre, qui va partout. |
+| Bannière plein écran | `br-ouverture--banniere` | La photo sur toute la largeur, le texte posé dessus sur un voile sombre. Pour une très belle photo, large (2 400 px). |
+| Photo coupée en biais | `br-ouverture--biais` | Fond foncé, la photo coupée en biais avec un trait de la couleur d’accent. Un style plus industriel. |
+| Moitié-moitié | `br-ouverture--moitie` | L’écran coupé en deux : le texte sur un aplat de couleur, la photo collée au bord sur toute la hauteur. |
+| Arche | `br-ouverture--arche` | La photo en arche, un cercle de la couleur de décor derrière. Élégant, pour l’image, le bien-être, l’événementiel. |
+| Titre géant | `br-ouverture--geant` | Le titre en très grand sur toute la largeur, la photo plus petite et décalée. Style magazine, pour un titre court. |
+| Diaporama | `br-ouverture--diaporama` | La photo sur toute la largeur, et les quatre photos de la section qui changent en fondu toutes les 6 secondes (bouton pause). Le titre et le bouton restent fixes. |
+| Mosaïque en tuiles | `br-ouverture--tuiles` | Le texte dans une grande tuile, trois photos autour (ou deux photos et la carte d’infos). Le style « bento », très actuel. |
+| Titre avec photos | `br-ouverture--mots` | De petites photos arrondies glissées entre les mots du titre, tout au centre. Style magazine, pour un titre court. |
+| Photo qui s’agrandit | `br-ouverture--agrandi` | Le titre au centre, la photo dessous en carte arrondie, qui s’étend à toute la largeur quand on fait défiler. |
+
+Place du texte (panneau « Titre ») :
+
+- **Selon la version** (aucune classe) : À gauche, ou centré pour « titre avec photos » et « photo qui s’agrandit ».
+- **Texte à gauche** (`br-titre--gauche`) : Le texte à gauche, la photo à droite.
+- **Texte centré** (`br-titre--centre`) : Le texte au centre ; dans les versions côte à côte, la photo passe dessous.
+- **Texte à droite** (`br-titre--droite`) : Le texte à droite, la photo passe à gauche. Sur téléphone, le texte revient en haut à gauche.
+
+Options, combinables avec toutes les versions :
+
+- **Carte d’infos** : Posée sur la photo : ouvert aujourd’hui, prochaine date libre et ville, depuis Mon entreprise. Sans données, rien ne s’affiche. Dans la section : le code court [briise_infos_ouverture] ; dans les outils : ouverture({ infos: true }).
+- **Bande de services** : Les noms des services en grand, sur une bande qui défile en bas de l’ouverture (pause au survol, au clavier ou avec le bouton). Composition « Ouverture avec bande de services » ; dans les outils : ouverture({ bande: true }).
+
+### Services (section `services`, par défaut : `grille`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| Grille | `br-services--grille` | Une carte par service : photo en haut, texte dessous. |
+| Grille asymétrique | `br-services--bento` | Le premier service en grand, les autres autour, chacun sur sa photo. |
+| Liste en deux colonnes | `br-services--liste` | Une ligne par service : vignette, numéro, nom, deux phrases et un bouton fléché. Pour une offre large (6 services et plus). |
+| Service phare | `br-services--phare` | Le premier service en grand, photo et texte côte à côte ; les autres en liste courte dessous. |
+| Défilement | `br-services--defile` | Grandes cartes photo qui glissent de gauche à droite, avec des flèches. |
+| Onglets | `br-services--onglets` | Un service à la fois : le visiteur choisit le service dans une rangée d’onglets. Dans l’éditeur, les services restent en grille. |
+| Volets | `br-services--volets` | Bandes photo côte à côte : celle que l’on survole s’ouvre et montre son texte. Sur téléphone, les volets s’empilent. |
+
+## Place du titre (toute section dont le titre est en haut)
+
+Dans le fichier de site : la classe `br-titre--<position>` de la section (dans l’éditeur : panneau « Titre »). Sans classe, la section suit le réglage général `titres` du site. Sur téléphone, le titre revient en haut ; seul le titre centré reste centré.
+
+| Position | Classe | Rendu |
+| --- | --- | --- |
+| Selon le site | aucune | Le réglage général : Mon entreprise > Apparence > Titres. |
+| À gauche | `br-titre--gauche` | Le titre à gauche, le lien à droite. |
+| Centré | `br-titre--centre` | Titre, phrase et lien au centre, les uns sous les autres. |
+| À droite | `br-titre--droite` | Le titre au bord droit, le lien à gauche. |
+| Titre et phrase côte à côte | `br-titre--cote` | Le titre à gauche, la phrase d’introduction et le lien à droite. |
+| Titre géant | `br-titre--geant` | Le titre en très grand sur toute la largeur, la phrase et le lien dessous. |
+| Titre et filet | `br-titre--filet` | Un trait fin prolonge le titre jusqu’au lien. |
+| En marge à gauche | `br-titre--marge-gauche` | Sur ordinateur, l’en-tête dans une colonne à gauche, qui reste visible pendant la lecture. |
+| En marge à droite | `br-titre--marge-droite` | Sur ordinateur, l’en-tête dans une colonne à droite. |
+
+## Habillage du site (une fois pour tout le site)
+
+Clés du fichier de site (`"entete": "capsule"`…) ou Mon entreprise > Apparence. Ce que fait chaque valeur : `README.md`, « Apparence ». L’ouverture n’est pas une clé : c’est la première section de l’accueil. Couleurs et polices : clés `couleurs` et `polices` ; réglage fin : clé `styles`.
+
+| Pièce | Valeurs |
+| --- | --- |
+| `entete` | `classique`, `capsule`, `ilots`, `logo-centre`, `medaillon`, `encadre`, `bandeau`, `barre-infos` |
+| `ouverture` | `cote`, `banniere`, `biais`, `moitie`, `arche`, `geant`, `diaporama`, `tuiles`, `mots`, `agrandi`, `choix-prestation`, `eventail`, `deux-portes`, `mosaique`, `carte`, `avant-apres`, `demande` |
+| `cartes` | `photo-fond`, `photo-haut`, `liste-filet` |
+| `titres` | `tete-lien`, `tete-deux-colonnes`, `grand-numero`, `marge` |
+| `pied` | `colonnes`, `grand-titre`, `logo-geant`, `grand-appel`, `carte`, `compact` |
+| `mobile` | `bouton`, `barre` |
+| `angles` | `standard`, `doux`, `droits`, `feuille`, `biseau` |
+| `photos` | `standard`, `arche`, `galet` |
+| `relief` | `ombre`, `bordure`, `plat` |
+| `etiquettes` | `texte`, `numerotees` |
+| `surlignage` | `couleur`, `aplat` |

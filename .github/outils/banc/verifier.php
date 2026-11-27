@@ -25,12 +25,31 @@ $ok( ! $a['exclues'], 'aucun lien vers une page exclue de Google' );
 $ok( ! $a['flous'], 'aucun texte de lien vague' );
 $ok( function_exists( 'briise_rythme_analyse' ) && ! briise_rythme_analyse(), 'couleurs : jamais deux sections voisines du même fond' );
 
-// La fiche de Chécy est volontairement trop courte : le Contrôle doit la repérer, et elle seule.
+// Fiches de réalisation : celles du site sont assez longues ; une fiche volontairement courte, ajoutée
+// pour l'essai, doit être repérée par le Contrôle, et elle seule.
 $minces = function_exists( 'briise_realisations_minces' ) ? briise_realisations_minces() : array();
-$ok( 1 === count( $minces ), 'fiches trop courtes repérées : 1 attendue (Chécy), ' . count( $minces ) . ' trouvée(s)' );
+$ok( ! $minces, 'fiches du site assez longues (' . count( $minces ) . ' trop courte(s))' );
+if ( function_exists( 'briise_realisations_minces' ) && defined( 'BRIISE_REALISATION' ) ) {
+	$courte = wp_insert_post( array( 'post_type' => BRIISE_REALISATION, 'post_status' => 'publish', 'post_title' => 'Fiche d’essai trop courte', 'post_content' => '<!-- wp:paragraph --><p>Trois mots seulement.</p><!-- /wp:paragraph -->' ) );
+	$ok( array( $courte ) === briise_realisations_minces(), 'fiche trop courte repérée par le Contrôle, et elle seule' );
+	wp_delete_post( $courte, true );
+}
 
 // Formulaires.
-$ok( briise_fluentforms_actif() && briise_formulaire_id( 'devis' ) > 0, 'formulaire de devis créé à l’import' );
+$ok( briise_fluentforms_actif() && briise_formulaire_id( 'reservation' ) > 0, 'formulaire de réservation créé à l’import' );
+
+// Couleurs du client appliquées depuis le fichier de site, contraste AA.
+$palette = array();
+foreach ( (array) ( wp_get_global_settings( array( 'color', 'palette' ) )['theme'] ?? array() ) as $c ) {
+	$palette[ $c['slug'] ] = $c['color'];
+}
+// Réglages de style du fichier de site (clé « styles »), lus dans les styles globaux enregistrés.
+$globaux = WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles( wp_get_theme() );
+$globaux = json_decode( (string) ( $globaux['post_content'] ?? '' ), true );
+$ok( 'var:preset|color|accent' === ( $globaux['styles']['elements']['button']['color']['background'] ?? '' ) && '12px' === ( $globaux['settings']['custom']['rayon']['petit'] ?? '' ), 'réglages de style du fichier de site appliqués (boutons, arrondis)' );
+$ok( '#b0285f' === ( $palette['accent'] ?? '' ), 'couleurs du fichier de site appliquées (accent ' . ( $palette['accent'] ?? 'absent' ) . ')' );
+require_once get_theme_file_path( 'inc/contraste.php' );
+$ok( ! briise_contrastes_insuffisants(), 'couleurs du site : contraste AA' );
 
 // Gabarits : une page qui commence par un en-tête du thème n'affiche pas un second titre.
 $mauvais = array();

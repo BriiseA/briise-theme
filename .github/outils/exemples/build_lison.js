@@ -654,7 +654,18 @@ const site = {
     dispo_texte: 'Prochaine séance libre',
   },
   fonctions: { realisations: true, realisations_nom: 'Portfolio' },
-  ambiance: 'galerie', couleurs: {},
+  // Couleurs et polices de Lison (rose poudré, framboise en accent) : contraste AA vérifié par contraste.py.
+  couleurs: { fond: '#fffcfa', clair: '#ffffff', surface: '#f6e3e6', nuance: '#eee8e3', texte: '#1d1720', 'texte-doux': '#5a5059', accent: '#b0285f', secondaire: '#5c1f3d', deco: '#f4b6c8', sombre: '#1d1720' },
+  polices: { titres: 'Bricolage Grotesque', texte: 'Geist' },
+  // Le reste de l'apparence de Lison, telle qu'elle a été présentée (ancienne ambiance Galerie) :
+  // arrondis, forme des décors, titres serrés, boutons framboise qui passent au prune au survol.
+  styles: {
+    settings: { custom: { rayon: { grand: '32px', moyen: '24px', petit: '12px', bouton: '999px', photo: '28px' }, forme: { blob: '28px' } } },
+    styles: { elements: {
+      heading: { typography: { fontWeight: '600', lineHeight: '0.98', letterSpacing: '-0.035em' } },
+      button: { color: { background: 'var:preset|color|accent', text: 'var:preset|color|clair' }, ':hover': { color: { background: 'var:preset|color|secondaire', text: 'var:preset|color|clair' } } },
+    } },
+  },
   cta: 'reserver', cta_label: 'Réserver une séance', accueil: 'accueil', personne: 'a-propos', blog: '',
   liens: { services: 'seances' },
   reservation_lieux: ['Au studio, à Olivet', 'Chez vous', 'Dehors (bord de Loire, forêt, parc)'],

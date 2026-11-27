@@ -1,9 +1,9 @@
 <?php
 /**
  * Vérification automatique des contrastes de la palette active.
- * Les couleurs de chaque variation sont validées AA ; mais l'administrateur
- * peut changer une couleur dans l'éditeur de site (couleur du logo du client).
- * Ce contrôle prévient alors, sur le tableau de bord, si un texte devient illisible.
+ * La palette de base est validée AA ; les couleurs d'un client ne le sont pas d'office.
+ * Elles sont vérifiées à l'import d'un fichier de site (rapport de l'import).
+ * Ensuite, le tableau de bord prévient si une couleur changée dans l'éditeur rend un texte illisible.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

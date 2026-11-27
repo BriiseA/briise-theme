@@ -1,0 +1,1593 @@
+/*
+ * Familles de sections : un même contenu, plusieurs versions.
+ * La version est une classe de la section (br-services--bento…), choisie dans l'éditeur
+ * (panneau « Version » de la section, inc/familles.php) ou écrite dans le fichier de site.
+ * Chaque version reste lisible sans script ; les onglets et les flèches du défilement
+ * sont ajoutés par assets/js/familles.js. Arrondis et ombres suivent les réglages du site.
+ */
+
+/* ===== Services : base commune ======================================================== */
+
+.br-services-liste {
+	display: grid;
+	gap: var(--wp--preset--spacing--40);
+	margin-top: var(--wp--preset--spacing--50) !important;
+}
+.br-service {
+	position: relative;
+	isolation: isolate;
+	display: flex;
+	flex-direction: column;
+	margin: 0 !important;
+	min-width: 0;
+}
+.br-service > *,
+.br-service-texte > * {
+	margin: 0 !important;
+}
+.br-service-texte {
+	display: flex;
+	flex-direction: column;
+	gap: .6rem;
+}
+.br-service-photo {
+	margin: 0 !important;
+	overflow: hidden;
+}
+.br-service-photo img {
+	display: block;
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover;
+	border-radius: 0 !important;
+	transition: transform .6s cubic-bezier(.2, .7, .2, 1);
+}
+.br-service:hover .br-service-photo img {
+	transform: scale(1.04);
+}
+/* Toute la carte mène à la page du service ; le focus se voit sur toute la carte. */
+.br-service .br-arrow a::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 2;
+	border-radius: inherit;
+}
+.br-service .br-arrow a:focus-visible {
+	outline: none;
+}
+.br-service .br-arrow a:focus-visible::before {
+	outline: 3px solid var(--wp--preset--color--accent);
+	outline-offset: 4px;
+}
+.br-service-nom {
+	font-size: var(--wp--preset--font-size--large);
+	line-height: 1.15;
+}
+
+/* Cartes claires (grille, service phare) : lisibles sur n'importe quel fond de section. */
+:is(.br-services--grille, .br-services--onglets:not(.br-onglets--actif)) .br-service,
+.br-services--phare .br-service {
+	background: var(--wp--preset--color--clair);
+	color: var(--wp--preset--color--texte);
+	border-radius: var(--wp--custom--rayon--grand);
+	overflow: hidden;
+	box-shadow: var(--br-ombre);
+}
+:is(.br-services--grille, .br-services--onglets:not(.br-onglets--actif), .br-services--phare) .br-service :is(h3, .br-arrow a) {
+	color: var(--wp--preset--color--texte);
+}
+:is(.br-services--grille, .br-services--onglets:not(.br-onglets--actif), .br-services--phare) .br-service .br-muted {
+	color: var(--wp--preset--color--texte-doux);
+}
+
+/* Cartes photo (grille asymétrique, défilement, volets) : le texte sur un dégradé sombre. */
+:is(.br-services--bento, .br-services--defile, .br-services--volets) .br-service {
+	justify-content: flex-end;
+	padding: 1.6rem;
+	border-radius: var(--wp--custom--rayon--grand);
+	overflow: hidden;
+	background: var(--wp--preset--color--secondaire);
+	color: #fff;
+}
+:is(.br-services--bento, .br-services--defile, .br-services--volets) .br-service-photo {
+	position: absolute !important;
+	inset: 0;
+	z-index: -1;
+}
+:is(.br-services--bento, .br-services--defile, .br-services--volets) .br-service-photo::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, rgba(21, 23, 26, 0) 25%, rgba(21, 23, 26, .9) 100%);
+}
+:is(.br-services--bento, .br-services--defile, .br-services--volets) .br-service :is(h3, .br-arrow a) {
+	color: #fff;
+}
+:is(.br-services--bento, .br-services--defile, .br-services--volets) .br-service .br-muted {
+	color: rgba(255, 255, 255, .9);
+}
+:is(.br-services--bento, .br-services--defile, .br-services--volets) .br-arrow a {
+	text-decoration-color: var(--wp--preset--color--accent);
+}
+
+/* ===== Grille : photo en haut, texte dessous ========================================== */
+
+:is(.br-services--grille, .br-services--onglets:not(.br-onglets--actif)) .br-services-liste {
+	grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+}
+:is(.br-services--grille, .br-services--onglets:not(.br-onglets--actif)) .br-service-photo {
+	aspect-ratio: 4 / 3;
+}
+:is(.br-services--grille, .br-services--onglets:not(.br-onglets--actif)) .br-service-texte {
+	flex: 1;
+	padding: 1.5rem 1.6rem 1.8rem;
+}
+:is(.br-services--grille, .br-services--onglets:not(.br-onglets--actif)) .br-service .br-arrow {
+	margin-top: auto !important;
+}
+:is(.br-services--grille, .br-services--onglets:not(.br-onglets--actif), .br-services--bento, .br-services--volets) .br-num {
+	display: none;
+}
+
+/* ===== Grille asymétrique : le premier service en grand =============================== */
+
+.br-services--bento .br-services-liste {
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	grid-auto-rows: minmax(15rem, auto);
+}
+.br-services--bento .br-service:first-child {
+	grid-column: span 2;
+	grid-row: span 2;
+	padding: clamp(1.6rem, 3vw, 2.5rem);
+}
+.br-services--bento .br-service:first-child .br-service-nom {
+	font-size: var(--wp--preset--font-size--x-large);
+}
+/* Trois services : les deux autres l'un sous l'autre. Quatre : le deuxième en large. */
+.br-services--bento .br-services-liste:has(> .br-service:nth-child(3):last-child) > .br-service:not(:first-child),
+.br-services--bento .br-services-liste:has(> .br-service:nth-child(4):last-child) > .br-service:nth-child(2) {
+	grid-column: span 2;
+}
+/* Six services : le dernier sur toute la largeur. */
+.br-services--bento .br-services-liste:has(> .br-service:nth-child(6):last-child) > .br-service:nth-child(6) {
+	grid-column: 1 / -1;
+}
+.br-services--bento .br-service:not(:first-child) .br-muted {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+@media (max-width: 781px) {
+	.br-services--bento .br-services-liste {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+	.br-services--bento .br-service:first-child {
+		grid-column: 1 / -1;
+		grid-row: auto;
+		min-height: 22rem;
+	}
+	.br-services--bento .br-services-liste > .br-service:not(:first-child) {
+		grid-column: span 1 !important;
+		min-height: 16rem;
+	}
+}
+@media (max-width: 520px) {
+	.br-services--bento .br-services-liste {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ===== Liste en deux colonnes : une ligne par service, pour une offre large ============ */
+
+.br-services--liste .br-services-liste {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0 clamp(1.5rem, 4vw, 3.5rem);
+}
+/* Une ligne : la vignette, le numéro, le nom et deux phrases, puis un bouton rond fléché.
+   Toute la ligne mène à la page du service. */
+.br-services--liste .br-service {
+	display: grid;
+	grid-template-columns: clamp(5rem, 8vw, 7rem) minmax(0, 1fr) 44px;
+	grid-template-areas: "photo num fleche" "photo nom fleche" "photo texte fleche";
+	align-content: center;
+	align-items: center;
+	gap: .2rem clamp(1rem, 2vw, 1.5rem);
+	padding: 1.1rem .75rem;
+	border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+	border-radius: var(--wp--custom--rayon--moyen);
+	transition: background .25s;
+}
+.br-services--liste .br-service-photo {
+	grid-area: photo;
+	aspect-ratio: 1;
+	border-radius: var(--wp--custom--rayon--moyen);
+}
+.br-services--liste .br-service-texte {
+	display: contents;
+}
+.br-services--liste .br-num {
+	grid-area: num;
+	width: auto;
+	height: auto;
+	justify-content: flex-start;
+	background: none;
+	color: var(--wp--preset--color--accent);
+	font-size: .85rem;
+	letter-spacing: .04em;
+}
+.br-services--liste .br-service-nom {
+	grid-area: nom;
+	font-size: var(--wp--preset--font-size--large);
+	line-height: 1.15;
+}
+.br-services--liste .br-muted {
+	grid-area: texte;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	font-size: .95rem;
+}
+/* Le lien devient un bouton rond fléché ; son texte reste lu par les lecteurs d'écran. */
+.br-services--liste .br-service .br-arrow {
+	grid-area: fleche;
+}
+.br-services--liste .br-service .br-arrow a {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	border: 1.5px solid currentColor;
+	border-radius: 999px;
+	font-size: 0;
+	text-decoration: none;
+	color: inherit;
+	transition: background .25s, color .25s, border-color .25s;
+}
+.br-services--liste .br-service .br-arrow a::after {
+	content: "→";
+	font-size: 1.15rem;
+	line-height: 1;
+}
+.br-services--liste .br-service:is(:hover, :focus-within) {
+	background: color-mix(in srgb, var(--wp--preset--color--clair) 70%, transparent);
+}
+.br-services--liste .br-service:is(:hover, :focus-within) .br-arrow a {
+	background: var(--wp--preset--color--accent);
+	border-color: var(--wp--preset--color--accent);
+	color: var(--wp--preset--color--clair);
+}
+.br-services--liste .br-service:is(:hover, :focus-within) .br-arrow a::after {
+	transform: none;
+}
+/* Un trait ferme chaque colonne. */
+.br-services--liste .br-service:nth-last-child(-n + 2) {
+	border-bottom: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+}
+.br-services--liste .br-services-liste:has(> .br-service:nth-child(odd):last-child) > .br-service:nth-last-child(2) {
+	border-bottom: 0;
+}
+@media (max-width: 860px) {
+	.br-services--liste .br-services-liste {
+		grid-template-columns: 1fr;
+	}
+	.br-services--liste .br-services-liste > .br-service:nth-last-child(2) {
+		border-bottom: 0;
+	}
+}
+@media (max-width: 480px) {
+	.br-services--liste .br-service {
+		grid-template-columns: 4.5rem minmax(0, 1fr) 44px;
+		padding-inline: .25rem;
+	}
+}
+
+/* ===== Service phare : le premier en grand, les autres en liste courte ================= */
+
+/* Rangée souple : les petits services se partagent toute la largeur, quel que soit leur nombre. */
+.br-services--phare .br-services-liste {
+	display: flex;
+	flex-wrap: wrap;
+}
+.br-services--phare .br-service:not(:first-child) {
+	flex: 1 1 15rem;
+}
+.br-services--phare .br-service:first-child {
+	flex: 1 1 100%;
+	display: grid;
+	grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+	align-items: center;
+	gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+.br-services--phare .br-service:first-child .br-service-photo {
+	align-self: stretch;
+	min-height: 22rem;
+}
+.br-services--phare .br-service:first-child .br-service-texte {
+	padding: 2rem clamp(1.5rem, 3vw, 2.75rem) 2rem 0;
+	gap: .9rem;
+}
+.br-services--phare .br-service:first-child .br-service-nom {
+	font-size: var(--wp--preset--font-size--xx-large);
+	line-height: 1.02;
+}
+.br-services--phare .br-service:not(:first-child) {
+	display: grid;
+	align-self: stretch;
+	grid-template-columns: 5.5rem minmax(0, 1fr);
+	align-items: center;
+	gap: 1rem;
+	padding: .9rem;
+	border-radius: var(--wp--custom--rayon--moyen);
+	box-shadow: none;
+}
+.br-services--phare .br-service:not(:first-child) .br-service-photo {
+	aspect-ratio: 1;
+	border-radius: var(--wp--custom--rayon--petit);
+}
+.br-services--phare .br-service:not(:first-child) .br-service-texte {
+	gap: .3rem;
+}
+.br-services--phare .br-service:not(:first-child) .br-muted {
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	font-size: .92rem;
+}
+.br-services--phare .br-service:not(:first-child) :is(.br-num, .br-arrow) {
+	display: none;
+}
+.br-services--phare .br-service:not(:first-child) .br-service-nom {
+	font-size: 1.1rem;
+}
+/* Le lien caché garde la carte cliquable : on le sort du flux sans le retirer. */
+.br-services--phare .br-service:not(:first-child) .br-arrow:has(a) {
+	display: block;
+	position: static;
+	height: 0;
+	overflow: visible;
+}
+.br-services--phare .br-service:not(:first-child) .br-arrow a {
+	font-size: 0;
+}
+.br-services--phare .br-service:not(:first-child) .br-arrow a::after {
+	content: none;
+}
+@media (max-width: 781px) {
+	.br-services--phare .br-service:first-child {
+		grid-template-columns: 1fr;
+		gap: 0;
+	}
+	.br-services--phare .br-service:first-child .br-service-photo {
+		min-height: 0;
+		aspect-ratio: 4 / 3;
+	}
+	.br-services--phare .br-service:first-child .br-service-texte {
+		padding: 1.5rem 1.5rem 1.75rem;
+	}
+}
+
+/* ===== Défilement : grandes cartes photo qui glissent ================================= */
+
+.br-services--defile .br-services-liste {
+	display: flex;
+	gap: 1.25rem;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	overscroll-behavior-x: contain;
+	padding-bottom: 1rem;
+	scrollbar-width: thin;
+	scrollbar-color: color-mix(in srgb, currentColor 35%, transparent) transparent;
+}
+.br-services--defile .br-services-liste:focus-visible {
+	outline: 3px solid var(--wp--preset--color--accent);
+	outline-offset: 4px;
+}
+.br-services--defile .br-service {
+	flex: 0 0 clamp(16rem, 30vw, 22rem);
+	min-height: clamp(24rem, 40vw, 30rem);
+	scroll-snap-align: start;
+}
+.br-services--defile .br-num {
+	position: absolute;
+	top: 1.2rem;
+	left: 1.2rem;
+	margin: 0 !important;
+}
+.br-services-fleches {
+	display: flex;
+	justify-content: flex-end;
+	gap: .6rem;
+	margin-top: 1rem;
+}
+.br-services-fleches[hidden] {
+	display: none;
+}
+.br-services-fleches button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 48px;
+	height: 48px;
+	border: 2px solid currentColor;
+	border-radius: 999px;
+	background: transparent;
+	color: inherit;
+	font-size: 1.25rem;
+	line-height: 1;
+	cursor: pointer;
+	transition: background .2s, color .2s;
+}
+.br-services-fleches button:hover:not(:disabled) {
+	background: var(--wp--preset--color--texte);
+	color: var(--wp--preset--color--fond);
+}
+.br-services-fleches button:focus-visible {
+	outline: 3px solid var(--wp--preset--color--accent);
+	outline-offset: 3px;
+}
+.br-services-fleches button:disabled {
+	opacity: .35;
+	cursor: default;
+}
+
+/* ===== Onglets : un service à la fois (sans script : la grille) ======================= */
+
+.br-services-onglets {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .5rem;
+	margin-top: var(--wp--preset--spacing--50);
+}
+.br-services-onglets button {
+	min-height: 44px;
+	padding: .6rem 1.25rem;
+	border: 2px solid var(--wp--preset--color--texte);
+	border-radius: var(--wp--custom--rayon--bouton);
+	background: transparent;
+	color: var(--wp--preset--color--texte);
+	font: inherit;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background .2s, color .2s;
+}
+.br-services-onglets button[aria-selected="true"] {
+	background: var(--wp--preset--color--texte);
+	color: var(--wp--preset--color--fond);
+}
+.br-services-onglets button:focus-visible {
+	outline: 3px solid var(--wp--preset--color--accent);
+	outline-offset: 3px;
+}
+.br-onglets--actif .br-services-liste {
+	display: block;
+	margin-top: var(--wp--preset--spacing--40) !important;
+}
+.br-onglets--actif .br-service {
+	display: grid;
+	grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+	align-items: center;
+	gap: clamp(1.5rem, 4vw, 3.5rem);
+	animation: br-onglet-entree .35s ease both;
+}
+.br-onglets--actif .br-service[hidden] {
+	display: none;
+}
+.br-onglets--actif .br-service-photo {
+	aspect-ratio: 4 / 3;
+	border-radius: var(--wp--custom--rayon--photo, var(--wp--custom--rayon--grand));
+}
+.br-onglets--actif .br-service-nom {
+	font-size: var(--wp--preset--font-size--xx-large);
+	line-height: 1.02;
+}
+.br-onglets--actif .br-service .br-arrow a::before {
+	content: none;
+}
+@keyframes br-onglet-entree {
+	from { opacity: 0; transform: translateY(8px); }
+	to { opacity: 1; transform: none; }
+}
+@media (max-width: 781px) {
+	.br-services-onglets {
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		padding-bottom: .4rem;
+	}
+	.br-services-onglets button {
+		flex: 0 0 auto;
+	}
+	.br-onglets--actif .br-service {
+		grid-template-columns: 1fr;
+	}
+}
+/* Sur une section foncée, l'onglet choisi garde un texte lisible. */
+:is(.has-secondaire-background-color, .has-sombre-background-color, .has-texte-background-color) .br-services-onglets button {
+	border-color: currentColor;
+	color: inherit;
+}
+:is(.has-secondaire-background-color, .has-sombre-background-color, .has-texte-background-color) .br-services-onglets button[aria-selected="true"] {
+	background: var(--wp--preset--color--fond);
+	color: var(--wp--preset--color--texte);
+}
+
+/* ===== Volets : bandes photo côte à côte, celle qu'on survole s'ouvre ================ */
+
+.br-services--volets .br-services-liste {
+	display: flex;
+	gap: .75rem;
+	height: clamp(26rem, 38vw, 32rem);
+}
+.br-services--volets .br-service {
+	flex: 1 1 0;
+	transition: flex-grow .5s cubic-bezier(.2, .7, .2, 1);
+}
+.br-services--volets .br-service-texte {
+	gap: .5rem;
+}
+/* Volet fermé : la description et le lien sont repliés (toujours lus par les lecteurs d'écran),
+   le nom reste en bas du volet. */
+.br-services--volets .br-service :is(.br-muted, .br-arrow) {
+	max-height: 0;
+	overflow: hidden;
+	opacity: 0;
+	transform: translateY(6px);
+	transition: opacity .3s, transform .3s, max-height .4s;
+}
+.br-services--volets .br-service-nom {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+/* Le volet ouvert : celui qu'on survole ou qui a le focus ; sinon le premier. */
+.br-services--volets .br-service:is(:hover, :focus-within),
+.br-services--volets .br-services-liste:not(:hover, :focus-within) .br-service:first-child {
+	flex-grow: 3.2;
+}
+.br-services--volets .br-service:is(:hover, :focus-within) :is(.br-muted, .br-arrow),
+.br-services--volets .br-services-liste:not(:hover, :focus-within) .br-service:first-child :is(.br-muted, .br-arrow) {
+	max-height: 12rem;
+	opacity: 1;
+	transform: none;
+}
+.br-services--volets .br-service:is(:hover, :focus-within) .br-service-nom,
+.br-services--volets .br-services-liste:not(:hover, :focus-within) .br-service:first-child .br-service-nom {
+	white-space: normal;
+	font-size: var(--wp--preset--font-size--x-large);
+}
+/* Téléphone, tablette, ou écran sans survol : les volets s'empilent, tout est visible. */
+@media (max-width: 900px), (hover: none) {
+	.br-services--volets .br-services-liste {
+		flex-direction: column;
+		height: auto;
+	}
+	.br-services--volets .br-service {
+		min-height: 15rem;
+	}
+	.br-services--volets .br-service :is(.br-muted, .br-arrow) {
+		max-height: none;
+		opacity: 1;
+		transform: none;
+	}
+	.br-services--volets .br-service-nom {
+		white-space: normal;
+	}
+}
+
+/* ===== Moins d'animations ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+	.br-service-photo img,
+	.br-services--liste .br-service,
+	.br-services--liste .br-service .br-arrow a,
+	.br-services--volets .br-service,
+	.br-services--volets .br-service :is(.br-muted, .br-arrow),
+	.br-services-fleches button,
+	.br-services-onglets button {
+		transition: none;
+	}
+	.br-service:hover .br-service-photo img {
+		transform: none;
+	}
+	.br-onglets--actif .br-service {
+		animation: none;
+	}
+}
+
+/* ===== Position du titre, section par section ==========================================
+ * Une classe br-titre--<position> sur la section (panneau « Titre » de l'éditeur) place son
+ * en-tête (.br-head ou .br-section-head, enfant direct de la section). Sans classe, la section
+ * suit le réglage général du site (Mon entreprise > Apparence > Titres). Sur téléphone, toutes
+ * les positions reviennent au titre en haut ; seul le titre centré reste centré.
+ */
+
+/* Phrase d'introduction dans une rangée « titre et lien » : sous le titre, sur toute la largeur. */
+.br-section-head > .br-lead {
+	order: 3;
+	flex-basis: 100%;
+	margin: 0 !important;
+}
+
+/* Dans la colonne d'une marge : la phrase avant le lien. */
+:is(.br-titre--marge-gauche, .br-titre--marge-droite) > .br-section-head > * {
+	order: 0;
+}
+:is(.br-titre--marge-gauche, .br-titre--marge-droite) > .br-section-head > .br-arrow {
+	order: 1;
+}
+
+/* Gauche : la forme d'origine, même si le site règle autrement ses titres. */
+.br-titre--gauche > :is(.br-head, .br-section-head),
+.br-titre--gauche > :is(.br-head, .br-section-head) > * {
+	text-align: left;
+}
+
+/* Centré : titre, phrase et lien au centre, les uns sous les autres. */
+.br-titre--centre > :is(.br-head, .br-section-head) {
+	display: flex !important;
+	flex-direction: column !important;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: .8rem;
+	max-width: 52rem !important;
+	margin-left: auto !important;
+	margin-right: auto !important;
+	text-align: center;
+}
+.br-titre--centre > :is(.br-head, .br-section-head) > * {
+	margin-left: auto !important;
+	margin-right: auto !important;
+	text-align: center;
+	flex-basis: auto !important;
+	order: 0;
+}
+.br-titre--centre > .br-section-head > .br-arrow {
+	order: 1;
+}
+
+/* À droite : le titre au bord droit, le lien à gauche. */
+.br-titre--droite > .br-section-head {
+	flex-direction: row-reverse !important;
+}
+.br-titre--droite > .br-section-head > :is(h2, .br-lead) {
+	text-align: right;
+}
+.br-titre--droite > .br-head {
+	display: flex !important;
+	flex-direction: column;
+	align-items: flex-end;
+	margin-left: auto !important;
+	margin-right: 0 !important;
+	text-align: right;
+}
+.br-titre--droite > .br-head > * {
+	margin-left: auto !important;
+	margin-right: 0 !important;
+}
+
+/* Titre et phrase côte à côte : le titre à gauche, la phrase et le lien à droite. */
+.br-titre--cote > :is(.br-head, .br-section-head) {
+	display: grid !important;
+	grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+	column-gap: clamp(2rem, 5vw, 5rem);
+	row-gap: .75rem;
+	align-items: end;
+}
+.br-titre--cote > :is(.br-head, .br-section-head) > * {
+	grid-column: 1;
+	max-width: none !important;
+	margin: 0 !important;
+}
+.br-titre--cote > :is(.br-head, .br-section-head) > .br-lead {
+	grid-column: 2;
+	grid-row: 1 / span 2;
+	align-self: end;
+}
+.br-titre--cote > :is(.br-head, .br-section-head) > .br-arrow {
+	grid-column: 2;
+	justify-self: start;
+}
+
+/* Titre géant : le titre sur toute la largeur, en très grand ; la phrase et le lien dessous. */
+.br-titre--geant > :is(.br-head, .br-section-head) {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 1rem 2.5rem;
+}
+.br-titre--geant > :is(.br-head, .br-section-head) > * {
+	max-width: none !important;
+	margin: 0 !important;
+}
+.br-titre--geant > :is(.br-head, .br-section-head) > :is(.br-label, h2) {
+	flex: 1 1 100%;
+}
+.br-titre--geant > :is(.br-head, .br-section-head) > h2 {
+	font-size: clamp(2.6rem, 8vw, 6.8rem) !important;
+	line-height: .95;
+	letter-spacing: -.045em;
+}
+.br-titre--geant > :is(.br-head, .br-section-head) > .br-lead {
+	order: 0;
+	flex: 1 1 22rem;
+	max-width: 36rem !important;
+}
+
+/* Titre et filet : un trait fin prolonge le titre jusqu'au lien. */
+.br-titre--filet > .br-section-head {
+	align-items: center !important;
+	flex-wrap: wrap;
+}
+.br-titre--filet > .br-section-head::after {
+	content: "";
+	order: 2;
+	flex: 1 1 3rem;
+	min-width: 2rem;
+	height: 1px;
+	background: currentColor;
+	opacity: .35;
+}
+.br-titre--filet > .br-section-head > h2 {
+	order: 1;
+	flex: 0 1 auto !important;
+}
+.br-titre--filet > .br-section-head > .br-arrow {
+	order: 3;
+}
+.br-titre--filet > .br-section-head > .br-lead {
+	order: 4;
+}
+.br-titre--filet > .br-head > h2 {
+	display: flex;
+	align-items: center;
+	gap: 1.5rem;
+	max-width: none !important;
+}
+.br-titre--filet > .br-head > h2::after {
+	content: "";
+	flex: 1 1 3rem;
+	height: 1px;
+	background: currentColor;
+	opacity: .35;
+}
+
+/* Téléphone : « à droite » et « côte à côte » reviennent au titre en haut, aligné à gauche. */
+@media (max-width: 781px) {
+	.br-titre--droite > .br-section-head {
+		flex-direction: row !important;
+	}
+	.br-titre--droite > :is(.br-head, .br-section-head),
+	.br-titre--droite > :is(.br-head, .br-section-head) > * {
+		align-items: flex-start;
+		margin-left: 0 !important;
+		text-align: left !important;
+	}
+	.br-titre--cote > :is(.br-head, .br-section-head) {
+		display: flex !important;
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	.br-titre--cote > :is(.br-head, .br-section-head) > .br-lead {
+		order: 0;
+	}
+}
+
+/* En marge (ordinateur) : l'en-tête dans une colonne à côté du contenu. */
+@media (min-width: 960px) {
+	:is(.br-titre--marge-gauche, .br-titre--marge-droite):has(> .br-head, > .br-section-head) {
+		display: grid !important;
+		column-gap: clamp(2rem, 5vw, 5rem);
+		row-gap: 0;
+		align-items: start;
+		padding-left: max(var(--wp--style--root--padding-left, 1.5rem), calc((100% - var(--wp--style--global--wide-size, 1320px)) / 2)) !important;
+		padding-right: max(var(--wp--style--root--padding-right, 1.5rem), calc((100% - var(--wp--style--global--wide-size, 1320px)) / 2)) !important;
+	}
+	:is(.br-titre--marge-gauche, .br-titre--marge-droite):has(> .br-head, > .br-section-head) > * {
+		max-width: none !important;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+	}
+	.br-titre--marge-gauche:has(> .br-head, > .br-section-head) {
+		grid-template-columns: minmax(220px, .38fr) minmax(0, 1fr);
+	}
+	.br-titre--marge-droite:has(> .br-head, > .br-section-head) {
+		grid-template-columns: minmax(0, 1fr) minmax(220px, .38fr);
+	}
+	.br-titre--marge-gauche > * {
+		grid-column: 2;
+	}
+	.br-titre--marge-droite > * {
+		grid-column: 1;
+	}
+	:is(.br-titre--marge-gauche, .br-titre--marge-droite) > :is(.br-head, .br-section-head) {
+		grid-row: 1 / span 12;
+		position: sticky;
+		top: 6rem;
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: flex-start !important;
+		justify-content: flex-start !important;
+		gap: .75rem;
+		margin-top: 0 !important;
+		text-align: left;
+	}
+	.br-titre--marge-gauche > :is(.br-head, .br-section-head) {
+		grid-column: 1;
+	}
+	.br-titre--marge-droite > :is(.br-head, .br-section-head) {
+		grid-column: 2;
+	}
+	:is(.br-titre--marge-gauche, .br-titre--marge-droite) > :is(.br-head, .br-section-head) > * {
+		margin: 0 !important;
+		max-width: 100% !important;
+		flex-basis: auto !important;
+		text-align: left;
+	}
+	/* Colonne de contenu plus étroite : une grille de quatre passe en deux sur deux. */
+	:is(.br-titre--marge-gauche, .br-titre--marge-droite) .is-layout-grid:has(> :nth-child(4):last-child),
+	:is(.br-titre--marge-gauche, .br-titre--marge-droite):is(.br-services--grille, .br-services--onglets:not(.br-onglets--actif)) .br-services-liste:has(> .br-service:nth-child(4):last-child) {
+		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+	}
+
+}
+
+/* ===== Ouverture : le haut de l'accueil ===============================================
+ * Même contenu (pastille, titre, phrase, boutons, atouts, photos), sept formes.
+ * Une vidéo (bloc Vidéo dans .br-ouv-media) remplace la photo dans toutes les versions.
+ */
+
+.br-ouverture {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
+}
+.br-ouv-grille {
+	position: relative;
+}
+.br-ouv-texte {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 1.1rem;
+	max-width: 42rem;
+}
+.br-ouv-texte > * {
+	margin: 0 !important;
+}
+/* Les trois atouts, en ligne, chacun avec une coche de la couleur d'accent. */
+.br-ouv-texte .br-coches {
+	list-style: none;
+	padding: 0;
+	margin-top: .4rem !important;
+	display: flex;
+	flex-wrap: wrap;
+	gap: .6rem 1.5rem;
+	font-size: .95rem;
+	font-weight: 500;
+	color: var(--wp--preset--color--texte-doux);
+}
+.br-ouv-texte .br-coches li {
+	display: flex;
+	align-items: center;
+	gap: .5rem;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+.br-ouv-texte .br-coches li::before {
+	content: "";
+	flex-shrink: 0;
+	width: 1.1rem;
+	height: 1.1rem;
+	background: var(--wp--preset--color--accent);
+	-webkit-mask: var(--br-i-coche) center / contain no-repeat;
+	mask: var(--br-i-coche) center / contain no-repeat;
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama, .br-ouverture--biais) .br-coches li::before {
+	background: currentColor;
+}
+.br-ouv-media {
+	position: relative;
+	margin: 0 !important;
+}
+.br-ouv-media > figure {
+	margin: 0 !important;
+	height: 100%;
+}
+.br-ouv-media :is(img, video) {
+	display: block;
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover;
+}
+/* Une seule photo, sauf pour le diaporama ; une vidéo passe devant la photo. */
+.br-ouverture:not(.br-ouverture--diaporama, .br-ouverture--tuiles) .br-ouv-media > .br-ouv-photo:not(:first-of-type),
+.br-ouverture--tuiles .br-ouv-media > .br-ouv-photo:nth-of-type(n + 4),
+.br-ouv-media:has(> .wp-block-video) > .br-ouv-photo {
+	display: none;
+}
+.br-ouv-media > .wp-block-video {
+	margin: 0 !important;
+	height: 100%;
+}
+.br-ouv-pause {
+	position: absolute;
+	right: 1rem;
+	bottom: 1rem;
+	z-index: 3;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	border: 0;
+	border-radius: 999px;
+	background: rgba(21, 23, 26, .7);
+	color: #fff;
+	cursor: pointer;
+}
+.br-ouv-pause:focus-visible {
+	outline: 3px solid #fff;
+	outline-offset: 2px;
+}
+.br-ouv-pause svg {
+	width: 18px;
+	height: 18px;
+}
+
+/* ----- Photo à côté ----- */
+:is(.br-ouverture--cote, .br-ouverture--arche, .br-ouverture--biais) .br-ouv-grille {
+	display: grid;
+	grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+	align-items: center;
+	gap: clamp(2rem, 5vw, 4.5rem);
+}
+.br-ouverture--cote .br-ouv-media {
+	aspect-ratio: 4 / 5;
+	max-height: 78vh;
+	border-radius: var(--wp--custom--rayon--photo, var(--wp--custom--rayon--grand));
+	overflow: hidden;
+}
+
+/* ----- Arche : la photo en arche, un cercle de couleur derrière ----- */
+.br-ouverture--arche .br-ouv-media {
+	aspect-ratio: 4 / 5;
+	max-height: 78vh;
+	justify-self: center;
+	width: min(100%, 30rem);
+}
+.br-ouverture--arche .br-ouv-media > :is(figure, .wp-block-video) {
+	border-radius: 999px 999px 14px 14px;
+	overflow: hidden;
+}
+.br-ouverture--arche .br-ouv-media::before {
+	content: "";
+	position: absolute;
+	z-index: -1;
+	top: -5%;
+	right: -10%;
+	width: 48%;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: var(--wp--preset--color--deco);
+}
+
+/* ----- Photo coupée en biais, sur fond foncé ----- */
+.br-ouverture--biais {
+	background: var(--wp--preset--color--sombre);
+	color: var(--wp--preset--color--fond);
+}
+.br-ouverture--biais :is(h1, .br-lead, .br-coches, .br-coches li) {
+	color: var(--wp--preset--color--fond);
+}
+.br-ouverture--biais .br-pastille {
+	background: color-mix(in srgb, var(--wp--preset--color--fond) 14%, transparent);
+	color: var(--wp--preset--color--fond);
+}
+.br-ouverture--biais .br-ouv-media {
+	aspect-ratio: 5 / 6;
+	max-height: 78vh;
+}
+.br-ouverture--biais .br-ouv-media > :is(figure, .wp-block-video) {
+	clip-path: polygon(16% 0, 100% 0, 100% 100%, 0 100%);
+}
+.br-ouverture--biais .br-ouv-media::before {
+	content: "";
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	bottom: 0;
+	left: 7%;
+	width: 6px;
+	background: var(--wp--preset--color--accent);
+	transform: skewX(-9deg);
+}
+
+/* ----- Bannière et diaporama : la photo sur toute la largeur, le texte posé dessus ----- */
+:is(.br-ouverture--banniere, .br-ouverture--diaporama) {
+	min-height: min(92vh, 52rem);
+	display: flex;
+	align-items: center;
+	color: #fff;
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama) > .br-ouv-grille {
+	width: 100%;
+	position: static;
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama) .br-ouv-media {
+	position: absolute !important;
+	inset: 0;
+	z-index: -1;
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama) .br-ouv-media::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	background: linear-gradient(90deg, rgba(15, 16, 18, .78) 0%, rgba(15, 16, 18, .55) 45%, rgba(15, 16, 18, .18) 100%);
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama) :is(h1, .br-lead, .br-coches, .br-coches li) {
+	color: #fff;
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama) .br-pastille {
+	background: rgba(255, 255, 255, .16);
+	color: #fff;
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama, .br-ouverture--biais) .wp-block-button:not(.is-style-outline) .wp-element-button {
+	background: var(--wp--preset--color--fond);
+	color: var(--wp--preset--color--texte);
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama, .br-ouverture--biais) .wp-block-button.is-style-outline .wp-element-button {
+	border-color: currentColor;
+	color: inherit;
+}
+/* Sur photo ou fond foncé, le mot surligné reste lisible : blanc, souligné de la couleur d'accent. */
+:is(.br-ouverture--banniere, .br-ouverture--diaporama, .br-ouverture--biais) h1 mark {
+	color: inherit !important;
+	text-decoration: underline;
+	text-decoration-color: var(--wp--preset--color--accent);
+	text-decoration-thickness: .09em;
+	text-underline-offset: .12em;
+}
+/* Sous un en-tête qui flotte sur la photo : de la place pour lui. */
+body.br-sur-photo .wp-block-post-content > :is(.br-ouverture--banniere, .br-ouverture--diaporama):first-child {
+	padding-top: calc(7rem + var(--wp--preset--spacing--50, 2rem)) !important;
+}
+/* Diaporama : les photos l'une sur l'autre, celle du moment en fondu (familles.js). Sans script : la première. */
+.br-ouverture--diaporama .br-ouv-media > .br-ouv-photo {
+	position: absolute !important;
+	inset: 0;
+	opacity: 0;
+	transition: opacity 1.4s ease;
+}
+.br-ouverture--diaporama .br-ouv-media:not(.br-diapo--actif) > .br-ouv-photo:first-child,
+.br-ouverture--diaporama .br-ouv-media > .br-ouv-photo.is-visible {
+	opacity: 1;
+}
+
+/* ----- Moitié-moitié : la photo collée au bord sur toute la hauteur ----- */
+.br-ouverture--moitie {
+	padding: 0 !important;
+}
+.br-ouverture--moitie > .br-ouv-grille {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	min-height: min(90vh, 50rem);
+	max-width: none !important;
+	margin: 0 !important;
+}
+.br-ouverture--moitie .br-ouv-texte {
+	align-self: stretch;
+	justify-content: center;
+	max-width: none;
+	padding: clamp(2.5rem, 6vw, 6rem) clamp(1.5rem, 5vw, 5rem);
+	padding-left: max(clamp(1.5rem, 5vw, 5rem), calc((100vw - var(--wp--style--global--content-size, 1200px)) / 2));
+	background: var(--wp--preset--color--surface);
+}
+.br-ouverture--moitie .br-ouv-media {
+	min-height: 22rem;
+}
+body.br-sur-photo .wp-block-post-content > .br-ouverture--moitie:first-child .br-ouv-texte {
+	padding-top: calc(7rem + var(--wp--preset--spacing--50, 2rem));
+}
+
+/* ----- Titre géant : le titre sur toute la largeur, la photo plus petite et décalée ----- */
+.br-ouverture--geant .br-ouv-grille {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, .85fr);
+	column-gap: clamp(2rem, 5vw, 5rem);
+	row-gap: 1.1rem;
+	align-items: start;
+}
+.br-ouverture--geant .br-ouv-texte {
+	display: contents;
+}
+.br-ouverture--geant .br-ouv-texte > * {
+	grid-column: 1;
+}
+.br-ouverture--geant .br-ouv-texte > h1 {
+	grid-column: 1 / -1;
+	font-size: clamp(2.8rem, 8.5vw, 7.6rem) !important;
+	line-height: .92;
+	letter-spacing: -.05em;
+	margin-bottom: .6rem !important;
+}
+.br-ouverture--geant .br-ouv-media {
+	grid-column: 2;
+	grid-row: 3 / span 4;
+	aspect-ratio: 3 / 2;
+	border-radius: var(--wp--custom--rayon--photo, var(--wp--custom--rayon--grand));
+	overflow: hidden;
+	transform: translateY(-2.5rem) rotate(1.5deg);
+	box-shadow: var(--br-ombre);
+}
+
+/* ----- Téléphone et tablette : le texte d'abord (titre et bouton visibles sans défiler) ----- */
+@media (max-width: 900px) {
+	:is(.br-ouverture--cote, .br-ouverture--arche, .br-ouverture--biais, .br-ouverture--moitie, .br-ouverture--geant) .br-ouv-grille {
+		grid-template-columns: 1fr;
+	}
+	:is(.br-ouverture--cote, .br-ouverture--biais) .br-ouv-media {
+		aspect-ratio: 4 / 3;
+		max-height: none;
+	}
+	.br-ouverture--arche .br-ouv-media {
+		width: min(80%, 22rem);
+	}
+	.br-ouverture--moitie .br-ouv-texte {
+		padding-left: clamp(1.5rem, 5vw, 5rem);
+	}
+	.br-ouverture--moitie .br-ouv-media {
+		aspect-ratio: 4 / 3;
+		min-height: 0;
+	}
+	.br-ouverture--geant .br-ouv-media {
+		grid-column: 1;
+		grid-row: auto;
+		transform: none;
+		margin-top: 1rem !important;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.br-ouverture--diaporama .br-ouv-media > .br-ouv-photo {
+		transition: none;
+	}
+}
+
+/* ----- Titre avec photos : de petites photos glissées entre les mots (masquées ailleurs) ----- */
+.br-mot-photo {
+	display: none;
+}
+.br-ouverture--mots .br-mot-photo {
+	display: inline-block;
+	width: 1.7em;
+	height: .82em;
+	margin: 0 .06em;
+	vertical-align: -.04em;
+	object-fit: cover;
+	border-radius: 999px;
+}
+.br-ouverture--mots .br-ouv-grille {
+	display: flex;
+	justify-content: center;
+}
+.br-ouverture--mots .br-ouv-texte {
+	align-items: center;
+	max-width: 62rem;
+	text-align: center;
+}
+.br-ouverture--mots h1 {
+	font-size: clamp(2.6rem, 7vw, 6.2rem) !important;
+	line-height: 1.02;
+	letter-spacing: -.04em;
+}
+.br-ouverture--mots .wp-block-buttons,
+.br-ouverture--mots .br-coches {
+	justify-content: center;
+}
+.br-ouverture--mots .br-ouv-media {
+	display: none;
+}
+
+/* ----- Mosaïque en tuiles : le texte dans une grande tuile, trois photos autour ----- */
+.br-ouverture--tuiles .br-ouv-grille {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	grid-template-rows: repeat(2, minmax(13rem, auto));
+	gap: clamp(.75rem, 1.5vw, 1.1rem);
+}
+.br-ouverture--tuiles .br-ouv-texte {
+	grid-column: 1 / span 2;
+	grid-row: 1 / span 2;
+	max-width: none;
+	justify-content: center;
+	padding: clamp(1.75rem, 4vw, 3.25rem);
+	border-radius: var(--wp--custom--rayon--grand);
+	background: var(--wp--preset--color--surface);
+}
+.br-ouverture--tuiles .br-ouv-media {
+	display: contents;
+}
+.br-ouverture--tuiles .br-ouv-media > :is(.br-ouv-photo, .wp-block-video, .br-ouv-infos) {
+	position: relative;
+	overflow: hidden;
+	border-radius: var(--wp--custom--rayon--grand);
+}
+.br-ouverture--tuiles .br-ouv-media > .br-ouv-photo:nth-of-type(1) {
+	grid-column: 3 / span 2;
+	grid-row: 1;
+}
+.br-ouverture--tuiles .br-ouv-media > .br-ouv-photo:nth-of-type(2) {
+	grid-column: 3;
+	grid-row: 2;
+}
+.br-ouverture--tuiles .br-ouv-media > .br-ouv-photo:nth-of-type(3) {
+	grid-column: 4;
+	grid-row: 2;
+}
+/* Avec la carte d'infos, elle prend la place de la troisième photo, en tuile de couleur. */
+.br-ouverture--tuiles .br-ouv-media:has(> .br-ouv-infos) > .br-ouv-photo:nth-of-type(3) {
+	display: none;
+}
+.br-ouverture--tuiles .br-ouv-media > .br-ouv-infos {
+	grid-column: 4;
+	grid-row: 2;
+	position: relative !important;
+	inset: auto !important;
+	max-width: none !important;
+	justify-content: center;
+	padding: 1.4rem 1.5rem !important;
+	background: var(--wp--preset--color--secondaire) !important;
+	color: var(--wp--preset--color--fond) !important;
+	box-shadow: none !important;
+}
+.br-ouverture--tuiles .br-ouv-media > .br-ouv-infos li::before {
+	background: currentColor !important;
+}
+@media (max-width: 900px) {
+	.br-ouverture--tuiles .br-ouv-grille {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-template-rows: auto;
+		grid-auto-rows: minmax(10rem, auto);
+	}
+	.br-ouverture--tuiles .br-ouv-texte {
+		grid-column: 1 / -1;
+		grid-row: auto;
+	}
+	.br-ouverture--tuiles .br-ouv-media > .br-ouv-photo:nth-of-type(1) {
+		grid-column: 1 / -1;
+		grid-row: auto;
+		min-height: 13rem;
+	}
+	.br-ouverture--tuiles .br-ouv-media > :is(.br-ouv-photo:nth-of-type(2), .br-ouv-photo:nth-of-type(3), .br-ouv-infos) {
+		grid-column: auto;
+		grid-row: auto;
+	}
+}
+
+/* ----- Photo qui s'agrandit : une carte sous le titre, qui s'étend à toute la largeur au défilement ----- */
+.br-ouverture--agrandi .br-ouv-grille {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: clamp(2rem, 5vw, 3.5rem);
+}
+.br-ouverture--agrandi .br-ouv-texte {
+	align-items: center;
+	max-width: 52rem;
+	text-align: center;
+}
+.br-ouverture--agrandi .wp-block-buttons,
+.br-ouverture--agrandi .br-coches {
+	justify-content: center;
+}
+.br-ouverture--agrandi .br-ouv-media {
+	width: 100vw;
+	max-width: none;
+	aspect-ratio: 16 / 8;
+	max-height: 88vh;
+	margin-left: calc(50% - 50vw) !important;
+	margin-right: calc(50% - 50vw) !important;
+	clip-path: inset(0 6% 0 6% round var(--wp--custom--rayon--grand));
+}
+.br-ouverture--agrandi .br-ouv-media > .br-ouv-infos {
+	left: calc(6% + 1.25rem);
+}
+@supports (animation-timeline: view()) {
+	@media (prefers-reduced-motion: no-preference) {
+		.br-ouverture--agrandi .br-ouv-media {
+			animation: br-agrandir linear both;
+			animation-timeline: view();
+			animation-range: entry 10% cover 50%;
+		}
+	}
+}
+@keyframes br-agrandir {
+	from { clip-path: inset(0 14% 0 14% round 40px); }
+	to { clip-path: inset(0 0 0 0 round 0); }
+}
+@media (max-width: 781px) {
+	.br-ouverture--agrandi .br-ouv-media {
+		aspect-ratio: 4 / 3;
+	}
+}
+
+/* ----- Option : la carte d'infos réelles, posée sur la photo ----- */
+.br-ouv-infos {
+	position: absolute;
+	left: 1.25rem;
+	bottom: 1.25rem;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	gap: .45rem;
+	max-width: min(20rem, calc(100% - 2.5rem));
+	margin: 0;
+	padding: 1rem 1.25rem;
+	list-style: none;
+	border-radius: var(--wp--custom--rayon--moyen);
+	background: var(--wp--preset--color--clair);
+	color: var(--wp--preset--color--texte);
+	font-size: .92rem;
+	line-height: 1.35;
+	box-shadow: 0 24px 60px -30px rgba(0, 0, 0, .45);
+}
+.br-ouv-infos li {
+	display: flex;
+	align-items: baseline;
+	gap: .55rem;
+	margin: 0;
+}
+.br-ouv-infos li::before {
+	content: "";
+	flex-shrink: 0;
+	width: .55rem;
+	height: .55rem;
+	border-radius: 50%;
+	background: var(--wp--preset--color--accent);
+}
+/* « Ouvert aujourd'hui » vient du navigateur : la ligne reste cachée tant qu'elle est vide. */
+.br-ouv-infos li:has(> .br-infos-jour[hidden]) {
+	display: none;
+}
+/* « Ouvert aujourd'hui » a déjà son point de couleur (vert ouvert, rouge fermé) : pas de second point. */
+.br-ouv-infos li:has(> .br-infos-jour)::before {
+	display: none;
+}
+.br-ouv-infos strong {
+	font-weight: 600;
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama) .br-ouv-infos {
+	left: auto;
+	right: max(1.25rem, calc((100% - var(--wp--style--global--content-size, 1200px)) / 2));
+	bottom: 2rem;
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama):has(.br-ouv-infos) .br-ouv-pause {
+	bottom: auto;
+	top: 1rem;
+}
+@media (max-width: 781px) {
+	:is(.br-ouverture--banniere, .br-ouverture--diaporama):has(.br-ouv-infos) {
+		padding-bottom: 9.5rem !important;
+	}
+	:is(.br-ouverture--banniere, .br-ouverture--diaporama) .br-ouv-infos {
+		left: 1.25rem;
+		right: 1.25rem;
+		max-width: none;
+	}
+}
+
+/* ----- Option : les services en grand, sur une bande qui défile (sections.js) ----- */
+.br-ouverture:has(> .br-defile--services) {
+	padding-bottom: 0 !important;
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama):has(> .br-defile--services) {
+	flex-direction: column;
+	justify-content: center;
+}
+.br-ouverture > .br-defile--services {
+	margin-top: clamp(2.5rem, 6vw, 4.5rem) !important;
+	padding: 1.1rem 0;
+	border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+	background: transparent;
+	width: 100%;
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama) > .br-defile--services {
+	margin-top: auto !important;
+	background: rgba(15, 16, 18, .35);
+}
+.br-defile--services .br-defile-item {
+	font-family: var(--wp--preset--font-family--titres);
+	font-size: clamp(1.5rem, 3.6vw, 2.8rem);
+	font-weight: 600;
+	letter-spacing: -.02em;
+	line-height: 1.1;
+	white-space: nowrap;
+	color: inherit;
+}
+.br-defile--services .br-defile-item::after {
+	content: "✦";
+	display: inline-block;
+	margin-left: 1.5rem;
+	font-size: .5em;
+	vertical-align: middle;
+	color: var(--wp--preset--color--accent);
+}
+/* Bannière ou diaporama avec la bande de services : la carte d'infos remonte au-dessus de la bande. */
+:is(.br-ouverture--banniere, .br-ouverture--diaporama):has(> .br-defile--services) .br-ouv-infos {
+	bottom: calc(2rem + clamp(4.5rem, 8vw, 6.5rem));
+}
+@media (max-width: 781px) {
+	/* Avec la carte d'infos et la bande : de la place pour la carte, entre le texte et la bande. */
+	:is(.br-ouverture--banniere, .br-ouverture--diaporama):has(.br-ouv-infos):has(> .br-defile--services) > .br-ouv-grille {
+		padding-bottom: 10.5rem;
+	}
+}
+
+/* ===== Ouverture : place du texte (panneau « Titre ») ===================================
+ * Sans classe : selon la version (à gauche, ou centré pour « titre avec photos » et « photo qui
+ * s'agrandit »). br-titre--droite : le texte à droite, la photo passe à gauche.
+ * br-titre--centre : le texte au centre. br-titre--gauche : le texte à gauche partout.
+ * Sur téléphone, le texte revient en haut, aligné à gauche (sauf centré).
+ */
+
+/* ----- À droite ----- */
+:is(.br-ouverture--cote, .br-ouverture--arche, .br-ouverture--biais).br-titre--droite .br-ouv-grille {
+	grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+}
+:is(.br-ouverture--cote, .br-ouverture--arche, .br-ouverture--biais, .br-ouverture--moitie).br-titre--droite .br-ouv-media {
+	order: -1;
+}
+.br-ouverture--biais.br-titre--droite .br-ouv-media > :is(figure, .wp-block-video) {
+	clip-path: polygon(0 0, 84% 0, 100% 100%, 0 100%);
+}
+.br-ouverture--biais.br-titre--droite .br-ouv-media::before {
+	left: auto;
+	right: 7%;
+	transform: skewX(9deg);
+}
+.br-ouverture--arche.br-titre--droite .br-ouv-media::before {
+	right: auto;
+	left: -10%;
+}
+.br-ouverture--moitie.br-titre--droite .br-ouv-texte {
+	padding-left: clamp(1.5rem, 5vw, 5rem);
+	padding-right: max(clamp(1.5rem, 5vw, 5rem), calc((100vw - var(--wp--style--global--content-size, 1200px)) / 2));
+}
+.br-ouverture--tuiles.br-titre--droite .br-ouv-texte {
+	grid-column: 3 / span 2;
+}
+.br-ouverture--tuiles.br-titre--droite .br-ouv-media > .br-ouv-photo:nth-of-type(1) {
+	grid-column: 1 / span 2;
+}
+.br-ouverture--tuiles.br-titre--droite .br-ouv-media > .br-ouv-photo:nth-of-type(2) {
+	grid-column: 1;
+}
+.br-ouverture--tuiles.br-titre--droite .br-ouv-media > :is(.br-ouv-photo:nth-of-type(3), .br-ouv-infos) {
+	grid-column: 2;
+}
+.br-ouverture--geant.br-titre--droite .br-ouv-grille {
+	grid-template-columns: minmax(0, .85fr) minmax(0, 1fr);
+}
+.br-ouverture--geant.br-titre--droite .br-ouv-texte > * {
+	grid-column: 2;
+}
+.br-ouverture--geant.br-titre--droite .br-ouv-texte > :is(h1, .br-pastille) {
+	grid-column: 1 / -1;
+	justify-self: end;
+	text-align: right;
+}
+.br-ouverture--geant.br-titre--droite .br-ouv-media {
+	grid-column: 1;
+	transform: translateY(-2.5rem) rotate(-1.5deg);
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama, .br-ouverture--mots, .br-ouverture--agrandi).br-titre--droite .br-ouv-texte {
+	margin-left: auto;
+	align-items: flex-end;
+	text-align: right;
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama, .br-ouverture--mots, .br-ouverture--agrandi).br-titre--droite :is(.wp-block-buttons, .br-coches) {
+	justify-content: flex-end;
+}
+.br-ouverture--mots.br-titre--droite .br-ouv-grille {
+	justify-content: flex-end;
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama).br-titre--droite .br-ouv-media::after {
+	background: linear-gradient(270deg, rgba(15, 16, 18, .78) 0%, rgba(15, 16, 18, .55) 45%, rgba(15, 16, 18, .18) 100%);
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama).br-titre--droite .br-ouv-infos {
+	right: auto;
+	left: max(1.25rem, calc((100% - var(--wp--style--global--content-size, 1200px)) / 2));
+}
+
+/* ----- Centré ----- */
+:is(.br-ouverture--cote, .br-ouverture--arche, .br-ouverture--biais, .br-ouverture--geant).br-titre--centre .br-ouv-grille {
+	grid-template-columns: minmax(0, 1fr);
+	justify-items: center;
+	row-gap: clamp(2rem, 5vw, 3.5rem);
+}
+:is(.br-ouverture--cote, .br-ouverture--arche, .br-ouverture--biais, .br-ouverture--geant, .br-ouverture--banniere, .br-ouverture--diaporama, .br-ouverture--moitie, .br-ouverture--tuiles).br-titre--centre .br-ouv-texte {
+	align-items: center;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+:is(.br-ouverture--cote, .br-ouverture--arche, .br-ouverture--biais, .br-ouverture--geant, .br-ouverture--banniere, .br-ouverture--diaporama, .br-ouverture--moitie, .br-ouverture--tuiles).br-titre--centre :is(.wp-block-buttons, .br-coches) {
+	justify-content: center;
+}
+:is(.br-ouverture--cote, .br-ouverture--biais).br-titre--centre .br-ouv-media {
+	width: min(100%, 64rem);
+	aspect-ratio: 16 / 8;
+	max-height: none;
+}
+.br-ouverture--biais.br-titre--centre .br-ouv-media > :is(figure, .wp-block-video) {
+	clip-path: polygon(0 10%, 100% 0, 100% 100%, 0 100%);
+}
+.br-ouverture--biais.br-titre--centre .br-ouv-media::before {
+	display: none;
+}
+.br-ouverture--geant.br-titre--centre .br-ouv-texte {
+	display: flex;
+}
+.br-ouverture--geant.br-titre--centre .br-ouv-media {
+	grid-column: 1;
+	grid-row: auto;
+	width: min(100%, 52rem);
+	transform: rotate(-1deg);
+}
+:is(.br-ouverture--banniere, .br-ouverture--diaporama).br-titre--centre .br-ouv-media::after {
+	background: rgba(15, 16, 18, .6);
+}
+
+/* ----- À gauche (pour les versions centrées par défaut) ----- */
+:is(.br-ouverture--mots, .br-ouverture--agrandi).br-titre--gauche .br-ouv-texte {
+	align-items: flex-start;
+	margin-right: auto;
+	text-align: left;
+}
+:is(.br-ouverture--mots, .br-ouverture--agrandi).br-titre--gauche :is(.wp-block-buttons, .br-coches) {
+	justify-content: flex-start;
+}
+.br-ouverture--mots.br-titre--gauche .br-ouv-grille {
+	justify-content: flex-start;
+}
+.br-ouverture--agrandi.br-titre--gauche .br-ouv-grille {
+	align-items: stretch;
+}
+
+/* ----- Téléphone : le texte en haut, à gauche (sauf centré) ----- */
+@media (max-width: 900px) {
+	.br-ouverture.br-titre--droite .br-ouv-media {
+		order: 0;
+	}
+	.br-ouverture.br-titre--droite .br-ouv-texte,
+	.br-ouverture.br-titre--droite .br-ouv-texte > * {
+		align-items: flex-start;
+		justify-self: start;
+		margin-left: 0;
+		text-align: left !important;
+	}
+	.br-ouverture.br-titre--droite :is(.wp-block-buttons, .br-coches) {
+		justify-content: flex-start;
+	}
+	.br-ouverture--geant.br-titre--droite .br-ouv-texte > *,
+	.br-ouverture--geant.br-titre--droite .br-ouv-media {
+		grid-column: 1;
+	}
+	.br-ouverture--tuiles.br-titre--droite .br-ouv-texte,
+	.br-ouverture--tuiles.br-titre--droite .br-ouv-media > .br-ouv-photo:nth-of-type(1) {
+		grid-column: 1 / -1;
+	}
+	.br-ouverture--tuiles.br-titre--droite .br-ouv-media > :is(.br-ouv-photo:nth-of-type(2), .br-ouv-photo:nth-of-type(3), .br-ouv-infos) {
+		grid-column: auto;
+	}
+	:is(.br-ouverture--cote, .br-ouverture--biais).br-titre--centre .br-ouv-media {
+		aspect-ratio: 4 / 3;
+	}
+}

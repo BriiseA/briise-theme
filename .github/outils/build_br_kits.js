@@ -99,7 +99,7 @@ const accueil = (ouvertures, ...reste) => {
   return { slug: 'accueil', titre: 'Accueil', ouvertures, reste: r };
 };
 // Toutes les ouvertures de la bibliothèque, pour tous les métiers.
-const TOUTES = Object.keys(S).filter((k) => S[k].cat === 'ouverture' && !/^en-tete/.test(k) && k !== 'hero-texte');
+const TOUTES = Object.keys(S).filter((k) => S[k].cat === 'ouverture' && !/^en-tete/.test(k));
 
 const KITS = {
   base: {
