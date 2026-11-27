@@ -72,7 +72,8 @@
 
 	// Les éléments déjà animés via un parent ne sont pas animés une seconde fois.
 	items = items.filter( function ( el ) {
-		if ( el.closest( '.br-page-head, .br-hero' ) ) {
+		// Bandes qui défilent de côté : une carte hors de l'écran à droite ne serait jamais révélée.
+		if ( el.closest( '.br-page-head, .br-hero, .br-galeries--bande .br-galeries-photos, .br-projets--defile .br-projects, .br-services--defile .br-services-liste, .br-temoignages--defile .br-temoin-liste, .br-partenaires--defile .br-logos' ) ) {
 			return false;
 		}
 		var p = el.parentElement;

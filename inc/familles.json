@@ -184,6 +184,102 @@
 					"La photo à gauche, une ligne par sujet : ce qu’on voit souvent, puis ce que vous faites."
 				]
 			}
+		},
+		"galerie": {
+			"nom": "Galerie",
+			"classe": "br-galeries",
+			"section": "galerie",
+			"defaut": "mosaique",
+			"variantes": {
+				"mosaique": [
+					"Mosaïque",
+					"La première photo en grand, les autres autour."
+				],
+				"grille": [
+					"Grille régulière",
+					"Des carrés, trois par ligne. Sobre."
+				],
+				"bande": [
+					"Bande qui défile",
+					"Les photos glissent de gauche à droite, avec des flèches."
+				],
+				"polaroid": [
+					"Photos posées en vrac",
+					"Chaque photo dans un cadre blanc, un peu de travers ; elle se redresse au survol. Chaleureux."
+				],
+				"grande": [
+					"Une en grand",
+					"La première photo en bandeau sur toute la largeur, les autres en vignettes dessous."
+				]
+			}
+		},
+		"logos": {
+			"nom": "Logos",
+			"classe": "br-partenaires",
+			"section": "logos",
+			"defaut": "ligne",
+			"variantes": {
+				"ligne": [
+					"En ligne",
+					"Les logos en gris, sur une rangée centrée."
+				],
+				"grille": [
+					"Grille de cartes",
+					"Chaque logo en couleurs, dans une carte."
+				],
+				"defile": [
+					"Bande qui défile",
+					"Les logos glissent en boucle ; pause au survol, au clavier ou avec le bouton."
+				],
+				"discrets": [
+					"Discrets",
+					"Le titre à gauche, de petits logos à droite entre deux filets."
+				]
+			}
+		},
+		"avant-apres": {
+			"nom": "Avant / après",
+			"classe": "br-transformation",
+			"section": "avant-apres",
+			"defaut": "glisse",
+			"variantes": {
+				"cote": [
+					"Côte à côte",
+					"Les deux photos l’une à côté de l’autre, avec leur étiquette."
+				],
+				"glisse": [
+					"À faire glisser",
+					"Une seule photo coupée par un curseur. Les deux photos doivent avoir le même cadrage."
+				],
+				"medaillon": [
+					"Avant en médaillon",
+					"L’après en grand, l’avant en médaillon posé dans un coin."
+				]
+			}
+		},
+		"realisations": {
+			"nom": "Réalisations",
+			"classe": "br-projets",
+			"section": "realisations",
+			"defaut": "grille",
+			"variantes": {
+				"grille": [
+					"Grille",
+					"Les fiches en cartes, trois par ligne."
+				],
+				"liste": [
+					"Liste",
+					"Une fiche par ligne : la photo à gauche, le titre et le résumé à droite."
+				],
+				"grande": [
+					"Une en grand",
+					"La dernière fiche en grand, les autres deux par deux dessous."
+				],
+				"defile": [
+					"Défilement",
+					"Les fiches glissent de gauche à droite, avec des flèches. Montrez-en au moins cinq (nombre=\"6\" dans le code court), sinon rien ne défile."
+				]
+			}
 		}
 	},
 	"titres": {
@@ -245,7 +341,11 @@
 				"br-services--phare",
 				"br-temoignages--grand",
 				"br-temoignages--note",
-				"br-chiffres--tuiles"
+				"br-chiffres--tuiles",
+				"br-galeries--grande",
+				"br-projets--liste",
+				"br-projets--grande",
+				"br-partenaires--discrets"
 			],
 			"seulement_si": [
 				"br-benefices",
@@ -271,7 +371,11 @@
 				"br-chiffres--ligne",
 				"br-chiffres--cartes",
 				"br-chiffres--bande",
-				"br-chiffres--photo"
+				"br-chiffres--photo",
+				"br-galeries--grille",
+				"br-galeries--bande",
+				"br-galeries--polaroid",
+				"br-galeries--mosaique"
 			]
 		},
 		"geant": {
@@ -291,7 +395,11 @@
 				"br-services--onglets",
 				"br-temoignages--defile",
 				"br-comparaison--colonnes",
-				"forme=\"galerie\""
+				"forme=\"galerie\"",
+				"br-galeries--bande",
+				"br-projets--defile",
+				"br-galeries--grande",
+				"br-transformation--medaillon"
 			]
 		},
 		"marge-droite": {
@@ -308,7 +416,11 @@
 				"br-services--onglets",
 				"br-temoignages--defile",
 				"br-comparaison--colonnes",
-				"forme=\"galerie\""
+				"forme=\"galerie\"",
+				"br-galeries--bande",
+				"br-projets--defile",
+				"br-galeries--grande",
+				"br-transformation--medaillon"
 			]
 		}
 	}

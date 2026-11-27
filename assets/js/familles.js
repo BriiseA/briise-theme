@@ -4,6 +4,7 @@
  * Services et avis en défilement : flèches « précédent » et « suivant ».
  * Ouverture en diaporama : les photos changent en fondu toutes les 6 secondes, bouton pause.
  * Ouverture avec vidéo : vidéo muette en boucle, bouton pause.
+ * Logos qui défilent, galerie en bande, réalisations en défilement.
  * Sans ce script, chaque version reste lisible : les onglets restent une grille de cartes,
  * le défilement se fait au doigt, à la souris ou au clavier.
  */
@@ -234,7 +235,40 @@
 		boutonPause( section.querySelector( '.br-ouv-media' ), function () { v.pause(); }, function () { v.play(); }, calme );
 	}
 
+	/* ----- Logos qui défilent : la rangée est doublée (copie cachée aux lecteurs d'écran) et glisse
+	   en boucle ; pause au survol, au clavier ou avec le bouton. Moins d'animations : la rangée reste fixe. */
+	function logosDefilants( section ) {
+		var rangee = section.querySelector( '.br-logos' );
+		if ( ! rangee || calme || rangee.classList.contains( 'br-logos--actif' ) || rangee.children.length < 3 ) {
+			return;
+		}
+		Array.prototype.slice.call( rangee.children ).forEach( function ( logo ) {
+			var copie = logo.cloneNode( true );
+			copie.setAttribute( 'aria-hidden', 'true' );
+			copie.querySelectorAll( 'img' ).forEach( function ( img ) {
+				img.setAttribute( 'alt', '' );
+			} );
+			copie.querySelectorAll( 'a' ).forEach( function ( a ) {
+				a.setAttribute( 'tabindex', '-1' );
+			} );
+			rangee.appendChild( copie );
+		} );
+		rangee.classList.add( 'br-logos--actif' );
+		boutonPause( section, function () {
+			section.classList.add( 'br-logos--pause' );
+		}, function () {
+			section.classList.remove( 'br-logos--pause' );
+		}, false );
+	}
+
 	function demarrer() {
+		document.querySelectorAll( '.br-partenaires--defile' ).forEach( logosDefilants );
+		document.querySelectorAll( '.br-galeries--bande' ).forEach( function ( s ) {
+			defilement( s, { liste: '.br-galeries-photos', precedent: 'Photo précédente', suivant: 'Photo suivante' } );
+		} );
+		document.querySelectorAll( '.br-projets--defile' ).forEach( function ( s ) {
+			defilement( s, { liste: '.br-projects', precedent: 'Réalisation précédente', suivant: 'Réalisation suivante' } );
+		} );
 		document.querySelectorAll( '.br-services--onglets' ).forEach( onglets );
 		document.querySelectorAll( '.br-services--defile' ).forEach( function ( s ) {
 			defilement( s );

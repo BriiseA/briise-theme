@@ -225,8 +225,10 @@
 
 /* Avant / après à faire glisser : souris (survol ou glisser), doigt, clavier. */
 (function () {
-	document.querySelectorAll('.br-glisse').forEach(function (c) {
+	// La famille Avant / après, version « à faire glisser », reçoit la même mécanique.
+	document.querySelectorAll('.br-glisse, .br-transformation--glisse .br-avant-apres').forEach(function (c) {
 		if (c.querySelectorAll('img').length < 2) { return; }
+		c.classList.add('br-glisse');
 		c.classList.add('is-pret');
 		var p = document.createElement('div');
 		p.className = 'br-comp-poignee';

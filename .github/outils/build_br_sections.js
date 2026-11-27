@@ -313,23 +313,16 @@ const stat = (n, t) => Col([P(n, 'br-stat'), Muted(t)]);
 const avis = (txt) => Col([Box('br-card br-avis', [
   cb('core/quote', { citation: fr('Prénom N., ville') }, [P(txt)]),
 ])]);
-add('logos', 'confiance', 'Logos de clients ou labels', 'Certifications, labels, partenaires ou clients connus, en une ligne.',
-  Section('br-section--tight', [
-    P('Ils nous font confiance', 'br-label br-center'),
-    cb('core/group', { className: 'br-logos', layout: { type: 'flex', flexWrap: 'wrap', justifyContent: 'center' } },
-      [1, 2, 3, 4, 5].map((i) => cb('core/image', { url: IMG('logo-' + i), alt: fr('Nom du partenaire ou du label ' + i), sizeSlug: 'full', linkDestination: 'none', width: '140px' }))),
-  ]));
-
 const projet = (n, t) => Col([Box('br-project', [Img(n, '4/3'), Chips(['Type de projet', 'Ville']), H(t, 3), Muted('Une phrase : la demande du client et ce qui a été fait.')])]);
-add('realisations', 'confiance', 'Dernières réalisations (automatique)', 'Accueil : les trois dernières réalisations publiées (menu Réalisations), avec un lien vers toutes. Se met à jour seule ; disparaît s’il n’y en a aucune.',
-  Section('br-section-realisations', [
+add('realisations', 'confiance', 'Dernières réalisations (automatique, 4 versions)', 'Accueil : les trois dernières réalisations publiées (menu Réalisations), avec un lien vers toutes. Forme au choix dans le panneau « Version » : grille, liste, une en grand, défilement. Se met à jour seule ; disparaît s’il n’y en a aucune.',
+  Section('br-section-realisations br-projets br-projets--grille', [
     sectionHead('Nos dernières réalisations', ['Toutes les réalisations', URL('realisations')]),
     Short('[briise_realisations nombre="3"]'),
   ]));
 add('realisations-toutes', 'confiance', 'Toutes les réalisations, avec filtres (automatique)', 'Page des réalisations : toutes les fiches publiées, avec des boutons pour filtrer par catégorie. Se met à jour seule.',
   Section('br-section-realisations', [Short('[briise_realisations filtres="1"]')]));
-add('realisations-service', 'confiance', 'Réalisations de ce service (automatique)', 'Page de service : les réalisations rattachées à ce service. Disparaît tant qu’il n’y en a aucune.',
-  Section('br-section-realisations', [
+add('realisations-service', 'confiance', 'Réalisations de ce service (automatique, 4 versions)', 'Page de service : les réalisations rattachées à ce service. Forme au choix dans le panneau « Version » : grille, liste, une en grand, défilement. Disparaît tant qu’il n’y en a aucune.',
+  Section('br-section-realisations br-projets br-projets--grille', [
     sectionHead('Nos réalisations pour ce service', ['Toutes les réalisations', URL('realisations')]),
     Short('[briise_realisations service="auto" nombre="3"]'),
   ]));
@@ -337,15 +330,6 @@ add('realisations-manuelle', 'confiance', 'Réalisations en grille (à la main)'
   Section('', [
     sectionHead('Nos dernières réalisations', ['Toutes les réalisations', URL('realisations')]),
     Cols([projet('carre', 'Première réalisation'), projet('carre-2', 'Deuxième réalisation'), projet('carre-3', 'Troisième réalisation')], 'br-projects'),
-  ]));
-
-add('avant-apres', 'confiance', 'Avant / après', 'Deux photos côte à côte pour montrer une transformation.',
-  Section('', [
-    Head([Label('Avant / après'), H('Le titre de la transformation', 2), Lead('Le contexte en une phrase : la demande, la contrainte, le délai.')]),
-    Cols([
-      Col([Box('br-avap', [Img('avant', '4/3', 'is-style-br-arrondi', 'Avant : décrivez l’état de départ'), P('Avant', 'br-chip br-avap-tag')])]),
-      Col([Box('br-avap', [Img('apres', '4/3', 'is-style-br-arrondi', 'Après : décrivez le résultat'), P('Après', 'br-chip br-avap-tag')])]),
-    ], 'br-avant-apres'),
   ]));
 
 const avantApres = (label, titre, chapo, a = ['avant', 'Avant : décrivez l’état de départ', 'Avant'], b = ['apres', 'Après : décrivez le résultat', 'Après']) => Section('', [
@@ -356,16 +340,6 @@ const avantApres = (label, titre, chapo, a = ['avant', 'Avant : décrivez l’é
   ], 'br-avant-apres br-glisse'),
   P('Faites glisser le curseur, ou passez la souris sur la photo, pour comparer.', 'br-muted br-glisse-aide'),
 ]);
-add('avant-apres-glisse', 'confiance', 'Avant / après à faire glisser', 'Une seule photo coupée par un curseur : on glisse pour passer de l’avant à l’après. Les deux photos doivent être prises du même endroit, avec le même cadrage ; sinon, préférer « Avant / après » côte à côte.',
-  avantApres('Avant / après', 'Le titre de la transformation', 'Le contexte en une phrase : la demande, la contrainte, le délai.'));
-
-add('galerie', 'confiance', 'Galerie en mosaïque', 'Six photos en mosaïque : lieu, ambiance, détails du travail.',
-  Section('', [
-    Head([Label('En images'), H('Un aperçu de notre univers', 2)]),
-    cb('core/gallery', { linkTo: 'none', sizeSlug: 'large', className: 'br-mosaique', columns: 3, imageCrop: true },
-      ['paysage', 'portrait', 'carre', 'carre-2', 'paysage-2', 'carre-3'].map((n, i) => cb('core/image', { url: IMG(n), alt: fr('Photo ' + (i + 1) + ' à remplacer'), sizeSlug: 'large', linkDestination: 'none' }))),
-  ]));
-
 /* ----- Parcours ----- */
 
 add('etapes', 'parcours', 'Étapes en frise', 'Rassurer sur le déroulé : du premier contact au résultat. Une frise numérotée qui se remplit au défilement, avec la durée de chaque étape. Idéale sur l’accueil.',
@@ -658,13 +632,6 @@ add('tarifs-liste', 'offre', 'Tarifs en liste, avec photos', 'Toutes les prestat
   ]));
 
 /* Galerie dont chaque photo s'agrandit au clic (fermeture au clavier, photo suivante avec les flèches). */
-add('galerie-agrandir', 'confiance', 'Galerie : photos agrandies au clic', 'Portfolio, réalisations : une mosaïque dont chaque photo s’agrandit en plein écran au clic ou au clavier. Le texte alternatif de chaque photo décrit vraiment ce qu’elle montre.',
-  Section('', [
-    Head([H('Des réalisations récentes', 2)]),
-    cb('core/gallery', { linkTo: 'none', sizeSlug: 'large', className: 'br-mosaique br-mosaique-dense', columns: 4, imageCrop: true },
-      ['portrait', 'paysage', 'carre', 'carre-2', 'carre-3', 'paysage-2', 'portrait', 'carre'].map((n, i) => cb('core/image', { url: IMG(n), alt: fr('Photo ' + (i + 1) + ' à remplacer : décrivez-la'), sizeSlug: 'large', linkDestination: 'none', lightbox: { enabled: true } }))),
-  ]));
-
 /* Formulaire de réservation : prestation, lieu, date, coordonnées ; à côté, ce qui se passe ensuite. */
 add('formulaire-reservation', 'contact', 'Formulaire de réservation', 'Page « Réserver » : le formulaire de réservation (prestation, lieu, date souhaitée, coordonnées ; créé dans Mon entreprise > Fonctions), avec à côté la prochaine date libre et ce qui se passe après l’envoi.',
   Section('br-reservation', [Cols([
@@ -785,14 +752,6 @@ add('bande-preuves', 'confiance', 'Bande de preuves qui défile', 'Juste sous l�
   ]));
 
 const avisDefile = (txt, qui) => Box('br-defile-item br-avis-court', [P(ETOILES, 'br-avis-etoiles'), cb('core/quote', { citation: fr(`<strong>${qui}</strong>`) }, [P(txt)])]);
-add('clients-defilants', 'confiance', 'Clients ou partenaires qui défilent', 'Les entreprises, collectivités ou architectes qui vous ont confié un chantier, en logos sur une bande qui défile. Un logo par client, avec son nom en texte alternatif. Seulement avec leur accord.',
-  Section('br-section--tight br-section-defile', [
-    P('Ils nous ont confié un chantier', 'br-label br-center'),
-    cb('core/group', { align: 'full', className: 'br-defile br-defile--logos', layout: { type: 'default' } }, [
-      Piste([1, 2, 3, 4, 5, 6].map((i) => cb('core/image', { url: IMG('logo-' + ((i - 1) % 5 + 1)), alt: fr('Nom du client ' + i), sizeSlug: 'full', linkDestination: 'none', className: 'br-defile-item' }))),
-    ]),
-  ]));
-
 // FAQ avec recherche : les questions restent des blocs « Détails » groupés sous des intertitres ;
 // le champ de recherche et les thèmes sont ajoutés par le navigateur.
 add('faq-recherche', 'parcours', 'FAQ avec recherche et thèmes', 'Page FAQ ou longue liste de questions : un champ « Chercher une question » et un bouton par thème (vos intertitres) s’ajoutent seuls au-dessus. Rangez les questions sous des intertitres de niveau 3. Sur la page choisie comme FAQ, les questions sont transmises à Google.',
@@ -1061,8 +1020,47 @@ const comparaison = ({ version = 'colonnes', label = 'Pourquoi nous', titre = 'C
 add('comparaison', 'confiance', 'Ce que vous évitez avec nous (2 versions)', 'Ce qui agace le plus les clients dans votre métier, et ce que vous faites autrement, ligne par ligne, avec une photo. Choisissez la forme dans le panneau « Version » : deux colonnes ou lignes face à face. Des pratiques que vous tenez vraiment ; ne nommez ni ne visez jamais un concurrent.',
   comparaison());
 
+/* ----- Familles « Preuves » (suite) : galerie, logos, avant / après ----------------------- */
+
+// Galerie : six photos ; chacune s'agrandit en plein écran au clic ou au clavier.
+const PHOTOS_GALERIE = ['paysage', 'portrait', 'carre', 'carre-2', 'paysage-2', 'carre-3'];
+const VERSIONS_GALERIE = ['mosaique', 'grille', 'bande', 'polaroid', 'grande'];
+const galerieSection = ({ version = 'mosaique', label = 'En images', titre = 'Un aperçu de notre travail', photos = PHOTOS_GALERIE, position = 'centre' } = {}) =>
+  Section(`br-galeries br-galeries--${version}${position ? ' br-titre--' + position : ''}`, [
+    Head([Label(label), H(titre, 2)]),
+    cb('core/gallery', { linkTo: 'none', sizeSlug: 'large', className: 'br-mosaique br-galeries-photos', columns: 3, imageCrop: true },
+      photos.map((n, i) => cb('core/image', { url: IMG(n), alt: fr('Photo ' + (i + 1) + ' à remplacer : décrivez ce qu’elle montre'), sizeSlug: 'large', linkDestination: 'none', lightbox: { enabled: true } }))),
+  ]);
+add('galerie', 'confiance', 'Galerie (5 versions)', 'Six photos de votre travail, de votre lieu ou de votre équipe ; chacune s’agrandit en plein écran au clic ou au clavier. Choisissez la forme dans le panneau « Version » : mosaïque, grille régulière, bande qui défile, photos posées en vrac ou une en grand. Le texte alternatif de chaque photo décrit vraiment ce qu’elle montre.',
+  galerieSection());
+
+// Logos : clients, partenaires, labels. Seulement avec leur accord ; le nom en texte alternatif.
+const VERSIONS_LOGOS = ['ligne', 'grille', 'defile', 'discrets'];
+const logosSection = ({ version = 'ligne', label = 'Ils nous font confiance', n = 6 } = {}) =>
+  Section(`br-section--tight br-partenaires br-partenaires--${version}`, [
+    P(label, 'br-label br-center'),
+    cb('core/group', { className: 'br-logos', layout: { type: 'flex', flexWrap: 'wrap', justifyContent: 'center' } },
+      Array.from({ length: n }, (_, i) => cb('core/image', { url: IMG('logo-' + ((i % 5) + 1)), alt: fr('Nom du client, du partenaire ou du label ' + (i + 1)), sizeSlug: 'full', linkDestination: 'none', width: '140px' }))),
+  ]);
+add('logos', 'confiance', 'Logos (4 versions)', 'Les clients, partenaires ou labels qui vous font confiance, en logos. Choisissez la forme dans le panneau « Version » : en ligne, en grille de cartes, en bande qui défile (pause au survol, au clavier ou avec le bouton) ou discrets, à côté de leur titre. Un logo par client, son nom en texte alternatif, seulement avec son accord.',
+  logosSection());
+
+// Avant / après : deux photos prises du même endroit, avec le même cadrage.
+const VERSIONS_AVANT_APRES = ['cote', 'glisse', 'medaillon'];
+const avantApresSection = ({ version = 'glisse', label = 'Avant / après', titre = 'Le titre de la transformation', chapo = 'Le contexte en une phrase : la demande, la contrainte, le délai.', position = '' } = {}) =>
+  Section(`br-transformation br-transformation--${version}${position ? ' br-titre--' + position : ''}`, [
+    Head([Label(label), H(titre, 2), ...(chapo ? [Lead(chapo)] : [])]),
+    Cols([
+      Col([Box('br-avap', [Img('avant', '16/10', 'is-style-br-arrondi', 'Avant : décrivez l’état de départ'), P('Avant', 'br-chip br-avap-tag')])]),
+      Col([Box('br-avap', [Img('apres', '16/10', 'is-style-br-arrondi', 'Après : décrivez le résultat'), P('Après', 'br-chip br-avap-tag')])]),
+    ], 'br-avant-apres'),
+    P('Faites glisser le curseur, ou passez la souris sur la photo, pour comparer.', 'br-muted br-glisse-aide'),
+  ]);
+add('avant-apres', 'confiance', 'Avant / après (3 versions)', 'Montrer une transformation : la photo d’avant et celle d’après. Choisissez la forme dans le panneau « Version » : côte à côte, à faire glisser (une seule photo coupée par un curseur) ou l’après en grand avec l’avant en médaillon. Pour le curseur, les deux photos doivent être prises du même endroit, avec le même cadrage.',
+  avantApresSection());
+
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').mkdirSync(require('path').join(__dirname, 'build'), { recursive: true });
 require('fs').writeFileSync(require('path').join(__dirname, 'build', 'br_sections.json'), JSON.stringify(out, null, 1));
-module.exports = { avisSection, temoin, VERSIONS_AVIS, chiffresSection, VERSIONS_CHIFFRES, comparaison, VERSIONS_COMPARAISON, services, serviceItem, VERSIONS_SERVICES, ouverture, VERSIONS_OUVERTURE, deuxPortes, situations, choixSeance, eventail, lieux, faitsIcones, etapesImages, ctaPhoto, avisCourt, tarifLigne, ETOILES, Row, ImgFond, Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
+module.exports = { galerieSection, VERSIONS_GALERIE, logosSection, VERSIONS_LOGOS, avantApresSection, VERSIONS_AVANT_APRES, avisSection, temoin, VERSIONS_AVIS, chiffresSection, VERSIONS_CHIFFRES, comparaison, VERSIONS_COMPARAISON, services, serviceItem, VERSIONS_SERVICES, ouverture, VERSIONS_OUVERTURE, deuxPortes, situations, choixSeance, eventail, lieux, faitsIcones, etapesImages, ctaPhoto, avisCourt, tarifLigne, ETOILES, Row, ImgFond, Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
 console.log(Object.keys(S).length, 'sections');

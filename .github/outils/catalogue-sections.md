@@ -44,29 +44,26 @@ Colonne « Besoins » : ce qu’il faut avoir avant de choisir la section. Une s
 | `tarifs-tableau` | Tableau de tarifs simple | Pour une liste de prestations nombreuses : une ligne par prestation. | prix réels | — |
 | `temps-prix` | Pourquoi ce prix : le temps passé | Justifier un prix par le travail qu’il représente : chaque étape et sa durée (« 30 min », « 2 h 30 »). Une barre colorée est dessinée à partir des durées. | — | — |
 
-## Confiance et preuves (20)
+## Confiance et preuves (17)
 
 | Section | Titre | À quoi elle sert | Besoins | Dans le navigateur |
 | --- | --- | --- | --- | --- |
-| `avant-apres` | Avant / après | Deux photos côte à côte pour montrer une transformation. | 2 photos | — |
-| `avant-apres-glisse` | Avant / après à faire glisser | Une seule photo coupée par un curseur : on glisse pour passer de l’avant à l’après. Les deux photos doivent être prises du même endroit, avec le même cadrage ; sinon, préférer « Avant / après » côte à côte. | 2 photos | curseur avant / après ; sans script : deux photos |
+| `avant-apres` | Avant / après (3 versions) | Montrer une transformation : la photo d’avant et celle d’après. Choisissez la forme dans le panneau « Version » : côte à côte, à faire glisser (une seule photo coupée par un curseur) ou l’après en grand avec l’avant en médaillon. Pour le curseur, les deux photos doivent être prises du même endroit, avec le même cadrage. | 2 photos | curseur avant / après ; sans script : deux photos |
 | `avis` | Avis (5 versions) | La note Google et quatre avis de clients, chacun avec la photo de la réalisation dont il parle. Choisissez la forme dans le panneau « Version » : grille, note en avant, un avis en grand, mur d’avis ou défilement. Uniquement la vraie note et des avis réels, recopiés mot pour mot avec l’accord de leur auteur (jamais pour une profession réglementée). Retirez la note si vous n’avez pas de fiche Google. | 4 photos, avis réels, avec l’accord de leur auteur (jamais pour une profession réglementée) | — |
 | `bande-confiance` | Bande de confiance | Juste sous l’ouverture, une carte qui chevauche la section du dessus : quatre garanties réelles avec leur icône. L’icône se change dans Avancé > Classes CSS : is-icone-garantie, is-icone-plan, is-icone-atelier, is-icone-avis, is-icone-delai, is-icone-prix, is-icone-local, is-icone-devis, is-icone-equipe. | — | — |
 | `bande-preuves` | Bande de preuves qui défile | Juste sous l’ouverture : vos garanties et vos faits courts, sur une bande qui défile doucement. De 5 à 8 faits vrais, de deux à cinq mots chacun. Le défilement s’arrête au survol, au clavier ou avec le bouton pause. | — | défile (pause, immobile si moins d’animations) ; sans script : bande fixe |
 | `chiffres` | Chiffres (5 versions) | Trois ou quatre preuves chiffrées et une photo. Choisissez la forme dans le panneau « Version » : en ligne, en cartes, en tuiles avec la photo, sur une bande foncée, ou posés sur la photo. Les chiffres comptent jusqu’à leur valeur quand la section apparaît (une valeur purement numérique, avec au plus une unité courte). Uniquement des chiffres vrais et vérifiables. | 1 photo, chiffres vérifiables | — |
-| `clients-defilants` | Clients ou partenaires qui défilent | Les entreprises, collectivités ou architectes qui vous ont confié un chantier, en logos sur une bande qui défile. Un logo par client, avec son nom en texte alternatif. Seulement avec leur accord. | 5 photos, logos de clients, avec leur accord | défile (pause, immobile si moins d’animations) ; sans script : bande fixe |
 | `comparaison` | Ce que vous évitez avec nous (2 versions) | Ce qui agace le plus les clients dans votre métier, et ce que vous faites autrement, ligne par ligne, avec une photo. Choisissez la forme dans le panneau « Version » : deux colonnes ou lignes face à face. Des pratiques que vous tenez vraiment ; ne nommez ni ne visez jamais un concurrent. | 1 photo | — |
 | `documents-garanties` | Garanties et documents à télécharger | Vos attestations en PDF : assurance décennale, qualification, Kbis. Remplacez chaque fichier (bouton « Remplacer » du bloc) et mettez la date à jour chaque année. Une attestation périmée fait plus de tort que pas d’attestation. | documents PDF à jour | — |
-| `galerie` | Galerie en mosaïque | Six photos en mosaïque : lieu, ambiance, détails du travail. | 6 photos | — |
-| `galerie-agrandir` | Galerie : photos agrandies au clic | Portfolio, réalisations : une mosaïque dont chaque photo s’agrandit en plein écran au clic ou au clavier. Le texte alternatif de chaque photo décrit vraiment ce qu’elle montre. | 6 photos | — |
+| `galerie` | Galerie (5 versions) | Six photos de votre travail, de votre lieu ou de votre équipe ; chacune s’agrandit en plein écran au clic ou au clavier. Choisissez la forme dans le panneau « Version » : mosaïque, grille régulière, bande qui défile, photos posées en vrac ou une en grand. Le texte alternatif de chaque photo décrit vraiment ce qu’elle montre. | 6 photos | agrandissement au clic (WordPress) ; sans script : photos simples |
 | `journee-racontee` | Une journée racontée en photos | Mariage, événement, chantier d’une journée : six moments dans l’ordre, chacun avec son heure et une phrase. Montre tout ce que le client reçoit, pas seulement les plus belles photos. | 6 photos | — |
-| `logos` | Logos de clients ou labels | Certifications, labels, partenaires ou clients connus, en une ligne. | 5 photos, logos de clients, avec leur accord | — |
+| `logos` | Logos (4 versions) | Les clients, partenaires ou labels qui vous font confiance, en logos. Choisissez la forme dans le panneau « Version » : en ligne, en grille de cartes, en bande qui défile (pause au survol, au clavier ou avec le bouton) ou discrets, à côté de leur titre. Un logo par client, son nom en texte alternatif, seulement avec son accord. | 5 photos, logos de clients, avec leur accord | — |
 | `qualifications` | Qualifications et assurances | Une ligne discrète : le logo de chaque qualification (Qualibat, RGE, décennale…), une précision et le lien « Vérifier » vers l’annuaire officiel. Se remplit dans Mon entreprise > Entreprise ; une qualification périmée disparaît seule. Rien ne s’affiche si la fonction est coupée. | qualifications et assurances (Mon entreprise > Entreprise) | — |
 | `realisation-racontee` | Une réalisation racontée | Une réalisation qui raconte votre façon de travailler : la commune et la date, trois faits (délai, durée, matériaux), le besoin, la solution, l’avis du client et le résultat. Une vraie réalisation, des photos du chantier, l’avis avec l’accord du client. | 2 photos, avis réels, avec l’accord de leur auteur (jamais pour une profession réglementée) | — |
-| `realisations` | Dernières réalisations (automatique) | Accueil : les trois dernières réalisations publiées (menu Réalisations), avec un lien vers toutes. Se met à jour seule ; disparaît s’il n’y en a aucune. | fiches Réalisations publiées | — |
+| `realisations` | Dernières réalisations (automatique, 4 versions) | Accueil : les trois dernières réalisations publiées (menu Réalisations), avec un lien vers toutes. Forme au choix dans le panneau « Version » : grille, liste, une en grand, défilement. Se met à jour seule ; disparaît s’il n’y en a aucune. | fiches Réalisations publiées | — |
 | `realisations-galerie` | Galerie de réalisations filtrable (automatique) | Toutes les réalisations publiées en grande galerie de photos, avec un bouton par catégorie et le nombre de réalisations. Chaque photo mène à sa fiche. Se met à jour seule. | fiches Réalisations publiées | — |
 | `realisations-manuelle` | Réalisations en grille (à la main) | Trois réalisations écrites dans la page, sans fiche. Pour un site sans la fonction Réalisations. | 3 photos | — |
-| `realisations-service` | Réalisations de ce service (automatique) | Page de service : les réalisations rattachées à ce service. Disparaît tant qu’il n’y en a aucune. | fiches Réalisations publiées | — |
+| `realisations-service` | Réalisations de ce service (automatique, 4 versions) | Page de service : les réalisations rattachées à ce service. Forme au choix dans le panneau « Version » : grille, liste, une en grand, défilement. Disparaît tant qu’il n’y en a aucune. | fiches Réalisations publiées | — |
 | `realisations-toutes` | Toutes les réalisations, avec filtres (automatique) | Page des réalisations : toutes les fiches publiées, avec des boutons pour filtrer par catégorie. Se met à jour seule. | fiches Réalisations publiées | — |
 
 ## Parcours et questions (9)
@@ -188,6 +185,42 @@ Options, combinables avec toutes les versions :
 | Deux colonnes | `br-comparaison--colonnes` | La photo en bandeau, puis deux colonnes : ce qu’on voit souvent, et vous (mis en avant). |
 | Lignes face à face | `br-comparaison--lignes` | La photo à gauche, une ligne par sujet : ce qu’on voit souvent, puis ce que vous faites. |
 
+### Galerie (section `galerie`, par défaut : `mosaique`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| Mosaïque | `br-galeries--mosaique` | La première photo en grand, les autres autour. |
+| Grille régulière | `br-galeries--grille` | Des carrés, trois par ligne. Sobre. |
+| Bande qui défile | `br-galeries--bande` | Les photos glissent de gauche à droite, avec des flèches. |
+| Photos posées en vrac | `br-galeries--polaroid` | Chaque photo dans un cadre blanc, un peu de travers ; elle se redresse au survol. Chaleureux. |
+| Une en grand | `br-galeries--grande` | La première photo en bandeau sur toute la largeur, les autres en vignettes dessous. |
+
+### Logos (section `logos`, par défaut : `ligne`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| En ligne | `br-partenaires--ligne` | Les logos en gris, sur une rangée centrée. |
+| Grille de cartes | `br-partenaires--grille` | Chaque logo en couleurs, dans une carte. |
+| Bande qui défile | `br-partenaires--defile` | Les logos glissent en boucle ; pause au survol, au clavier ou avec le bouton. |
+| Discrets | `br-partenaires--discrets` | Le titre à gauche, de petits logos à droite entre deux filets. |
+
+### Avant / après (section `avant-apres`, par défaut : `glisse`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| Côte à côte | `br-transformation--cote` | Les deux photos l’une à côté de l’autre, avec leur étiquette. |
+| À faire glisser | `br-transformation--glisse` | Une seule photo coupée par un curseur. Les deux photos doivent avoir le même cadrage. |
+| Avant en médaillon | `br-transformation--medaillon` | L’après en grand, l’avant en médaillon posé dans un coin. |
+
+### Réalisations (section `realisations`, par défaut : `grille`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| Grille | `br-projets--grille` | Les fiches en cartes, trois par ligne. |
+| Liste | `br-projets--liste` | Une fiche par ligne : la photo à gauche, le titre et le résumé à droite. |
+| Une en grand | `br-projets--grande` | La dernière fiche en grand, les autres deux par deux dessous. |
+| Défilement | `br-projets--defile` | Les fiches glissent de gauche à droite, avec des flèches. Montrez-en au moins cinq (nombre="6" dans le code court), sinon rien ne défile. |
+
 ## Place du titre (toute section dont le titre est en haut)
 
 Dans le fichier de site : la classe `br-titre--<position>` de la section (dans l’éditeur : panneau « Titre »). Sans classe, la section suit le réglage général `titres` du site. Sur téléphone, le titre revient en haut ; seul le titre centré reste centré.
@@ -211,7 +244,6 @@ Toutes les positions ne vont pas à toutes les sections : la marge écrase un ta
 | Section | Positions permises |
 | --- | --- |
 | `avant-apres` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
-| `avant-apres-glisse` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet |
 | `avis` | À gauche, Centré, À droite, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
 | `benefices-photos` | À gauche, Centré, À droite, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
 | `chiffres` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
@@ -223,7 +255,6 @@ Toutes les positions ne vont pas à toutes les sections : la marge écrase un ta
 | `etapes-images` | À gauche, Centré, Titre et phrase côte à côte, Titre et filet |
 | `etapes-photos` | À gauche, Centré, Titre et filet |
 | `galerie` | À gauche, Centré, À droite, Titre géant, Titre et filet |
-| `galerie-agrandir` | À gauche, Centré, À droite, Titre géant, Titre et filet |
 | `journee-racontee` | À gauche, Centré, Titre et phrase côte à côte, Titre et filet |
 | `lieux` | À gauche, Centré, Titre et phrase côte à côte, Titre et filet, En marge à gauche, En marge à droite |
 | `modeles-cartes` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet, En marge à gauche, En marge à droite |

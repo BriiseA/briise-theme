@@ -55,7 +55,7 @@ SCRIPT = [
     ('br-estim', 'calcul de la fourchette ; sans script : barème en tableau'),
     ('etapes="1"', 'formulaire en trois étapes ; sans script : formulaire complet'),
     ('br-glisse', 'curseur avant / après ; sans script : deux photos'),
-    ('br-galerie-agrandir|br-agrandir', 'agrandissement plein écran ; sans script : photos simples'),
+    ('"lightbox"', 'agrandissement au clic (WordPress) ; sans script : photos simples'),
 ]
 
 

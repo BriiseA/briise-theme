@@ -2089,3 +2089,346 @@ body.br-sur-photo .wp-block-post-content > .br-ouverture--moitie:first-child .br
 		font-size: .95rem;
 	}
 }
+
+/* ===== Galerie (famille) ================================================================
+ * Une galerie WordPress (.br-galeries-photos, aussi .br-mosaique) ; chaque photo s'agrandit au clic.
+ * « Mosaïque » garde la forme d'origine ; les autres versions la remplacent.
+ */
+.br-galeries-photos {
+	margin-top: var(--wp--preset--spacing--50) !important;
+}
+:is(.br-galeries--grille, .br-galeries--grande, .br-galeries--bande, .br-galeries--polaroid) .wp-block-gallery.br-galeries-photos figure.wp-block-image {
+	grid-row: auto !important;
+	grid-column: auto !important;
+}
+
+/* Grille régulière : des carrés, trois par ligne. */
+.br-galeries--grille .wp-block-gallery.br-galeries-photos {
+	grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+	grid-auto-rows: auto !important;
+}
+.br-galeries--grille .wp-block-gallery.br-galeries-photos figure.wp-block-image {
+	aspect-ratio: 1;
+}
+
+/* Une en grand : la première photo en bandeau sur toute la largeur, les autres en vignettes dessous. */
+.br-galeries--grande .wp-block-gallery.br-galeries-photos {
+	grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+	grid-auto-rows: auto !important;
+}
+.br-galeries--grande .wp-block-gallery.br-galeries-photos figure.wp-block-image {
+	aspect-ratio: 1;
+}
+.br-galeries--grande .wp-block-gallery.br-galeries-photos figure.wp-block-image:first-child {
+	grid-column: 1 / -1 !important;
+	aspect-ratio: 21 / 9;
+}
+
+/* Bande : les photos glissent de gauche à droite, avec des flèches (familles.js). */
+.br-galeries--bande .wp-block-gallery.br-galeries-photos {
+	display: flex !important;
+	flex-wrap: nowrap !important;
+	gap: 1rem !important;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	overscroll-behavior-x: contain;
+	padding-bottom: 1rem;
+	scrollbar-width: thin;
+}
+.br-galeries--bande .wp-block-gallery.br-galeries-photos figure.wp-block-image {
+	flex: 0 0 clamp(14rem, 26vw, 20rem) !important;
+	height: auto !important;
+	aspect-ratio: 3 / 4;
+	scroll-snap-align: start;
+}
+.br-galeries--bande .wp-block-gallery.br-galeries-photos:focus-visible {
+	outline: 3px solid var(--wp--preset--color--accent);
+	outline-offset: 4px;
+}
+
+/* Photos posées en vrac : un cadre blanc, chacune un peu de travers ; elle se redresse au survol. */
+.br-galeries--polaroid .wp-block-gallery.br-galeries-photos {
+	display: flex !important;
+	flex-wrap: wrap !important;
+	justify-content: center;
+	gap: clamp(1rem, 2.5vw, 2rem) !important;
+	padding: 1rem 0;
+}
+.br-galeries--polaroid .wp-block-gallery.br-galeries-photos figure.wp-block-image {
+	flex: 0 0 clamp(11rem, 26vw, 19rem) !important;
+	height: auto !important;
+	aspect-ratio: 4 / 5;
+	padding: .6rem .6rem 2.2rem;
+	background: #fff;
+	box-shadow: 0 14px 34px -14px rgba(0, 0, 0, .35);
+	transform: rotate(-3deg);
+	transition: transform .3s ease;
+}
+.br-galeries--polaroid .wp-block-gallery.br-galeries-photos figure.wp-block-image:nth-child(even) {
+	transform: rotate(2.5deg) translateY(.75rem);
+}
+.br-galeries--polaroid .wp-block-gallery.br-galeries-photos figure.wp-block-image:nth-child(3n) {
+	transform: rotate(-1deg) translateY(-.4rem);
+}
+.br-galeries--polaroid .wp-block-gallery.br-galeries-photos figure.wp-block-image:is(:hover, :focus-within) {
+	transform: none;
+	z-index: 2;
+}
+.br-galeries--polaroid .wp-block-gallery.br-galeries-photos figure.wp-block-image img {
+	border-radius: 2px !important;
+}
+@media (max-width: 781px) {
+	.br-galeries--grille .wp-block-gallery.br-galeries-photos {
+		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+	}
+	.br-galeries--grande .wp-block-gallery.br-galeries-photos {
+		grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+	}
+	.br-galeries--grande .wp-block-gallery.br-galeries-photos figure.wp-block-image:first-child {
+		aspect-ratio: 4 / 3;
+	}
+	.br-galeries--polaroid .wp-block-gallery.br-galeries-photos figure.wp-block-image {
+		flex-basis: calc(50% - 1rem) !important;
+	}
+}
+
+/* ===== Logos (famille) ===================================================================
+ * Une rangée de logos (.br-logos). « En ligne » garde la forme d'origine.
+ */
+.br-partenaires {
+	position: relative;
+}
+
+/* En grille de cartes : chaque logo dans une carte, en couleurs. */
+.br-partenaires--grille .br-logos {
+	display: grid !important;
+	grid-template-columns: repeat(auto-fit, minmax(min(9.5rem, 100%), 1fr));
+	gap: 1rem !important;
+}
+.br-partenaires--grille .br-logos > figure {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 6.5rem;
+	padding: 1.25rem;
+	border-radius: var(--wp--custom--rayon--moyen);
+	background: var(--wp--preset--color--clair);
+	box-shadow: var(--br-ombre);
+}
+.br-partenaires--grille .br-logos img {
+	max-width: 100%;
+	height: auto;
+	max-height: 56px;
+	filter: none;
+	opacity: 1;
+}
+
+/* Bande qui défile : la rangée doublée glisse en boucle (familles.js) ; fondu sur les bords. */
+.br-partenaires--defile {
+	overflow: hidden;
+}
+.br-partenaires--defile .br-logos {
+	flex-wrap: nowrap !important;
+	justify-content: flex-start !important;
+	-webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+	mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.br-partenaires--defile .br-logos > figure {
+	flex: 0 0 auto;
+}
+.br-partenaires--defile .br-logos.br-logos--actif {
+	width: max-content;
+	animation: br-logos-defile 40s linear infinite;
+}
+.br-partenaires--defile:is(:hover, :focus-within, .br-logos--pause) .br-logos.br-logos--actif {
+	animation-play-state: paused;
+}
+@keyframes br-logos-defile {
+	from { transform: translateX(0); }
+	to { transform: translateX(-50%); }
+}
+/* Sans script (ou moins d'animations) : une rangée fixe qui passe à la ligne. */
+.br-partenaires--defile .br-logos:not(.br-logos--actif) {
+	flex-wrap: wrap !important;
+	justify-content: center !important;
+	-webkit-mask-image: none;
+	mask-image: none;
+}
+.br-partenaires--defile .br-ouv-pause {
+	top: 50%;
+	bottom: auto;
+	transform: translateY(-50%);
+	width: 44px;
+	height: 44px;
+	opacity: .75;
+}
+
+/* Discrets : le titre à gauche, de petits logos à droite, entre deux filets. */
+.br-partenaires--discrets {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem 2.5rem;
+	/* La section passe en ligne : elle garde la largeur du contenu par ses marges intérieures. */
+	padding-left: max(var(--wp--style--root--padding-left, 1.5rem), calc((100% - var(--wp--style--global--content-size, 1200px)) / 2 + var(--wp--style--root--padding-left, 0px))) !important;
+	padding-right: max(var(--wp--style--root--padding-right, 1.5rem), calc((100% - var(--wp--style--global--content-size, 1200px)) / 2 + var(--wp--style--root--padding-right, 0px))) !important;
+}
+.br-partenaires--discrets > * {
+	margin: 0 !important;
+}
+.br-partenaires--discrets > .br-label {
+	flex: 0 0 auto;
+	text-align: left;
+}
+.br-partenaires--discrets .br-logos {
+	flex: 1 1 28rem;
+	justify-content: flex-end !important;
+	gap: 1rem 2rem !important;
+	padding: 1rem 0;
+	border-top: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+	border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+}
+.br-partenaires--discrets .br-logos img {
+	height: 34px;
+	opacity: .65;
+}
+@media (max-width: 781px) {
+	.br-partenaires--discrets .br-logos {
+		justify-content: flex-start !important;
+	}
+}
+
+/* ===== Avant / après (famille) ===========================================================
+ * Deux photos (.br-avant-apres). « À faire glisser » : le curseur de ux.js (classe .br-glisse).
+ */
+.br-transformation:not(.br-transformation--glisse) .br-glisse-aide {
+	display: none;
+}
+
+/* L'après en grand, l'avant en médaillon posé dans un coin. */
+.br-transformation--medaillon .br-avant-apres {
+	position: relative;
+	display: block !important;
+}
+.br-transformation--medaillon .br-avant-apres > .wp-block-column:last-child {
+	width: 100%;
+	flex-basis: 100% !important;
+}
+.br-transformation--medaillon .br-avant-apres > .wp-block-column:first-child {
+	position: absolute;
+	z-index: 2;
+	left: 3%;
+	bottom: -5%;
+	width: min(34%, 22rem);
+}
+.br-transformation--medaillon .br-avant-apres > .wp-block-column:first-child img {
+	border: 6px solid var(--wp--preset--color--fond);
+	box-shadow: 0 20px 40px -18px rgba(0, 0, 0, .45);
+}
+.br-transformation--medaillon {
+	padding-bottom: calc(var(--wp--preset--spacing--70) + 2rem) !important;
+}
+@media (max-width: 781px) {
+	.br-transformation--medaillon .br-avant-apres > .wp-block-column:first-child {
+		width: 46%;
+		bottom: -9%;
+	}
+}
+
+/* ===== Réalisations (famille) ============================================================
+ * Les fiches publiées ([briise_realisations] : .br-projects .br-project). « Grille » : la forme d'origine.
+ */
+/* En liste : la photo à gauche, le titre et le résumé à droite. */
+.br-projets--liste .br-projects--auto {
+	grid-template-columns: 1fr !important;
+	gap: 0 !important;
+}
+.br-projets--liste .br-project {
+	display: grid;
+	grid-template-columns: clamp(9rem, 26%, 18rem) minmax(0, 1fr);
+	grid-template-rows: auto auto 1fr;
+	column-gap: clamp(1.25rem, 3vw, 2.5rem);
+	align-items: start;
+	padding: 1.25rem 0;
+	border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+}
+.br-projets--liste .br-project > figure {
+	grid-row: 1 / span 3;
+}
+.br-projets--liste .br-project > *:not(figure) {
+	grid-column: 2;
+	margin-top: 0 !important;
+}
+
+/* Une en grand : la première fiche sur toute la largeur, photo et texte côte à côte. */
+.br-projets--grande .br-projects--auto {
+	grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+.br-projets--grande .br-project:first-child {
+	grid-column: 1 / -1;
+	display: grid;
+	grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+	grid-template-rows: auto auto 1fr;
+	column-gap: clamp(1.5rem, 4vw, 3rem);
+	align-items: start;
+}
+.br-projets--grande .br-project:first-child > figure {
+	grid-row: 1 / span 3;
+}
+.br-projets--grande .br-project:first-child > *:not(figure) {
+	grid-column: 2;
+}
+.br-projets--grande .br-project:first-child .br-project-titre {
+	font-size: var(--wp--preset--font-size--x-large);
+}
+
+/* Défilement : les fiches glissent de gauche à droite, avec des flèches (familles.js). */
+.br-projets--defile .br-projects--auto {
+	display: flex !important;
+	gap: 1.25rem !important;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	overscroll-behavior-x: contain;
+	padding-bottom: 1rem;
+	scrollbar-width: thin;
+}
+.br-projets--defile .br-project {
+	flex: 0 0 clamp(16rem, 30vw, 22rem);
+	scroll-snap-align: start;
+}
+.br-projets--defile .br-projects--auto:focus-visible {
+	outline: 3px solid var(--wp--preset--color--accent);
+	outline-offset: 4px;
+}
+@media (max-width: 781px) {
+	/* Liste : une vignette à gauche, le texte à droite, même sur téléphone. */
+	.br-projets--liste .br-project {
+		grid-template-columns: 6.5rem minmax(0, 1fr);
+		column-gap: 1rem;
+	}
+	.br-projets--liste .br-project .br-project-titre {
+		font-size: var(--wp--preset--font-size--medium);
+	}
+	.br-projets--grande .br-project:first-child {
+		grid-template-columns: 1fr;
+	}
+	.br-projets--grande .br-project:first-child > figure {
+		grid-row: auto;
+	}
+	.br-projets--grande .br-project:first-child > *:not(figure) {
+		grid-column: 1;
+	}
+	.br-projets--grande .br-projects--auto {
+		grid-template-columns: 1fr !important;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.br-partenaires--defile .br-logos.br-logos--actif {
+		animation: none;
+	}
+	.br-galeries--polaroid .wp-block-gallery.br-galeries-photos figure.wp-block-image {
+		transition: none;
+	}
+}
