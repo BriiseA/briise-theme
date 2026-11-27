@@ -122,6 +122,22 @@ sortie += [
 sortie += [f"| {v[0]} | {'aucune' if k == 'site' else '`br-titre--' + k + '`'} | {v[1]} |" for k, v in F['titres'].items()]
 sortie.append('')
 
+# Positions permises, section par section (calculées par build_br_kits.js avec les règles de inc/familles.json).
+permis = ICI / 'build' / 'titres_permis.json'
+if permis.exists():
+    P = json.load(open(permis, encoding='utf-8'))
+    noms = {k: v[0] for k, v in F['titres'].items()}
+    sortie += [
+        '### Positions permises, section par section',
+        '',
+        'Toutes les positions ne vont pas à toutes les sections : la marge écrase un tableau ou une galerie, un titre à droite dérange au-dessus d’un contenu lu de gauche à droite ou d’une phrase d’introduction, le titre géant ne va qu’à un titre court, « côte à côte » demande une phrase. Le panneau « Titre » et le rythme des titres ne proposent que ces positions (règles : `reglesTitres` de `inc/familles.json`).',
+        '',
+        '| Section | Positions permises |',
+        '| --- | --- |',
+    ]
+    sortie += [f"| `{k}` | {', '.join(noms.get(p, p) for p in v)} |" for k, v in sorted(P.items())]
+    sortie.append('')
+
 # Habillage du site : les pièces qui se choisissent une fois pour tout le site (fichier de site ou Mon entreprise > Apparence).
 V = json.load(open(ICI / 'variantes.json', encoding='utf-8'))
 sortie += [

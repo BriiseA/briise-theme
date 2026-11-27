@@ -97,14 +97,7 @@
     "bande-confiance": [
       "bande-preuves"
     ],
-    "avis-note": [
-      "avis-defilants",
-      "temoignages"
-    ],
-    "temoignages": [
-      "avis-note",
-      "avis-defilants"
-    ],
+    "avis": [],
     "logos": [
       "clients-defilants"
     ],

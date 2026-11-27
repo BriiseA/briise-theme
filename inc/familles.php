@@ -62,7 +62,7 @@ add_action( 'enqueue_block_editor_assets', function () {
 		wp_get_theme()->get( 'Version' ),
 		true
 	);
-	wp_add_inline_script( 'briise-familles-editeur', 'window.briiseFamilles = ' . wp_json_encode( briise_familles() ) . '; window.briiseTitres = ' . wp_json_encode( briise_titres_section() ) . ';', 'before' );
+	wp_add_inline_script( 'briise-familles-editeur', 'window.briiseFamilles = ' . wp_json_encode( briise_familles() ) . '; window.briiseTitres = ' . wp_json_encode( briise_titres_section() ) . '; window.briiseReglesTitres = ' . wp_json_encode( (array) ( briise_familles_donnees()['reglesTitres'] ?? array() ) ) . ';', 'before' );
 } );
 
 /**
@@ -86,5 +86,7 @@ add_shortcode( 'briise_infos_ouverture', function () {
 	if ( '' !== $ville ) {
 		$lignes[] = '<li><span>Basé à <strong>' . esc_html( $ville ) . '</strong></span></li>';
 	}
-	return $lignes ? '<ul class="br-ouv-infos">' . implode( '', $lignes ) . '</ul>' : '';
+	// Seule la ligne « ouvert aujourd'hui » : la carte se cache si le navigateur ne peut rien en dire.
+	$seule = ( 1 === count( $lignes ) && $json ) ? ' br-ouv-infos--jour-seul' : '';
+	return $lignes ? '<ul class="br-ouv-infos' . $seule . '">' . implode( '', $lignes ) . '</ul>' : '';
 } );

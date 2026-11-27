@@ -8,8 +8,8 @@
  */
 $briise = briise_theme_entreprise();
 ?>
-<!-- wp:group {"backgroundColor":"surface","align":"full","className":"br-section br-services br-services\u002d\u002dgrille","layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull br-section br-services br-services--grille has-surface-background-color has-background"><!-- wp:group {"className":"br-section-head","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"bottom"}} -->
+<!-- wp:group {"backgroundColor":"surface","align":"full","className":"br-section br-services br-services\u002d\u002dgrille br-titre\u002d\u002dcote","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull br-section br-services br-services--grille br-titre--cote has-surface-background-color has-background"><!-- wp:group {"className":"br-section-head","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"bottom"}} -->
 <div class="wp-block-group br-section-head"><!-- wp:heading -->
 <h2 class="wp-block-heading">Ce que nous faisons</h2>
 <!-- /wp:heading -->

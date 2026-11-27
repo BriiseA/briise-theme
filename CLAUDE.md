@@ -30,7 +30,7 @@ Thème de bloc (Full Site Editing) de l'agence web Briise, et son extension Brii
    Familles (une section, plusieurs versions) : la version est la classe `br-<famille>--<version>` ; liste et panneau « Version » de l'éditeur dans `inc/familles.php`, CSS dans `familles.css`, comportements dans `assets/js/familles.js`. Une version doit rester lisible sans script.
 4. Il n'y a plus d'ambiances : chaque section doit fonctionner avec n'importe quelles couleurs de client qui passent le contrôle AA (`python3 contraste.py`, et le rapport de l'import). Arrondis, ombres et capitales se règlent par site (Mon entreprise > Apparence).
 
-Règles des sections : jamais de texte seul (une image ou un dessin à côté), deux sections voisines n'ont jamais le même fond (fonction `rythme()` de `build_br_kits.js`), animations coupées si le visiteur demande à réduire les animations, cibles tactiles de 44 px, focus visible.
+Règles des sections : jamais de texte seul (une image ou un dessin à côté), deux sections voisines n'ont jamais le même fond ni leur titre au même endroit (fonctions `rythme()` et `rythmeTitres()` de `build_br_kits.js`, `rythmeTout()` pour les deux ; les positions de titre permises suivent `reglesTitres` de `inc/familles.json`, partagé avec l'éditeur et le catalogue), animations coupées si le visiteur demande à réduire les animations, cibles tactiles de 44 px, focus visible.
 
 ## Vérifier
 

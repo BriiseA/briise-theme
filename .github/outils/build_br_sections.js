@@ -118,9 +118,6 @@ const zoneSchema = (label, titre, chapo, lien) => Section('br-zone-schema', [Col
 add('bande-confiance', 'confiance', 'Bande de confiance', 'Juste sous l’ouverture, une carte qui chevauche la section du dessus : quatre garanties réelles avec leur icône. L’icône se change dans Avancé > Classes CSS : is-icone-garantie, is-icone-plan, is-icone-atelier, is-icone-avis, is-icone-delai, is-icone-prix, is-icone-local, is-icone-devis, is-icone-equipe.',
   confiance([['garantie', 'Garantie décennale', 'Attestation jointe au devis'], ['devis', 'Devis gratuit', 'Sous 5 jours ouvrés'], ['local', 'Une équipe locale', 'À votre ville et alentour'], ['avis', 'Note Google', 'À n’afficher que si elle est réelle']]));
 
-add('tuiles-chiffres', 'confiance', 'Chiffres en tuiles', 'Vos preuves en chiffres, en tuiles de tailles différentes : une grande pour le chiffre le plus fort, les autres autour. Les chiffres comptent jusqu’à leur valeur quand la section apparaît.',
-  tuiles('Pourquoi nous choisir', 'Ce qui fait la différence', [['grande', '100 %', 'Le chiffre le plus fort, avec une phrase qui dit ce qu’il garantit au client.', 'paysage', 'Photo à remplacer : votre atelier ou votre équipe au travail. Sans photo, retirez-la : la tuile reste sombre.'], ['large plan', '3D', 'Un avantage concret, en une phrase.'], ['', '5 jours', 'Un délai que vous tenez.'], ['accent', '1', 'seul interlocuteur, du devis à la fin du chantier']]));
-
 add('zone-liste', 'contact', 'Zone d’intervention en liste', 'Les communes où vous intervenez, groupées par distance (moins de 10 km, 10 à 20 km…), puis une invitation à appeler. Les distances se calculent seules à partir de Mon entreprise > Entreprise > Communes du schéma de zone (nom ; latitude ; longitude, votre adresse en premier).',
   zoneListe('Zone d’intervention', 'Nous intervenons à 30 km autour de votre ville', 'Les secteurs où vous travaillez, en une phrase. La visite ou le devis sont-ils gratuits partout ?', ['Toutes les communes où nous intervenons', URL('zone-intervention')]));
 
@@ -152,7 +149,7 @@ const serviceItem = (n, o = {}) => Box('br-service', [
 const VERSIONS_SERVICES = ['grille', 'bento', 'liste', 'phare', 'defile', 'onglets', 'volets'];
 // La phrase d'introduction (chapo) est facultative : retirez-la, le titre reste correct seul.
 // position : la place du titre (br-titre--centre…, voir inc/familles.php) ; vide = selon le site.
-const services = ({ version = 'grille', titre = 'Ce que nous faisons', chapo = 'Une phrase qui présente vos services : pour qui ils sont faits, et où vous intervenez.', lien = ['Tous nos services', URL('services')], items = 4, bg = 'surface', position = '' } = {}) =>
+const services = ({ version = 'grille', titre = 'Ce que nous faisons', chapo = 'Une phrase qui présente vos services : pour qui ils sont faits, et où vous intervenez.', lien = ['Tous nos services', URL('services')], items = 4, bg = 'surface', position = 'cote' } = {}) =>
   Section(`br-services br-services--${version}${position ? ' br-titre--' + position : ''}`, [
     Row('br-section-head', [H(titre, 2), ...(chapo ? [Lead(chapo)] : []), ...(lien ? [Arrow(lien[0], lien[1])] : [])]),
     Box('br-services-liste', (Array.isArray(items) ? items : Array.from({ length: items }, () => ({}))).map((o, i) => serviceItem(i + 1, o))),
@@ -313,22 +310,9 @@ add('tarifs-tableau', 'offre', 'Tableau de tarifs simple', 'Pour une liste de pr
 /* ----- Confiance ----- */
 
 const stat = (n, t) => Col([P(n, 'br-stat'), Muted(t)]);
-add('chiffres-cles', 'confiance', 'Chiffres clés', 'Quatre preuves rapides. Uniquement des chiffres vrais et vérifiables.',
-  Section('br-section--tight', [Cols([stat('15 ans', 'd’expérience dans le métier'), stat('400', 'clients accompagnés'), stat('48 h', 'pour recevoir votre devis'), stat('4,9/5', 'note moyenne sur Google')], 'br-stats-row')]));
-
 const avis = (txt) => Col([Box('br-card br-avis', [
   cb('core/quote', { citation: fr('Prénom N., ville') }, [P(txt)]),
 ])]);
-add('temoignages', 'confiance', 'Témoignages', 'Trois avis de clients. Uniquement des avis réels, avec l’accord de leur auteur.',
-  Section('', [
-    sectionHead('Ce que disent nos clients', ['Tous les avis sur Google', '#']),
-    Cols([
-      avis('Recopiez ici un avis réel, mot pour mot. Les plus convaincants racontent une situation précise et son résultat.'),
-      avis('Un deuxième avis, idéalement d’un autre type de client, pour que chacun s’y retrouve.'),
-      avis('Un troisième avis, court. Trois avis suffisent : au-delà, renvoyez vers votre fiche Google.'),
-    ]),
-  ], { backgroundColor: 'surface' }));
-
 add('logos', 'confiance', 'Logos de clients ou labels', 'Certifications, labels, partenaires ou clients connus, en une ligne.',
   Section('br-section--tight', [
     P('Ils nous font confiance', 'br-label br-center'),
@@ -626,17 +610,6 @@ add('cta-photo', 'contact', 'Appel à l’action sur photo', 'Fin de page : le d
 /* Avis avec la note : la note moyenne et le nombre d'avis, puis trois avis courts. */
 const ETOILES = '<span class="br-etoiles" aria-hidden="true">★★★★★</span>';
 const avisCourt = (txt, qui, quoi) => Col([Box('br-avis-court', [P(ETOILES, 'br-avis-etoiles'), cb('core/quote', { citation: fr(`<strong>${qui}</strong><br>${quoi}`) }, [P(txt)])])]);
-add('avis-note', 'confiance', 'Avis avec la note Google', 'La note moyenne et le nombre d’avis Google, puis trois avis courts. Uniquement la vraie note et des avis réels, recopiés mot pour mot avec l’accord de leur auteur.',
-  Section('br-avis-note', [
-    Row('br-section-head br-tete-deux', [H('Ce qu’en disent nos clients', 2), P(`<strong class="br-note-chiffre">4,9</strong> <span class="br-note-detail">${ETOILES}<span>sur 5, 62 avis Google</span></span>`, 'br-note')]),
-    Cols([
-      avisCourt('« Un avis réel, court, qui raconte une situation précise. »', 'Prénom N.', 'Prestation, ville'),
-      avisCourt('« Un deuxième avis, d’un autre type de client. »', 'Prénom N.', 'Prestation, ville'),
-      avisCourt('« Un troisième avis, qui lève une crainte fréquente. »', 'Prénom N.', 'Prestation, ville'),
-    ], 'br-avis-grille'),
-    Btns(Btn(CTA_LABEL, CTA), Btn('Lire tous les avis sur Google', '#', 'is-style-outline')),
-  ]));
-
 /* Ce que vous recevez : la livraison dessinée sur un téléphone, et trois éléments concrets. */
 add('ce-que-vous-recevez', 'offre', 'Ce que vous recevez', 'Montrer concrètement le résultat livré : une galerie en ligne, un dossier, un carnet d’entretien… dessiné sur un téléphone, avec trois éléments compris.',
   Section('br-recevez', [Cols([
@@ -812,21 +785,6 @@ add('bande-preuves', 'confiance', 'Bande de preuves qui défile', 'Juste sous l�
   ]));
 
 const avisDefile = (txt, qui) => Box('br-defile-item br-avis-court', [P(ETOILES, 'br-avis-etoiles'), cb('core/quote', { citation: fr(`<strong>${qui}</strong>`) }, [P(txt)])]);
-add('avis-defilants', 'confiance', 'Avis qui défilent', 'Plus de trois avis à montrer : une rangée qui défile, avec la note Google au-dessus. Uniquement des avis réels, recopiés mot pour mot avec l’accord de leur auteur. Le défilement s’arrête au survol, au clavier ou avec le bouton pause.',
-  Section('br-section-defile', [
-    Row('br-section-head br-tete-deux', [H('Ce qu’en disent nos clients', 2), P(`<strong class="br-note-chiffre">4,9</strong> <span class="br-note-detail">${ETOILES}<span>sur 5, 62 avis Google</span></span>`, 'br-note')]),
-    cb('core/group', { align: 'full', className: 'br-defile br-defile--avis', layout: { type: 'default' } }, [
-      Piste([
-        avisDefile('« Un avis réel et court, qui raconte une situation précise. »', 'Prénom N., ville'),
-        avisDefile('« Un deuxième avis, d’un autre type de client. »', 'Prénom N., ville'),
-        avisDefile('« Un avis qui parle du prix ou du devis. »', 'Prénom N., ville'),
-        avisDefile('« Un avis qui parle de la propreté ou du délai. »', 'Prénom N., ville'),
-        avisDefile('« Un avis qui lève une crainte fréquente. »', 'Prénom N., ville'),
-      ]),
-    ]),
-    Btns(Btn('Lire tous les avis sur Google', '#', 'is-style-outline')),
-  ], { backgroundColor: 'surface' }));
-
 add('clients-defilants', 'confiance', 'Clients ou partenaires qui défilent', 'Les entreprises, collectivités ou architectes qui vous ont confié un chantier, en logos sur une bande qui défile. Un logo par client, avec son nom en texte alternatif. Seulement avec leur accord.',
   Section('br-section--tight br-section-defile', [
     P('Ils nous ont confié un chantier', 'br-label br-center'),
@@ -1035,8 +993,76 @@ add('merci-suite', 'contact', 'Page merci : la suite', 'Pour la page qui s’aff
     ], 'br-merci-bas'),
   ]));
 
+/* ----- Familles « Preuves » : avis, chiffres, comparaison ------------------------------
+   Même principe que Services et Ouverture : une section, plusieurs versions (inc/familles.json),
+   le CSS dans assets/css/familles.css. Uniquement des contenus réels : les textes ci-dessous
+   disent quoi mettre, ils ne sont jamais à publier tels quels. */
+
+// Avis : la note Google (facultative) et quatre avis. Chaque avis peut avoir la photo de la
+// réalisation dont il parle (montrée dans les versions « grand avis » et « mur »).
+const AVIS_EXEMPLES = [
+  ['Recopiez ici un avis réel, mot pour mot. Les plus convaincants racontent une situation précise et son résultat.', 'Prénom N.', 'Prestation, ville', 'paysage'],
+  ['Un deuxième avis, d’un autre type de client, pour que chacun s’y retrouve.', 'Prénom N.', 'Prestation, ville', 'carre'],
+  ['Un avis qui parle du prix ou du devis : c’est la crainte numéro un.', 'Prénom N.', 'Prestation, ville', 'paysage-2'],
+  ['Un quatrième avis, court. Au-delà, renvoyez vers votre fiche Google.', 'Prénom N.', 'Prestation, ville', 'carre-2'],
+];
+const temoin = ([txt, qui, quoi, img]) => Box('br-temoin', [
+  ...(img ? [cb('core/image', { url: IMG(img), alt: fr('Photo à remplacer : la réalisation dont parle ce client'), sizeSlug: 'large', linkDestination: 'none', className: 'br-temoin-photo' })] : []),
+  P(ETOILES, 'br-avis-etoiles'),
+  cb('core/quote', { citation: fr(`<strong>${qui}</strong><br>${quoi}`), className: 'br-temoin-citation' }, [P(fr(txt))]),
+]);
+const NOTE_GOOGLE = P(`<strong class="br-note-chiffre">4,9</strong> <span class="br-note-detail">${ETOILES}<span>sur 5, 62 avis Google</span></span>`, 'br-note');
+const VERSIONS_AVIS = ['grille', 'note', 'grand', 'mur', 'defile'];
+const avisSection = ({ version = 'grille', titre = 'Ce qu’en disent nos clients', chapo = '', lien = ['Tous les avis sur Google', '#'], note = true, items = AVIS_EXEMPLES, bg = 'surface', position = 'centre' } = {}) =>
+  Section(`br-temoignages br-temoignages--${version}${position ? ' br-titre--' + position : ''}`, [
+    Row('br-section-head', [H(titre, 2), ...(chapo ? [Lead(chapo)] : []), ...(lien ? [Arrow(lien[0], lien[1])] : [])]),
+    Box('br-temoignages-corps', [
+      ...(note ? [Box('br-temoignages-note', [NOTE_GOOGLE])] : []),
+      Box('br-temoin-liste', items.map(temoin)),
+    ]),
+  ], bg ? { backgroundColor: bg } : {});
+add('avis', 'confiance', 'Avis (5 versions)', 'La note Google et quatre avis de clients, chacun avec la photo de la réalisation dont il parle. Choisissez la forme dans le panneau « Version » : grille, note en avant, un avis en grand, mur d’avis ou défilement. Uniquement la vraie note et des avis réels, recopiés mot pour mot avec l’accord de leur auteur (jamais pour une profession réglementée). Retirez la note si vous n’avez pas de fiche Google.',
+  avisSection());
+
+// Chiffres : trois ou quatre preuves chiffrées, vraies et vérifiables, et une photo.
+const CHIFFRES_EXEMPLES = [['15 ans', 'd’expérience dans le métier'], ['400', 'clients accompagnés'], ['48 h', 'pour recevoir votre devis'], ['4,9/5', 'note moyenne sur Google']];
+const VERSIONS_CHIFFRES = ['ligne', 'cartes', 'tuiles', 'bande', 'photo'];
+const chiffresSection = ({ version = 'ligne', label = 'En chiffres', titre = 'Ce qui fait la différence', chapo = 'Une phrase qui dit ce que ces chiffres garantissent à vos clients.', items = CHIFFRES_EXEMPLES, photo = 'paysage', position = 'filet' } = {}) =>
+  Section(`br-chiffres br-chiffres--${version}${position ? ' br-titre--' + position : ''}`, [
+    Head([Label(label), H(titre, 2), ...(chapo ? [Lead(chapo)] : [])]),
+    Box('br-chiffres-corps', [
+      Box('br-chiffres-liste', items.map(([v, t]) => Box('br-chiffre', [P(v, 'br-stat'), Muted(t)]))),
+      ...(photo ? [cb('core/image', { url: IMG(photo), alt: fr('Photo à remplacer : votre équipe ou votre travail'), sizeSlug: 'large', linkDestination: 'none', className: 'br-chiffres-photo' })] : []),
+    ]),
+  ]);
+add('chiffres', 'confiance', 'Chiffres (5 versions)', 'Trois ou quatre preuves chiffrées et une photo. Choisissez la forme dans le panneau « Version » : en ligne, en cartes, en tuiles avec la photo, sur une bande foncée, ou posés sur la photo. Les chiffres comptent jusqu’à leur valeur quand la section apparaît (une valeur purement numérique, avec au plus une unité courte). Uniquement des chiffres vrais et vérifiables.',
+  chiffresSection());
+
+// Comparaison : « Ce que vous évitez avec nous ». Une ligne par sujet : ce qu'on voit souvent, ce que
+// vous faites. Ne jamais nommer ni viser un concurrent : décrire des pratiques, pas des entreprises.
+const COMPARAISON_EXEMPLES = [
+  ['Un devis vague, des suppléments à la fin', 'Un prix détaillé, tenu jusqu’au bout'],
+  ['Des semaines sans nouvelles', 'Une réponse sous 48 h, un interlocuteur unique'],
+  ['Un chantier laissé en l’état', 'Un chantier propre, chaque soir'],
+  ['Personne quand il y a un souci', 'Une garantie écrite, et on revient'],
+];
+const VERSIONS_COMPARAISON = ['colonnes', 'lignes'];
+const comparaison = ({ version = 'colonnes', label = 'Pourquoi nous', titre = 'Ce que vous évitez avec nous', chapo = 'Ce qui agace le plus dans votre métier, et ce que vous faites autrement. Des faits que vous tenez, jamais un concurrent nommé.', tetes = ['Ce qu’on voit souvent', 'Avec nous'], items = COMPARAISON_EXEMPLES, photo = 'paysage', position = 'geant' } = {}) =>
+  Section(`br-comparaison br-comparaison--${version}${position ? ' br-titre--' + position : ''}`, [
+    Head([Label(label), H(titre, 2), ...(chapo ? [Lead(chapo)] : [])]),
+    Box('br-comparaison-corps', [
+      ...(photo ? [cb('core/image', { url: IMG(photo), alt: fr('Photo à remplacer : votre travail, soigné'), sizeSlug: 'large', linkDestination: 'none', className: 'br-comparaison-photo' })] : []),
+      Box('br-comparaison-table', [
+        Box('br-comparaison-ligne br-comparaison-tetes', [P(tetes[0], 'br-comparaison-autres'), P(tetes[1], 'br-comparaison-nous')]),
+        ...items.map(([a, n]) => Box('br-comparaison-ligne', [P(a, 'br-comparaison-autres'), P(n, 'br-comparaison-nous')])),
+      ]),
+    ]),
+  ]);
+add('comparaison', 'confiance', 'Ce que vous évitez avec nous (2 versions)', 'Ce qui agace le plus les clients dans votre métier, et ce que vous faites autrement, ligne par ligne, avec une photo. Choisissez la forme dans le panneau « Version » : deux colonnes ou lignes face à face. Des pratiques que vous tenez vraiment ; ne nommez ni ne visez jamais un concurrent.',
+  comparaison());
+
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').mkdirSync(require('path').join(__dirname, 'build'), { recursive: true });
 require('fs').writeFileSync(require('path').join(__dirname, 'build', 'br_sections.json'), JSON.stringify(out, null, 1));
-module.exports = { services, serviceItem, VERSIONS_SERVICES, ouverture, VERSIONS_OUVERTURE, deuxPortes, situations, choixSeance, eventail, lieux, faitsIcones, etapesImages, ctaPhoto, avisCourt, tarifLigne, ETOILES, Row, ImgFond, Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
+module.exports = { avisSection, temoin, VERSIONS_AVIS, chiffresSection, VERSIONS_CHIFFRES, comparaison, VERSIONS_COMPARAISON, services, serviceItem, VERSIONS_SERVICES, ouverture, VERSIONS_OUVERTURE, deuxPortes, situations, choixSeance, eventail, lieux, faitsIcones, etapesImages, ctaPhoto, avisCourt, tarifLigne, ETOILES, Row, ImgFond, Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
 console.log(Object.keys(S).length, 'sections');

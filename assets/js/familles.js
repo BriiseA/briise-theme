@@ -1,7 +1,7 @@
 /**
  * Briise : comportements des familles de sections.
  * Services en onglets : la liste devient des onglets, un service affiché à la fois.
- * Services en défilement : flèches « précédent » et « suivant ».
+ * Services et avis en défilement : flèches « précédent » et « suivant ».
  * Ouverture en diaporama : les photos changent en fondu toutes les 6 secondes, bouton pause.
  * Ouverture avec vidéo : vidéo muette en boucle, bouton pause.
  * Sans ce script, chaque version reste lisible : les onglets restent une grille de cartes,
@@ -89,8 +89,10 @@
 	}
 
 	/* ----- Défilement : flèches ---------------------------------------------------- */
-	function defilement( section ) {
-		var liste = section.querySelector( '.br-services-liste' );
+	// o : liste (sélecteur de la bande), precedent et suivant (libellés des flèches).
+	function defilement( section, o ) {
+		o = o || { liste: '.br-services-liste', precedent: 'Service précédent', suivant: 'Service suivant' };
+		var liste = section.querySelector( o.liste );
 		if ( ! liste || section.querySelector( '.br-services-fleches' ) ) {
 			return;
 		}
@@ -104,7 +106,7 @@
 		nav.className = 'br-services-fleches';
 
 		function pas() {
-			var premier = items( liste )[ 0 ];
+			var premier = liste.firstElementChild;
 			var ecart = parseFloat( window.getComputedStyle( liste ).columnGap ) || 20;
 			return premier ? premier.getBoundingClientRect().width + ecart : liste.clientWidth * 0.8;
 		}
@@ -118,8 +120,8 @@
 			} );
 			return b;
 		}
-		var precedent = bouton( -1, 'Service précédent', '←' );
-		var suivant = bouton( 1, 'Service suivant', '→' );
+		var precedent = bouton( -1, o.precedent, '←' );
+		var suivant = bouton( 1, o.suivant, '→' );
 		function majour() {
 			var max = liste.scrollWidth - liste.clientWidth - 2;
 			nav.hidden = max <= 0;
@@ -234,7 +236,12 @@
 
 	function demarrer() {
 		document.querySelectorAll( '.br-services--onglets' ).forEach( onglets );
-		document.querySelectorAll( '.br-services--defile' ).forEach( defilement );
+		document.querySelectorAll( '.br-services--defile' ).forEach( function ( s ) {
+			defilement( s );
+		} );
+		document.querySelectorAll( '.br-temoignages--defile' ).forEach( function ( s ) {
+			defilement( s, { liste: '.br-temoin-liste', precedent: 'Avis précédent', suivant: 'Avis suivant' } );
+		} );
 		document.querySelectorAll( '.br-ouverture--diaporama' ).forEach( diaporama );
 		document.querySelectorAll( '.br-ouverture' ).forEach( video );
 	}

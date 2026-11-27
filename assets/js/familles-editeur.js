@@ -14,6 +14,7 @@
 	var el = wp.element.createElement;
 	var familles = window.briiseFamilles || {};
 	var titres = window.briiseTitres || {};
+	var regles = window.briiseReglesTitres || {};
 	var PREFIXE_TITRE = 'br-titre--';
 
 	function classesDe( className ) {
@@ -37,23 +38,87 @@
 		} ) );
 	}
 
-	/* Panneau « Titre » : la position du titre de la section (liste propre à la famille, sinon la liste générale). */
+	/* Ce que contient la section : ses classes et ses codes courts, le texte de son titre, et si
+	   le titre est suivi d'une phrase d'introduction. Sert aux règles des positions permises. */
+	function analyse( clientId ) {
+		var bloc = wp.data && wp.data.select( 'core/block-editor' ).getBlock( clientId );
+		var a = { classes: [], textes: [], titre: '', phrase: false };
+		if ( ! bloc ) {
+			return a;
+		}
+		( function parcourir( b ) {
+			classesDe( b.attributes.className ).forEach( function ( c ) {
+				a.classes.push( c );
+			} );
+			if ( 'core/shortcode' === b.name ) {
+				a.textes.push( String( b.attributes.text || '' ) );
+			}
+			( b.innerBlocks || [] ).forEach( parcourir );
+		}( bloc ) );
+		var tete = bloc.innerBlocks.filter( function ( b ) {
+			var c = classesDe( b.attributes.className );
+			return c.indexOf( 'br-head' ) >= 0 || c.indexOf( 'br-section-head' ) >= 0;
+		} )[ 0 ];
+		( tete ? tete.innerBlocks : [] ).forEach( function ( x ) {
+			if ( 'core/heading' === x.name && ! a.titre ) {
+				a.titre = String( x.attributes.content || '' ).replace( /<[^>]+>/g, '' ).trim();
+			}
+			if ( classesDe( x.attributes.className ).indexOf( 'br-lead' ) >= 0 ) {
+				a.phrase = true;
+			}
+		} );
+		return a;
+	}
+	/* Une position convient-elle à cette section ? (règles : inc/familles.json, « reglesTitres ») */
+	function permise( position, a ) {
+		var r = regles[ position ];
+		if ( ! r || ! a ) {
+			return true;
+		}
+		if ( ( 'requise' === r.phrase && ! a.phrase ) || ( 'interdite' === r.phrase && a.phrase ) ) {
+			return false;
+		}
+		if ( r.titre_max && a.titre.length > r.titre_max ) {
+			return false;
+		}
+		var contient = function ( m ) {
+			return 0 === m.indexOf( 'br-' ) ? a.classes.indexOf( m ) >= 0 : a.textes.some( function ( t ) {
+				return t.indexOf( m ) >= 0;
+			} );
+		};
+		// Liste blanche : sans l'un de ces contenus, la position n'est pas proposée.
+		if ( r.seulement_si && ! r.seulement_si.some( contient ) ) {
+			return false;
+		}
+		return ! ( r.contenus || [] ).some( contient );
+	}
+
+	/* Panneau « Titre » : la position du titre de la section (liste propre à la famille, sinon la liste
+	   générale, réduite aux positions qui conviennent à son contenu). */
 	function panneauTitre( props, classes, liste ) {
 		var positions = liste || titres;
+		var a = liste ? null : analyse( props.clientId );
 		var trouvee = classes.filter( function ( c ) {
 			return 0 === c.indexOf( PREFIXE_TITRE );
 		} )[ 0 ];
 		var actuelle = trouvee ? trouvee.slice( PREFIXE_TITRE.length ) : 'site';
+		var horsRegle = ! permise( actuelle, a );
+		var aide = ( positions[ actuelle ] || [] )[ 1 ] || '';
+		if ( horsRegle ) {
+			aide = 'Cette position ne convient pas au contenu de la section (titre trop long, phrase d’introduction, tableau ou galerie trop large…) : choisissez-en une autre.';
+		}
 		return el(
 			wp.components.PanelBody,
 			{ title: 'Titre', initialOpen: true },
 			el( wp.components.SelectControl, {
 				label: 'Position du titre',
 				value: actuelle,
-				options: Object.keys( positions ).map( function ( v ) {
-					return { label: positions[ v ][ 0 ], value: v };
+				options: Object.keys( positions ).filter( function ( v ) {
+					return v === actuelle || permise( v, a );
+				} ).map( function ( v ) {
+					return { label: positions[ v ][ 0 ] + ( v === actuelle && horsRegle ? ' (déconseillé ici)' : '' ), value: v };
 				} ),
-				help: ( positions[ actuelle ] || [] )[ 1 ] || '',
+				help: aide,
 				onChange: function ( v ) {
 					var suite = classes.filter( function ( c ) {
 						return 0 !== c.indexOf( PREFIXE_TITRE );
@@ -74,7 +139,8 @@
 			}
 			var classes = classesDe( props.attributes.className );
 			var famille = familleDe( classes );
-			var titre = classes.indexOf( 'br-section' ) >= 0 && ( ( famille && famille.titres ) || aUnEnTete( props.clientId ) );
+			// L'en-tête de page (titre principal, fil d'Ariane) n'a pas de panneau « Titre ».
+			var titre = classes.indexOf( 'br-section' ) >= 0 && classes.indexOf( 'br-page-head' ) < 0 && ( ( famille && famille.titres ) || aUnEnTete( props.clientId ) );
 			if ( ! famille && ! titre ) {
 				return el( BlockEdit, props );
 			}

@@ -979,7 +979,7 @@
 
 /* ----- Photo coupée en biais, sur fond foncé ----- */
 .br-ouverture--biais {
-	background: var(--wp--preset--color--sombre);
+	background-color: var(--wp--preset--color--sombre) !important;
 	color: var(--wp--preset--color--fond);
 }
 .br-ouverture--biais :is(h1, .br-lead, .br-coches, .br-coches li) {
@@ -1231,8 +1231,9 @@ body.br-sur-photo .wp-block-post-content > .br-ouverture--moitie:first-child .br
 	grid-column: 4;
 	grid-row: 2;
 }
-/* Avec la carte d'infos, elle prend la place de la troisième photo, en tuile de couleur. */
-.br-ouverture--tuiles .br-ouv-media:has(> .br-ouv-infos) > .br-ouv-photo:nth-of-type(3) {
+/* Avec la carte d'infos (si elle a quelque chose à dire), elle prend la place de la troisième photo. */
+.br-ouverture--tuiles .br-ouv-media:has(> .br-ouv-infos:not(.br-ouv-infos--jour-seul)) > .br-ouv-photo:nth-of-type(3),
+.br-ouverture--tuiles .br-ouv-media:has(> .br-ouv-infos--jour-seul .br-infos-jour:not([hidden])) > .br-ouv-photo:nth-of-type(3) {
 	display: none;
 }
 .br-ouverture--tuiles .br-ouv-media > .br-ouv-infos {
@@ -1351,6 +1352,10 @@ body.br-sur-photo .wp-block-post-content > .br-ouverture--moitie:first-child .br
 	height: .55rem;
 	border-radius: 50%;
 	background: var(--wp--preset--color--accent);
+}
+/* Une carte sans aucune ligne à montrer disparaît (horaires non remplis, pas de date libre, pas de ville). */
+.br-ouv-infos--jour-seul:has(.br-infos-jour[hidden]) {
+	display: none !important;
 }
 /* « Ouvert aujourd'hui » vient du navigateur : la ligne reste cachée tant qu'elle est vide. */
 .br-ouv-infos li:has(> .br-infos-jour[hidden]) {
@@ -1589,5 +1594,498 @@ body.br-sur-photo .wp-block-post-content > .br-ouverture--moitie:first-child .br
 	}
 	:is(.br-ouverture--cote, .br-ouverture--biais).br-titre--centre .br-ouv-media {
 		aspect-ratio: 4 / 3;
+	}
+}
+
+/* ===== Avis (famille) ==================================================================
+ * La note Google (.br-temoignages-note) et les avis (.br-temoin) : étoiles, citation, auteur, et
+ * la photo de la réalisation dont parle l'avis (montrée dans « grand avis » et « mur »).
+ */
+.br-temoignages-corps {
+	display: grid;
+	gap: clamp(1.5rem, 3vw, 2.5rem);
+	margin-top: var(--wp--preset--spacing--50) !important;
+}
+.br-temoignages-corps > *,
+.br-temoin > * {
+	margin: 0 !important;
+}
+.br-temoin-liste {
+	display: grid;
+	gap: 1.25rem;
+}
+.br-temoin {
+	display: flex;
+	flex-direction: column;
+	gap: .9rem;
+	padding: clamp(1.4rem, 2.5vw, 1.9rem);
+	border-radius: var(--wp--custom--rayon--moyen);
+	background: var(--wp--preset--color--clair);
+	color: var(--wp--preset--color--texte);
+	box-shadow: var(--br-ombre);
+	break-inside: avoid;
+}
+.br-temoin-photo {
+	margin: 0 !important;
+	overflow: hidden;
+	border-radius: var(--wp--custom--rayon--petit);
+}
+.br-temoin-photo img {
+	display: block;
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover;
+}
+.br-temoin-citation {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	flex: 1;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: 0 !important;
+}
+.br-temoin-citation p {
+	margin: 0 !important;
+	font-family: var(--wp--preset--font-family--titres);
+	font-size: 1.2rem;
+	font-weight: 500;
+	line-height: 1.4;
+}
+.br-temoin-citation cite {
+	margin-top: auto;
+	font-size: .9rem;
+	font-style: normal;
+	line-height: 1.4;
+	color: var(--wp--preset--color--texte-doux);
+}
+.br-temoin-citation cite strong {
+	color: var(--wp--preset--color--texte);
+}
+.br-temoignages-note .br-note {
+	flex-wrap: wrap;
+}
+
+/* Grille : les avis côte à côte, la note au-dessus. */
+:is(.br-temoignages--grille, .br-temoignages--note, .br-temoignages--defile) .br-temoin-photo {
+	display: none;
+}
+.br-temoignages--grille .br-temoin-liste {
+	grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+}
+
+/* Note en avant : la note dans une grande carte à gauche, les avis deux par deux. */
+.br-temoignages--note .br-temoignages-corps {
+	grid-template-columns: minmax(0, .8fr) minmax(0, 2fr);
+	align-items: stretch;
+}
+.br-temoignages--note .br-temoignages-note {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: clamp(1.75rem, 3vw, 2.5rem);
+	border-radius: var(--wp--custom--rayon--grand);
+	background: var(--wp--preset--color--secondaire);
+	color: var(--wp--preset--color--fond);
+}
+.br-temoignages--note .br-note {
+	flex-direction: column;
+	align-items: flex-start;
+}
+.br-temoignages--note .br-note :is(.br-note-chiffre, .br-note-detail, .br-note-detail span) {
+	color: var(--wp--preset--color--fond);
+}
+.br-temoignages--note .br-note .br-etoiles {
+	color: var(--wp--preset--color--fond);
+}
+.br-temoignages--note .br-note-chiffre {
+	font-size: clamp(4rem, 8vw, 6rem);
+}
+.br-temoignages--note .br-temoin-liste {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Un avis en grand : le premier avis avec sa photo, les autres en petit dessous. */
+.br-temoignages--grand .br-temoin-liste {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.br-temoignages--grand .br-temoin:first-child {
+	grid-column: 1 / -1;
+	display: grid;
+	grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+	grid-template-areas: "photo etoiles" "photo citation";
+	grid-template-rows: auto 1fr;
+	column-gap: clamp(1.75rem, 4vw, 3.5rem);
+	row-gap: 1rem;
+	padding: clamp(1.25rem, 2.5vw, 2rem);
+	border-radius: var(--wp--custom--rayon--grand);
+}
+.br-temoignages--grand .br-temoin:first-child .br-temoin-photo {
+	grid-area: photo;
+	aspect-ratio: 4 / 3;
+	border-radius: var(--wp--custom--rayon--photo, var(--wp--custom--rayon--moyen));
+}
+.br-temoignages--grand .br-temoin:first-child .br-avis-etoiles {
+	grid-area: etoiles;
+	align-self: end;
+}
+.br-temoignages--grand .br-temoin:first-child .br-temoin-citation {
+	grid-area: citation;
+}
+.br-temoignages--grand .br-temoin:first-child .br-temoin-citation p {
+	font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+	line-height: 1.25;
+	letter-spacing: -.01em;
+}
+.br-temoignages--grand .br-temoin:not(:first-child) .br-temoin-photo {
+	display: none;
+}
+
+/* Mur d'avis : des colonnes de hauteurs différentes, certaines avec la photo. */
+.br-temoignages--mur .br-temoin-liste {
+	display: block;
+	columns: 3 16rem;
+	column-gap: 1.25rem;
+}
+.br-temoignages--mur .br-temoin {
+	margin-bottom: 1.25rem !important;
+}
+/* Quatre avis (ou moins) : deux colonnes, sinon la troisième reste presque vide. */
+.br-temoignages--mur .br-temoin-liste:not(:has(> .br-temoin:nth-child(5))) {
+	columns: 2 16rem;
+}
+.br-temoignages--mur .br-temoin:nth-child(even) .br-temoin-photo {
+	display: none;
+}
+.br-temoignages--mur .br-temoin-photo {
+	aspect-ratio: 4 / 3;
+}
+
+/* Défilement : les avis glissent de gauche à droite, avec des flèches (familles.js). */
+.br-temoignages--defile .br-temoin-liste {
+	display: flex;
+	gap: 1.25rem;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	overscroll-behavior-x: contain;
+	padding-bottom: 1rem;
+	scrollbar-width: thin;
+}
+.br-temoignages--defile .br-temoin {
+	flex: 0 0 clamp(16rem, 30vw, 22rem);
+	scroll-snap-align: start;
+}
+.br-temoignages--defile .br-temoin-liste:focus-visible {
+	outline: 3px solid var(--wp--preset--color--accent);
+	outline-offset: 4px;
+}
+
+@media (max-width: 900px) {
+	:is(.br-temoignages--note, .br-temoignages--grand) .br-temoignages-corps,
+	.br-temoignages--note .br-temoin-liste,
+	.br-temoignages--grand .br-temoin-liste {
+		grid-template-columns: 1fr;
+	}
+	.br-temoignages--grand .br-temoin:first-child {
+		grid-template-columns: 1fr;
+		grid-template-areas: "photo" "etoiles" "citation";
+	}
+}
+
+/* ===== Chiffres (famille) ===============================================================
+ * Des chiffres (.br-stat, comptés par motion.js) et leur légende, et une photo
+ * (montrée dans « tuiles » et « photo »).
+ */
+.br-chiffres-corps {
+	position: relative;
+	margin-top: var(--wp--preset--spacing--50) !important;
+}
+.br-chiffres-liste {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
+	gap: clamp(1rem, 2.5vw, 2rem);
+}
+.br-chiffre {
+	display: flex;
+	flex-direction: column;
+	gap: .4rem;
+	margin: 0 !important;
+}
+.br-chiffre > * {
+	margin: 0 !important;
+}
+/* Le chiffre en grand (une autre section du thème utilise aussi .br-stat, en petit). */
+.br-chiffre .br-stat {
+	font-family: var(--wp--preset--font-family--titres);
+	font-size: clamp(2.6rem, 5vw, 4.2rem);
+	font-weight: 600;
+	line-height: 1;
+	letter-spacing: -.03em;
+	color: var(--wp--preset--color--secondaire);
+}
+.br-chiffre .br-muted {
+	font-size: .98rem;
+	line-height: 1.4;
+}
+.br-chiffres-photo {
+	margin: 0 !important;
+	overflow: hidden;
+}
+.br-chiffres-photo img {
+	display: block;
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover;
+}
+:is(.br-chiffres--ligne, .br-chiffres--cartes, .br-chiffres--bande) .br-chiffres-photo {
+	display: none;
+}
+
+/* En ligne : séparés par un filet. */
+.br-chiffres--ligne .br-chiffre + .br-chiffre {
+	padding-left: clamp(1rem, 2.5vw, 2rem);
+	border-left: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+}
+
+/* En cartes : chaque chiffre dans sa carte. */
+.br-chiffres--cartes .br-chiffre {
+	padding: clamp(1.4rem, 2.5vw, 2rem);
+	border-radius: var(--wp--custom--rayon--grand);
+	background: var(--wp--preset--color--clair);
+	color: var(--wp--preset--color--texte);
+	box-shadow: var(--br-ombre);
+}
+.br-chiffres--cartes .br-stat {
+	color: var(--wp--preset--color--accent);
+}
+
+/* En tuiles : la photo en grand, les chiffres en tuiles autour. */
+.br-chiffres--tuiles .br-chiffres-corps {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: clamp(.75rem, 1.5vw, 1.1rem);
+}
+.br-chiffres--tuiles .br-chiffres-photo {
+	order: -1;
+	min-height: 22rem;
+	border-radius: var(--wp--custom--rayon--grand);
+}
+.br-chiffres--tuiles .br-chiffres-liste {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: clamp(.75rem, 1.5vw, 1.1rem);
+}
+.br-chiffres--tuiles .br-chiffre {
+	justify-content: flex-end;
+	padding: clamp(1.25rem, 2.5vw, 1.75rem);
+	border-radius: var(--wp--custom--rayon--grand);
+	background: var(--wp--preset--color--surface);
+	color: var(--wp--preset--color--texte);
+}
+.br-chiffres--tuiles .br-chiffre:first-child {
+	background: var(--wp--preset--color--secondaire);
+	color: var(--wp--preset--color--fond);
+}
+.br-chiffres--tuiles .br-chiffre:first-child :is(.br-stat, .br-muted) {
+	color: var(--wp--preset--color--fond);
+}
+
+/* Sur une bande foncée : les chiffres en clair. */
+/* Le fond foncé passe devant une couleur de fond choisie pour la section : le texte clair reste lisible. */
+.br-chiffres--bande {
+	background-color: var(--wp--preset--color--secondaire) !important;
+	color: var(--wp--preset--color--fond);
+}
+.br-chiffres--bande :is(h2, .br-label, .br-lead, .br-stat, .br-muted) {
+	color: var(--wp--preset--color--fond);
+}
+.br-chiffres--bande .br-chiffre + .br-chiffre {
+	padding-left: clamp(1rem, 2.5vw, 2rem);
+	border-left: 1px solid color-mix(in srgb, var(--wp--preset--color--fond) 30%, transparent);
+}
+
+/* Posés sur la photo : la photo en fond de la section, sous un voile sombre. */
+.br-chiffres--photo {
+	position: relative;
+	isolation: isolate;
+	color: #fff;
+}
+.br-chiffres--photo .br-chiffres-corps {
+	position: static;
+}
+.br-chiffres--photo .br-chiffres-photo {
+	position: absolute !important;
+	inset: 0;
+	z-index: -1;
+}
+.br-chiffres--photo .br-chiffres-photo::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: rgba(15, 16, 18, .68);
+}
+.br-chiffres--photo :is(h2, .br-label, .br-lead, .br-stat, .br-muted) {
+	color: #fff;
+}
+.br-chiffres--photo .br-chiffre {
+	padding: 1.25rem 1.4rem;
+	border-radius: var(--wp--custom--rayon--moyen);
+	background: rgba(255, 255, 255, .1);
+	backdrop-filter: blur(6px);
+}
+
+@media (max-width: 781px) {
+	.br-chiffres--tuiles .br-chiffres-corps {
+		grid-template-columns: 1fr;
+	}
+	.br-chiffres--tuiles .br-chiffres-photo {
+		min-height: 14rem;
+	}
+	:is(.br-chiffres--ligne, .br-chiffres--bande) .br-chiffres-liste {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+	:is(.br-chiffres--ligne, .br-chiffres--bande) .br-chiffre + .br-chiffre {
+		padding-left: 0;
+		border-left: 0;
+	}
+}
+
+/* ===== Comparaison : « Ce que vous évitez avec nous » ================================
+ * Une ligne par sujet (.br-comparaison-ligne) : ce qu'on voit souvent, ce que vous faites.
+ */
+.br-comparaison-corps {
+	display: grid;
+	gap: clamp(1.5rem, 3vw, 2.5rem);
+	margin-top: var(--wp--preset--spacing--50) !important;
+}
+.br-comparaison-corps > * {
+	margin: 0 !important;
+}
+.br-comparaison-photo {
+	overflow: hidden;
+	border-radius: var(--wp--custom--rayon--photo, var(--wp--custom--rayon--grand));
+}
+.br-comparaison-photo img {
+	display: block;
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover;
+}
+.br-comparaison-table {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+.br-comparaison-ligne {
+	display: contents;
+}
+.br-comparaison-ligne > p {
+	display: flex;
+	align-items: baseline;
+	gap: .7rem;
+	margin: 0 !important;
+	padding: .95rem 1.4rem;
+	line-height: 1.4;
+}
+.br-comparaison-ligne:not(.br-comparaison-tetes) > p::before {
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.4rem;
+	height: 1.4rem;
+	border-radius: 50%;
+	font-size: .8rem;
+	font-weight: 700;
+	line-height: 1;
+	transform: translateY(.15rem);
+}
+.br-comparaison-ligne:not(.br-comparaison-tetes) > .br-comparaison-autres::before {
+	content: "✕";
+	background: color-mix(in srgb, var(--wp--preset--color--texte) 12%, transparent);
+	color: var(--wp--preset--color--texte-doux);
+}
+.br-comparaison-ligne:not(.br-comparaison-tetes) > .br-comparaison-nous::before {
+	content: "✓";
+	background: var(--wp--preset--color--accent);
+	color: var(--wp--preset--color--clair);
+}
+.br-comparaison-autres {
+	color: var(--wp--preset--color--texte-doux);
+}
+.br-comparaison-nous {
+	font-weight: 600;
+	color: var(--wp--preset--color--texte);
+}
+.br-comparaison-tetes > p {
+	font-family: var(--wp--preset--font-family--titres);
+	font-size: var(--wp--preset--font-size--large);
+	font-weight: 600;
+	padding-top: 1.4rem !important;
+}
+
+/* Deux colonnes : la photo en bandeau, puis deux cartes (la vôtre mise en avant). */
+.br-comparaison--colonnes .br-comparaison-photo {
+	aspect-ratio: 21 / 8;
+}
+.br-comparaison--colonnes .br-comparaison-table {
+	column-gap: clamp(1rem, 2.5vw, 2rem);
+}
+.br-comparaison--colonnes .br-comparaison-autres {
+	background: color-mix(in srgb, var(--wp--preset--color--texte) 5%, transparent);
+}
+.br-comparaison--colonnes .br-comparaison-nous {
+	background: var(--wp--preset--color--clair);
+	box-shadow: inset 3px 0 0 var(--wp--preset--color--accent);
+}
+.br-comparaison--colonnes .br-comparaison-tetes > p {
+	border-radius: var(--wp--custom--rayon--grand) var(--wp--custom--rayon--grand) 0 0;
+}
+.br-comparaison--colonnes .br-comparaison-ligne:last-child > p {
+	padding-bottom: 1.4rem;
+	border-radius: 0 0 var(--wp--custom--rayon--grand) var(--wp--custom--rayon--grand);
+}
+
+/* Lignes face à face : la photo à gauche, une ligne par sujet, séparée d'un filet. */
+.br-comparaison--lignes .br-comparaison-corps {
+	grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+	align-items: start;
+}
+.br-comparaison--lignes .br-comparaison-photo {
+	aspect-ratio: 4 / 5;
+	position: sticky;
+	top: 6rem;
+}
+.br-comparaison--lignes .br-comparaison-ligne > p {
+	border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+}
+.br-comparaison--lignes .br-comparaison-tetes > p {
+	border-bottom: 2px solid currentColor;
+	font-size: 1.05rem;
+}
+.br-comparaison--lignes .br-comparaison-nous {
+	position: relative;
+}
+.br-comparaison--lignes .br-comparaison-ligne:not(.br-comparaison-tetes) > .br-comparaison-nous::after {
+	content: "→";
+	position: absolute;
+	left: -.55rem;
+	top: 1rem;
+	color: var(--wp--preset--color--accent);
+	font-weight: 700;
+}
+
+@media (max-width: 781px) {
+	.br-comparaison--lignes .br-comparaison-corps {
+		grid-template-columns: 1fr;
+	}
+	.br-comparaison--lignes .br-comparaison-photo {
+		position: static;
+		aspect-ratio: 16 / 9;
+	}
+	.br-comparaison--colonnes .br-comparaison-photo {
+		aspect-ratio: 16 / 9;
+	}
+	.br-comparaison-ligne > p {
+		padding: .8rem .9rem;
+		font-size: .95rem;
 	}
 }

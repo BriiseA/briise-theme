@@ -44,18 +44,18 @@ Colonne « Besoins » : ce qu’il faut avoir avant de choisir la section. Une s
 | `tarifs-tableau` | Tableau de tarifs simple | Pour une liste de prestations nombreuses : une ligne par prestation. | prix réels | — |
 | `temps-prix` | Pourquoi ce prix : le temps passé | Justifier un prix par le travail qu’il représente : chaque étape et sa durée (« 30 min », « 2 h 30 »). Une barre colorée est dessinée à partir des durées. | — | — |
 
-## Confiance et preuves (22)
+## Confiance et preuves (20)
 
 | Section | Titre | À quoi elle sert | Besoins | Dans le navigateur |
 | --- | --- | --- | --- | --- |
 | `avant-apres` | Avant / après | Deux photos côte à côte pour montrer une transformation. | 2 photos | — |
 | `avant-apres-glisse` | Avant / après à faire glisser | Une seule photo coupée par un curseur : on glisse pour passer de l’avant à l’après. Les deux photos doivent être prises du même endroit, avec le même cadrage ; sinon, préférer « Avant / après » côte à côte. | 2 photos | curseur avant / après ; sans script : deux photos |
-| `avis-defilants` | Avis qui défilent | Plus de trois avis à montrer : une rangée qui défile, avec la note Google au-dessus. Uniquement des avis réels, recopiés mot pour mot avec l’accord de leur auteur. Le défilement s’arrête au survol, au clavier ou avec le bouton pause. | avis réels, avec l’accord de leur auteur (jamais pour une profession réglementée) | défile (pause, immobile si moins d’animations) ; sans script : bande fixe |
-| `avis-note` | Avis avec la note Google | La note moyenne et le nombre d’avis Google, puis trois avis courts. Uniquement la vraie note et des avis réels, recopiés mot pour mot avec l’accord de leur auteur. | avis réels, avec l’accord de leur auteur (jamais pour une profession réglementée) | — |
+| `avis` | Avis (5 versions) | La note Google et quatre avis de clients, chacun avec la photo de la réalisation dont il parle. Choisissez la forme dans le panneau « Version » : grille, note en avant, un avis en grand, mur d’avis ou défilement. Uniquement la vraie note et des avis réels, recopiés mot pour mot avec l’accord de leur auteur (jamais pour une profession réglementée). Retirez la note si vous n’avez pas de fiche Google. | 4 photos, avis réels, avec l’accord de leur auteur (jamais pour une profession réglementée) | — |
 | `bande-confiance` | Bande de confiance | Juste sous l’ouverture, une carte qui chevauche la section du dessus : quatre garanties réelles avec leur icône. L’icône se change dans Avancé > Classes CSS : is-icone-garantie, is-icone-plan, is-icone-atelier, is-icone-avis, is-icone-delai, is-icone-prix, is-icone-local, is-icone-devis, is-icone-equipe. | — | — |
 | `bande-preuves` | Bande de preuves qui défile | Juste sous l’ouverture : vos garanties et vos faits courts, sur une bande qui défile doucement. De 5 à 8 faits vrais, de deux à cinq mots chacun. Le défilement s’arrête au survol, au clavier ou avec le bouton pause. | — | défile (pause, immobile si moins d’animations) ; sans script : bande fixe |
-| `chiffres-cles` | Chiffres clés | Quatre preuves rapides. Uniquement des chiffres vrais et vérifiables. | chiffres vérifiables | — |
+| `chiffres` | Chiffres (5 versions) | Trois ou quatre preuves chiffrées et une photo. Choisissez la forme dans le panneau « Version » : en ligne, en cartes, en tuiles avec la photo, sur une bande foncée, ou posés sur la photo. Les chiffres comptent jusqu’à leur valeur quand la section apparaît (une valeur purement numérique, avec au plus une unité courte). Uniquement des chiffres vrais et vérifiables. | 1 photo, chiffres vérifiables | — |
 | `clients-defilants` | Clients ou partenaires qui défilent | Les entreprises, collectivités ou architectes qui vous ont confié un chantier, en logos sur une bande qui défile. Un logo par client, avec son nom en texte alternatif. Seulement avec leur accord. | 5 photos, logos de clients, avec leur accord | défile (pause, immobile si moins d’animations) ; sans script : bande fixe |
+| `comparaison` | Ce que vous évitez avec nous (2 versions) | Ce qui agace le plus les clients dans votre métier, et ce que vous faites autrement, ligne par ligne, avec une photo. Choisissez la forme dans le panneau « Version » : deux colonnes ou lignes face à face. Des pratiques que vous tenez vraiment ; ne nommez ni ne visez jamais un concurrent. | 1 photo | — |
 | `documents-garanties` | Garanties et documents à télécharger | Vos attestations en PDF : assurance décennale, qualification, Kbis. Remplacez chaque fichier (bouton « Remplacer » du bloc) et mettez la date à jour chaque année. Une attestation périmée fait plus de tort que pas d’attestation. | documents PDF à jour | — |
 | `galerie` | Galerie en mosaïque | Six photos en mosaïque : lieu, ambiance, détails du travail. | 6 photos | — |
 | `galerie-agrandir` | Galerie : photos agrandies au clic | Portfolio, réalisations : une mosaïque dont chaque photo s’agrandit en plein écran au clic ou au clavier. Le texte alternatif de chaque photo décrit vraiment ce qu’elle montre. | 6 photos | — |
@@ -68,8 +68,6 @@ Colonne « Besoins » : ce qu’il faut avoir avant de choisir la section. Une s
 | `realisations-manuelle` | Réalisations en grille (à la main) | Trois réalisations écrites dans la page, sans fiche. Pour un site sans la fonction Réalisations. | 3 photos | — |
 | `realisations-service` | Réalisations de ce service (automatique) | Page de service : les réalisations rattachées à ce service. Disparaît tant qu’il n’y en a aucune. | fiches Réalisations publiées | — |
 | `realisations-toutes` | Toutes les réalisations, avec filtres (automatique) | Page des réalisations : toutes les fiches publiées, avec des boutons pour filtrer par catégorie. Se met à jour seule. | fiches Réalisations publiées | — |
-| `temoignages` | Témoignages | Trois avis de clients. Uniquement des avis réels, avec l’accord de leur auteur. | avis réels, avec l’accord de leur auteur (jamais pour une profession réglementée) | — |
-| `tuiles-chiffres` | Chiffres en tuiles | Vos preuves en chiffres, en tuiles de tailles différentes : une grande pour le chiffre le plus fort, les autres autour. Les chiffres comptent jusqu’à leur valeur quand la section apparaît. | 1 photo, chiffres vérifiables | — |
 
 ## Parcours et questions (9)
 
@@ -163,6 +161,33 @@ Options, combinables avec toutes les versions :
 | Onglets | `br-services--onglets` | Un service à la fois : le visiteur choisit le service dans une rangée d’onglets. Dans l’éditeur, les services restent en grille. |
 | Volets | `br-services--volets` | Bandes photo côte à côte : celle que l’on survole s’ouvre et montre son texte. Sur téléphone, les volets s’empilent. |
 
+### Avis (section `avis`, par défaut : `grille`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| Grille | `br-temoignages--grille` | Les avis côte à côte, la note Google au-dessus. |
+| Note en avant | `br-temoignages--note` | La note Google dans une grande carte foncée, les avis deux par deux à côté. |
+| Un avis en grand | `br-temoignages--grand` | Le premier avis en grand avec la photo de la réalisation, les autres en petit dessous. |
+| Mur d’avis | `br-temoignages--mur` | Les avis en colonnes de hauteurs différentes, certains avec la photo de la réalisation. |
+| Défilement | `br-temoignages--defile` | Les avis glissent de gauche à droite, avec des flèches. |
+
+### Chiffres (section `chiffres`, par défaut : `ligne`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| En ligne | `br-chiffres--ligne` | Les chiffres côte à côte, séparés par un filet. Sobre. |
+| En cartes | `br-chiffres--cartes` | Chaque chiffre dans sa carte, dans la couleur d’accent. |
+| En tuiles | `br-chiffres--tuiles` | La photo en grand, les chiffres en tuiles à côté (le premier en couleur foncée). |
+| Bande foncée | `br-chiffres--bande` | Les chiffres en clair sur une bande de couleur foncée. |
+| Sur la photo | `br-chiffres--photo` | La photo en fond de la section sous un voile sombre, les chiffres posés dessus. |
+
+### Comparaison (section `comparaison`, par défaut : `colonnes`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| Deux colonnes | `br-comparaison--colonnes` | La photo en bandeau, puis deux colonnes : ce qu’on voit souvent, et vous (mis en avant). |
+| Lignes face à face | `br-comparaison--lignes` | La photo à gauche, une ligne par sujet : ce qu’on voit souvent, puis ce que vous faites. |
+
 ## Place du titre (toute section dont le titre est en haut)
 
 Dans le fichier de site : la classe `br-titre--<position>` de la section (dans l’éditeur : panneau « Titre »). Sans classe, la section suit le réglage général `titres` du site. Sur téléphone, le titre revient en haut ; seul le titre centré reste centré.
@@ -178,6 +203,43 @@ Dans le fichier de site : la classe `br-titre--<position>` de la section (dans l
 | Titre et filet | `br-titre--filet` | Un trait fin prolonge le titre jusqu’au lien. |
 | En marge à gauche | `br-titre--marge-gauche` | Sur ordinateur, l’en-tête dans une colonne à gauche, qui reste visible pendant la lecture. |
 | En marge à droite | `br-titre--marge-droite` | Sur ordinateur, l’en-tête dans une colonne à droite. |
+
+### Positions permises, section par section
+
+Toutes les positions ne vont pas à toutes les sections : la marge écrase un tableau ou une galerie, un titre à droite dérange au-dessus d’un contenu lu de gauche à droite ou d’une phrase d’introduction, le titre géant ne va qu’à un titre court, « côte à côte » demande une phrase. Le panneau « Titre » et le rythme des titres ne proposent que ces positions (règles : `reglesTitres` de `inc/familles.json`).
+
+| Section | Positions permises |
+| --- | --- |
+| `avant-apres` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `avant-apres-glisse` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet |
+| `avis` | À gauche, Centré, À droite, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `benefices-photos` | À gauche, Centré, À droite, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `chiffres` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `comparaison` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet |
+| `derniers-articles` | À gauche, Centré, À droite, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `documents-garanties` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `equipe` | À gauche, Centré, À droite, Titre et filet, En marge à gauche, En marge à droite |
+| `etapes` | À gauche, Centré, Titre géant, Titre et filet |
+| `etapes-images` | À gauche, Centré, Titre et phrase côte à côte, Titre et filet |
+| `etapes-photos` | À gauche, Centré, Titre et filet |
+| `galerie` | À gauche, Centré, À droite, Titre géant, Titre et filet |
+| `galerie-agrandir` | À gauche, Centré, À droite, Titre géant, Titre et filet |
+| `journee-racontee` | À gauche, Centré, Titre et phrase côte à côte, Titre et filet |
+| `lieux` | À gauche, Centré, Titre et phrase côte à côte, Titre et filet, En marge à gauche, En marge à droite |
+| `modeles-cartes` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `ou-en-etes-vous` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `pages-liees` | À gauche, Centré, À droite, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `realisations` | À gauche, Centré, À droite, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `realisations-galerie` | À gauche, Centré, À droite, Titre géant, Titre et filet |
+| `realisations-manuelle` | À gauche, Centré, À droite, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `realisations-service` | À gauche, Centré, À droite, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `services` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `tableau-comparatif` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet |
+| `tarifs-cartes` | À gauche, Centré, À droite, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `tarifs-liste` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `tarifs-tableau` | À gauche, Centré, Titre géant, Titre et filet |
+| `zone` | À gauche, Centré, Titre et phrase côte à côte, Titre et filet, En marge à gauche, En marge à droite |
+| `zone-plan` | À gauche, Centré, Titre et phrase côte à côte, Titre et filet |
 
 ## Habillage du site (une fois pour tout le site)
 

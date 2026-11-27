@@ -112,6 +112,78 @@
 					"Bandes photo côte à côte : celle que l’on survole s’ouvre et montre son texte. Sur téléphone, les volets s’empilent."
 				]
 			}
+		},
+		"avis": {
+			"nom": "Avis",
+			"classe": "br-temoignages",
+			"section": "avis",
+			"defaut": "grille",
+			"variantes": {
+				"grille": [
+					"Grille",
+					"Les avis côte à côte, la note Google au-dessus."
+				],
+				"note": [
+					"Note en avant",
+					"La note Google dans une grande carte foncée, les avis deux par deux à côté."
+				],
+				"grand": [
+					"Un avis en grand",
+					"Le premier avis en grand avec la photo de la réalisation, les autres en petit dessous."
+				],
+				"mur": [
+					"Mur d’avis",
+					"Les avis en colonnes de hauteurs différentes, certains avec la photo de la réalisation."
+				],
+				"defile": [
+					"Défilement",
+					"Les avis glissent de gauche à droite, avec des flèches."
+				]
+			}
+		},
+		"chiffres": {
+			"nom": "Chiffres",
+			"classe": "br-chiffres",
+			"section": "chiffres",
+			"defaut": "ligne",
+			"variantes": {
+				"ligne": [
+					"En ligne",
+					"Les chiffres côte à côte, séparés par un filet. Sobre."
+				],
+				"cartes": [
+					"En cartes",
+					"Chaque chiffre dans sa carte, dans la couleur d’accent."
+				],
+				"tuiles": [
+					"En tuiles",
+					"La photo en grand, les chiffres en tuiles à côté (le premier en couleur foncée)."
+				],
+				"bande": [
+					"Bande foncée",
+					"Les chiffres en clair sur une bande de couleur foncée."
+				],
+				"photo": [
+					"Sur la photo",
+					"La photo en fond de la section sous un voile sombre, les chiffres posés dessus."
+				]
+			}
+		},
+		"comparaison": {
+			"nom": "Comparaison",
+			"classe": "br-comparaison",
+			"section": "comparaison",
+			"defaut": "colonnes",
+			"variantes": {
+				"colonnes": [
+					"Deux colonnes",
+					"La photo en bandeau, puis deux colonnes : ce qu’on voit souvent, et vous (mis en avant)."
+				],
+				"lignes": [
+					"Lignes face à face",
+					"La photo à gauche, une ligne par sujet : ce qu’on voit souvent, puis ce que vous faites."
+				]
+			}
 		}
 	},
 	"titres": {
@@ -151,5 +223,93 @@
 			"En marge à droite",
 			"Sur ordinateur, l’en-tête dans une colonne à droite."
 		]
+	},
+	"reglesTitres": {
+		"_lisezmoi": "Positions du titre qui ne conviennent pas à une section, selon son contenu. Lu par l’éditeur (panneau « Titre »), par le rythme des titres (build_br_kits.js) et par le catalogue. « phrase » : requise ou interdite (phrase d’introduction sous le titre) ; « titre_max » : longueur maximale du titre ; « contenus » : la position est interdite si la section contient l’une de ces classes (br-…) ou l’un de ces textes de code court. « seulement_si » : la position n’est permise que si la section contient l’un de ces contenus (liste blanche : une section nouvelle ou inconnue ne l’a pas par défaut).",
+		"cote": {
+			"phrase": "requise"
+		},
+		"droite": {
+			"phrase": "interdite",
+			"contenus": [
+				"br-table",
+				"br-tarifs-liste",
+				"br-fil--frise",
+				"br-etapes-photos",
+				"br-docs",
+				"br-zone-plan",
+				"[briise_zone]",
+				"br-avant-apres",
+				"br-comparaison",
+				"br-services--liste",
+				"br-services--phare",
+				"br-temoignages--grand",
+				"br-temoignages--note",
+				"br-chiffres--tuiles"
+			],
+			"seulement_si": [
+				"br-benefices",
+				"br-prices",
+				"br-section-realisations",
+				"br-projects",
+				"br-mosaique",
+				"br-team",
+				"br-posts",
+				"br-section-liees",
+				"br-modeles",
+				"br-situations",
+				"br-lieux",
+				"br-etapes-images",
+				"br-services--grille",
+				"br-services--bento",
+				"br-services--defile",
+				"br-services--volets",
+				"br-services--onglets",
+				"br-temoignages--grille",
+				"br-temoignages--mur",
+				"br-temoignages--defile",
+				"br-chiffres--ligne",
+				"br-chiffres--cartes",
+				"br-chiffres--bande",
+				"br-chiffres--photo"
+			]
+		},
+		"geant": {
+			"titre_max": 32
+		},
+		"marge-gauche": {
+			"contenus": [
+				"br-table",
+				"br-mosaique",
+				"br-zone-plan",
+				"br-glisse",
+				"br-fil--frise",
+				"br-defile",
+				"br-etapes-images",
+				"br-services--volets",
+				"br-services--defile",
+				"br-services--onglets",
+				"br-temoignages--defile",
+				"br-comparaison--colonnes",
+				"forme=\"galerie\""
+			]
+		},
+		"marge-droite": {
+			"contenus": [
+				"br-table",
+				"br-mosaique",
+				"br-zone-plan",
+				"br-glisse",
+				"br-fil--frise",
+				"br-defile",
+				"br-etapes-images",
+				"br-services--volets",
+				"br-services--defile",
+				"br-services--onglets",
+				"br-temoignages--defile",
+				"br-comparaison--colonnes",
+				"forme=\"galerie\""
+			]
+		}
 	}
 }
