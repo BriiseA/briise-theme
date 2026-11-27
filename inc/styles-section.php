@@ -38,6 +38,10 @@ function briise_fond_effectif( $bloc ) {
 	if ( preg_match( '/is-style-(br-[a-z]+)/', $bloc['attrs']['className'] ?? '', $m ) && isset( briise_styles_section()[ $m[1] ] ) ) {
 		return briise_styles_section()[ $m[1] ][1];
 	}
+	// Engagements en bande : fond foncé fixé par le thème.
+	if ( false !== strpos( $bloc['attrs']['className'] ?? '', 'br-engagements--bande' ) ) {
+		return 'sombre';
+	}
 	if ( ! empty( $bloc['attrs']['backgroundColor'] ) ) {
 		return $bloc['attrs']['backgroundColor'];
 	}
@@ -71,8 +75,9 @@ function briise_rythme_analyse() {
 				$prev = null;
 				continue;
 			}
-			// La bande de confiance chevauche ses voisines : elle ne compte pas.
-			if ( false !== strpos( $b['attrs']['className'] ?? '', 'br-confiance-zone' ) ) {
+			// La bande de confiance chevauche ses voisines : elle ne compte pas (sauf en bande ou en pastilles).
+			$classes = $b['attrs']['className'] ?? '';
+			if ( false !== strpos( $classes, 'br-confiance-zone' ) && ! preg_match( '/br-engagements--(bande|pastilles)/', $classes ) ) {
 				continue;
 			}
 			$fond = briise_fond_effectif( $b );

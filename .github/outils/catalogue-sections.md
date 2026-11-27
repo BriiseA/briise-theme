@@ -50,7 +50,7 @@ Colonne « Besoins » : ce qu’il faut avoir avant de choisir la section. Une s
 | --- | --- | --- | --- | --- |
 | `avant-apres` | Avant / après (3 versions) | Montrer une transformation : la photo d’avant et celle d’après. Choisissez la forme dans le panneau « Version » : côte à côte, à faire glisser (une seule photo coupée par un curseur) ou l’après en grand avec l’avant en médaillon. Pour le curseur, les deux photos doivent être prises du même endroit, avec le même cadrage. | 2 photos | curseur avant / après ; sans script : deux photos |
 | `avis` | Avis (5 versions) | La note Google et quatre avis de clients, chacun avec la photo de la réalisation dont il parle. Choisissez la forme dans le panneau « Version » : grille, note en avant, un avis en grand, mur d’avis ou défilement. Uniquement la vraie note et des avis réels, recopiés mot pour mot avec l’accord de leur auteur (jamais pour une profession réglementée). Retirez la note si vous n’avez pas de fiche Google. | 4 photos, avis réels, avec l’accord de leur auteur (jamais pour une profession réglementée) | — |
-| `bande-confiance` | Bande de confiance | Juste sous l’ouverture, une carte qui chevauche la section du dessus : quatre garanties réelles avec leur icône. L’icône se change dans Avancé > Classes CSS : is-icone-garantie, is-icone-plan, is-icone-atelier, is-icone-avis, is-icone-delai, is-icone-prix, is-icone-local, is-icone-devis, is-icone-equipe. | — | — |
+| `bande-confiance` | Engagements (3 versions) | Quatre engagements réels, chacun avec son icône, son titre et une précision. Choisissez la forme dans le panneau « Version » : carte qui chevauche l’ouverture (juste dessous), bande foncée pleine largeur, ou pastilles (par exemple juste avant un formulaire). L’icône se change dans Avancé > Classes CSS : is-icone-garantie, is-icone-plan, is-icone-atelier, is-icone-avis, is-icone-delai, is-icone-prix, is-icone-local, is-icone-devis, is-icone-equipe. | — | — |
 | `bande-preuves` | Bande de preuves qui défile | Juste sous l’ouverture : vos garanties et vos faits courts, sur une bande qui défile doucement. De 5 à 8 faits vrais, de deux à cinq mots chacun. Le défilement s’arrête au survol, au clavier ou avec le bouton pause. | — | défile (pause, immobile si moins d’animations) ; sans script : bande fixe |
 | `chiffres` | Chiffres (5 versions) | Trois ou quatre preuves chiffrées et une photo. Choisissez la forme dans le panneau « Version » : en ligne, en cartes, en tuiles avec la photo, sur une bande foncée, ou posés sur la photo. Les chiffres comptent jusqu’à leur valeur quand la section apparaît (une valeur purement numérique, avec au plus une unité courte). Uniquement des chiffres vrais et vérifiables. | 1 photo, chiffres vérifiables | — |
 | `comparaison` | Ce que vous évitez avec nous (2 versions) | Ce qui agace le plus les clients dans votre métier, et ce que vous faites autrement, ligne par ligne, avec une photo. Choisissez la forme dans le panneau « Version » : deux colonnes ou lignes face à face. Des pratiques que vous tenez vraiment ; ne nommez ni ne visez jamais un concurrent. | 1 photo | — |
@@ -220,6 +220,14 @@ Options, combinables avec toutes les versions :
 | Liste | `br-projets--liste` | Une fiche par ligne : la photo à gauche, le titre et le résumé à droite. |
 | Une en grand | `br-projets--grande` | La dernière fiche en grand, les autres deux par deux dessous. |
 | Défilement | `br-projets--defile` | Les fiches glissent de gauche à droite, avec des flèches. Montrez-en au moins cinq (nombre="6" dans le code court), sinon rien ne défile. |
+
+### Engagements (section `bande-confiance`, par défaut : `chevauche`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| Carte qui chevauche | `br-engagements--chevauche` | Une carte claire posée à cheval sous l’ouverture. À placer juste après l’ouverture. |
+| Bande foncée | `br-engagements--bande` | Les quatre engagements en ligne sur une bande foncée, pleine largeur. Se place n’importe où. |
+| Pastilles | `br-engagements--pastilles` | De petites pastilles centrées, discrètes. Par exemple juste avant un formulaire ou sous les tarifs. |
 
 ## Place du titre (toute section dont le titre est en haut)
 

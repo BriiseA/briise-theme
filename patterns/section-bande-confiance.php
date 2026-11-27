@@ -1,15 +1,15 @@
 <?php
 /**
- * Title: Confiance : Bande de confiance
+ * Title: Confiance : Engagements (3 versions)
  * Slug: briise/bande-confiance
  * Categories: briise-confiance
- * Description: Juste sous l’ouverture, une carte qui chevauche la section du dessus : quatre garanties réelles avec leur icône. L’icône se change dans Avancé > Classes CSS : is-icone-garantie, is-icone-plan, is-icone-atelier, is-icone-avis, is-icone-delai, is-icone-prix, is-icone-local, is-icone-devis, is-icone-equipe.
+ * Description: Quatre engagements réels, chacun avec son icône, son titre et une précision. Choisissez la forme dans le panneau « Version » : carte qui chevauche l’ouverture (juste dessous), bande foncée pleine largeur, ou pastilles (par exemple juste avant un formulaire). L’icône se change dans Avancé > Classes CSS : is-icone-garantie, is-icone-plan, is-icone-atelier, is-icone-avis, is-icone-delai, is-icone-prix, is-icone-local, is-icone-devis, is-icone-equipe.
  * Viewport Width: 1400
  */
 $briise = briise_theme_entreprise();
 ?>
-<!-- wp:group {"align":"full","className":"br-confiance-zone","layout":{"type":"default"}} -->
-<div class="wp-block-group alignfull br-confiance-zone"><!-- wp:group {"className":"br-confiance","layout":{"type":"default"}} -->
+<!-- wp:group {"align":"full","className":"br-confiance-zone br-engagements br-engagements\u002d\u002dchevauche","layout":{"type":"default"}} -->
+<div class="wp-block-group alignfull br-confiance-zone br-engagements br-engagements--chevauche"><!-- wp:group {"className":"br-confiance","layout":{"type":"default"}} -->
 <div class="wp-block-group br-confiance"><!-- wp:group {"className":"br-confiance-item is-icone-garantie","layout":{"type":"default"}} -->
 <div class="wp-block-group br-confiance-item is-icone-garantie"><!-- wp:paragraph {"className":"br-confiance-titre"} -->
 <p class="br-confiance-titre">Garantie décennale</p>

@@ -280,6 +280,26 @@
 					"Les fiches glissent de gauche à droite, avec des flèches. Montrez-en au moins cinq (nombre=\"6\" dans le code court), sinon rien ne défile."
 				]
 			}
+		},
+		"engagements": {
+			"nom": "Engagements",
+			"classe": "br-engagements",
+			"section": "bande-confiance",
+			"defaut": "chevauche",
+			"variantes": {
+				"chevauche": [
+					"Carte qui chevauche",
+					"Une carte claire posée à cheval sous l’ouverture. À placer juste après l’ouverture."
+				],
+				"bande": [
+					"Bande foncée",
+					"Les quatre engagements en ligne sur une bande foncée, pleine largeur. Se place n’importe où."
+				],
+				"pastilles": [
+					"Pastilles",
+					"De petites pastilles centrées, discrètes. Par exemple juste avant un formulaire ou sous les tarifs."
+				]
+			}
 		}
 	},
 	"titres": {

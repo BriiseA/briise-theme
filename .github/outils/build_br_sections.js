@@ -97,7 +97,11 @@ const heroPhoto = ({ pastille, titre, accent, chapo, second, coches = [], img = 
   Col([P(pastille, 'br-pastille'), H(titre + ' ' + Mark(accent), 1, null, { fontSize: 'huge' }), Lead(chapo), MainBtns(second), ...(coches.length ? [List(coches, 'br-coches')] : [])], { verticalAlignment: 'center', width: '52%' }),
   Col([Box('br-hero-media', [Img(img, '1/1', 'br-hero-img', alt), ...etiquettes.map(([petit, grand], i) => Box('br-etiquette-photo br-etiquette-photo--' + (i + 1), [P(petit, 'br-etiquette-petit'), P(grand, 'br-etiquette-grand')]))])], { verticalAlignment: 'center', width: '48%' }),
 ], 'br-split', { verticalAlignment: 'center' })], { backgroundColor: 'surface' });
-const confiance = (items) => cb('core/group', { align: 'full', className: 'br-confiance-zone', layout: { type: 'default' } }, [
+// Engagements (famille) : quatre engagements, icône, titre et précision. « chevauche » : la carte posée à
+// cheval sous l'ouverture (elle ne compte pas dans le rythme des fonds) ; « bande » et « pastilles » : une
+// section ordinaire, posable n'importe où.
+const VERSIONS_ENGAGEMENTS = ['chevauche', 'bande', 'pastilles'];
+const confiance = (items, version = 'chevauche') => cb('core/group', { align: 'full', className: 'br-confiance-zone br-engagements br-engagements--' + version, layout: { type: 'default' } }, [
   cb('core/group', { className: 'br-confiance', layout: { type: 'default' } }, items.map(([ic, t, s]) => Box('br-confiance-item is-icone-' + ic, [P(t, 'br-confiance-titre'), P(s, 'br-confiance-sous')]))),
 ]);
 const tuiles = (label, titre, items, chapo, apres = []) => Section('br-tuiles-section', [Head([Label(label), H(titre, 2), ...(chapo ? [Lead(chapo)] : [])]),
@@ -115,7 +119,7 @@ const zoneSchema = (label, titre, chapo, lien) => Section('br-zone-schema', [Col
   Col([Short('[briise_zone_schema]')], { verticalAlignment: 'center', width: '56%' }),
 ], 'br-split', { verticalAlignment: 'center' })]);
 
-add('bande-confiance', 'confiance', 'Bande de confiance', 'Juste sous l’ouverture, une carte qui chevauche la section du dessus : quatre garanties réelles avec leur icône. L’icône se change dans Avancé > Classes CSS : is-icone-garantie, is-icone-plan, is-icone-atelier, is-icone-avis, is-icone-delai, is-icone-prix, is-icone-local, is-icone-devis, is-icone-equipe.',
+add('bande-confiance', 'confiance', 'Engagements (3 versions)', 'Quatre engagements réels, chacun avec son icône, son titre et une précision. Choisissez la forme dans le panneau « Version » : carte qui chevauche l’ouverture (juste dessous), bande foncée pleine largeur, ou pastilles (par exemple juste avant un formulaire). L’icône se change dans Avancé > Classes CSS : is-icone-garantie, is-icone-plan, is-icone-atelier, is-icone-avis, is-icone-delai, is-icone-prix, is-icone-local, is-icone-devis, is-icone-equipe.',
   confiance([['garantie', 'Garantie décennale', 'Attestation jointe au devis'], ['devis', 'Devis gratuit', 'Sous 5 jours ouvrés'], ['local', 'Une équipe locale', 'À votre ville et alentour'], ['avis', 'Note Google', 'À n’afficher que si elle est réelle']]));
 
 add('zone-liste', 'contact', 'Zone d’intervention en liste', 'Les communes où vous intervenez, groupées par distance (moins de 10 km, 10 à 20 km…), puis une invitation à appeler. Les distances se calculent seules à partir de Mon entreprise > Entreprise > Communes du schéma de zone (nom ; latitude ; longitude, votre adresse en premier).',
@@ -1062,5 +1066,5 @@ add('avant-apres', 'confiance', 'Avant / après (3 versions)', 'Montrer une tran
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').mkdirSync(require('path').join(__dirname, 'build'), { recursive: true });
 require('fs').writeFileSync(require('path').join(__dirname, 'build', 'br_sections.json'), JSON.stringify(out, null, 1));
-module.exports = { galerieSection, VERSIONS_GALERIE, logosSection, VERSIONS_LOGOS, avantApresSection, VERSIONS_AVANT_APRES, avisSection, temoin, VERSIONS_AVIS, chiffresSection, VERSIONS_CHIFFRES, comparaison, VERSIONS_COMPARAISON, services, serviceItem, VERSIONS_SERVICES, ouverture, VERSIONS_OUVERTURE, deuxPortes, situations, choixSeance, eventail, lieux, faitsIcones, etapesImages, ctaPhoto, avisCourt, tarifLigne, ETOILES, Row, ImgFond, Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
+module.exports = { confiance, VERSIONS_ENGAGEMENTS, galerieSection, VERSIONS_GALERIE, logosSection, VERSIONS_LOGOS, avantApresSection, VERSIONS_AVANT_APRES, avisSection, temoin, VERSIONS_AVIS, chiffresSection, VERSIONS_CHIFFRES, comparaison, VERSIONS_COMPARAISON, services, serviceItem, VERSIONS_SERVICES, ouverture, VERSIONS_OUVERTURE, deuxPortes, situations, choixSeance, eventail, lieux, faitsIcones, etapesImages, ctaPhoto, avisCourt, tarifLigne, ETOILES, Row, ImgFond, Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
 console.log(Object.keys(S).length, 'sections');

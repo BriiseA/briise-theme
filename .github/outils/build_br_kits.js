@@ -9,9 +9,10 @@ const sec = (slug) => S[slug].blocks;
    et les photos ne bougent pas ; une tête de page peut précéder une section du même fond. */
 const { cloneBlock } = require('@wordpress/blocks');
 const CLAIRS = ['fond', 'surface', 'nuance'];
-const fondDe = (b) => (b.name === 'core/cover' ? 'photo' : (b.attributes.backgroundColor || 'fond'));
 // La bande de confiance chevauche la section du dessus : elle ne compte pas dans le rythme.
-const passe = (b) => /br-confiance-zone/.test(b.attributes.className || '');
+// Les versions « bande » et « pastilles » sont des sections ordinaires : elles comptent.
+const passe = (b) => /br-confiance-zone/.test(b.attributes.className || '') && !/br-engagements--(bande|pastilles)/.test(b.attributes.className || '');
+const fondDe = (b) => (b.name === 'core/cover' ? 'photo' : /br-engagements--bande/.test(b.attributes.className || '') ? 'sombre' : (b.attributes.backgroundColor || 'fond'));
 const rythme = (blocks) => {
   const out = [];
   blocks.forEach((b, i) => {

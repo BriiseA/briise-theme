@@ -2432,3 +2432,82 @@ body.br-sur-photo .wp-block-post-content > .br-ouverture--moitie:first-child .br
 		transition: none;
 	}
 }
+
+/* ===== Engagements (famille) ============================================================
+ * Quatre engagements (.br-confiance-item). « Carte qui chevauche » garde la forme d'origine,
+ * posée à cheval sous l'ouverture (theme.json). Les autres versions sont des sections ordinaires :
+ * pas de chevauchement, et les règles de theme.json qui décalent les voisines les excluent.
+ */
+.br-confiance-zone:is(.br-engagements--bande, .br-engagements--pastilles) {
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+}
+:is(.br-engagements--bande, .br-engagements--pastilles) .br-confiance {
+	background: transparent;
+	color: inherit;
+	box-shadow: none !important;
+	border: 0 !important;
+	border-radius: 0;
+}
+
+/* Bande foncée : pleine largeur, les engagements en ligne séparés par un filet. */
+.br-engagements--bande {
+	background-color: var(--wp--preset--color--sombre) !important;
+	color: var(--wp--preset--color--clair);
+	padding-top: var(--wp--preset--spacing--60);
+	padding-bottom: var(--wp--preset--spacing--60);
+}
+.br-engagements--bande .br-confiance {
+	padding: 0;
+	max-width: var(--wp--style--global--content-size, 1200px);
+}
+.br-engagements--bande .br-confiance-titre {
+	color: var(--wp--preset--color--clair);
+}
+.br-engagements--bande .br-confiance-sous {
+	color: color-mix(in srgb, var(--wp--preset--color--clair) 80%, transparent);
+}
+.br-engagements--bande .br-confiance-item + .br-confiance-item {
+	border-left-color: color-mix(in srgb, var(--wp--preset--color--clair) 22%, transparent);
+}
+
+/* Pastilles : petites, centrées, sur une ou deux lignes. */
+.br-engagements--pastilles {
+	padding-top: var(--wp--preset--spacing--50);
+	padding-bottom: var(--wp--preset--spacing--50);
+}
+.br-engagements--pastilles .br-confiance {
+	display: flex !important;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: .75rem 1rem;
+	padding: 0;
+	max-width: var(--wp--style--global--content-size, 1200px);
+}
+.br-engagements--pastilles .br-confiance-item {
+	grid-template-columns: 2.5rem auto;
+	column-gap: .75rem;
+	padding: .5rem 1.4rem .5rem .5rem;
+	border: 1px solid color-mix(in srgb, currentColor 16%, transparent) !important;
+	border-radius: 999px;
+	background: var(--wp--preset--color--clair);
+	color: var(--wp--preset--color--texte);
+}
+.br-engagements--pastilles .br-confiance-item::before {
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: 50%;
+	background-size: 1.2rem;
+}
+.br-engagements--pastilles .br-confiance-titre {
+	font-size: 1rem;
+	line-height: 1.2;
+}
+.br-engagements--pastilles .br-confiance-sous {
+	font-size: .8rem;
+}
+@media (max-width: 781px) {
+	.br-engagements--pastilles .br-confiance-item {
+		flex: 1 1 100%;
+	}
+}
