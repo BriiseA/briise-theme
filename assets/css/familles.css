@@ -2946,3 +2946,51 @@ body.br-sur-photo .wp-block-post-content > .br-ouverture--moitie:first-child .br
 .br-ouv-question .br-coches li { display: flex; align-items: center; gap: .5rem; }
 .br-ouv-question .br-coches li::before { content: ""; flex-shrink: 0; width: 1.1rem; height: 1.1rem; background: var(--wp--preset--color--accent); -webkit-mask: var(--br-i-coche) center / contain no-repeat; mask: var(--br-i-coche) center / contain no-repeat; }
 .br-mots-zone > span:not(.is-visible) { transform: translateY(-.4em); }
+
+/* Portraits ronds : passent devant la forme des photos du site (arche, galet) et le relief des cartes. */
+:is(.wp-site-blocks, .is-root-container) .br-equipe.br-equipe--ronds .br-member .wp-block-image img,
+:is(.wp-site-blocks, .is-root-container) .br-personne.br-personne--citation .wp-block-column:first-child .wp-block-image img { border-radius: 50% !important; clip-path: none !important; aspect-ratio: 1 !important; object-fit: cover; }
+.br-equipe.br-equipe--ronds .br-member { border: 0 !important; box-shadow: none !important; background: none !important; }
+/* Titre géant : de l'air sous la phrase, les jambages ne touchent plus le texte. */
+.br-appel--geant h2 { line-height: 1.06 !important; padding-bottom: .08em; margin-bottom: 1.25rem !important; }
+
+/* ----- Téléphone : une photo dès le premier écran. Une bande photo courte passe au-dessus du texte ;
+   le titre et le bouton restent visibles sans défiler. Les versions où le texte est posé sur la photo
+   (bannière, diaporama, agrandi) n'en ont pas besoin. ----- */
+@media (max-width: 781px) {
+	.br-ouverture:is(.br-ouverture--cote, .br-ouverture--arche, .br-ouverture--biais, .br-ouverture--moitie, .br-ouverture--geant, .br-ouverture--tuiles, .br-ouverture--mots) .br-ouv-grille {
+		display: flex !important;
+		flex-direction: column;
+	}
+	.br-ouverture:is(.br-ouverture--cote, .br-ouverture--arche, .br-ouverture--biais, .br-ouverture--moitie, .br-ouverture--geant, .br-ouverture--tuiles, .br-ouverture--mots) .br-ouv-media {
+		order: -1;
+		width: 100% !important;
+		height: 26vh !important;
+		min-height: 11rem;
+		max-height: 13rem;
+		aspect-ratio: auto !important;
+		display: block !important;
+		overflow: hidden;
+		border-radius: var(--wp--custom--rayon--grand);
+		margin: 0 0 1.25rem !important;
+	}
+	.br-ouverture:is(.br-ouverture--cote, .br-ouverture--arche, .br-ouverture--biais, .br-ouverture--moitie, .br-ouverture--geant, .br-ouverture--tuiles, .br-ouverture--mots) .br-ouv-media > .br-ouv-photo:first-of-type {
+		display: block !important;
+		position: static !important;
+		width: 100% !important;
+		height: 100% !important;
+		margin: 0 !important;
+		clip-path: none !important;
+		transform: none !important;
+	}
+	.br-ouverture:is(.br-ouverture--cote, .br-ouverture--arche, .br-ouverture--biais, .br-ouverture--moitie, .br-ouverture--geant, .br-ouverture--tuiles, .br-ouverture--mots) .br-ouv-media > .br-ouv-photo:first-of-type img {
+		width: 100% !important;
+		height: 100% !important;
+		object-fit: cover;
+		border-radius: 0 !important;
+		clip-path: none !important;
+	}
+	.br-ouverture:is(.br-ouverture--cote, .br-ouverture--arche, .br-ouverture--biais, .br-ouverture--moitie, .br-ouverture--geant, .br-ouverture--tuiles, .br-ouverture--mots) .br-ouv-media > :is(.br-ouv-photo:not(:first-of-type), .br-ouv-infos) {
+		display: none !important;
+	}
+}

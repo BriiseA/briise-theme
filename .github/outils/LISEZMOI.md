@@ -15,6 +15,8 @@ Ces scripts fabriquent les fichiers du thème ; ils ne sont pas inclus dans `bri
 | `exemples/build_briise.js` | Fichier du site de l'agence `exemples/site-briise.json` |
 | `parcours.json` | Les cinq parcours de départ (urgence, projet, réservation, conseil, commerce) : question du visiteur, action, ordre de l'accueil, pages |
 | `variantes.json`, `registre-sites.json`, `registre.py` | Catalogue des pièces qui différencient un site, combinaison de chaque site, et contrôle anti-ressemblance (au moins 3 pièces différentes de chaque site, ouverture différente des 2 derniers) |
+| `apercu.js` | Aperçu dans WordPress Playground, sans rien installer : `node apercu.js site-client.json` (le site du client importé) ou `node apercu.js --catalogue` (toutes les sections et leurs versions, choix de l'en-tête, du pied et des fonds). Écrit `build/apercu-….html`, à ouvrir dans un navigateur. `--branche nom` pour essayer une branche |
+| `methode/nouveau-site-briise/SKILL.md` | La méthode de création d'un site client (compétence de Claude), tenue à jour avec le thème. Après une modification, la téléverser dans claude.ai (Réglages > Capacités > Compétences) |
 | `banc/lancer.sh` | Banc d'essai : WordPress neuf, import du site de Lison Vautrin, vérifications, accessibilité, captures. Lancé par GitHub à chaque envoi et avant chaque publication |
 
 Installation : `npm ci` dans ce dossier. Les scripts écrivent leurs fichiers de travail dans `build/` (ignoré par Git) et les fichiers du thème à leur place dans le dépôt.

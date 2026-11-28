@@ -1,0 +1,29 @@
+<style>
+.mode-blanc,.f-blanc{--wp--preset--color--fond:#ffffff;--wp--preset--color--surface:#f2f2f2;--wp--preset--color--nuance:#f2f2f2;--wp--preset--color--clair:#f6f6f6}
+.mode-gris,.f-gris{--wp--preset--color--fond:#ececec;--wp--preset--color--surface:#e0e0e0;--wp--preset--color--nuance:#e0e0e0;--wp--preset--color--clair:#ffffff}
+.mode-noir,.f-noir{--wp--preset--color--fond:#121212;--wp--preset--color--surface:#1d1d1d;--wp--preset--color--nuance:#1d1d1d;--wp--preset--color--clair:#232323;--wp--preset--color--texte:#f2f2f2;--wp--preset--color--texte-doux:#b9b9b9;--wp--preset--color--sombre:#000000}
+body:is(.mode-blanc,.mode-gris,.mode-noir){background:var(--wp--preset--color--fond)!important;color:var(--wp--preset--color--texte)}
+:is(.f-blanc,.f-gris,.f-noir){background-color:var(--wp--preset--color--fond)!important;color:var(--wp--preset--color--texte)!important}
+#br-fonds{position:fixed;left:16px;bottom:16px;z-index:99999;display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px;border-radius:14px;background:#111;color:#fff;font:600 14px/1 system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);max-width:calc(100vw - 32px)}
+#br-fonds span{padding:0 6px}
+#br-fonds button{min-height:40px;padding:0 12px;border-radius:10px;border:1px solid #444;background:#222;color:#fff;font:inherit;cursor:pointer}
+#br-fonds button[aria-pressed=true]{background:#fff;color:#111}
+</style>
+<div id="br-fonds" role="group" aria-label="Fonds de démonstration"><span>Fonds :</span><button type="button" data-m="">D’origine</button><button type="button" data-m="blanc">Blanc</button><button type="button" data-m="gris">Gris</button><button type="button" data-m="noir">Noir</button><button type="button" data-m="alterne">Alterné</button></div>
+<script>
+(function(){
+var cycle=['f-blanc','f-gris','f-noir'];
+function sections(){return Array.prototype.filter.call(document.querySelectorAll('.br-section, .wp-block-cover.alignfull'),function(s){return !s.parentElement.closest('.br-section')&&!s.closest('header,footer');});}
+function appliquer(m){
+ document.body.classList.remove('mode-blanc','mode-gris','mode-noir');
+ sections().forEach(function(s){s.classList.remove.apply(s.classList,cycle);});
+ if(m==='alterne'){var i=0;sections().forEach(function(s){if(s.classList.contains('wp-block-cover'))return;s.classList.add(cycle[i%3]);i++;});}
+ else if(m){document.body.classList.add('mode-'+m);}
+ document.querySelectorAll('#br-fonds button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.m===m?'true':'false');});
+ try{localStorage.setItem('br-fonds',m);}catch(e){}
+}
+document.querySelectorAll('#br-fonds button').forEach(function(b){b.addEventListener('click',function(){appliquer(b.dataset.m);});});
+var m='';try{m=localStorage.getItem('br-fonds')||'';}catch(e){}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){appliquer(m);});}else{appliquer(m);}
+})();
+</script>
