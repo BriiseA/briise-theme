@@ -2913,16 +2913,16 @@ body.br-sur-photo .wp-block-post-content > .br-ouverture--moitie:first-child .br
 .br-question-carte > :last-child { margin-bottom: 0 !important; }
 .br-question-titre { font-size: clamp(1.5rem, 2.6vw, 2rem) !important; }
 .br-question-choix { display: grid; gap: .6rem; }
-.br-choix { margin: 0 !important; }
-.br-choix a { position: relative; display: grid; grid-template-columns: 2.6rem 1fr auto; column-gap: .9rem; align-items: center; min-height: 64px; padding: .75rem 1rem; border-radius: var(--wp--custom--rayon--moyen); border: 1px solid color-mix(in srgb, currentColor 14%, transparent); color: inherit; text-decoration: none; transition: border-color .2s ease, transform .2s ease; }
-.br-choix a::before { content: ""; grid-row: 1 / span 2; width: 2.6rem; height: 2.6rem; border-radius: 50%; background: var(--wp--preset--color--surface); }
-.br-choix a::after { content: "→"; grid-column: 3; grid-row: 1 / span 2; font-size: 1.2rem; color: var(--wp--preset--color--accent); }
-.br-choix a strong { grid-column: 2; font-family: var(--wp--preset--font-family--titres); font-size: 1.1rem; }
-.br-choix a span { grid-column: 2; font-size: .9rem; color: var(--wp--preset--color--texte-doux); }
-.br-choix { position: relative; }
-.br-choix::before { content: ""; position: absolute; left: calc(1rem + .65rem); top: 50%; width: 1.3rem; height: 1.3rem; transform: translateY(-50%); background: var(--wp--preset--color--accent); -webkit-mask: var(--br-ic, var(--br-i-coche)) center / contain no-repeat; mask: var(--br-ic, var(--br-i-coche)) center / contain no-repeat; z-index: 1; pointer-events: none; }
-.br-choix a:hover { border-color: var(--wp--preset--color--accent); transform: translateX(3px); }
-.br-choix a:focus-visible { outline: 3px solid var(--wp--preset--color--accent); outline-offset: 2px; }
+.br-question-option { margin: 0 !important; }
+.br-question-option a { position: relative; display: grid; grid-template-columns: 2.6rem 1fr auto; column-gap: .9rem; align-items: center; min-height: 64px; padding: .75rem 1rem; border-radius: var(--wp--custom--rayon--moyen); border: 1px solid color-mix(in srgb, currentColor 14%, transparent); color: inherit; text-decoration: none; transition: border-color .2s ease, transform .2s ease; }
+.br-question-option a::before { content: ""; grid-row: 1 / span 2; width: 2.6rem; height: 2.6rem; border-radius: 50%; background: var(--wp--preset--color--surface); }
+.br-question-option a::after { content: "→"; grid-column: 3; grid-row: 1 / span 2; font-size: 1.2rem; color: var(--wp--preset--color--accent); }
+.br-question-option a strong { grid-column: 2; font-family: var(--wp--preset--font-family--titres); font-size: 1.1rem; }
+.br-question-option a span { grid-column: 2; font-size: .9rem; color: var(--wp--preset--color--texte-doux); }
+.br-question-option { position: relative; }
+.br-question-option::before { content: ""; position: absolute; left: calc(1rem + .65rem); top: 50%; width: 1.3rem; height: 1.3rem; transform: translateY(-50%); background: var(--wp--preset--color--accent); -webkit-mask: var(--br-ic, var(--br-i-coche)) center / contain no-repeat; mask: var(--br-ic, var(--br-i-coche)) center / contain no-repeat; z-index: 1; pointer-events: none; }
+.br-question-option a:hover { border-color: var(--wp--preset--color--accent); transform: translateX(3px); }
+.br-question-option a:focus-visible { outline: 3px solid var(--wp--preset--color--accent); outline-offset: 2px; }
 .br-raccourcis { position: absolute; right: 1.25rem; bottom: 1.25rem; z-index: 2; max-width: calc(100% - 2.5rem); }
 .br-raccourcis ul { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; list-style: none; padding: 0; margin: 0; }
 .br-raccourcis a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.1rem; border-radius: 999px; background: color-mix(in srgb, var(--wp--preset--color--sombre) 45%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, .3); color: #fff; text-decoration: none; font-weight: 600; font-size: .92rem; }

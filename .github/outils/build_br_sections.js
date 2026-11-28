@@ -1138,7 +1138,7 @@ add('clients-noms', 'confiance', 'Ils nous font confiance (noms)', 'Les noms de 
     List(['Nom du premier client', 'Nom du deuxième client', 'Nom du troisième client', 'Nom du quatrième client', 'Nom du cinquième client', 'Nom du sixième client'], 'br-noms-liste'),
   ]));
 
-const choix = (ic, t, d, url) => P(`<a href="${url}"><strong>${fr(t)}</strong><span>${fr(d)}</span></a>`, 'br-choix br-ic-' + ic);
+const choix = (ic, t, d, url) => P(`<a href="${url}"><strong>${fr(t)}</strong><span>${fr(d)}</span></a>`, 'br-question-option br-ic-' + ic);
 add('ouverture-question', 'ouverture', 'Ouverture : une question pour commencer', 'Le haut de l’accueil avec, à la place de la photo, une carte qui pose une seule question et propose deux ou trois gros choix. Chaque choix mène à la bonne page ou au formulaire. Le mot qui change dans le titre se règle avec le bouton « Mots qui changent » de la barre d’outils (mots séparés par « / »).',
   Section('br-hero br-ouv-question', [Cols([
     Col([

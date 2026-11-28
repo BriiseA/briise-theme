@@ -49,16 +49,16 @@ $briise = briise_theme_entreprise();
 <!-- /wp:heading -->
 
 <!-- wp:group {"className":"br-question-choix","layout":{"type":"default"}} -->
-<div class="wp-block-group br-question-choix"><!-- wp:paragraph {"className":"br-choix br-ic-maison"} -->
-<p class="br-choix br-ic-maison"><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>"><strong>Je découvre</strong><span>Je veux comprendre et être conseillé</span></a></p>
+<div class="wp-block-group br-question-choix"><!-- wp:paragraph {"className":"br-question-option br-ic-maison"} -->
+<p class="br-question-option br-ic-maison"><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>"><strong>Je découvre</strong><span>Je veux comprendre et être conseillé</span></a></p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph {"className":"br-choix br-ic-horloge"} -->
-<p class="br-choix br-ic-horloge"><a href="<?php echo esc_url( $briise['cta_url'] ); ?>"><strong>C’est pressé</strong><span>Je veux un rendez-vous rapidement</span></a></p>
+<!-- wp:paragraph {"className":"br-question-option br-ic-horloge"} -->
+<p class="br-question-option br-ic-horloge"><a href="<?php echo esc_url( $briise['cta_url'] ); ?>"><strong>C’est pressé</strong><span>Je veux un rendez-vous rapidement</span></a></p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph {"className":"br-choix br-ic-loupe"} -->
-<p class="br-choix br-ic-loupe"><a href="<?php echo esc_url( home_url( '/tarifs/' ) ); ?>"><strong>Je compare</strong><span>Je veux voir les prix et les formules</span></a></p>
+<!-- wp:paragraph {"className":"br-question-option br-ic-loupe"} -->
+<p class="br-question-option br-ic-loupe"><a href="<?php echo esc_url( home_url( '/tarifs/' ) ); ?>"><strong>Je compare</strong><span>Je veux voir les prix et les formules</span></a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
