@@ -27,7 +27,7 @@ $briise = briise_theme_entreprise();
 <div class="wp-block-group br-chiffres-corps"><!-- wp:group {"className":"br-chiffres-liste","layout":{"type":"default"}} -->
 <div class="wp-block-group br-chiffres-liste"><!-- wp:group {"className":"br-chiffre","layout":{"type":"default"}} -->
 <div class="wp-block-group br-chiffre"><!-- wp:paragraph {"className":"br-stat"} -->
-<p class="br-stat">15 ans</p>
+<p class="br-stat">[00] ans</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-muted"} -->
@@ -37,7 +37,7 @@ $briise = briise_theme_entreprise();
 
 <!-- wp:group {"className":"br-chiffre","layout":{"type":"default"}} -->
 <div class="wp-block-group br-chiffre"><!-- wp:paragraph {"className":"br-stat"} -->
-<p class="br-stat">400</p>
+<p class="br-stat">[000]</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-muted"} -->
@@ -47,17 +47,17 @@ $briise = briise_theme_entreprise();
 
 <!-- wp:group {"className":"br-chiffre","layout":{"type":"default"}} -->
 <div class="wp-block-group br-chiffre"><!-- wp:paragraph {"className":"br-stat"} -->
-<p class="br-stat">48 h</p>
+<p class="br-stat">[00] h</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-muted"} -->
-<p class="br-muted">pour recevoir votre devis</p>
+<p class="br-muted">pour vous répondre</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
 <!-- wp:group {"className":"br-chiffre","layout":{"type":"default"}} -->
 <div class="wp-block-group br-chiffre"><!-- wp:paragraph {"className":"br-stat"} -->
-<p class="br-stat">4,9/5</p>
+<p class="br-stat">[note]/5</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-muted"} -->

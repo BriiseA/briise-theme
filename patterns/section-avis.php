@@ -22,7 +22,7 @@ $briise = briise_theme_entreprise();
 <!-- wp:group {"className":"br-temoignages-corps","layout":{"type":"default"}} -->
 <div class="wp-block-group br-temoignages-corps"><!-- wp:group {"className":"br-temoignages-note","layout":{"type":"default"}} -->
 <div class="wp-block-group br-temoignages-note"><!-- wp:paragraph {"className":"br-note"} -->
-<p class="br-note"><strong class="br-note-chiffre">4,9</strong> <span class="br-note-detail"><span class="br-etoiles" aria-hidden="true">★★★★★</span><span>sur 5, 62 avis Google</span></span></p>
+<p class="br-note"><strong class="br-note-chiffre">[note]</strong> <span class="br-note-detail"><span class="br-etoiles" aria-hidden="true">★★★★★</span><span>sur 5, [nombre] avis Google</span></span></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -70,7 +70,7 @@ $briise = briise_theme_entreprise();
 
 <!-- wp:quote {"className":"br-temoin-citation"} -->
 <blockquote class="wp-block-quote br-temoin-citation"><!-- wp:paragraph -->
-<p>Un avis qui parle du prix ou du devis : c’est la crainte numéro un.</p>
+<p>Un avis qui parle du prix ou de la clarté de l’offre : c’est la crainte numéro un.</p>
 <!-- /wp:paragraph --><cite><strong>Prénom N.</strong><br>Prestation, ville</cite></blockquote>
 <!-- /wp:quote --></div>
 <!-- /wp:group -->

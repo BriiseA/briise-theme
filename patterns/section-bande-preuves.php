@@ -11,19 +11,19 @@ $briise = briise_theme_entreprise();
 <!-- wp:group {"backgroundColor":"nuance","align":"full","className":"br-defile br-defile\u002d\u002dpreuves","layout":{"type":"default"}} -->
 <div class="wp-block-group alignfull br-defile br-defile--preuves has-nuance-background-color has-background"><!-- wp:group {"className":"br-defile-piste","layout":{"type":"flex","flexWrap":"wrap"}} -->
 <div class="wp-block-group br-defile-piste"><!-- wp:paragraph {"className":"br-defile-item"} -->
-<p class="br-defile-item">Devis gratuit sous 48 h</p>
+<p class="br-defile-item">Réponse sous [délai]</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-defile-item"} -->
-<p class="br-defile-item">Prix annoncé avant de commencer</p>
+<p class="br-defile-item">Prix annoncés à l’avance</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-defile-item"} -->
-<p class="br-defile-item">Garantie décennale</p>
+<p class="br-defile-item">[Votre label ou diplôme]</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-defile-item"} -->
-<p class="br-defile-item">Atelier à [ville]</p>
+<p class="br-defile-item">Installé à [ville]</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-defile-item"} -->
@@ -31,11 +31,11 @@ $briise = briise_theme_entreprise();
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-defile-item"} -->
-<p class="br-defile-item">4,9/5 sur Google</p>
+<p class="br-defile-item">[note]/5 sur Google</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-defile-item"} -->
-<p class="br-defile-item">Une seule équipe, de la visite à la pose</p>
+<p class="br-defile-item">Un seul interlocuteur, du début à la fin</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group --></div>
 <!-- /wp:group -->

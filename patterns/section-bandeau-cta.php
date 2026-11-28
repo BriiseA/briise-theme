@@ -1,21 +1,21 @@
 <?php
 /**
- * Title: Contact : Bandeau d’appel à l’action
+ * Title: Contact : Appel à l’action (4 versions)
  * Slug: briise/bandeau-cta
  * Categories: briise-contact
- * Description: Fin de page : une dernière invitation à passer à l’action.
+ * Description: Fin de page : une dernière invitation à passer à l’action. Forme au choix dans le panneau « Version » : bandeau, carte posée sur la page, bande fine, titre géant.
  * Viewport Width: 1400
  */
 $briise = briise_theme_entreprise();
 ?>
-<!-- wp:group {"backgroundColor":"secondaire","textColor":"fond","align":"full","className":"br-section br-cta","layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull br-section br-cta has-fond-color has-secondaire-background-color has-text-color has-background"><!-- wp:group {"className":"br-cta-inner","layout":{"type":"default"}} -->
+<!-- wp:group {"backgroundColor":"secondaire","textColor":"fond","align":"full","className":"br-section br-cta br-appel br-appel\u002d\u002dbandeau","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull br-section br-cta br-appel br-appel--bandeau has-fond-color has-secondaire-background-color has-text-color has-background"><!-- wp:group {"className":"br-cta-inner","layout":{"type":"default"}} -->
 <div class="wp-block-group br-cta-inner"><!-- wp:heading -->
 <h2 class="wp-block-heading">Une question, un projet ?</h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"className":"br-lead"} -->
-<p class="br-lead">Une phrase qui lève le dernier frein : devis gratuit, réponse rapide, premier échange sans engagement.</p>
+<p class="br-lead">Une phrase qui lève le dernier frein : réponse rapide, premier échange sans engagement, prix annoncé à l’avance.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:buttons -->

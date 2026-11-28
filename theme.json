@@ -19,52 +19,52 @@
 				{
 					"slug": "fond",
 					"name": "Fond",
-					"color": "#f4ede3"
+					"color": "#ffffff"
 				},
 				{
 					"slug": "clair",
 					"name": "Fond clair (cartes)",
-					"color": "#fffcf7"
+					"color": "#f5f5f5"
 				},
 				{
 					"slug": "surface",
 					"name": "Surface",
-					"color": "#e3d2bd"
+					"color": "#f0f0f0"
 				},
 				{
 					"slug": "nuance",
 					"name": "Nuance",
-					"color": "#dfe2cd"
+					"color": "#e6e6e6"
 				},
 				{
 					"slug": "texte",
 					"name": "Texte",
-					"color": "#262220"
+					"color": "#141414"
 				},
 				{
 					"slug": "texte-doux",
 					"name": "Texte secondaire",
-					"color": "#5c5249"
+					"color": "#555555"
 				},
 				{
 					"slug": "accent",
 					"name": "Accent",
-					"color": "#93411e"
+					"color": "#141414"
 				},
 				{
 					"slug": "secondaire",
 					"name": "Secondaire",
-					"color": "#4b5434"
+					"color": "#1f1f1f"
 				},
 				{
 					"slug": "deco",
 					"name": "Décor (formes, jamais du texte)",
-					"color": "#b8562a"
+					"color": "#cfcfcf"
 				},
 				{
 					"slug": "sombre",
 					"name": "Fond sombre",
-					"color": "#262220"
+					"color": "#111111"
 				}
 			]
 		},

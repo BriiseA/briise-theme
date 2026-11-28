@@ -41,11 +41,11 @@ $briise = briise_theme_entreprise();
 
 <!-- wp:group {"className":"br-comparaison-ligne","layout":{"type":"default"}} -->
 <div class="wp-block-group br-comparaison-ligne"><!-- wp:paragraph {"className":"br-comparaison-autres"} -->
-<p class="br-comparaison-autres">Un devis vague, des suppléments à la fin</p>
+<p class="br-comparaison-autres">Un prix flou, des suppléments à la fin</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-comparaison-nous"} -->
-<p class="br-comparaison-nous">Un prix détaillé, tenu jusqu’au bout</p>
+<p class="br-comparaison-nous">Un prix annoncé, tenu jusqu’au bout</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -55,27 +55,27 @@ $briise = briise_theme_entreprise();
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-comparaison-nous"} -->
-<p class="br-comparaison-nous">Une réponse sous 48 h, un interlocuteur unique</p>
+<p class="br-comparaison-nous">Une réponse sous [délai], un interlocuteur unique</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
 <!-- wp:group {"className":"br-comparaison-ligne","layout":{"type":"default"}} -->
 <div class="wp-block-group br-comparaison-ligne"><!-- wp:paragraph {"className":"br-comparaison-autres"} -->
-<p class="br-comparaison-autres">Un chantier laissé en l’état</p>
+<p class="br-comparaison-autres">On vous presse de décider</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-comparaison-nous"} -->
-<p class="br-comparaison-nous">Un chantier propre, chaque soir</p>
+<p class="br-comparaison-nous">Le temps de réfléchir, sans relance insistante</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
 <!-- wp:group {"className":"br-comparaison-ligne","layout":{"type":"default"}} -->
 <div class="wp-block-group br-comparaison-ligne"><!-- wp:paragraph {"className":"br-comparaison-autres"} -->
-<p class="br-comparaison-autres">Personne quand il y a un souci</p>
+<p class="br-comparaison-autres">Plus personne une fois payé</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-comparaison-nous"} -->
-<p class="br-comparaison-nous">Une garantie écrite, et on revient</p>
+<p class="br-comparaison-nous">Joignable après la prestation, si besoin</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group --></div>
 <!-- /wp:group --></div>

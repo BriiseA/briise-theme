@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: Offre : Services (7 versions)
+ * Title: Offre : Services (9 versions)
  * Slug: briise/services
  * Categories: briise-offre
  * Description: Vos services, chacun avec sa photo, son nom, deux phrases et le lien vers sa page. Choisissez la forme dans le panneau « Version » de la section : grille, grille asymétrique, liste en deux colonnes, service phare, défilement, onglets ou volets ; et la place du titre dans le panneau « Titre ». Le texte et les photos restent en place quand vous changez de version. Retirez ou dupliquez un service : chaque version s’adapte de 3 à 6 services.

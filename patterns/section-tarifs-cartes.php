@@ -1,15 +1,15 @@
 <?php
 /**
- * Title: Offre : Grille de tarifs en cartes
+ * Title: Offre : Formules et tarifs (4 versions)
  * Slug: briise/tarifs-cartes
  * Categories: briise-offre
- * Description: Deux à quatre formules avec leur prix ; celle du milieu est mise en avant.
+ * Description: Deux à quatre formules avec leur prix. Forme au choix dans le panneau « Version » : cartes (celle du milieu en avant), vedette sombre, menu (nom, pointillés, prix), bandes horizontales, cartes sobres sans mise en avant. Seulement des prix réels.
  * Viewport Width: 1400
  */
 $briise = briise_theme_entreprise();
 ?>
-<!-- wp:group {"backgroundColor":"nuance","align":"full","className":"br-section","layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull br-section has-nuance-background-color has-background"><!-- wp:group {"className":"br-head","layout":{"type":"default"}} -->
+<!-- wp:group {"backgroundColor":"nuance","align":"full","className":"br-section br-formules br-formules\u002d\u002dcartes","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull br-section br-formules br-formules--cartes has-nuance-background-color has-background"><!-- wp:group {"className":"br-head","layout":{"type":"default"}} -->
 <div class="wp-block-group br-head"><!-- wp:paragraph {"className":"br-label"} -->
 <p class="br-label">Tarifs</p>
 <!-- /wp:paragraph -->
@@ -23,11 +23,11 @@ $briise = briise_theme_entreprise();
 <div class="wp-block-columns br-prices"><!-- wp:column -->
 <div class="wp-block-column"><!-- wp:group {"className":"br-card br-price","layout":{"type":"default"}} -->
 <div class="wp-block-group br-card br-price"><!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">Découverte</h3>
+<h3 class="wp-block-heading">Première formule</h3>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"className":"br-stat"} -->
-<p class="br-stat">40 €</p>
+<p class="br-stat">[prix] €</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-muted"} -->
@@ -63,11 +63,11 @@ $briise = briise_theme_entreprise();
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">Régulière</h3>
+<h3 class="wp-block-heading">Formule la plus choisie</h3>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"className":"br-stat"} -->
-<p class="br-stat">90 €</p>
+<p class="br-stat">[prix] €</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-muted"} -->
@@ -99,11 +99,11 @@ $briise = briise_theme_entreprise();
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:group {"className":"br-card br-price","layout":{"type":"default"}} -->
 <div class="wp-block-group br-card br-price"><!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">Intensive</h3>
+<h3 class="wp-block-heading">Formule complète</h3>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"className":"br-stat"} -->
-<p class="br-stat">160 €</p>
+<p class="br-stat">[prix] €</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-muted"} -->

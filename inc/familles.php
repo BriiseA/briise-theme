@@ -58,7 +58,7 @@ add_action( 'enqueue_block_editor_assets', function () {
 	wp_enqueue_script(
 		'briise-familles-editeur',
 		get_theme_file_uri( 'assets/js/familles-editeur.js' ),
-		array( 'wp-hooks', 'wp-compose', 'wp-element', 'wp-data', 'wp-block-editor', 'wp-components' ),
+		array( 'wp-hooks', 'wp-compose', 'wp-element', 'wp-data', 'wp-block-editor', 'wp-components', 'wp-rich-text' ),
 		wp_get_theme()->get( 'Version' ),
 		true
 	);
@@ -81,6 +81,13 @@ add_shortcode( 'briise_infos_ouverture', function () {
 	if ( $dispo ) {
 		$lignes[] = '<li><span>' . esc_html( $dispo[0] ) . ' : <strong>' . esc_html( $dispo[1] ) . '</strong></span></li>';
 	}
+	// Note Google : seulement si elle est renseignée dans Mon entreprise (vraie note, jamais inventée).
+	$r     = function_exists( 'briise_reglage' ) ? (array) briise_reglage( 'briise_entreprise' ) : array();
+	if ( ! empty( $r['avis_note'] ) ) {
+		$n        = (int) ( $r['avis_nombre'] ?? 0 );
+		$texte    = '<span>★ <strong>' . esc_html( $r['avis_note'] ) . '/5</strong>' . ( $n ? esc_html( ' · ' . $n . ' avis Google' ) : ' sur Google' ) . '</span>';
+		$lignes[] = '<li class="br-infos-avis">' . ( ! empty( $r['google'] ) ? '<a href="' . esc_url( $r['google'] ) . '">' . $texte . '</a>' : $texte ) . '</li>';
+	}
 	$e     = function_exists( 'briise_theme_entreprise' ) ? briise_theme_entreprise() : array();
 	$ville = trim( (string) ( $e['city'] ?? '' ) );
 	if ( '' !== $ville ) {
@@ -89,4 +96,20 @@ add_shortcode( 'briise_infos_ouverture', function () {
 	// Seule la ligne « ouvert aujourd'hui » : la carte se cache si le navigateur ne peut rien en dire.
 	$seule = ( 1 === count( $lignes ) && $json ) ? ' br-ouv-infos--jour-seul' : '';
 	return $lignes ? '<ul class="br-ouv-infos' . $seule . '">' . implode( '', $lignes ) . '</ul>' : '';
+} );
+
+/**
+ * Raccourcis d'une ouverture : des pastilles vers les pages de service (au plus cinq).
+ * Rien sans pages de service.
+ */
+add_shortcode( 'briise_raccourcis', function () {
+	$s = function_exists( 'briise_theme_pages_services' ) ? briise_theme_pages_services() : array();
+	if ( empty( $s['pages'] ) ) {
+		return '';
+	}
+	$h = '<nav class="br-raccourcis" aria-label="' . esc_attr( $s['titre'] ?? 'Nos services' ) . '"><ul>';
+	foreach ( array_slice( $s['pages'], 0, 5 ) as $id ) {
+		$h .= '<li><a href="' . esc_url( get_permalink( $id ) ) . '">' . esc_html( get_the_title( $id ) ) . '</a></li>';
+	}
+	return $h . '</ul></nav>';
 } );

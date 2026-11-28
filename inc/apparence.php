@@ -23,6 +23,8 @@ function briise_apparence_choix() {
 			'encadre'     => array( 'Encadré', 'Toute la page dans un cadre arrondi, menu classique.' ),
 			'bandeau'     => array( 'Bandeau', 'Bande teintée pleine largeur, liens en petites capitales espacées.' ),
 			'barre-infos' => array( 'Barre d’infos', 'Au-dessus du menu : ouvert ou fermé aujourd’hui, disponibilité, zone et téléphone. Pour le dépannage et les commerces.' ),
+			'menu-plein'  => array( 'Menu plein écran', 'Logo à gauche, bouton « Menu » et action à droite ; le menu s’ouvre sur tout l’écran. Épuré, pour les sites qui misent sur l’image.' ),
+			'deux-etages' => array( 'Deux étages', 'Le logo centré en haut, le menu centré dessous entre deux filets. Pour un logo large ou un nom à mettre en avant.' ),
 		),
 		'pied'   => array(
 			'colonnes'    => array( 'Colonnes', 'Services, contact, horaires en colonnes (pied d’origine).' ),
@@ -31,6 +33,8 @@ function briise_apparence_choix() {
 			'grand-appel' => array( 'Grand appel', 'Le téléphone en très grand, le bouton et l’itinéraire.' ),
 			'carte'       => array( 'Plan et horaires', 'Une image du plan (photo « plan » dans la Médiathèque), les horaires et les coordonnées.' ),
 			'compact'     => array( 'Compact', 'Une seule bande : nom, liens, téléphone.' ),
+			'centre'      => array( 'Centré', 'Tout au centre sur fond sombre : le nom, les pages de service, le téléphone et le bouton.' ),
+			'clair'       => array( 'Clair', 'Sur la couleur de surface, sans bloc sombre : nom et action en haut, puis services, contact et horaires.' ),
 		),
 		'mobile' => array(
 			'bouton' => array( 'Bouton fixe', 'Appeler et l’action principale, en bas de l’écran du téléphone.' ),

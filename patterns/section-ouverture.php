@@ -35,7 +35,7 @@ $briise = briise_theme_entreprise();
 
 <!-- wp:list {"className":"br-coches"} -->
 <ul class="wp-block-list br-coches"><!-- wp:list-item -->
-<li>Devis gratuit</li>
+<li>Votre premier atout</li>
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->
@@ -43,7 +43,7 @@ $briise = briise_theme_entreprise();
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->
-<li>Votre garantie</li>
+<li>Votre engagement</li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list --></div>
 <!-- /wp:group -->

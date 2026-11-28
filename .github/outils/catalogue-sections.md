@@ -6,7 +6,7 @@ Toutes les sections servent à tous les métiers. Pour composer un site : partir
 
 Colonne « Besoins » : ce qu’il faut avoir avant de choisir la section. Une section sans son contenu réel ne doit pas être publiée.
 
-## Ouverture (haut de l’accueil ou d’une page) (13)
+## Ouverture (haut de l’accueil ou d’une page) (15)
 
 | Section | Titre | À quoi elle sert | Besoins | Dans le navigateur |
 | --- | --- | --- | --- | --- |
@@ -23,11 +23,15 @@ Colonne « Besoins » : ce qu’il faut avoir avant de choisir la section. Une s
 | `ouverture-deux-portes` | Deux portes : urgent ou projet | Quand les visiteurs arrivent avec deux besoins très différents, une urgence ou un projet : dès l’arrivée, deux chemins. « C’est urgent » : l’appel en grand, les pannes courantes qui mènent à leur page, le geste à faire en attendant. « J’ai un projet » : une photo et la demande de devis. Le téléphone vient de Mon entreprise. | 1 photo, pages de service | — |
 | `ouverture-eventail` | Ouverture : titre centré et photos en éventail | Quand les photos sont le meilleur argument : un grand titre centré, puis cinq photos disposées en arc. Élégante sur ordinateur ; sur mobile, trois photos restent visibles. | 5 photos | — |
 | `ouverture-mosaique` | Accueil en mosaïque de réalisations | La preuve dès l’arrivée : le titre et les boutons à gauche, trois réalisations récentes à droite, chacune avec son ouvrage et sa commune. Chaque photo mène aux réalisations. | 3 photos | — |
+| `ouverture-question` | Ouverture : une question pour commencer | Le haut de l’accueil avec, à la place de la photo, une carte qui pose une seule question et propose deux ou trois gros choix. Chaque choix mène à la bonne page ou au formulaire. Le mot qui change dans le titre se règle avec le bouton « Mots qui changent » de la barre d’outils (mots séparés par « / »). | — | — |
+| `ouverture-raccourcis` | Ouverture avec raccourcis vers les services | La même ouverture, avec en bas de la photo des pastilles qui mènent à vos pages de service (elles viennent de vos pages ; rien ne s’affiche sans elles). La carte d’infos peut montrer votre note Google si vous la renseignez dans Mon entreprise. | 4 photos | — |
 
-## Offre et tarifs (15)
+## Offre et tarifs (17)
 
 | Section | Titre | À quoi elle sert | Besoins | Dans le navigateur |
 | --- | --- | --- | --- | --- |
+| `abonnements` | Abonnements (mensuel ou annuel) | Pour les abonnements (cours, coaching, entretien, adhésion) : chaque formule a un prix au mois et un prix à l’année, et un sélecteur « Au mois / À l’année » en haut. Sans script, les deux prix restent affichés. Mêmes versions que « Formules et tarifs ». Seulement des prix réels. | prix réels, chiffres vérifiables | — |
+| `aides` | Aides et financement | Les aides, remboursements ou modes de paiement qui baissent le prix pour le client : aide publique, prise en charge (mutuelle, CPF, CESU…), paiement en plusieurs fois. Chaque carte renvoie au site officiel. Les montants changent souvent : vérifiez-les avant de publier, et datez-les. | — | — |
 | `benefices-photos` | Ce que ça change, en photos | Pages de service : trois bénéfices concrets pour le client, chacun avec sa photo. Ce qu’il y gagne, pas une liste de caractéristiques. | 3 photos | — |
 | `carte-cadeau` | Carte cadeau | Offrir une prestation : un visuel de carte cadeau (photo, nom, montant) et le mode d’emploi en une phrase. | 1 photo, prix réels | — |
 | `ce-que-vous-recevez` | Ce que vous recevez | Montrer concrètement le résultat livré : une galerie en ligne, un dossier, un carnet d’entretien… dessiné sur un téléphone, avec trois éléments compris. | 4 photos | — |
@@ -37,14 +41,14 @@ Colonne « Besoins » : ce qu’il faut avoir avant de choisir la section. Une s
 | `modeles-cartes` | Quel modèle choisir, en cartes | Une carte par modèle ou par option, avec sa photo, sa place, son prix, pour qui il est fait et ses limites. Lisible sur mobile, plus parlant qu’un tableau. | 3 photos, prix réels | — |
 | `prix-compris` | Prix et ce qu’il comprend | Les prix, puis deux listes courtes : ce qui est compris, ce qui ne l’est pas. Elles répondent à la peur numéro un du prospect, les mauvaises surprises sur le devis. | prix réels | — |
 | `service-alterne` | Service détaillé, image et texte alternés | Pages de service : chaque service avec sa photo, en alternance gauche et droite. | 2 photos | — |
-| `services` | Services (7 versions) | Vos services, chacun avec sa photo, son nom, deux phrases et le lien vers sa page. Choisissez la forme dans le panneau « Version » de la section : grille, grille asymétrique, liste en deux colonnes, service phare, défilement, onglets ou volets ; et la place du titre dans le panneau « Titre ». Le texte et les photos restent en place quand vous changez de version. Retirez ou dupliquez un service : chaque version s’adapte de 3 à 6 services. | 4 photos, pages de service | — |
+| `services` | Services (9 versions) | Vos services, chacun avec sa photo, son nom, deux phrases et le lien vers sa page. Choisissez la forme dans le panneau « Version » de la section : grille, grille asymétrique, liste en deux colonnes, service phare, défilement, onglets ou volets ; et la place du titre dans le panneau « Titre ». Le texte et les photos restent en place quand vous changez de version. Retirez ou dupliquez un service : chaque version s’adapte de 3 à 6 services. | 4 photos, pages de service | — |
 | `tableau-comparatif` | Tableau comparatif | Aider à choisir entre deux ou trois formules. | prix réels | — |
-| `tarifs-cartes` | Grille de tarifs en cartes | Deux à quatre formules avec leur prix ; celle du milieu est mise en avant. | prix réels, chiffres vérifiables | — |
+| `tarifs-cartes` | Formules et tarifs (4 versions) | Deux à quatre formules avec leur prix. Forme au choix dans le panneau « Version » : cartes (celle du milieu en avant), vedette sombre, menu (nom, pointillés, prix), bandes horizontales, cartes sobres sans mise en avant. Seulement des prix réels. | prix réels, chiffres vérifiables | — |
 | `tarifs-liste` | Tarifs en liste, avec photos | Toutes les prestations sur une liste : vignette, nom, ce qui est compris en quelques mots, prix. Chaque ligne mène à la page de la prestation. | 3 photos, prix réels | — |
 | `tarifs-tableau` | Tableau de tarifs simple | Pour une liste de prestations nombreuses : une ligne par prestation. | prix réels | — |
 | `temps-prix` | Pourquoi ce prix : le temps passé | Justifier un prix par le travail qu’il représente : chaque étape et sa durée (« 30 min », « 2 h 30 »). Une barre colorée est dessinée à partir des durées. | — | — |
 
-## Confiance et preuves (17)
+## Confiance et preuves (18)
 
 | Section | Titre | À quoi elle sert | Besoins | Dans le navigateur |
 | --- | --- | --- | --- | --- |
@@ -53,6 +57,7 @@ Colonne « Besoins » : ce qu’il faut avoir avant de choisir la section. Une s
 | `bande-confiance` | Engagements (3 versions) | Quatre engagements réels, chacun avec son icône, son titre et une précision. Choisissez la forme dans le panneau « Version » : carte qui chevauche l’ouverture (juste dessous), bande foncée pleine largeur, ou pastilles (par exemple juste avant un formulaire). L’icône se change dans Avancé > Classes CSS : is-icone-garantie, is-icone-plan, is-icone-atelier, is-icone-avis, is-icone-delai, is-icone-prix, is-icone-local, is-icone-devis, is-icone-equipe. | — | — |
 | `bande-preuves` | Bande de preuves qui défile | Juste sous l’ouverture : vos garanties et vos faits courts, sur une bande qui défile doucement. De 5 à 8 faits vrais, de deux à cinq mots chacun. Le défilement s’arrête au survol, au clavier ou avec le bouton pause. | — | défile (pause, immobile si moins d’animations) ; sans script : bande fixe |
 | `chiffres` | Chiffres (5 versions) | Trois ou quatre preuves chiffrées et une photo. Choisissez la forme dans le panneau « Version » : en ligne, en cartes, en tuiles avec la photo, sur une bande foncée, ou posés sur la photo. Les chiffres comptent jusqu’à leur valeur quand la section apparaît (une valeur purement numérique, avec au plus une unité courte). Uniquement des chiffres vrais et vérifiables. | 1 photo, chiffres vérifiables | — |
+| `clients-noms` | Ils nous font confiance (noms) | Les noms de vos clients ou partenaires, en texte, quand vous ne pouvez pas afficher leurs logos. Seulement avec leur accord. | — | — |
 | `comparaison` | Ce que vous évitez avec nous (2 versions) | Ce qui agace le plus les clients dans votre métier, et ce que vous faites autrement, ligne par ligne, avec une photo. Choisissez la forme dans le panneau « Version » : deux colonnes ou lignes face à face. Des pratiques que vous tenez vraiment ; ne nommez ni ne visez jamais un concurrent. | 1 photo | — |
 | `documents-garanties` | Garanties et documents à télécharger | Vos attestations en PDF : assurance décennale, qualification, Kbis. Remplacez chaque fichier (bouton « Remplacer » du bloc) et mettez la date à jour chaque année. Une attestation périmée fait plus de tort que pas d’attestation. | documents PDF à jour | — |
 | `galerie` | Galerie (5 versions) | Six photos de votre travail, de votre lieu ou de votre équipe ; chacune s’agrandit en plein écran au clic ou au clavier. Choisissez la forme dans le panneau « Version » : mosaïque, grille régulière, bande qui défile, photos posées en vrac ou une en grand. Le texte alternatif de chaque photo décrit vraiment ce qu’elle montre. | 6 photos | agrandissement au clic (WordPress) ; sans script : photos simples |
@@ -66,27 +71,31 @@ Colonne « Besoins » : ce qu’il faut avoir avant de choisir la section. Une s
 | `realisations-service` | Réalisations de ce service (automatique, 4 versions) | Page de service : les réalisations rattachées à ce service. Forme au choix dans le panneau « Version » : grille, liste, une en grand, défilement. Disparaît tant qu’il n’y en a aucune. | fiches Réalisations publiées | — |
 | `realisations-toutes` | Toutes les réalisations, avec filtres (automatique) | Page des réalisations : toutes les fiches publiées, avec des boutons pour filtrer par catégorie. Se met à jour seule. | fiches Réalisations publiées | — |
 
-## Parcours et questions (9)
+## Parcours et questions (10)
 
 | Section | Titre | À quoi elle sert | Besoins | Dans le navigateur |
 | --- | --- | --- | --- | --- |
-| `etapes` | Étapes en frise | Rassurer sur le déroulé : du premier contact au résultat. Une frise numérotée qui se remplit au défilement, avec la durée de chaque étape. Idéale sur l’accueil. | — | — |
+| `etapes` | Étapes (4 versions) | Rassurer sur le déroulé : du premier contact au résultat, avec la durée de chaque étape. Forme au choix dans le panneau « Version » : frise qui se remplit au défilement, fil vertical, cartes numérotées, zigzag de part et d’autre d’une ligne, cartes empilées au défilement. | — | — |
 | `etapes-images` | Étapes en photos, numérotées | Comment ça se passe, en trois à cinq photos : le numéro de l’étape est posé sur la photo, le moment (« Le jour J », « Sous 3 semaines ») dans une pastille. Quand chaque étape se montre mieux qu’elle ne se raconte. | 4 photos | — |
 | `etapes-photos` | Déroulé et prix, en photos | Comment ça se passe, de la visite à la fin du chantier, chaque étape avec sa photo, puis le prix et ce qui le fait varier. | 3 photos, prix réels | — |
 | `etapes-prix` | Déroulé et prix, côte à côte | Pages de service : les étapes sur un fil qui se remplit au défilement, et le prix dans la colonne qui reste à l’écran. Le visiteur lit le déroulé et voit le prix en même temps. | prix réels | — |
-| `faq` | FAQ en accordéon | Lever les freins avant le contact. Sur la page choisie comme FAQ, les questions sont transmises à Google. | — | — |
+| `faq` | Questions fréquentes (4 versions) | Lever les freins avant le contact. Sur la page choisie comme FAQ, les questions sont transmises à Google. Forme au choix dans le panneau « Version » : titre à côté, centrée, sur deux colonnes, toutes les réponses ouvertes en cartes. | — | — |
 | `faq-recherche` | FAQ avec recherche et thèmes | Page FAQ ou longue liste de questions : un champ « Chercher une question » et un bouton par thème (vos intertitres) s’ajoutent seuls au-dessus. Rangez les questions sous des intertitres de niveau 3. Sur la page choisie comme FAQ, les questions sont transmises à Google. | — | recherche et thèmes ; sans script : FAQ complète |
 | `horaires` | Horaires et planning | Horaires d’ouverture tirés de « Mon entreprise », et un planning de rendez-vous ou de cours. Le jour en cours est surligné. | horaires (Mon entreprise) | — |
 | `orientation` | Orientation : la bonne page en une phrase | Accueil d’une offre large : « Je cherche [choix] pour [choix] », et le bouton mène à la page qui répond. Chaque ligne de la liste est une réponse possible, écrite « premier choix | second choix », avec le lien vers sa page. Une seule partie par ligne donne un seul menu. Ajoutez une troisième partie pour nommer la page sur le bouton. | pages de service | menus « Je cherche … pour … » ; sans script : liste de liens |
-| `ou-en-etes-vous` | Où en êtes-vous ? | Quand les visiteurs arrivent dans des situations différentes : quatre cartes qui partent de leur situation, dite comme ils la diraient, avec la réponse, le prix et la page qui y répond. Tout est visible sans clic. Icône au choix par la classe du bloc : br-ic-maison, fleches, loupe, horloge, euro, bouclier, coeur, appareil. Seulement un prix réel, ou « Sur devis ». | — | — |
+| `ou-en-etes-vous` | Où en êtes-vous ? (6 versions) | Forme au choix dans le panneau « Version » : cartes, lignes, conversation, avec photo, frise (quand les situations se suivent dans le temps), profils avec photo. Quand les visiteurs arrivent dans des situations différentes : quatre cartes qui partent de leur situation, dite comme ils la diraient, avec la réponse, le prix et la page qui y répond. Tout est visible sans clic. Icône au choix par la classe du bloc : br-ic-maison, fleches, loupe, horloge, euro, bouclier, coeur, appareil. Seulement un prix réel, ou « Sur devis ». | 5 photos | — |
+| `pour-vous` | Est-ce pour vous ? | Dire franchement à qui vous convenez et à qui vous ne convenez pas : deux listes, « Oui, si… » et « Plutôt non, si… », puis ce qui se passe dans le doute. Rassure plus qu’un argument. Trois à cinq points vrais de chaque côté. | — | — |
 
-## Personnes (4)
+## Personnes (7)
 
 | Section | Titre | À quoi elle sert | Besoins | Dans le navigateur |
 | --- | --- | --- | --- | --- |
-| `dirigeant` | Présentation du dirigeant | Quand le client choisit une personne autant qu’une entreprise : la personne derrière l’entreprise, sa photo et son parcours. | 1 photo, chiffres vérifiables | — |
-| `equipe` | Équipe | PME et cabinets : présenter les personnes que le client rencontrera. | 3 photos | — |
+| `dirigeant` | Présentation de la personne (3 versions) | Quand le client choisit une personne autant qu’une entreprise : sa photo et son parcours. Forme au choix dans le panneau « Version » : photo à gauche, photo à droite, citation en grand avec un petit portrait. | 1 photo, chiffres vérifiables | — |
+| `equipe` | Équipe (4 versions) | Présenter les personnes que le client rencontrera. Forme au choix dans le panneau « Version » : grille, portraits ronds, cartes avec le nom sur la photo, défilement avec flèches. | 4 photos | — |
 | `equipe-photo` | L’équipe en une photo et quatre faits | Quand vous êtes plusieurs : une photo de groupe devant l’atelier ou le camion, et quatre faits qui rassurent (nombre de personnes, sous-traitance, interlocuteur unique, ancienneté), sans fiche par personne. Seul ? Préférez « Présentation du dirigeant ». | 1 photo, chiffres vérifiables | — |
+| `histoire` | Notre histoire | Les étapes de l’entreprise, avec leurs dates, à côté d’une photo. Seulement des faits vrais : une ouverture, une formation, un nouveau lieu, une équipe qui grandit. | 1 photo | — |
+| `manifeste` | Manifeste | Votre conviction en une grande phrase, avec deux petites photos glissées entre les mots. Les mots se colorent au fil de la lecture (fixes si le visiteur demande moins d’animations). Une phrase que vous pourriez dire à un client, pas un slogan. | 2 photos | — |
+| `recrutement` | On recrute | Les postes ouverts, avec une photo de l’équipe : le contrat, le lieu et une phrase par poste, et le lien pour postuler. Retirez la section quand aucun poste n’est ouvert. | 1 photo | — |
 | `valeurs` | Citation ou valeurs | Positionnement : une phrase forte et trois engagements. | chiffres vérifiables | — |
 
 ## Contenu (2)
@@ -100,7 +109,7 @@ Colonne « Besoins » : ce qu’il faut avoir avant de choisir la section. Une s
 
 | Section | Titre | À quoi elle sert | Besoins | Dans le navigateur |
 | --- | --- | --- | --- | --- |
-| `bandeau-cta` | Bandeau d’appel à l’action | Fin de page : une dernière invitation à passer à l’action. | — | — |
+| `bandeau-cta` | Appel à l’action (4 versions) | Fin de page : une dernière invitation à passer à l’action. Forme au choix dans le panneau « Version » : bandeau, carte posée sur la page, bande fine, titre géant. | — | — |
 | `contact` | Bloc contact complet | Coordonnées, itinéraire, horaires et réseaux, tirés de « Mon entreprise ». | adresse, téléphone, e-mail (Mon entreprise), horaires (Mon entreprise) | — |
 | `coordonnees-carte` | Coordonnées (carte) | Téléphone, e-mail, adresse et horaires en une carte, avec le lien d’itinéraire. Se remplit depuis Mon entreprise. | adresse, téléphone, e-mail (Mon entreprise) | — |
 | `cta-photo` | Appel à l’action sur photo | Fin de page : le dernier appel posé sur une grande photo, assombrie du côté du texte. Le pied de page, uni, s’en détache nettement. | 1 photo | — |
@@ -157,6 +166,8 @@ Options, combinables avec toutes les versions :
 | Défilement | `br-services--defile` | Grandes cartes photo qui glissent de gauche à droite, avec des flèches. |
 | Onglets | `br-services--onglets` | Un service à la fois : le visiteur choisit le service dans une rangée d’onglets. Dans l’éditeur, les services restent en grille. |
 | Volets | `br-services--volets` | Bandes photo côte à côte : celle que l’on survole s’ouvre et montre son texte. Sur téléphone, les volets s’empilent. |
+| Aperçu photo | `br-services--apercu` | Les noms des services en liste ; la photo du service survolé s’affiche à côté, en grand. Sur téléphone, des cartes classiques. |
+| Cartes empilées | `br-services--pile` | Chaque service dans une grande carte qui reste en haut de l’écran ; la suivante vient se poser dessus au défilement. |
 
 ### Avis (section `avis`, par défaut : `grille`)
 
@@ -229,6 +240,72 @@ Options, combinables avec toutes les versions :
 | Bande foncée | `br-engagements--bande` | Les quatre engagements en ligne sur une bande foncée, pleine largeur. Se place n’importe où. |
 | Pastilles | `br-engagements--pastilles` | De petites pastilles centrées, discrètes. Par exemple juste avant un formulaire ou sous les tarifs. |
 
+### Où en êtes-vous ? (section `ou-en-etes-vous`, par défaut : `cartes`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| Cartes | `br-ouenetes--cartes` | Quatre cartes côte à côte, chacune avec son icône. |
+| Lignes | `br-ouenetes--lignes` | Une situation par ligne : la phrase à gauche, la réponse et le prix à droite. Bien pour des phrases longues. |
+| Conversation | `br-ouenetes--conversation` | La phrase du visiteur dans une bulle, votre réponse dans une autre, comme un échange de messages. |
+| Avec photo | `br-ouenetes--photo` | Une photo d’un côté, les situations en petites cartes de l’autre. |
+| Frise | `br-ouenetes--frise` | Les situations se suivent sur une ligne. Seulement quand elles se suivent dans le temps (« J’y pense », « Je me lance »…). |
+| Profils avec photo | `br-ouenetes--profils` | Une photo en haut de chaque carte. Quand les situations sont des types de clients (particuliers, entreprises…). Il faut une vraie photo par profil. |
+
+### Étapes (section `etapes`, par défaut : `frise`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| Frise | `br-deroule--frise` | Les étapes côte à côte sur une ligne qui se remplit au défilement. |
+| Fil vertical | `br-deroule--vertical` | Les étapes l’une sous l’autre, le long d’un fil. Bien pour des textes plus longs. |
+| Cartes numérotées | `br-deroule--cartes` | Une carte par étape, un grand numéro en haut. Sans ligne. |
+| Zigzag | `br-deroule--zigzag` | Les étapes de part et d’autre d’une ligne centrale. |
+| Cartes empilées | `br-deroule--pile` | Chaque étape dans une carte qui reste en haut de l’écran ; la suivante vient se poser dessus au défilement. |
+
+### Questions fréquentes (section `faq`, par défaut : `cote`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| Titre à côté | `br-questions--cote` | Le titre à gauche, les questions à droite. |
+| Centrée | `br-questions--centree` | Le titre centré, les questions dessous dans une colonne. |
+| Deux colonnes | `br-questions--deux` | Les questions réparties sur deux colonnes. Pour huit questions ou plus. |
+| Réponses ouvertes | `br-questions--ouvertes` | Toutes les réponses visibles, en cartes. Pour quatre à six questions courtes. |
+
+### Présentation de la personne (section `dirigeant`, par défaut : `gauche`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| Photo à gauche | `br-personne--gauche` | La photo à gauche, le parcours à droite. |
+| Photo à droite | `br-personne--droite` | Le parcours à gauche, la photo à droite. |
+| Citation en grand | `br-personne--citation` | Un petit portrait rond, puis votre phrase en grand, centrée. |
+
+### Équipe (section `equipe`, par défaut : `grille`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| Grille | `br-equipe--grille` | Les portraits côte à côte, le nom et le rôle dessous. |
+| Portraits ronds | `br-equipe--ronds` | Des portraits ronds, centrés. Plus chaleureux. |
+| Nom sur la photo | `br-equipe--cartes` | Grands portraits, le nom et le rôle posés en bas de la photo. |
+| Défilement | `br-equipe--defile` | Les portraits glissent de gauche à droite, avec des flèches. Pour une grande équipe. |
+
+### Formules et tarifs (section `tarifs-cartes`, par défaut : `cartes`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| Cartes | `br-formules--cartes` | Une carte par formule, celle du milieu mise en avant. |
+| Cartes sobres | `br-formules--sobres` | Les mêmes cartes, sans mise en avant. |
+| Menu | `br-formules--menu` | Le nom, des pointillés et le prix, comme une carte de restaurant. Bien pour beaucoup de prestations courtes. |
+| Bandes | `br-formules--bandes` | Une formule par ligne : nom et prix, détail, bouton. |
+| Vedette sombre | `br-formules--sombre` | La formule mise en avant passe sur fond sombre, les autres restent claires. |
+
+### Appel à l’action (section `bandeau-cta`, par défaut : `bandeau`)
+
+| Version | Classe | Forme |
+| --- | --- | --- |
+| Bandeau | `br-appel--bandeau` | Pleine largeur sur la couleur secondaire : le texte à gauche, le bouton à droite. |
+| Carte | `br-appel--carte` | Une carte colorée posée sur la page, centrée. |
+| Bande fine | `br-appel--fine` | Une seule ligne, peu de hauteur, sans décor. Pour relancer en milieu de page. |
+| Titre géant | `br-appel--geant` | Une phrase très grande, centrée. Pour une phrase courte. |
+
 ## Place du titre (toute section dont le titre est en haut)
 
 Dans le fichier de site : la classe `br-titre--<position>` de la section (dans l’éditeur : panneau « Titre »). Sans classe, la section suit le réglage général `titres` du site. Sur téléphone, le titre revient en haut ; seul le titre centré reste centré.
@@ -251,6 +328,8 @@ Toutes les positions ne vont pas à toutes les sections : la marge écrase un ta
 
 | Section | Positions permises |
 | --- | --- |
+| `abonnements` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `aides` | À gauche, Centré, Titre et phrase côte à côte, Titre et filet, En marge à gauche, En marge à droite |
 | `avant-apres` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
 | `avis` | À gauche, Centré, À droite, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
 | `benefices-photos` | À gauche, Centré, À droite, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
@@ -263,11 +342,13 @@ Toutes les positions ne vont pas à toutes les sections : la marge écrase un ta
 | `etapes-images` | À gauche, Centré, Titre et phrase côte à côte, Titre et filet |
 | `etapes-photos` | À gauche, Centré, Titre et filet |
 | `galerie` | À gauche, Centré, À droite, Titre géant, Titre et filet |
+| `histoire` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
 | `journee-racontee` | À gauche, Centré, Titre et phrase côte à côte, Titre et filet |
 | `lieux` | À gauche, Centré, Titre et phrase côte à côte, Titre et filet, En marge à gauche, En marge à droite |
 | `modeles-cartes` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
 | `ou-en-etes-vous` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
 | `pages-liees` | À gauche, Centré, À droite, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
+| `pour-vous` | À gauche, Centré, Titre et phrase côte à côte, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
 | `realisations` | À gauche, Centré, À droite, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
 | `realisations-galerie` | À gauche, Centré, À droite, Titre géant, Titre et filet |
 | `realisations-manuelle` | À gauche, Centré, À droite, Titre géant, Titre et filet, En marge à gauche, En marge à droite |
@@ -286,11 +367,11 @@ Clés du fichier de site (`"entete": "capsule"`…) ou Mon entreprise > Apparenc
 
 | Pièce | Valeurs |
 | --- | --- |
-| `entete` | `classique`, `capsule`, `ilots`, `logo-centre`, `medaillon`, `encadre`, `bandeau`, `barre-infos` |
+| `entete` | `classique`, `capsule`, `ilots`, `logo-centre`, `medaillon`, `encadre`, `bandeau`, `barre-infos`, `menu-plein`, `deux-etages` |
 | `ouverture` | `cote`, `banniere`, `biais`, `moitie`, `arche`, `geant`, `diaporama`, `tuiles`, `mots`, `agrandi`, `choix-prestation`, `eventail`, `deux-portes`, `mosaique`, `carte`, `avant-apres`, `demande` |
 | `cartes` | `photo-fond`, `photo-haut`, `liste-filet` |
 | `titres` | `tete-lien`, `tete-deux-colonnes`, `grand-numero`, `marge` |
-| `pied` | `colonnes`, `grand-titre`, `logo-geant`, `grand-appel`, `carte`, `compact` |
+| `pied` | `colonnes`, `grand-titre`, `logo-geant`, `grand-appel`, `carte`, `compact`, `centre`, `clair` |
 | `mobile` | `bouton`, `barre` |
 | `angles` | `standard`, `doux`, `droits`, `feuille`, `biseau` |
 | `photos` | `standard`, `arche`, `galet` |

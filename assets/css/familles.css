@@ -2511,3 +2511,438 @@ body.br-sur-photo .wp-block-post-content > .br-ouverture--moitie:first-child .br
 		flex: 1 1 100%;
 	}
 }
+
+/* ===== Où en êtes-vous ? (famille br-ouenetes) ==========================================
+ * « Cartes » garde la forme d'origine (sections.css). La photo de la section ne sert qu'à « avec
+ * photo », la photo de chaque carte qu'à « profils ».
+ */
+.br-ouenetes-corps { display: contents; }
+.br-ouenetes:not(.br-ouenetes--photo) .br-ouenetes-photo,
+.br-ouenetes:not(.br-ouenetes--profils) .br-situation-photo { display: none !important; }
+/* Toute la carte est cliquable par son lien. */
+.br-ouenetes .br-situation .br-arrow a::before { content: ""; position: absolute; inset: 0; z-index: 1; }
+.br-ouenetes .br-situation:focus-within { outline: 3px solid var(--wp--preset--color--accent); outline-offset: 3px; }
+
+/* Lignes : une situation par ligne ; la phrase à gauche, la réponse, le prix et la flèche à droite. */
+.br-ouenetes--lignes .br-situations.is-layout-grid { grid-template-columns: 1fr; gap: 0; }
+.br-ouenetes--lignes .br-situation {
+	display: grid;
+	grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(11rem, auto);
+	column-gap: clamp(1rem, 3vw, 2.5rem);
+	align-items: center;
+	padding: 1.4rem 0 1.4rem 4.6rem;
+	background: none;
+	color: inherit;
+	border-radius: 0;
+	border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+}
+.br-ouenetes--lignes .br-situation > * { margin: 0 !important; }
+.br-ouenetes--lignes .br-situation h3 { grid-row: 1 / span 2; font-size: clamp(1.2rem, 2vw, 1.5rem); }
+.br-ouenetes--lignes .br-situation .br-muted { grid-column: 2; }
+.br-ouenetes--lignes .br-situation .br-situation-prix { grid-column: 2; padding-top: .3rem; }
+.br-ouenetes--lignes .br-situation .br-arrow { grid-column: 3; grid-row: 1 / span 2; justify-self: end; }
+.br-ouenetes--lignes .br-situation::before { left: 0; top: 50%; transform: translateY(-50%); }
+.br-ouenetes--lignes .br-situation::after { left: 13px; top: 50%; transform: translateY(-50%); }
+.br-ouenetes--lignes .br-situation:hover h3 { color: var(--wp--preset--color--accent); }
+
+/* Conversation : la phrase du visiteur dans une bulle, la réponse dans une autre, en décalé. */
+.br-ouenetes--conversation .br-situations.is-layout-grid { grid-template-columns: 1fr; gap: 1.75rem; max-width: 56rem; margin-left: auto; margin-right: auto; }
+.br-ouenetes--conversation .br-situation {
+	display: grid;
+	grid-template-columns: 52px minmax(0, 1fr) minmax(0, 1fr);
+	column-gap: .9rem;
+	padding: 0;
+	background: none;
+	color: inherit;
+	border-radius: 0;
+}
+.br-ouenetes--conversation .br-situation > * { margin: 0 !important; grid-column: 3; }
+.br-ouenetes--conversation .br-situation::before { left: 0; top: 0; }
+.br-ouenetes--conversation .br-situation::after { left: 13px; top: 13px; }
+.br-ouenetes--conversation .br-situation h3 {
+	grid-column: 2 / span 2;
+	justify-self: start;
+	max-width: min(100%, 30rem);
+	padding: .9rem 1.2rem;
+	font-size: 1.15rem;
+	background: var(--wp--preset--color--clair);
+	color: var(--wp--preset--color--texte);
+	border: 1px solid color-mix(in srgb, var(--wp--preset--color--texte) 10%, transparent);
+	border-radius: 1.2rem 1.2rem 1.2rem .3rem;
+	margin-bottom: .5rem !important;
+}
+.br-ouenetes--conversation .br-situation > :not(h3, figure) {
+	padding: 0 1.2rem;
+	background: color-mix(in srgb, var(--wp--preset--color--accent) 12%, var(--wp--preset--color--clair));
+	color: var(--wp--preset--color--texte);
+}
+.br-ouenetes--conversation .br-situation .br-muted { padding-top: .9rem; border-radius: 1.2rem 1.2rem 0 0; }
+.br-ouenetes--conversation .br-situation .br-situation-prix { padding-top: .4rem; }
+.br-ouenetes--conversation .br-situation .br-arrow { padding-top: .4rem; padding-bottom: .9rem; border-radius: 0 0 .3rem 1.2rem; }
+@media (max-width: 781px) {
+	.br-ouenetes--conversation .br-situation { grid-template-columns: 44px minmax(0, 1fr); }
+	.br-ouenetes--conversation .br-situation > * { grid-column: 2; margin-left: 1.5rem !important; }
+	.br-ouenetes--conversation .br-situation h3 { grid-column: 2; margin-left: 0 !important; }
+	.br-ouenetes--conversation .br-situation::before { width: 44px; height: 44px; }
+	.br-ouenetes--conversation .br-situation::after { left: 10px; top: 10px; width: 24px; height: 24px; }
+}
+
+/* Avec photo : la photo d'un côté, les situations en petites cartes deux par deux de l'autre. */
+.br-ouenetes--photo .br-ouenetes-corps {
+	display: grid;
+	grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+	gap: clamp(1.25rem, 3vw, 2.5rem);
+	align-items: stretch;
+	margin-top: var(--wp--preset--spacing--50, 2rem);
+}
+.br-ouenetes--photo .br-ouenetes-photo { margin: 0 !important; }
+.br-ouenetes--photo .br-ouenetes-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--wp--custom--rayon--grand); }
+.br-ouenetes--photo .br-situations.is-layout-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 0; }
+.br-ouenetes--photo .br-situation { padding: 4.6rem 1.3rem 1.3rem; }
+.br-ouenetes--photo .br-situation::before { left: 1.3rem; top: 1.3rem; width: 44px; height: 44px; }
+.br-ouenetes--photo .br-situation::after { left: calc(1.3rem + 10px); top: calc(1.3rem + 10px); width: 24px; height: 24px; }
+.br-ouenetes--photo .br-situation h3 { font-size: 1.1rem; }
+@media (max-width: 781px) {
+	.br-ouenetes--photo .br-ouenetes-corps { grid-template-columns: 1fr; }
+	.br-ouenetes--photo .br-ouenetes-photo img { aspect-ratio: 16 / 10; height: auto; }
+}
+@media (max-width: 560px) {
+	.br-ouenetes--photo .br-situations.is-layout-grid { grid-template-columns: 1fr; }
+}
+
+/* Frise : les situations se suivent sur une ligne, l'icône posée sur la ligne. */
+.br-ouenetes--frise .br-situations.is-layout-grid { position: relative; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr)); }
+.br-ouenetes--frise .br-situations.is-layout-grid::before {
+	content: "";
+	position: absolute;
+	left: 26px;
+	right: 0;
+	top: 25px;
+	height: 2px;
+	background: color-mix(in srgb, currentColor 18%, transparent);
+}
+.br-ouenetes--frise .br-situation { padding: 4.6rem 0 0; background: none; color: inherit; border-radius: 0; }
+.br-ouenetes--frise .br-situation::before { left: 0; top: 0; background: var(--wp--preset--color--accent); box-shadow: 0 0 0 6px var(--wp--preset--color--fond); }
+.br-ouenetes--frise .br-situation::after { left: 13px; top: 13px; background: var(--wp--preset--color--clair); }
+@media (max-width: 781px) {
+	.br-ouenetes--frise .br-situations.is-layout-grid { grid-template-columns: 1fr; gap: 1.75rem; }
+	.br-ouenetes--frise .br-situations.is-layout-grid::before { left: 25px; right: auto; top: 26px; bottom: 0; width: 2px; height: auto; }
+	.br-ouenetes--frise .br-situation { padding: .3rem 0 0 4.4rem; }
+}
+
+/* Profils avec photo : chaque carte commence par sa photo ; l'icône n'est plus utile. */
+.br-ouenetes--profils .br-situation { padding: 0 0 1.4rem; overflow: hidden; }
+.br-ouenetes--profils .br-situation::before, .br-ouenetes--profils .br-situation::after { display: none; }
+.br-ouenetes--profils .br-situation > :not(figure) { margin-left: 1.4rem !important; margin-right: 1.4rem !important; }
+.br-ouenetes--profils .br-situation-photo { margin: 0 0 1.1rem !important; }
+.br-ouenetes--profils .br-situation-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; border-radius: 0; }
+
+/* ===== Étapes (famille br-deroule) =======================================================
+ * « Frise » garde la forme d'origine (theme.json). Le remplissage au défilement (motion.js)
+ * reconnaît seul une frise ou un fil vertical.
+ */
+@media (min-width: 782px) {
+	/* Fil vertical, centré. */
+	.br-deroule--vertical .br-fil--frise { display: block; max-width: 46rem; margin-left: auto !important; margin-right: auto !important; }
+	.br-deroule--vertical .br-fil--frise .br-fil-etape { padding: 0 0 2.25rem calc(var(--br-rond) + 1.25rem); gap: .5rem; }
+	.br-deroule--vertical .br-fil--frise .br-fil-etape:last-child { padding-bottom: 0; }
+	.br-deroule--vertical .br-fil--frise .br-fil-num { position: absolute; left: 0; top: 0; margin: 0 !important; }
+	.br-deroule--vertical .br-fil--frise .br-fil-etape h3 { margin-top: calc((var(--br-rond) - 1.25em) / 2) !important; }
+	.br-deroule--vertical .br-fil--frise .br-fil-etape:not(:last-child)::before,
+	.br-deroule--vertical .br-fil--frise .br-fil-etape:not(:last-child)::after { left: calc(var(--br-rond) / 2 - 1.5px); top: calc(var(--br-rond) / 2); bottom: calc(var(--br-rond) / -2); width: 3px; height: auto; transform-origin: top; }
+	.br-deroule--vertical .br-fil--frise .br-fil-etape:not(:last-child)::after { transform: scaleY(var(--br-f, 1)); }
+
+	/* Zigzag : les étapes de part et d'autre d'une ligne centrale. */
+	.br-deroule--zigzag .br-fil--frise { display: block; position: relative; }
+	.br-deroule--zigzag .br-fil--frise::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; transform: translateX(-50%); background: color-mix(in srgb, var(--wp--preset--color--accent) 25%, transparent); border-radius: 3px; }
+	.br-deroule--zigzag .br-fil--frise .br-fil-etape { width: 50%; padding: 0 calc(var(--br-rond) / 2 + 1.75rem) 2.5rem 0; text-align: right; align-items: flex-end; }
+	.br-deroule--zigzag .br-fil--frise .br-fil-etape:nth-child(even) { margin-left: 50% !important; padding: 0 0 2.5rem calc(var(--br-rond) / 2 + 1.75rem); text-align: left; align-items: flex-start; }
+	.br-deroule--zigzag .br-fil--frise .br-fil-num { position: absolute; top: 0; right: calc(var(--br-rond) / -2); margin: 0 !important; z-index: 1; }
+	.br-deroule--zigzag .br-fil--frise .br-fil-etape:nth-child(even) .br-fil-num { right: auto; left: calc(var(--br-rond) / -2); }
+	.br-deroule--zigzag .br-fil--frise .br-fil-etape h3 { margin-top: calc((var(--br-rond) - 1.25em) / 2) !important; }
+	.br-deroule--zigzag .br-fil--frise .br-fil-etape::before,
+	.br-deroule--zigzag .br-fil--frise .br-fil-etape::after { display: none; }
+}
+/* Cartes numérotées : sans ligne, un grand numéro en haut de chaque carte. */
+.br-deroule--cartes .br-fil--frise { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr)); gap: 1.1rem; }
+.br-deroule--cartes .br-fil--frise .br-fil-etape { padding: 1.6rem !important; gap: .6rem; background: var(--wp--preset--color--clair); color: var(--wp--preset--color--texte); border-radius: var(--wp--custom--rayon--moyen); }
+.br-deroule--cartes .br-fil--frise .br-fil-num { position: static; width: auto; height: auto; border: 0; background: none !important; color: var(--wp--preset--color--accent) !important; justify-content: flex-start; font-size: clamp(2.6rem, 5vw, 3.6rem); line-height: 1; margin: 0 0 .4rem !important; }
+.br-deroule--cartes .br-fil--frise .br-fil-etape h3 { margin-top: 0 !important; }
+.br-deroule--cartes .br-fil--frise .br-fil-etape::before,
+.br-deroule--cartes .br-fil--frise .br-fil-etape::after { display: none; }
+.br-deroule--cartes .br-fil-texte { color: var(--wp--preset--color--texte-doux); }
+
+/* ===== Questions fréquentes (famille br-questions) ======================================= */
+@media (min-width: 782px) {
+	.br-questions:is(.br-questions--centree, .br-questions--deux, .br-questions--ouvertes) .wp-block-columns { flex-direction: column; gap: var(--wp--preset--spacing--50) !important; }
+	.br-questions:is(.br-questions--centree, .br-questions--deux, .br-questions--ouvertes) .wp-block-column { flex-basis: auto !important; width: 100%; }
+}
+.br-questions--centree .wp-block-column:first-child { text-align: center; max-width: 44rem; margin-left: auto; margin-right: auto; }
+.br-questions--centree .wp-block-column:last-child { max-width: 50rem; margin-left: auto; margin-right: auto; }
+.br-questions--deux .wp-block-column:last-child { column-count: 2; column-gap: clamp(1.5rem, 4vw, 3rem); }
+.br-questions--deux .wp-block-column:last-child > * { break-inside: avoid; }
+.br-questions--ouvertes .wp-block-column:last-child { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr)); gap: 1rem; }
+.br-questions--ouvertes .wp-block-column:last-child > .wp-block-details { margin: 0 !important; padding: 1.4rem 1.5rem !important; background: var(--wp--preset--color--clair); color: var(--wp--preset--color--texte); border: 0 !important; border-radius: var(--wp--custom--rayon--moyen); }
+.br-questions--ouvertes .wp-block-details summary { font-family: var(--wp--preset--font-family--titres); font-weight: 700; font-size: 1.15rem; list-style: none; cursor: default; }
+.br-questions--ouvertes .wp-block-details summary::-webkit-details-marker { display: none; }
+.br-questions--ouvertes .wp-block-details summary::after { display: none !important; }
+@media (max-width: 781px) {
+	.br-questions--deux .wp-block-column:last-child { column-count: 1; }
+}
+
+/* ===== Personne (famille br-personne) ===================================================== */
+@media (min-width: 782px) {
+	.br-personne--droite .wp-block-columns { flex-direction: row-reverse; }
+}
+.br-personne--citation .wp-block-columns { flex-direction: column; align-items: center; text-align: center; gap: 1.5rem !important; }
+.br-personne--citation .wp-block-column { flex-basis: auto !important; width: 100%; max-width: 50rem; margin-left: auto !important; margin-right: auto !important; }
+.br-personne--citation .wp-block-column:first-child { display: flex; justify-content: center; }
+.br-personne--citation .wp-block-column:first-child figure { margin: 0 auto !important; width: fit-content; }
+.br-personne--citation .wp-block-column:first-child img { width: clamp(7rem, 12vw, 9.5rem) !important; height: clamp(7rem, 12vw, 9.5rem) !important; aspect-ratio: 1 !important; object-fit: cover; border-radius: 50% !important; clip-path: none !important; }
+.br-personne--citation .br-statement { font-size: clamp(1.6rem, 3.2vw, 2.4rem); line-height: 1.25; }
+.br-personne--citation .br-statement::before { content: "« "; color: var(--wp--preset--color--accent); }
+.br-personne--citation .br-statement::after { content: " »"; color: var(--wp--preset--color--accent); }
+.br-personne--citation .br-arrow { justify-content: center; }
+
+/* ===== Équipe (famille br-equipe) ========================================================= */
+.br-equipe--ronds .br-member { text-align: center; }
+.br-equipe--ronds .br-member img { width: min(100%, 12rem) !important; aspect-ratio: 1 !important; margin: 0 auto; border-radius: 50% !important; object-fit: cover; clip-path: none !important; }
+.br-equipe--ronds .br-member figure { display: flex; justify-content: center; }
+.br-equipe--cartes .br-member { position: relative; overflow: hidden; border-radius: var(--wp--custom--rayon--grand); }
+.br-equipe--cartes .br-member figure { margin: 0 !important; }
+.br-equipe--cartes .br-member img { aspect-ratio: 3 / 4 !important; object-fit: cover; width: 100%; border-radius: 0 !important; display: block; }
+.br-equipe--cartes .br-member::after { content: ""; position: absolute; inset: 45% 0 0; background: linear-gradient(transparent, rgba(0, 0, 0, .72)); pointer-events: none; }
+.br-equipe--cartes .br-member :is(h3, p) { position: absolute; left: 1.2rem; right: 1.2rem; z-index: 1; color: #fff !important; margin: 0 !important; }
+.br-equipe--cartes .br-member h3 { bottom: 2.6rem; }
+.br-equipe--cartes .br-member p { bottom: 1.1rem; opacity: .9; }
+.br-equipe--defile .br-team { flex-wrap: nowrap !important; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; padding-bottom: 1rem; scrollbar-width: thin; }
+.br-equipe--defile .br-team > .wp-block-column { flex: 0 0 clamp(13rem, 24vw, 17rem) !important; scroll-snap-align: start; }
+.br-equipe--defile .br-team:focus-visible { outline: 3px solid var(--wp--preset--color--accent); outline-offset: 4px; }
+
+/* ===== Formules et tarifs (famille br-formules) =========================================== */
+.br-formules--sobres .br-price--vedette { box-shadow: none; }
+.br-formules--sobres .br-price { background: transparent !important; border: 1px solid color-mix(in srgb, currentColor 18%, transparent); box-shadow: none !important; }
+.br-formules--sobres .br-price > .br-chip { display: none; }
+.br-formules:is(.br-formules--menu, .br-formules--bandes) .br-prices { flex-direction: column; gap: 0 !important; }
+.br-formules:is(.br-formules--menu, .br-formules--bandes) .br-prices > .wp-block-column { flex-basis: auto !important; width: 100%; }
+.br-formules:is(.br-formules--menu, .br-formules--bandes) .br-price { background: transparent !important; box-shadow: none !important; border-radius: 0; border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent); padding: 1.4rem 0 !important; }
+.br-formules:is(.br-formules--menu, .br-formules--bandes) .br-price > .br-chip { margin: 0 0 .5rem !important; }
+/* Menu : le nom, des pointillés, le prix ; puis la phrase et ce qui est inclus. */
+.br-formules--menu .br-prices { max-width: 52rem; margin-left: auto !important; margin-right: auto !important; }
+.br-formules--menu .br-price { display: grid !important; grid-template-columns: minmax(0, 1fr) auto; column-gap: 1rem; align-items: baseline; }
+.br-formules--menu .br-price > * { grid-column: 1 / -1; margin: 0 !important; }
+.br-formules--menu .br-price h3 { grid-column: 1; display: flex; align-items: baseline; gap: .8rem; }
+.br-formules--menu .br-price h3::after { content: ""; flex: 1; border-bottom: 2px dotted color-mix(in srgb, currentColor 35%, transparent); transform: translateY(-.25em); }
+.br-formules--menu .br-price .br-stat { grid-column: 2; grid-row: 1; font-size: clamp(1.4rem, 2.4vw, 1.8rem); }
+.br-formules--menu .br-price > .br-chip + h3, .br-formules--menu .br-price > .br-chip + h3 + .br-stat { grid-row: 2; }
+.br-formules--menu .br-price ul { display: flex; flex-wrap: wrap; gap: .2rem 1.2rem; padding: 0; list-style: none; margin-top: .5rem !important; font-size: .92rem; }
+.br-formules--menu .br-price .wp-block-buttons { padding-top: .8rem; }
+.br-formules:is(.br-formules--menu, .br-formules--bandes) .br-price > .br-chip { justify-self: start; }
+.br-formules--menu .br-price ul li { padding-left: 0 !important; }
+.br-formules--menu .br-price ul li::before { display: none !important; }
+.br-formules--menu .br-price ul li + li::before { content: "·"; display: inline !important; position: static !important; background: none !important; width: auto !important; height: auto !important; margin-right: 1.2rem; }
+.br-formules--menu .br-price .wp-block-button__link { padding: .55rem 1.1rem !important; font-size: .9rem; min-height: 44px; }
+/* Bandes : le nom et le prix à gauche, le détail au milieu, le bouton à droite. */
+@media (min-width: 782px) {
+	.br-formules--bandes .br-price { display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) auto; column-gap: clamp(1.5rem, 3vw, 2.5rem); align-items: center; }
+	.br-formules--bandes .br-price > * { margin: 0 !important; }
+	.br-formules--bandes .br-price > :is(.br-chip, h3, .br-stat) { grid-column: 1; }
+	.br-formules--bandes .br-price > :is(.br-muted, ul) { grid-column: 2; }
+	.br-formules--bandes .br-price > .wp-block-buttons { grid-column: 3; grid-row: 1 / span 4; padding: 0; }
+	.br-formules--bandes .br-price .br-stat { font-size: clamp(1.8rem, 3vw, 2.4rem); }
+}
+
+/* ===== Appel à l'action (famille br-appel) ================================================ */
+.br-appel--carte { background-color: transparent !important; color: var(--wp--preset--color--texte) !important; }
+.br-appel--carte::before, .br-appel--carte::after { display: none; }
+.br-appel--carte .br-cta-inner, .br-appel--geant .br-cta-inner { display: block; }
+.br-appel--carte .br-cta-inner > .wp-block-buttons, .br-appel--geant .br-cta-inner > .wp-block-buttons { margin-top: var(--wp--preset--spacing--40) !important; }
+.br-appel--carte .br-cta-inner { max-width: 60rem; margin: 0 auto !important; padding: clamp(2rem, 5vw, 3.5rem) !important; background: var(--wp--preset--color--secondaire); color: var(--wp--preset--color--fond); border-radius: var(--wp--custom--rayon--grand); text-align: center; }
+.br-appel--carte .br-cta-inner > * { margin-left: auto; margin-right: auto; }
+.br-appel--carte .wp-block-buttons { justify-content: center; }
+/* Bande fine : une seule ligne, peu de hauteur, sans décor. Pour relancer en milieu de page. */
+.br-appel--fine { padding-top: clamp(1.5rem, 3vw, 2.25rem) !important; padding-bottom: clamp(1.5rem, 3vw, 2.25rem) !important; }
+.br-appel--fine::before, .br-appel--fine::after { display: none; }
+.br-appel--fine .br-cta-inner > * { max-width: none; }
+.br-appel--fine h2 { font-size: clamp(1.35rem, 2.4vw, 1.75rem) !important; }
+.br-appel--fine .br-lead { font-size: 1rem; opacity: .9; }
+.br-appel--geant .br-cta-inner { text-align: center; }
+.br-appel--geant .br-cta-inner > * { max-width: none; margin-left: auto; margin-right: auto; }
+.br-appel--geant h2 { font-size: clamp(2.8rem, 8vw, 6.5rem) !important; line-height: 1; letter-spacing: -.02em; }
+.br-appel--geant .br-lead { max-width: 40rem; }
+.br-appel--geant .wp-block-buttons { justify-content: center; }
+
+/* ===== Aides et financement ; On recrute ================================================== */
+.br-aides-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr)); gap: 1.1rem; margin: var(--wp--preset--spacing--50) 0 1.2rem !important; }
+.br-aide { position: relative; padding: 5rem 1.6rem 1.6rem !important; margin: 0 !important; background: var(--wp--preset--color--clair); color: var(--wp--preset--color--texte); border-radius: var(--wp--custom--rayon--moyen); display: flex; flex-direction: column; gap: .5rem; }
+.br-aide > * { margin: 0 !important; }
+.br-aide h3 { font-size: 1.2rem; }
+.br-aide .br-arrow { margin-top: auto !important; padding-top: .5rem; }
+.br-aide::before { content: ""; position: absolute; left: 1.6rem; top: 1.6rem; width: 2.6rem; height: 2.6rem; border-radius: var(--wp--custom--rayon--moyen); background: var(--wp--preset--color--accent) var(--br-i, var(--br-i-garantie)) center / 1.3rem no-repeat; }
+.br-postes { display: grid; gap: 0; }
+.br-poste { padding: 1.3rem 0 !important; margin: 0 !important; border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent); display: grid; gap: .35rem; }
+.br-poste:first-child { padding-top: 0 !important; }
+.br-poste > * { margin: 0 !important; }
+.br-poste-infos { font-size: .9rem; color: var(--wp--preset--color--accent); font-weight: 600; }
+
+/* ===== Services : « Aperçu » (la liste change la photo) et « Cartes empilées » ============ */
+@media (min-width: 782px) {
+	.br-services--apercu .br-services-liste { display: block; position: relative; padding-right: 52%; min-height: 30rem; }
+	.br-services--apercu .br-service { position: static; padding: 1.1rem 3rem 1.1rem 0; border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent); background: none !important; box-shadow: none !important; }
+	.br-services--apercu .br-service-photo { position: absolute; top: 0; right: 0; width: 48%; height: 100%; opacity: 0; border-radius: var(--wp--custom--rayon--grand); transition: opacity .45s ease; }
+	.br-services--apercu .br-service:first-child .br-service-photo { opacity: 1; }
+	.br-services--apercu .br-services-liste:has(.br-service:is(:hover, :focus-within)) .br-service-photo { opacity: 0; }
+	.br-services--apercu .br-services-liste .br-service:is(:hover, :focus-within) .br-service-photo { opacity: 1; }
+	.br-services--apercu .br-service .br-num { display: none; }
+	.br-services--apercu .br-service-nom { font-size: clamp(1.3rem, 2.2vw, 1.75rem); transition: color .2s ease; color: color-mix(in srgb, currentColor 55%, transparent); }
+	.br-services--apercu .br-service:first-child .br-service-nom,
+	.br-services--apercu .br-service:is(:hover, :focus-within) .br-service-nom { color: inherit; }
+	.br-services--apercu .br-services-liste:has(.br-service:is(:hover, :focus-within)) .br-service:first-child:not(:hover, :focus-within) .br-service-nom { color: color-mix(in srgb, currentColor 55%, transparent); }
+	.br-services--apercu .br-service .br-muted { font-size: .95rem; }
+	.br-services--apercu .br-service .br-arrow { position: absolute; right: calc(52% + .25rem); margin-top: -2.4rem !important; }
+	.br-services--apercu .br-service .br-arrow a { font-size: 0; }
+	.br-services--apercu .br-service .br-arrow a::after { font-size: 1.3rem; }
+	.br-services--apercu .br-service .br-arrow a::before { display: none; }
+}
+/* Cartes empilées : chaque carte reste en haut de l'écran, la suivante vient se poser dessus. */
+.br-services--pile .br-services-liste { display: block; }
+.br-services--pile .br-service {
+	position: sticky;
+	top: calc(6rem + var(--br-pile, 0) * 1.1rem);
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	min-height: clamp(18rem, 32vw, 24rem);
+	margin-bottom: 1.5rem !important;
+	background: var(--wp--preset--color--clair);
+	color: var(--wp--preset--color--texte);
+	border-radius: var(--wp--custom--rayon--grand);
+	box-shadow: 0 -10px 40px -24px rgba(0, 0, 0, .35);
+	overflow: hidden;
+}
+.br-services--pile .br-service:nth-child(2) { --br-pile: 1; }
+.br-services--pile .br-service:nth-child(3) { --br-pile: 2; }
+.br-services--pile .br-service:nth-child(4) { --br-pile: 3; }
+.br-services--pile .br-service:nth-child(5) { --br-pile: 4; }
+.br-services--pile .br-service:nth-child(6) { --br-pile: 5; }
+.br-services--pile .br-service-photo { order: 2; height: 100%; }
+.br-services--pile .br-service-texte { padding: clamp(1.5rem, 3vw, 2.5rem); justify-content: center; }
+.br-services--pile .br-num { font-size: clamp(2.2rem, 4vw, 3rem); color: var(--wp--preset--color--accent); line-height: 1; }
+@media (max-width: 781px) {
+	.br-services--pile .br-service { grid-template-columns: 1fr; top: calc(5rem + var(--br-pile, 0) * .8rem); }
+	.br-services--pile .br-service-photo { order: 0; aspect-ratio: 16 / 9; }
+}
+
+/* ===== Étapes : « Cartes empilées » ======================================================= */
+.br-deroule--pile .br-fil--frise { display: block !important; max-width: 52rem; margin-left: auto !important; margin-right: auto !important; }
+.br-deroule--pile .br-fil--frise .br-fil-etape {
+	position: sticky !important;
+	top: calc(6rem + var(--br-pile, 0) * 1.1rem);
+	display: grid !important;
+	grid-template-columns: auto 1fr;
+	column-gap: 1.5rem;
+	align-items: start;
+	padding: clamp(1.5rem, 3vw, 2.25rem) !important;
+	margin-bottom: 1.25rem !important;
+	background: var(--wp--preset--color--clair);
+	color: var(--wp--preset--color--texte);
+	border-radius: var(--wp--custom--rayon--grand);
+	box-shadow: 0 -10px 40px -24px rgba(0, 0, 0, .35);
+}
+.br-deroule--pile .br-fil--frise .br-fil-etape > * { grid-column: 2; }
+.br-deroule--pile .br-fil--frise .br-fil-num { grid-column: 1; grid-row: 1 / span 3; position: static !important; }
+.br-deroule--pile .br-fil--frise .br-fil-etape h3 { margin-top: .6rem !important; }
+.br-deroule--pile .br-fil--frise .br-fil-etape::before,
+.br-deroule--pile .br-fil--frise .br-fil-etape::after { display: none !important; }
+.br-deroule--pile .br-fil-etape:nth-child(2) { --br-pile: 1; }
+.br-deroule--pile .br-fil-etape:nth-child(3) { --br-pile: 2; }
+.br-deroule--pile .br-fil-etape:nth-child(4) { --br-pile: 3; }
+.br-deroule--pile .br-fil-etape:nth-child(5) { --br-pile: 4; }
+
+/* ===== Formules : « Vedette sombre » ; Abonnements : au mois ou à l'année ================== */
+.br-formules--sombre .br-price--vedette { background: var(--wp--preset--color--sombre) !important; color: var(--wp--preset--color--fond) !important; box-shadow: none; }
+.br-formules--sombre .br-price--vedette :is(h3, .br-stat, .br-muted, li) { color: inherit !important; }
+.br-formules--sombre .br-price--vedette .br-muted { opacity: .8; }
+.br-formules--sombre .br-price--vedette > .br-chip { background: transparent !important; color: inherit !important; border: 1px solid color-mix(in srgb, currentColor 40%, transparent); }
+.br-formules--sombre .br-price--vedette .wp-block-button__link { background: var(--wp--preset--color--fond) !important; color: var(--wp--preset--color--sombre) !important; border-color: transparent !important; }
+.br-prix-mois, .br-prix-an { margin-bottom: 0 !important; }
+.br-prix-mois small, .br-prix-an small { font-size: .9rem; font-weight: 400; opacity: .7; }
+.br-abonnement.is-mois .br-prix-an, .br-abonnement.is-an .br-prix-mois { display: none; }
+.br-abonnement-choix { display: inline-flex; gap: .25rem; padding: .3rem; margin-top: 1.25rem; border-radius: 999px; border: 1px solid color-mix(in srgb, currentColor 18%, transparent); background: var(--wp--preset--color--clair); }
+.br-abonnement-choix button { min-height: 44px; padding: 0 1.2rem; border: 0; border-radius: 999px; background: transparent; color: var(--wp--preset--color--texte); font: inherit; font-weight: 600; cursor: pointer; }
+.br-abonnement-choix button[aria-pressed="true"] { background: var(--wp--preset--color--sombre); color: var(--wp--preset--color--fond); }
+.br-abonnement-choix button:focus-visible { outline: 3px solid var(--wp--preset--color--accent); outline-offset: 2px; }
+
+/* ===== Est-ce pour vous ? ================================================================= */
+.br-pourvous-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr)); gap: 1.1rem; margin: var(--wp--preset--spacing--50) 0 1.2rem !important; }
+.br-pourvous-cols > * { margin: 0 !important; padding: clamp(1.4rem, 3vw, 2rem) !important; border-radius: var(--wp--custom--rayon--moyen); background: var(--wp--preset--color--clair); color: var(--wp--preset--color--texte); border-top: 4px solid; }
+.br-pourvous-oui { border-top-color: #2e7d4f !important; }
+.br-pourvous-non { border-top-color: #b3412e !important; }
+.br-pourvous-titre { margin: 0 0 .75rem !important; font-family: var(--wp--preset--font-family--titres); font-weight: 700; font-size: 1.25rem; }
+.br-pourvous-cols ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .55rem; }
+.br-pourvous-cols li { position: relative; padding-left: 1.8rem; line-height: 1.5; }
+.br-pourvous-cols li::before { content: ""; position: absolute; left: 0; top: .2rem; width: 1.15rem; height: 1.15rem; }
+.br-pourvous-oui li::before { background: #2e7d4f; -webkit-mask: var(--br-i-coche) center / contain no-repeat; mask: var(--br-i-coche) center / contain no-repeat; }
+.br-pourvous-non li::before { background: linear-gradient(45deg, transparent 43%, #b3412e 43% 57%, transparent 57%), linear-gradient(-45deg, transparent 43%, #b3412e 43% 57%, transparent 57%); }
+
+/* ===== Manifeste ========================================================================== */
+.br-manifeste { text-align: center; }
+.br-manifeste > * { margin-left: auto !important; margin-right: auto !important; }
+.br-manifeste-texte { max-width: 56rem; font-size: clamp(2rem, 4.6vw, 3.6rem) !important; line-height: 1.15; letter-spacing: -.01em; }
+.br-manifeste-texte .br-mot-photo { display: inline-block; width: 1.9em; height: 1em; object-fit: cover; border-radius: 999px; vertical-align: -.1em; margin: 0 .08em; }
+.br-manifeste .br-arrow { justify-content: center; }
+.br-mf { transition: color .35s ease; color: color-mix(in srgb, currentColor 28%, transparent); }
+.br-mf.is-lu { color: inherit; }
+
+/* ===== Notre histoire ===================================================================== */
+.br-notre-histoire .br-jalons { position: relative; display: grid; gap: 1.75rem; padding-left: 1.75rem; }
+.br-jalons::before { content: ""; position: absolute; left: .3rem; top: .5rem; bottom: .5rem; width: 2px; background: color-mix(in srgb, var(--wp--preset--color--accent) 35%, transparent); }
+.br-jalon { position: relative; margin: 0 !important; }
+.br-jalon > * { margin: 0 !important; }
+.br-jalon::before { content: ""; position: absolute; left: calc(-1.75rem + .3rem - 6px); top: .45rem; width: 14px; height: 14px; border-radius: 50%; background: var(--wp--preset--color--accent); box-shadow: 0 0 0 5px var(--wp--preset--color--fond); }
+.br-jalon-annee { font-family: var(--wp--preset--font-family--titres); font-weight: 700; font-size: clamp(1.6rem, 3vw, 2.2rem); line-height: 1; color: var(--wp--preset--color--accent); margin-bottom: .35rem !important; }
+.br-jalon h3 { font-size: 1.15rem; margin-bottom: .2rem !important; }
+
+/* ===== Clients en noms ===================================================================== */
+.br-noms-liste { list-style: none; padding: 0; margin: 1rem auto 0 !important; display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 0; max-width: 60rem; }
+.br-noms-liste li { font-family: var(--wp--preset--font-family--titres); font-size: clamp(1.15rem, 2vw, 1.5rem); font-weight: 600; opacity: .8; }
+.br-noms-liste li + li::before { content: "·"; margin: 0 1rem; color: var(--wp--preset--color--accent); }
+
+/* ===== Ouverture « une question » ; raccourcis ; note Google =============================== */
+.br-question-carte { padding: clamp(1.5rem, 3vw, 2.25rem) !important; background: var(--wp--preset--color--clair); color: var(--wp--preset--color--texte); border-radius: var(--wp--custom--rayon--grand); box-shadow: 0 30px 70px -40px rgba(0, 0, 0, .45); }
+.br-question-carte > * { margin: 0 0 .9rem !important; }
+.br-question-carte > :last-child { margin-bottom: 0 !important; }
+.br-question-titre { font-size: clamp(1.5rem, 2.6vw, 2rem) !important; }
+.br-question-choix { display: grid; gap: .6rem; }
+.br-choix { margin: 0 !important; }
+.br-choix a { position: relative; display: grid; grid-template-columns: 2.6rem 1fr auto; column-gap: .9rem; align-items: center; min-height: 64px; padding: .75rem 1rem; border-radius: var(--wp--custom--rayon--moyen); border: 1px solid color-mix(in srgb, currentColor 14%, transparent); color: inherit; text-decoration: none; transition: border-color .2s ease, transform .2s ease; }
+.br-choix a::before { content: ""; grid-row: 1 / span 2; width: 2.6rem; height: 2.6rem; border-radius: 50%; background: var(--wp--preset--color--surface); }
+.br-choix a::after { content: "→"; grid-column: 3; grid-row: 1 / span 2; font-size: 1.2rem; color: var(--wp--preset--color--accent); }
+.br-choix a strong { grid-column: 2; font-family: var(--wp--preset--font-family--titres); font-size: 1.1rem; }
+.br-choix a span { grid-column: 2; font-size: .9rem; color: var(--wp--preset--color--texte-doux); }
+.br-choix { position: relative; }
+.br-choix::before { content: ""; position: absolute; left: calc(1rem + .65rem); top: 50%; width: 1.3rem; height: 1.3rem; transform: translateY(-50%); background: var(--wp--preset--color--accent); -webkit-mask: var(--br-ic, var(--br-i-coche)) center / contain no-repeat; mask: var(--br-ic, var(--br-i-coche)) center / contain no-repeat; z-index: 1; pointer-events: none; }
+.br-choix a:hover { border-color: var(--wp--preset--color--accent); transform: translateX(3px); }
+.br-choix a:focus-visible { outline: 3px solid var(--wp--preset--color--accent); outline-offset: 2px; }
+.br-raccourcis { position: absolute; right: 1.25rem; bottom: 1.25rem; z-index: 2; max-width: calc(100% - 2.5rem); }
+.br-raccourcis ul { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; list-style: none; padding: 0; margin: 0; }
+.br-raccourcis a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.1rem; border-radius: 999px; background: color-mix(in srgb, var(--wp--preset--color--sombre) 45%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, .3); color: #fff; text-decoration: none; font-weight: 600; font-size: .92rem; }
+.br-raccourcis a:hover { background: color-mix(in srgb, var(--wp--preset--color--sombre) 70%, transparent); }
+.br-ouv-infos .br-infos-avis a { color: inherit; text-decoration: none; }
+@media (max-width: 781px) {
+	.br-raccourcis { position: static; margin-top: 1rem; max-width: none; }
+	.br-raccourcis ul { justify-content: flex-start; }
+	.br-raccourcis a { background: var(--wp--preset--color--sombre); }
+}
+
+/* ===== Mot qui change dans un titre (.br-mots, familles.js) =============================== */
+.br-mots-zone { display: inline-grid; vertical-align: bottom; }
+.br-mots-zone > span { grid-area: 1 / 1; transition: opacity .45s ease, transform .45s ease; color: var(--wp--preset--color--accent); }
+.br-mots-zone > span:not(.is-visible) { opacity: 0; transform: translateY(.35em); }
+
+@media (prefers-reduced-motion: reduce) {
+	.br-services--apercu .br-service-photo, .br-mf, .br-mots-zone > span { transition: none; }
+}
+.br-ouv-question .br-coches { list-style: none; padding: 0; margin: 1.5rem 0 0 !important; display: flex; flex-wrap: wrap; gap: .6rem 1.5rem; font-size: .95rem; font-weight: 500; color: var(--wp--preset--color--texte-doux); }
+.br-ouv-question .br-coches li { display: flex; align-items: center; gap: .5rem; }
+.br-ouv-question .br-coches li::before { content: ""; flex-shrink: 0; width: 1.1rem; height: 1.1rem; background: var(--wp--preset--color--accent); -webkit-mask: var(--br-i-coche) center / contain no-repeat; mask: var(--br-i-coche) center / contain no-repeat; }
+.br-mots-zone > span:not(.is-visible) { transform: translateY(-.4em); }

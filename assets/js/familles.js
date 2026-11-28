@@ -261,13 +261,138 @@
 		}, false );
 	}
 
+
+	/* ----- Abonnements : « Au mois » / « À l'année ». Sans script, les deux prix restent affichés. */
+	function abonnement( section ) {
+		var cartes = section.querySelector( '.br-prices' );
+		if ( ! cartes || section.querySelector( '.br-abonnement-choix' ) ) {
+			return;
+		}
+		var choix = document.createElement( 'div' );
+		choix.className = 'br-abonnement-choix';
+		choix.setAttribute( 'role', 'group' );
+		choix.setAttribute( 'aria-label', 'Afficher les prix' );
+		var boutons = [ [ 'mois', 'Au mois' ], [ 'an', 'À l’année' ] ].map( function ( c ) {
+			var b = document.createElement( 'button' );
+			b.type = 'button';
+			b.textContent = c[ 1 ];
+			b.addEventListener( 'click', function () {
+				montrer( c[ 0 ] );
+			} );
+			choix.appendChild( b );
+			return [ c[ 0 ], b ];
+		} );
+		function montrer( v ) {
+			section.classList.toggle( 'is-mois', 'mois' === v );
+			section.classList.toggle( 'is-an', 'an' === v );
+			boutons.forEach( function ( b ) {
+				b[ 1 ].setAttribute( 'aria-pressed', b[ 0 ] === v ? 'true' : 'false' );
+			} );
+		}
+		var tete = section.querySelector( '.br-head' );
+		( tete || cartes ).insertAdjacentElement( tete ? 'beforeend' : 'beforebegin', choix );
+		montrer( 'mois' );
+	}
+
+	/* ----- Mot qui change : « mot 1 / mot 2 / mot 3 » dans un titre. Les lecteurs d'écran lisent
+	   la liste entière ; moins d'animations : le premier mot reste. */
+	function motsQuiChangent( el ) {
+		if ( el.dataset.brPret ) {
+			return;
+		}
+		var mots = el.textContent.split( ' / ' ).map( function ( m ) { return m.trim(); } ).filter( Boolean );
+		if ( mots.length < 2 ) {
+			return;
+		}
+		el.dataset.brPret = '1';
+		el.textContent = '';
+		var lu = document.createElement( 'span' );
+		lu.className = 'screen-reader-text';
+		lu.textContent = mots.slice( 0, -1 ).join( ', ' ) + ' ou ' + mots[ mots.length - 1 ];
+		var zone = document.createElement( 'span' );
+		zone.className = 'br-mots-zone';
+		zone.setAttribute( 'aria-hidden', 'true' );
+		var spans = mots.map( function ( m, i ) {
+			var s = document.createElement( 'span' );
+			s.textContent = m;
+			if ( ! i ) {
+				s.className = 'is-visible';
+			}
+			zone.appendChild( s );
+			return s;
+		} );
+		el.appendChild( lu );
+		el.appendChild( zone );
+		if ( calme ) {
+			return;
+		}
+		var i = 0;
+		setInterval( function () {
+			spans[ i ].classList.remove( 'is-visible' );
+			i = ( i + 1 ) % spans.length;
+			spans[ i ].classList.add( 'is-visible' );
+		}, 2600 );
+	}
+
+	/* ----- Manifeste : les mots se colorent au fil de la lecture. */
+	function manifeste( titre ) {
+		if ( calme || titre.dataset.brPret ) {
+			return;
+		}
+		titre.dataset.brPret = '1';
+		var mots = [];
+		Array.prototype.slice.call( titre.childNodes ).forEach( function ( n ) {
+			if ( 3 !== n.nodeType ) {
+				return;
+			}
+			var frag = document.createDocumentFragment();
+			n.textContent.split( /(\s+)/ ).forEach( function ( t ) {
+				if ( ! t.trim() ) {
+					frag.appendChild( document.createTextNode( t ) );
+					return;
+				}
+				var s = document.createElement( 'span' );
+				s.className = 'br-mf';
+				s.textContent = t;
+				mots.push( s );
+				frag.appendChild( s );
+			} );
+			n.parentNode.replaceChild( frag, n );
+		} );
+		function maj() {
+			var r = titre.getBoundingClientRect();
+			var vh = window.innerHeight;
+			var p = Math.max( 0, Math.min( 1, ( vh * 0.8 - r.top ) / ( r.height + vh * 0.35 ) ) );
+			var n = Math.round( p * mots.length );
+			mots.forEach( function ( m, k ) {
+				m.classList.toggle( 'is-lu', k < n );
+			} );
+		}
+		window.addEventListener( 'scroll', maj, { passive: true } );
+		window.addEventListener( 'resize', maj );
+		maj();
+	}
+
 	function demarrer() {
+		document.querySelectorAll( '.br-abonnement' ).forEach( abonnement );
+		document.querySelectorAll( '.br-mots' ).forEach( motsQuiChangent );
+		document.querySelectorAll( '.br-manifeste-texte' ).forEach( manifeste );
 		document.querySelectorAll( '.br-partenaires--defile' ).forEach( logosDefilants );
 		document.querySelectorAll( '.br-galeries--bande' ).forEach( function ( s ) {
 			defilement( s, { liste: '.br-galeries-photos', precedent: 'Photo précédente', suivant: 'Photo suivante' } );
 		} );
 		document.querySelectorAll( '.br-projets--defile' ).forEach( function ( s ) {
 			defilement( s, { liste: '.br-projects', precedent: 'Réalisation précédente', suivant: 'Réalisation suivante' } );
+		} );
+		document.querySelectorAll( '.br-equipe--defile' ).forEach( function ( s ) {
+			defilement( s, { liste: '.br-team', precedent: 'Personne précédente', suivant: 'Personne suivante' } );
+		} );
+		// Questions ouvertes : toutes les réponses visibles (sans script, l'accordéon reste utilisable).
+		document.querySelectorAll( '.br-questions--ouvertes details' ).forEach( function ( d ) {
+			d.open = true;
+			d.querySelector( 'summary' ).addEventListener( 'click', function ( e ) {
+				e.preventDefault();
+			} );
 		} );
 		document.querySelectorAll( '.br-services--onglets' ).forEach( onglets );
 		document.querySelectorAll( '.br-services--defile' ).forEach( function ( s ) {

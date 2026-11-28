@@ -1,15 +1,15 @@
 <?php
 /**
- * Title: Personnes : Présentation du dirigeant
+ * Title: Personnes : Présentation de la personne (3 versions)
  * Slug: briise/dirigeant
  * Categories: briise-personnes
- * Description: Quand le client choisit une personne autant qu’une entreprise : la personne derrière l’entreprise, sa photo et son parcours.
+ * Description: Quand le client choisit une personne autant qu’une entreprise : sa photo et son parcours. Forme au choix dans le panneau « Version » : photo à gauche, photo à droite, citation en grand avec un petit portrait.
  * Viewport Width: 1400
  */
 $briise = briise_theme_entreprise();
 ?>
-<!-- wp:group {"align":"full","className":"br-section","layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull br-section"><!-- wp:columns {"verticalAlignment":"center","className":"br-split"} -->
+<!-- wp:group {"align":"full","className":"br-section br-personne br-personne\u002d\u002dgauche","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull br-section br-personne br-personne--gauche"><!-- wp:columns {"verticalAlignment":"center","className":"br-split"} -->
 <div class="wp-block-columns are-vertically-aligned-center br-split"><!-- wp:column {"width":"42%"} -->
 <div class="wp-block-column" style="flex-basis:42%"><!-- wp:image {"aspectRatio":"4/5","scale":"cover","sizeSlug":"full","linkDestination":"none","className":"is-style-br-galet"} -->
 <figure class="wp-block-image size-full is-style-br-galet"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/sections/portrait.svg' ) ); ?>" alt="Portrait de [prénom nom]" style="aspect-ratio:4/5;object-fit:cover"/></figure>

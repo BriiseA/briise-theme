@@ -191,3 +191,27 @@
 
 	wp.hooks.addFilter( 'editor.BlockEdit', 'briise/familles-version', avecVersion );
 }( window.wp ) );
+
+/* Format « Mots qui changent » : entoure « mot 1 / mot 2 / mot 3 » dans un titre ; sur le site, les
+   mots se succèdent (assets/js/familles.js). */
+( function ( wp ) {
+	if ( ! wp || ! wp.richText || ! wp.blockEditor || ! wp.element ) {
+		return;
+	}
+	var el = wp.element.createElement;
+	wp.richText.registerFormatType( 'briise/mots', {
+		title: 'Mots qui changent',
+		tagName: 'span',
+		className: 'br-mots',
+		edit: function ( props ) {
+			return el( wp.blockEditor.RichTextToolbarButton, {
+				icon: 'update',
+				title: 'Mots qui changent (séparés par « / »)',
+				isActive: props.isActive,
+				onClick: function () {
+					props.onChange( wp.richText.toggleFormat( props.value, { type: 'briise/mots' } ) );
+				},
+			} );
+		},
+	} );
+}( window.wp ) );

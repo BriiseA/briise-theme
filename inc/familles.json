@@ -110,6 +110,14 @@
 				"volets": [
 					"Volets",
 					"Bandes photo côte à côte : celle que l’on survole s’ouvre et montre son texte. Sur téléphone, les volets s’empilent."
+				],
+				"apercu": [
+					"Aperçu photo",
+					"Les noms des services en liste ; la photo du service survolé s’affiche à côté, en grand. Sur téléphone, des cartes classiques."
+				],
+				"pile": [
+					"Cartes empilées",
+					"Chaque service dans une grande carte qui reste en haut de l’écran ; la suivante vient se poser dessus au défilement."
 				]
 			}
 		},
@@ -300,6 +308,186 @@
 					"De petites pastilles centrées, discrètes. Par exemple juste avant un formulaire ou sous les tarifs."
 				]
 			}
+		},
+		"ouenetes": {
+			"nom": "Où en êtes-vous ?",
+			"classe": "br-ouenetes",
+			"section": "ou-en-etes-vous",
+			"defaut": "cartes",
+			"variantes": {
+				"cartes": [
+					"Cartes",
+					"Quatre cartes côte à côte, chacune avec son icône."
+				],
+				"lignes": [
+					"Lignes",
+					"Une situation par ligne : la phrase à gauche, la réponse et le prix à droite. Bien pour des phrases longues."
+				],
+				"conversation": [
+					"Conversation",
+					"La phrase du visiteur dans une bulle, votre réponse dans une autre, comme un échange de messages."
+				],
+				"photo": [
+					"Avec photo",
+					"Une photo d’un côté, les situations en petites cartes de l’autre."
+				],
+				"frise": [
+					"Frise",
+					"Les situations se suivent sur une ligne. Seulement quand elles se suivent dans le temps (« J’y pense », « Je me lance »…)."
+				],
+				"profils": [
+					"Profils avec photo",
+					"Une photo en haut de chaque carte. Quand les situations sont des types de clients (particuliers, entreprises…). Il faut une vraie photo par profil."
+				]
+			}
+		},
+		"deroule": {
+			"nom": "Étapes",
+			"classe": "br-deroule",
+			"section": "etapes",
+			"defaut": "frise",
+			"variantes": {
+				"frise": [
+					"Frise",
+					"Les étapes côte à côte sur une ligne qui se remplit au défilement."
+				],
+				"vertical": [
+					"Fil vertical",
+					"Les étapes l’une sous l’autre, le long d’un fil. Bien pour des textes plus longs."
+				],
+				"cartes": [
+					"Cartes numérotées",
+					"Une carte par étape, un grand numéro en haut. Sans ligne."
+				],
+				"zigzag": [
+					"Zigzag",
+					"Les étapes de part et d’autre d’une ligne centrale."
+				],
+				"pile": [
+					"Cartes empilées",
+					"Chaque étape dans une carte qui reste en haut de l’écran ; la suivante vient se poser dessus au défilement."
+				]
+			}
+		},
+		"questions": {
+			"nom": "Questions fréquentes",
+			"classe": "br-questions",
+			"section": "faq",
+			"defaut": "cote",
+			"variantes": {
+				"cote": [
+					"Titre à côté",
+					"Le titre à gauche, les questions à droite."
+				],
+				"centree": [
+					"Centrée",
+					"Le titre centré, les questions dessous dans une colonne."
+				],
+				"deux": [
+					"Deux colonnes",
+					"Les questions réparties sur deux colonnes. Pour huit questions ou plus."
+				],
+				"ouvertes": [
+					"Réponses ouvertes",
+					"Toutes les réponses visibles, en cartes. Pour quatre à six questions courtes."
+				]
+			}
+		},
+		"personne": {
+			"nom": "Présentation de la personne",
+			"classe": "br-personne",
+			"section": "dirigeant",
+			"defaut": "gauche",
+			"variantes": {
+				"gauche": [
+					"Photo à gauche",
+					"La photo à gauche, le parcours à droite."
+				],
+				"droite": [
+					"Photo à droite",
+					"Le parcours à gauche, la photo à droite."
+				],
+				"citation": [
+					"Citation en grand",
+					"Un petit portrait rond, puis votre phrase en grand, centrée."
+				]
+			}
+		},
+		"equipe": {
+			"nom": "Équipe",
+			"classe": "br-equipe",
+			"section": "equipe",
+			"defaut": "grille",
+			"variantes": {
+				"grille": [
+					"Grille",
+					"Les portraits côte à côte, le nom et le rôle dessous."
+				],
+				"ronds": [
+					"Portraits ronds",
+					"Des portraits ronds, centrés. Plus chaleureux."
+				],
+				"cartes": [
+					"Nom sur la photo",
+					"Grands portraits, le nom et le rôle posés en bas de la photo."
+				],
+				"defile": [
+					"Défilement",
+					"Les portraits glissent de gauche à droite, avec des flèches. Pour une grande équipe."
+				]
+			}
+		},
+		"formules": {
+			"nom": "Formules et tarifs",
+			"classe": "br-formules",
+			"section": "tarifs-cartes",
+			"defaut": "cartes",
+			"variantes": {
+				"cartes": [
+					"Cartes",
+					"Une carte par formule, celle du milieu mise en avant."
+				],
+				"sobres": [
+					"Cartes sobres",
+					"Les mêmes cartes, sans mise en avant."
+				],
+				"menu": [
+					"Menu",
+					"Le nom, des pointillés et le prix, comme une carte de restaurant. Bien pour beaucoup de prestations courtes."
+				],
+				"bandes": [
+					"Bandes",
+					"Une formule par ligne : nom et prix, détail, bouton."
+				],
+				"sombre": [
+					"Vedette sombre",
+					"La formule mise en avant passe sur fond sombre, les autres restent claires."
+				]
+			}
+		},
+		"appel": {
+			"nom": "Appel à l’action",
+			"classe": "br-appel",
+			"section": "bandeau-cta",
+			"defaut": "bandeau",
+			"variantes": {
+				"bandeau": [
+					"Bandeau",
+					"Pleine largeur sur la couleur secondaire : le texte à gauche, le bouton à droite."
+				],
+				"carte": [
+					"Carte",
+					"Une carte colorée posée sur la page, centrée."
+				],
+				"fine": [
+					"Bande fine",
+					"Une seule ligne, peu de hauteur, sans décor. Pour relancer en milieu de page."
+				],
+				"geant": [
+					"Titre géant",
+					"Une phrase très grande, centrée. Pour une phrase courte."
+				]
+			}
 		}
 	},
 	"titres": {
@@ -365,7 +553,17 @@
 				"br-galeries--grande",
 				"br-projets--liste",
 				"br-projets--grande",
-				"br-partenaires--discrets"
+				"br-partenaires--discrets",
+				"br-ouenetes--lignes",
+				"br-ouenetes--conversation",
+				"br-ouenetes--photo",
+				"br-formules--menu",
+				"br-formules--bandes",
+				"br-services--apercu",
+				"br-services--pile",
+				"br-deroule--pile",
+				"br-pourvous",
+				"br-jalons"
 			],
 			"seulement_si": [
 				"br-benefices",
@@ -419,7 +617,15 @@
 				"br-galeries--bande",
 				"br-projets--defile",
 				"br-galeries--grande",
-				"br-transformation--medaillon"
+				"br-transformation--medaillon",
+				"br-ouenetes--frise",
+				"br-ouenetes--photo",
+				"br-ouenetes--profils",
+				"br-equipe--defile",
+				"br-formules--bandes",
+				"br-services--apercu",
+				"br-services--pile",
+				"br-deroule--pile"
 			]
 		},
 		"marge-droite": {
@@ -440,7 +646,15 @@
 				"br-galeries--bande",
 				"br-projets--defile",
 				"br-galeries--grande",
-				"br-transformation--medaillon"
+				"br-transformation--medaillon",
+				"br-ouenetes--frise",
+				"br-ouenetes--photo",
+				"br-ouenetes--profils",
+				"br-equipe--defile",
+				"br-formules--bandes",
+				"br-services--apercu",
+				"br-services--pile",
+				"br-deroule--pile"
 			]
 		}
 	}

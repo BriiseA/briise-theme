@@ -48,6 +48,9 @@ const sectionHead = (title, link) => Row('br-section-head', [H(title, 2), ...(li
 const Num = (n) => P(n, 'br-num');
 
 const S = {};
+// Ajoute la classe de famille (et de version) à une section déjà construite, sans toucher aux fonctions
+// partagées avec les sites d'exemple.
+const avecClasse = (b, cls) => { b.attributes.className = ((b.attributes.className || '') + ' ' + cls).trim(); return b; };
 const add = (slug, cat, title, desc, blocks) => { const b = Array.isArray(blocks) ? blocks : [blocks]; S[slug] = { cat, title, desc, blocks: b, markup: serialize(b) }; };
 
 /* ----- Ouverture ----- */
@@ -120,7 +123,7 @@ const zoneSchema = (label, titre, chapo, lien) => Section('br-zone-schema', [Col
 ], 'br-split', { verticalAlignment: 'center' })]);
 
 add('bande-confiance', 'confiance', 'Engagements (3 versions)', 'Quatre engagements réels, chacun avec son icône, son titre et une précision. Choisissez la forme dans le panneau « Version » : carte qui chevauche l’ouverture (juste dessous), bande foncée pleine largeur, ou pastilles (par exemple juste avant un formulaire). L’icône se change dans Avancé > Classes CSS : is-icone-garantie, is-icone-plan, is-icone-atelier, is-icone-avis, is-icone-delai, is-icone-prix, is-icone-local, is-icone-devis, is-icone-equipe.',
-  confiance([['garantie', 'Garantie décennale', 'Attestation jointe au devis'], ['devis', 'Devis gratuit', 'Sous 5 jours ouvrés'], ['local', 'Une équipe locale', 'À votre ville et alentour'], ['avis', 'Note Google', 'À n’afficher que si elle est réelle']]));
+  confiance([['garantie', 'Votre premier engagement', 'Ce qui le prouve, en quelques mots'], ['delai', 'Une réponse rapide', 'Sous [délai], par écrit ou par téléphone'], ['local', 'Près de chez vous', 'À [ville] et alentour'], ['avis', 'Votre note', 'Uniquement si elle est réelle']]));
 
 add('zone-liste', 'contact', 'Zone d’intervention en liste', 'Les communes où vous intervenez, groupées par distance (moins de 10 km, 10 à 20 km…), puis une invitation à appeler. Les distances se calculent seules à partir de Mon entreprise > Entreprise > Communes du schéma de zone (nom ; latitude ; longitude, votre adresse en premier).',
   zoneListe('Zone d’intervention', 'Nous intervenons à 30 km autour de votre ville', 'Les secteurs où vous travaillez, en une phrase. La visite ou le devis sont-ils gratuits partout ?', ['Toutes les communes où nous intervenons', URL('zone-intervention')]));
@@ -150,7 +153,7 @@ const serviceItem = (n, o = {}) => Box('br-service', [
     Arrow(o.lien ? o.lien[0] : `{{SERVICE:${n}}} en détail`, o.lien ? o.lien[1] : URL(`service-${n}`)),
   ]),
 ]);
-const VERSIONS_SERVICES = ['grille', 'bento', 'liste', 'phare', 'defile', 'onglets', 'volets'];
+const VERSIONS_SERVICES = ['grille', 'bento', 'liste', 'phare', 'defile', 'onglets', 'volets', 'apercu', 'pile'];
 // La phrase d'introduction (chapo) est facultative : retirez-la, le titre reste correct seul.
 // position : la place du titre (br-titre--centre…, voir inc/familles.php) ; vide = selon le site.
 const services = ({ version = 'grille', titre = 'Ce que nous faisons', chapo = 'Une phrase qui présente vos services : pour qui ils sont faits, et où vous intervenez.', lien = ['Tous nos services', URL('services')], items = 4, bg = 'surface', position = 'cote' } = {}) =>
@@ -159,7 +162,7 @@ const services = ({ version = 'grille', titre = 'Ce que nous faisons', chapo = '
     Box('br-services-liste', (Array.isArray(items) ? items : Array.from({ length: items }, () => ({}))).map((o, i) => serviceItem(i + 1, o))),
   ], bg ? { backgroundColor: bg } : {});
 
-add('services', 'offre', 'Services (7 versions)', 'Vos services, chacun avec sa photo, son nom, deux phrases et le lien vers sa page. Choisissez la forme dans le panneau « Version » de la section : grille, grille asymétrique, liste en deux colonnes, service phare, défilement, onglets ou volets ; et la place du titre dans le panneau « Titre ». Le texte et les photos restent en place quand vous changez de version. Retirez ou dupliquez un service : chaque version s’adapte de 3 à 6 services.',
+add('services', 'offre', 'Services (9 versions)', 'Vos services, chacun avec sa photo, son nom, deux phrases et le lien vers sa page. Choisissez la forme dans le panneau « Version » de la section : grille, grille asymétrique, liste en deux colonnes, service phare, défilement, onglets ou volets ; et la place du titre dans le panneau « Titre ». Le texte et les photos restent en place quand vous changez de version. Retirez ou dupliquez un service : chaque version s’adapte de 3 à 6 services.',
   services());
 
 // Ouverture : pastille, grand titre (un mot surligné), phrase, bouton d'action et second bouton,
@@ -179,7 +182,7 @@ const titreOuverture = (titre, motsPhotos) => {
 // Options : infos = la carte d'infos réelles posée sur la photo (horaires du jour, prochaine date libre,
 // ville : rien ne s'affiche sans données) ; bande = les services en grand, sur une bande qui défile
 // (true : les quatre premiers services du client ; ou une liste de noms).
-const ouverture = ({ version = 'cote', pastille = 'Votre métier · Votre ville', titre = 'Le titre qui dit ce que vous faites,', accent = 'et où', chapo = 'Une ou deux phrases : pour qui, ce qui vous distingue, et ce que le visiteur gagne à vous appeler.', second = ['Voir nos réalisations', URL('realisations')], atouts = ['Devis gratuit', 'Votre délai de réponse', 'Votre garantie'], photos = PHOTOS_OUVERTURE, motsPhotos = ['paysage', 'paysage-2'], infos = true, bande = false } = {}) => {
+const ouverture = ({ version = 'cote', pastille = 'Votre métier · Votre ville', titre = 'Le titre qui dit ce que vous faites,', accent = 'et où', chapo = 'Une ou deux phrases : pour qui, ce qui vous distingue, et ce que le visiteur gagne à vous appeler.', second = ['Voir nos réalisations', URL('realisations')], atouts = ['Votre premier atout', 'Votre délai de réponse', 'Votre engagement'], photos = PHOTOS_OUVERTURE, motsPhotos = ['paysage', 'paysage-2'], infos = true, bande = false, raccourcis = false } = {}) => {
   const noms = bande === true ? [1, 2, 3, 4].map((n) => `{{SERVICE:${n}}}`) : (bande || []);
   return Section(`br-hero br-ouverture br-ouverture--${version}`, [
     Box('br-ouv-grille', [
@@ -193,6 +196,7 @@ const ouverture = ({ version = 'cote', pastille = 'Votre métier · Votre ville'
       Box('br-ouv-media', [
         ...photos.map((p) => (Array.isArray(p) ? PhotoOuverture(p[0], p[1]) : PhotoOuverture(p))),
         ...(infos ? [Short('[briise_infos_ouverture]')] : []),
+        ...(raccourcis ? [Short('[briise_raccourcis]')] : []),
       ]),
     ]),
     ...(noms.length ? [cb('core/group', { align: 'full', className: 'br-defile br-defile--services', layout: { type: 'default' } }, [
@@ -205,6 +209,9 @@ add('ouverture', 'ouverture', 'Ouverture (10 versions)', 'Le haut de l’accueil
   ouverture());
 add('ouverture-bande', 'ouverture', 'Ouverture avec bande de services', 'La même ouverture, avec en bas vos services en grand sur une bande qui défile doucement (pause au survol, au clavier ou avec le bouton). Les noms viennent de vos pages de service : vérifiez qu’il y en a au moins quatre, ou retirez les noms en trop.',
   ouverture({ version: 'banniere', bande: true }));
+
+add('ouverture-raccourcis', 'ouverture', 'Ouverture avec raccourcis vers les services', 'La même ouverture, avec en bas de la photo des pastilles qui mènent à vos pages de service (elles viennent de vos pages ; rien ne s’affiche sans elles). La carte d’infos peut montrer votre note Google si vous la renseignez dans Mon entreprise.',
+  ouverture({ version: 'banniere', raccourcis: true }));
 
 const bloc = (titre) => [
   Label('Service'), H(titre, 2),
@@ -295,10 +302,10 @@ const tarif = (nom, prix, vedette) => Col([Box('br-card br-price' + (vedette ? '
   List(['Ce qui est inclus', 'Un deuxième élément', 'Un troisième élément']),
   Btns(Btn('Choisir cette formule', CTA, vedette ? null : 'is-style-outline')),
 ])]);
-add('tarifs-cartes', 'offre', 'Grille de tarifs en cartes', 'Deux à quatre formules avec leur prix ; celle du milieu est mise en avant.',
-  Section('', [
+add('tarifs-cartes', 'offre', 'Formules et tarifs (4 versions)', 'Deux à quatre formules avec leur prix. Forme au choix dans le panneau « Version » : cartes (celle du milieu en avant), vedette sombre, menu (nom, pointillés, prix), bandes horizontales, cartes sobres sans mise en avant. Seulement des prix réels.',
+  Section('br-formules br-formules--cartes', [
     Head([Label('Tarifs'), H('Des prix clairs, sans surprise', 2)]),
-    Cols([tarif('Découverte', '40 €'), tarif('Régulière', '90 €', true), tarif('Intensive', '160 €')], 'br-prices'),
+    Cols([tarif('Première formule', '[prix] €'), tarif('Formule la plus choisie', '[prix] €', true), tarif('Formule complète', '[prix] €')], 'br-prices'),
   ], { backgroundColor: 'nuance' }));
 
 add('tarifs-tableau', 'offre', 'Tableau de tarifs simple', 'Pour une liste de prestations nombreuses : une ligne par prestation.',
@@ -346,12 +353,12 @@ const avantApres = (label, titre, chapo, a = ['avant', 'Avant : décrivez l’é
 ]);
 /* ----- Parcours ----- */
 
-add('etapes', 'parcours', 'Étapes en frise', 'Rassurer sur le déroulé : du premier contact au résultat. Une frise numérotée qui se remplit au défilement, avec la durée de chaque étape. Idéale sur l’accueil.',
-  etapesFrise('Trois étapes, sans surprise', [
+add('etapes', 'parcours', 'Étapes (4 versions)', 'Rassurer sur le déroulé : du premier contact au résultat, avec la durée de chaque étape. Forme au choix dans le panneau « Version » : frise qui se remplit au défilement, fil vertical, cartes numérotées, zigzag de part et d’autre d’une ligne, cartes empilées au défilement.',
+  avecClasse(etapesFrise('Trois étapes, sans surprise', [
     ['Vous nous contactez', 'Par téléphone ou par le formulaire. Nous répondons sous 24 heures ouvrées.', 'Réponse sous 24 h'],
-    ['Nous faisons le point', 'Un échange pour comprendre votre besoin, puis un devis clair et détaillé.', 'Devis gratuit'],
-    ['Nous réalisons', 'Aux dates convenues, avec un interlocuteur unique du début à la fin.', 'Délai annoncé au devis'],
-  ], [MainBtns()]));
+    ['Nous faisons le point', 'Un échange pour comprendre votre besoin, puis une proposition claire et détaillée.', 'Premier échange offert'],
+    ['Nous réalisons', 'Aux dates convenues, avec un interlocuteur unique du début à la fin.', 'Délai annoncé à l’avance'],
+  ], [MainBtns()]), 'br-deroule br-deroule--frise'));
 
 add('etapes-prix', 'parcours', 'Déroulé et prix, côte à côte', 'Pages de service : les étapes sur un fil qui se remplit au défilement, et le prix dans la colonne qui reste à l’écran. Le visiteur lit le déroulé et voit le prix en même temps.',
   etapesFil('De la première visite à la fin du chantier', [
@@ -373,14 +380,14 @@ add('prix-compris', 'offre', 'Prix et ce qu’il comprend', 'Les prix, puis deux
     ], 'br-etapes-cols'),
   ], { backgroundColor: 'fond' }));
 
-add('faq', 'parcours', 'FAQ en accordéon', 'Lever les freins avant le contact. Sur la page choisie comme FAQ, les questions sont transmises à Google.',
-  Section('', [Cols([
+add('faq', 'parcours', 'Questions fréquentes (4 versions)', 'Lever les freins avant le contact. Sur la page choisie comme FAQ, les questions sont transmises à Google. Forme au choix dans le panneau « Version » : titre à côté, centrée, sur deux colonnes, toutes les réponses ouvertes en cartes.',
+  Section('br-questions br-questions--cote', [Cols([
     Col([Label('Questions fréquentes'), H('Vos questions, nos réponses', 2), Muted('Vous ne trouvez pas votre réponse ?'), Arrow('Posez-nous la question', CTA)], { width: '38%' }),
     Col([
       Details('Une question que vos clients posent souvent ?', 'Une réponse directe en deux ou trois phrases. Commencez par oui ou par non quand c’est possible.'),
       Details('Combien de temps faut-il compter ?', 'Donnez un délai concret, même approximatif : c’est l’une des premières choses que l’on cherche.'),
-      Details('Quels sont vos tarifs ?', 'Une fourchette honnête vaut mieux que « sur devis » seul. Renvoyez vers la page des tarifs si elle existe.'),
-      Details('Intervenez-vous dans ma ville ?', 'Citez les villes ou le rayon couvert. C’est aussi utile pour le référencement local.'),
+      Details('Quels sont vos tarifs ?', 'Une fourchette honnête vaut mieux que « sur demande » seul. Renvoyez vers la page des tarifs si elle existe.'),
+      Details('Intervenez-vous dans ma ville ?', 'Citez les villes ou le rayon couvert, ou dites si tout se fait à distance. C’est aussi utile pour le référencement local.'),
       Details('Comment se passe le paiement ?', 'Moyens acceptés, acompte éventuel, échéances.'),
     ], { width: '62%' }),
   ], 'br-split')]));
@@ -400,8 +407,8 @@ add('horaires', 'parcours', 'Horaires et planning', 'Horaires d’ouverture tir�
 
 /* ----- Personnes ----- */
 
-add('dirigeant', 'personnes', 'Présentation du dirigeant', 'Quand le client choisit une personne autant qu’une entreprise : la personne derrière l’entreprise, sa photo et son parcours.',
-  Section('', [Cols([
+add('dirigeant', 'personnes', 'Présentation de la personne (3 versions)', 'Quand le client choisit une personne autant qu’une entreprise : sa photo et son parcours. Forme au choix dans le panneau « Version » : photo à gauche, photo à droite, citation en grand avec un petit portrait.',
+  Section('br-personne br-personne--gauche', [Cols([
     Col([Img('portrait', '4/5', 'is-style-br-galet', 'Portrait de [prénom nom]')], { width: '42%' }),
     Col([
       Label('Qui suis-je'), H('Prénom Nom, votre métier', 2),
@@ -412,10 +419,10 @@ add('dirigeant', 'personnes', 'Présentation du dirigeant', 'Quand le client cho
   ], 'br-split', { verticalAlignment: 'center' })]));
 
 const membre = (img, n) => Col([Box('br-member', [Img(img, '1/1', 'is-style-br-arrondi', 'Portrait de ' + n), H(n, 3), Muted('Rôle ou spécialité')])]);
-add('equipe', 'personnes', 'Équipe', 'PME et cabinets : présenter les personnes que le client rencontrera.',
-  Section('', [
+add('equipe', 'personnes', 'Équipe (4 versions)', 'Présenter les personnes que le client rencontrera. Forme au choix dans le panneau « Version » : grille, portraits ronds, cartes avec le nom sur la photo, défilement avec flèches.',
+  Section('br-equipe br-equipe--grille', [
     Head([Label('L’équipe'), H('Les personnes qui vous accompagnent', 2)]),
-    Cols([membre('carre', 'Prénom Nom'), membre('carre-2', 'Prénom Nom'), membre('carre-3', 'Prénom Nom')], 'br-team'),
+    Cols([membre('carre', 'Prénom Nom'), membre('carre-2', 'Prénom Nom'), membre('carre-3', 'Prénom Nom'), membre('portrait', 'Prénom Nom')], 'br-team'),
   ]));
 
 const valeur = (t) => Col([H(t, 3), Muted('Ce que cette valeur change concrètement pour le client, en une ou deux phrases.')]);
@@ -453,9 +460,9 @@ add('zone-carte', 'contact', 'Zone d’intervention (carte)', 'Les communes regr
   Section('', [Short('[briise_carte_zone]')]));
 
 
-add('bandeau-cta', 'contact', 'Bandeau d’appel à l’action', 'Fin de page : une dernière invitation à passer à l’action.',
-  Section('br-cta', [Box('br-cta-inner', [
-    H('Une question, un projet ?', 2), Lead('Une phrase qui lève le dernier frein : devis gratuit, réponse rapide, premier échange sans engagement.'),
+add('bandeau-cta', 'contact', 'Appel à l’action (4 versions)', 'Fin de page : une dernière invitation à passer à l’action. Forme au choix dans le panneau « Version » : bandeau, carte posée sur la page, bande fine, titre géant.',
+  Section('br-cta br-appel br-appel--bandeau', [Box('br-cta-inner', [
+    H('Une question, un projet ?', 2), Lead('Une phrase qui lève le dernier frein : réponse rapide, premier échange sans engagement, prix annoncé à l’avance.'),
     Btns(Btn(CTA_LABEL, CTA, null, { backgroundColor: 'fond', textColor: 'texte' })),
   ])], { backgroundColor: 'secondaire', textColor: 'fond' }));
 
@@ -738,7 +745,7 @@ add('ouverture-demande', 'ouverture', 'Grande photo et demande express', 'La dem
     url: IMG('banniere'), alt: '', dimRatio: 70, overlayColor: 'sombre', isUserOverlayColor: true, minHeight: 80, minHeightUnit: 'vh',
     contentPosition: 'center center', align: 'full', className: 'br-banniere br-ouv-plein br-ouv-demande', layout: { type: 'constrained' },
   }, [Cols([
-    Col([Label('Votre métier, votre ville'), H('Le titre qui dit ce que vous faites, et où', 1, null, { fontSize: 'huge' }), Lead('Laissez votre numéro : nous vous rappelons dans la journée ouvrée pour fixer la visite.'), List(['Visite gratuite', 'Devis sous 5 jours', 'Garantie décennale'], 'br-coches')], { verticalAlignment: 'center', width: '55%' }),
+    Col([Label('Votre métier, votre ville'), H('Le titre qui dit ce que vous faites, et où', 1, null, { fontSize: 'huge' }), Lead('Laissez votre numéro : nous vous rappelons dans la journée ouvrée pour fixer un rendez-vous.'), List(['Premier échange gratuit', 'Réponse sous [délai]', 'Votre engagement'], 'br-coches')], { verticalAlignment: 'center', width: '55%' }),
     Col([Box('br-card br-ouv-form', [P('Votre projet en 30 secondes', 'br-ouv-form-titre'), Short('[briise_formulaire type="rappel"]'), P(`Vous préférez écrire ? <a href="${CTA}">Le formulaire complet</a>`, 'br-muted br-ouv-form-lien')])], { verticalAlignment: 'center', width: '45%' }),
   ], 'br-split', { verticalAlignment: 'center' })]));
 
@@ -751,7 +758,7 @@ add('ouverture-demande', 'ouverture', 'Grande photo et demande express', 'La dem
 const Piste = (items, cls = '') => cb('core/group', { className: ('br-defile-piste ' + cls).trim(), layout: { type: 'flex', flexWrap: 'wrap' } }, items);
 add('bande-preuves', 'confiance', 'Bande de preuves qui défile', 'Juste sous l’ouverture : vos garanties et vos faits courts, sur une bande qui défile doucement. De 5 à 8 faits vrais, de deux à cinq mots chacun. Le défilement s’arrête au survol, au clavier ou avec le bouton pause.',
   cb('core/group', { align: 'full', className: 'br-defile br-defile--preuves', backgroundColor: 'nuance', layout: { type: 'default' } }, [
-    Piste(['Devis gratuit sous 48 h', 'Prix annoncé avant de commencer', 'Garantie décennale', 'Atelier à [ville]', 'Depuis [année]', '4,9/5 sur Google', 'Une seule équipe, de la visite à la pose']
+    Piste(['Réponse sous [délai]', 'Prix annoncés à l’avance', '[Votre label ou diplôme]', 'Installé à [ville]', 'Depuis [année]', '[note]/5 sur Google', 'Un seul interlocuteur, du début à la fin']
       .map((t) => P(t, 'br-defile-item'))),
   ]));
 
@@ -780,18 +787,27 @@ add('faq-recherche', 'parcours', 'FAQ avec recherche et thèmes', 'Page FAQ ou l
 
 // Où en êtes-vous ? : quatre situations du visiteur, dites à la première personne, chacune avec
 // sa réponse, son prix et la page qui y répond. Tout est visible sans clic. Icône par la classe br-ic-….
-const situation = ([ic, phrase, reponse, prix, lien, url]) => Box('br-situation br-ic-' + ic, [
+// Famille « Où en êtes-vous ? » (classe br-ouenetes) : cartes, lignes, conversation, avec photo, frise,
+// profils avec photo. Le contenu est le même ; la photo de la section ne sert qu'à « avec photo », la
+// photo de chaque carte qu'à « profils » (cachées ailleurs, elles se retirent si inutiles).
+const VERSIONS_OUENETES = ['cartes', 'lignes', 'conversation', 'photo', 'frise', 'profils'];
+const PHOTOS_SITUATIONS = ['carre', 'carre-2', 'carre-3', 'portrait'];
+const situation = ([ic, phrase, reponse, prix, lien, url, photo], i = 0) => Box('br-situation br-ic-' + ic, [
+  ImgFond(photo || PHOTOS_SITUATIONS[i % 4], 'br-situation-photo', 'Photo à remplacer : la personne ou le moment que décrit cette situation'),
   H(phrase, 3), Muted(reponse), P(`<strong>${fr(prix)}</strong>`, 'br-situation-prix'), Arrow(lien, url)]);
-const situations = ({ label, titre, chapo, items, bg }) => Section('br-situations-section', [
+const situations = ({ label, titre, chapo, items, bg, version = 'cartes', position = '' }) => Section(`br-situations-section br-ouenetes br-ouenetes--${version}${position ? ' br-titre--' + position : ''}`, [
   Head([Label(label), H(titre, 2), Lead(chapo)]),
-  cb('core/group', { className: 'br-situations', layout: { type: 'grid', minimumColumnWidth: '14rem' } }, items.map(situation)),
+  Box('br-ouenetes-corps', [
+    Img('paysage', '4/5', 'br-ouenetes-photo', 'Photo à remplacer : votre lieu, votre travail ou vous'),
+    cb('core/group', { className: 'br-situations', layout: { type: 'grid', minimumColumnWidth: '14rem' } }, items.map((it, i) => situation(it, i))),
+  ]),
 ], bg ? { backgroundColor: bg } : {});
-add('ou-en-etes-vous', 'parcours', 'Où en êtes-vous ?', 'Quand les visiteurs arrivent dans des situations différentes : quatre cartes qui partent de leur situation, dite comme ils la diraient, avec la réponse, le prix et la page qui y répond. Tout est visible sans clic. Icône au choix par la classe du bloc : br-ic-maison, fleches, loupe, horloge, euro, bouclier, coeur, appareil. Seulement un prix réel, ou « Sur devis ».',
+add('ou-en-etes-vous', 'parcours', 'Où en êtes-vous ? (6 versions)', 'Forme au choix dans le panneau « Version » : cartes, lignes, conversation, avec photo, frise (quand les situations se suivent dans le temps), profils avec photo. Quand les visiteurs arrivent dans des situations différentes : quatre cartes qui partent de leur situation, dite comme ils la diraient, avec la réponse, le prix et la page qui y répond. Tout est visible sans clic. Icône au choix par la classe du bloc : br-ic-maison, fleches, loupe, horloge, euro, bouclier, coeur, appareil. Seulement un prix réel, ou « Sur devis ».',
   situations({ label: 'Par où commencer', titre: 'Où en êtes-vous ?', chapo: 'Choisissez la phrase qui vous ressemble : vous voyez ce qui vous servira, et ce que ça coûte.', items: [
-    ['maison', 'Je découvre, je ne sais pas par où commencer.', 'Ce que vous proposez pour démarrer, en une phrase.', 'Votre prix réel, ou « Sur devis »', 'Voir ce service', URL('service-1')],
-    ['fleches', 'J’ai déjà essayé, sans le résultat espéré.', 'Ce que vous faites autrement, concrètement.', 'Votre prix réel, ou « Sur devis »', 'Voir ce service', URL('service-2')],
-    ['loupe', 'Je sais ce que je veux, je compare.', 'Ce qui vous distingue, chiffre à l’appui.', 'Votre prix réel, ou « Sur devis »', 'Voir ce service', URL('service-3')],
-    ['horloge', 'C’est pressé.', 'Votre délai réel pour intervenir ou répondre.', 'Votre prix réel, ou « Sur devis »', CTA_LABEL, CTA],
+    ['maison', 'Je découvre, je ne sais pas par où commencer.', 'Ce que vous proposez pour démarrer, en une phrase.', 'Votre prix réel, ou « Sur demande »', 'Voir ce service', URL('service-1')],
+    ['fleches', 'J’ai déjà essayé, sans le résultat espéré.', 'Ce que vous faites autrement, concrètement.', 'Votre prix réel, ou « Sur demande »', 'Voir ce service', URL('service-2')],
+    ['loupe', 'Je sais ce que je veux, je compare.', 'Ce qui vous distingue, chiffre à l’appui.', 'Votre prix réel, ou « Sur demande »', 'Voir ce service', URL('service-3')],
+    ['horloge', 'C’est pressé.', 'Votre délai réel pour intervenir ou répondre.', 'Votre prix réel, ou « Sur demande »', CTA_LABEL, CTA],
   ] }));
 
 // Orientation compacte : « Je cherche … pour … » ; chaque ligne de la liste est une réponse
@@ -966,7 +982,7 @@ add('merci-suite', 'contact', 'Page merci : la suite', 'Pour la page qui s’aff
 const AVIS_EXEMPLES = [
   ['Recopiez ici un avis réel, mot pour mot. Les plus convaincants racontent une situation précise et son résultat.', 'Prénom N.', 'Prestation, ville', 'paysage'],
   ['Un deuxième avis, d’un autre type de client, pour que chacun s’y retrouve.', 'Prénom N.', 'Prestation, ville', 'carre'],
-  ['Un avis qui parle du prix ou du devis : c’est la crainte numéro un.', 'Prénom N.', 'Prestation, ville', 'paysage-2'],
+  ['Un avis qui parle du prix ou de la clarté de l’offre : c’est la crainte numéro un.', 'Prénom N.', 'Prestation, ville', 'paysage-2'],
   ['Un quatrième avis, court. Au-delà, renvoyez vers votre fiche Google.', 'Prénom N.', 'Prestation, ville', 'carre-2'],
 ];
 const temoin = ([txt, qui, quoi, img]) => Box('br-temoin', [
@@ -974,7 +990,7 @@ const temoin = ([txt, qui, quoi, img]) => Box('br-temoin', [
   P(ETOILES, 'br-avis-etoiles'),
   cb('core/quote', { citation: fr(`<strong>${qui}</strong><br>${quoi}`), className: 'br-temoin-citation' }, [P(fr(txt))]),
 ]);
-const NOTE_GOOGLE = P(`<strong class="br-note-chiffre">4,9</strong> <span class="br-note-detail">${ETOILES}<span>sur 5, 62 avis Google</span></span>`, 'br-note');
+const NOTE_GOOGLE = P(`<strong class="br-note-chiffre">[note]</strong> <span class="br-note-detail">${ETOILES}<span>sur 5, [nombre] avis Google</span></span>`, 'br-note');
 const VERSIONS_AVIS = ['grille', 'note', 'grand', 'mur', 'defile'];
 const avisSection = ({ version = 'grille', titre = 'Ce qu’en disent nos clients', chapo = '', lien = ['Tous les avis sur Google', '#'], note = true, items = AVIS_EXEMPLES, bg = 'surface', position = 'centre' } = {}) =>
   Section(`br-temoignages br-temoignages--${version}${position ? ' br-titre--' + position : ''}`, [
@@ -988,7 +1004,7 @@ add('avis', 'confiance', 'Avis (5 versions)', 'La note Google et quatre avis de 
   avisSection());
 
 // Chiffres : trois ou quatre preuves chiffrées, vraies et vérifiables, et une photo.
-const CHIFFRES_EXEMPLES = [['15 ans', 'd’expérience dans le métier'], ['400', 'clients accompagnés'], ['48 h', 'pour recevoir votre devis'], ['4,9/5', 'note moyenne sur Google']];
+const CHIFFRES_EXEMPLES = [['[00] ans', 'd’expérience dans le métier'], ['[000]', 'clients accompagnés'], ['[00] h', 'pour vous répondre'], ['[note]/5', 'note moyenne sur Google']];
 const VERSIONS_CHIFFRES = ['ligne', 'cartes', 'tuiles', 'bande', 'photo'];
 const chiffresSection = ({ version = 'ligne', label = 'En chiffres', titre = 'Ce qui fait la différence', chapo = 'Une phrase qui dit ce que ces chiffres garantissent à vos clients.', items = CHIFFRES_EXEMPLES, photo = 'paysage', position = 'filet' } = {}) =>
   Section(`br-chiffres br-chiffres--${version}${position ? ' br-titre--' + position : ''}`, [
@@ -1004,10 +1020,10 @@ add('chiffres', 'confiance', 'Chiffres (5 versions)', 'Trois ou quatre preuves c
 // Comparaison : « Ce que vous évitez avec nous ». Une ligne par sujet : ce qu'on voit souvent, ce que
 // vous faites. Ne jamais nommer ni viser un concurrent : décrire des pratiques, pas des entreprises.
 const COMPARAISON_EXEMPLES = [
-  ['Un devis vague, des suppléments à la fin', 'Un prix détaillé, tenu jusqu’au bout'],
-  ['Des semaines sans nouvelles', 'Une réponse sous 48 h, un interlocuteur unique'],
-  ['Un chantier laissé en l’état', 'Un chantier propre, chaque soir'],
-  ['Personne quand il y a un souci', 'Une garantie écrite, et on revient'],
+  ['Un prix flou, des suppléments à la fin', 'Un prix annoncé, tenu jusqu’au bout'],
+  ['Des semaines sans nouvelles', 'Une réponse sous [délai], un interlocuteur unique'],
+  ['On vous presse de décider', 'Le temps de réfléchir, sans relance insistante'],
+  ['Plus personne une fois payé', 'Joignable après la prestation, si besoin'],
 ];
 const VERSIONS_COMPARAISON = ['colonnes', 'lignes'];
 const comparaison = ({ version = 'colonnes', label = 'Pourquoi nous', titre = 'Ce que vous évitez avec nous', chapo = 'Ce qui agace le plus dans votre métier, et ce que vous faites autrement. Des faits que vous tenez, jamais un concurrent nommé.', tetes = ['Ce qu’on voit souvent', 'Avec nous'], items = COMPARAISON_EXEMPLES, photo = 'paysage', position = 'geant' } = {}) =>
@@ -1063,8 +1079,103 @@ const avantApresSection = ({ version = 'glisse', label = 'Avant / après', titre
 add('avant-apres', 'confiance', 'Avant / après (3 versions)', 'Montrer une transformation : la photo d’avant et celle d’après. Choisissez la forme dans le panneau « Version » : côte à côte, à faire glisser (une seule photo coupée par un curseur) ou l’après en grand avec l’avant en médaillon. Pour le curseur, les deux photos doivent être prises du même endroit, avec le même cadrage.',
   avantApresSection());
 
+/* ----- Aides et financement, On recrute --------------------------------------------- */
+const aide = (icone, nom) => Box('br-aide is-icone-' + icone, [H(nom, 3),
+  P('<strong>Pour qui :</strong> ' + fr('les conditions, en une phrase.')),
+  P('<strong>Montant :</strong> ' + fr('[montant ou part prise en charge], selon [critère].')),
+  Arrow('Vérifier sur le site officiel', '#')]);
+add('aides', 'offre', 'Aides et financement', 'Les aides, remboursements ou modes de paiement qui baissent le prix pour le client : aide publique, prise en charge (mutuelle, CPF, CESU…), paiement en plusieurs fois. Chaque carte renvoie au site officiel. Les montants changent souvent : vérifiez-les avant de publier, et datez-les.',
+  Section('br-aides', [
+    Head([Label('Financement'), H('Les aides qui peuvent baisser votre prix', 2), Lead('Une phrase qui dit si vous aidez le client à faire les démarches.')]),
+    Box('br-aides-grille', [aide('prix', 'Nom de la première aide'), aide('garantie', 'Nom de la deuxième aide'), aide('delai', 'Payer en plusieurs fois')]),
+    Muted('Montants vérifiés en [mois année]. Ils peuvent changer : le site officiel fait foi.'),
+  ]));
+
+const poste = (titre) => Box('br-poste', [H(titre, 3), P('[Contrat] · [Temps plein ou partiel] · [Ville]', 'br-poste-infos'), Muted('Ce que la personne fera, en une phrase.'), Arrow('Voir le poste et postuler', '#')]);
+add('recrutement', 'personnes', 'On recrute', 'Les postes ouverts, avec une photo de l’équipe : le contrat, le lieu et une phrase par poste, et le lien pour postuler. Retirez la section quand aucun poste n’est ouvert.',
+  Section('br-recrute', [Cols([
+    Col([Label('On recrute'), H('Rejoignez l’équipe', 2), Lead('Ce que vous offrez à ceux qui vous rejoignent : l’ambiance, la formation, les horaires.'), Img('paysage', '4/3', 'is-style-br-arrondi', 'Photo à remplacer : l’équipe au travail')], { width: '42%' }),
+    Col([Box('br-postes', [poste('Intitulé du premier poste'), poste('Intitulé du deuxième poste')]), Muted('Pas de poste pour vous ? Envoyez une candidature spontanée.')], { width: '58%' }),
+  ], 'br-split')]));
+
+/* ----- Références (lot 2) : Est-ce pour vous ?, Manifeste, Notre histoire, Clients en noms,
+   Ouverture « une question », Abonnements ------------------------------------------------- */
+add('pour-vous', 'parcours', 'Est-ce pour vous ?', 'Dire franchement à qui vous convenez et à qui vous ne convenez pas : deux listes, « Oui, si… » et « Plutôt non, si… », puis ce qui se passe dans le doute. Rassure plus qu’un argument. Trois à cinq points vrais de chaque côté.',
+  Section('br-pourvous', [
+    Head([Label('Pour qui'), H('Est-ce fait pour vous ?', 2), Lead('Une phrase qui dit que vous préférez prévenir que décevoir.')]),
+    Box('br-pourvous-cols', [
+      Box('br-pourvous-oui', [P('Oui, si…', 'br-pourvous-titre'), List(['[La situation où vous êtes le plus utile]', '[Ce que le client attend, et que vous faites bien]', '[Une condition pratique : lieu, délai, budget]'], 'br-liste-oui')]),
+      Box('br-pourvous-non', [P('Plutôt non, si…', 'br-pourvous-titre'), List(['[Ce que vous ne faites pas]', '[Le cas où un autre professionnel sera plus utile]', '[Une limite pratique, dite simplement]'], 'br-liste-non')]),
+    ]),
+    Muted('Dans le doute, écrivez-nous : nous vous répondons avant tout engagement.'),
+  ]));
+
+add('manifeste', 'personnes', 'Manifeste', 'Votre conviction en une grande phrase, avec deux petites photos glissées entre les mots. Les mots se colorent au fil de la lecture (fixes si le visiteur demande moins d’animations). Une phrase que vous pourriez dire à un client, pas un slogan.',
+  Section('br-manifeste', [
+    Label('Ce qui nous guide'),
+    H(`Nous croyons qu’un travail bien fait ${PhotoMot('carre')} se voit tout de suite, se raconte ${PhotoMot('carre-2')} facilement et se tient dans le temps.`, 2, 'br-manifeste-texte'),
+    Arrow('Notre histoire', URL('a-propos')),
+  ]));
+
+const jalon = (annee, t, d) => Box('br-jalon', [P(annee, 'br-jalon-annee'), H(t, 3), Muted(d)]);
+add('histoire', 'personnes', 'Notre histoire', 'Les étapes de l’entreprise, avec leurs dates, à côté d’une photo. Seulement des faits vrais : une ouverture, une formation, un nouveau lieu, une équipe qui grandit.',
+  Section('br-notre-histoire', [
+    Head([Label('Notre histoire'), H('D’où nous venons', 2), Lead('Les étapes qui comptent, en quelques lignes.')]),
+    Cols([
+      Col([Img('portrait', '4/5', 'is-style-br-arrondi', 'Photo à remplacer : vous ou votre lieu, à vos débuts ou aujourd’hui')], { width: '38%' }),
+      Col([Box('br-jalons', [
+        jalon('[année]', 'Le début', 'Où, comment et pourquoi vous avez commencé.'),
+        jalon('[année]', 'Une étape', 'Une ouverture, une formation, un nouveau service.'),
+        jalon('[année]', 'Une autre étape', 'Ce qui a changé pour vos clients.'),
+        jalon('Aujourd’hui', 'Où vous en êtes', 'L’équipe, le lieu, ce que vous proposez.'),
+      ])], { width: '62%' }),
+    ], 'br-split'),
+  ]));
+
+add('clients-noms', 'confiance', 'Ils nous font confiance (noms)', 'Les noms de vos clients ou partenaires, en texte, quand vous ne pouvez pas afficher leurs logos. Seulement avec leur accord.',
+  Section('br-section--tight br-noms', [
+    P('Ils nous ont fait confiance', 'br-label br-center'),
+    List(['Nom du premier client', 'Nom du deuxième client', 'Nom du troisième client', 'Nom du quatrième client', 'Nom du cinquième client', 'Nom du sixième client'], 'br-noms-liste'),
+  ]));
+
+const choix = (ic, t, d, url) => P(`<a href="${url}"><strong>${fr(t)}</strong><span>${fr(d)}</span></a>`, 'br-choix br-ic-' + ic);
+add('ouverture-question', 'ouverture', 'Ouverture : une question pour commencer', 'Le haut de l’accueil avec, à la place de la photo, une carte qui pose une seule question et propose deux ou trois gros choix. Chaque choix mène à la bonne page ou au formulaire. Le mot qui change dans le titre se règle avec le bouton « Mots qui changent » de la barre d’outils (mots séparés par « / »).',
+  Section('br-hero br-ouv-question', [Cols([
+    Col([
+      P('Votre métier · Votre ville', 'br-pastille'),
+      H('Le titre qui dit ce que vous faites, <span class="br-mots">pour les particuliers / pour les entreprises / pour les associations</span>', 1, null, { fontSize: 'huge' }),
+      Lead('Une ou deux phrases : ce qui vous distingue, et ce que le visiteur gagne à vous appeler.'),
+      List(['Votre premier atout', 'Votre délai de réponse', 'Votre engagement'], 'br-coches'),
+    ], { width: '52%', verticalAlignment: 'center' }),
+    Col([Box('br-question-carte', [
+      P('Pour commencer', 'br-label'),
+      H('Où en êtes-vous ?', 2, 'br-question-titre'),
+      Box('br-question-choix', [
+        choix('maison', 'Je découvre', 'Je veux comprendre et être conseillé', URL('service-1')),
+        choix('horloge', 'C’est pressé', 'Je veux un rendez-vous rapidement', CTA),
+        choix('loupe', 'Je compare', 'Je veux voir les prix et les formules', URL('tarifs')),
+      ]),
+      Muted('Vous préférez parler à quelqu’un ? Appelez-nous.'),
+    ])], { width: '48%', verticalAlignment: 'center' }),
+  ], 'br-split', { verticalAlignment: 'center' })], { backgroundColor: 'surface' }));
+
+const abo = (nom, mois, an, vedette) => Col([Box('br-card br-price' + (vedette ? ' br-price--vedette' : ''), [
+  ...(vedette ? [P('Le plus choisi', 'br-chip')] : []),
+  H(nom, 3),
+  P(`${mois} <small>/ mois</small>`, 'br-stat br-prix-mois'),
+  P(`${an} <small>/ an</small>`, 'br-stat br-prix-an'),
+  Muted('Une phrase sur ce que comprend cette formule.'),
+  List(['Ce qui est inclus', 'Un deuxième élément', 'Un troisième élément']),
+  Btns(Btn('Choisir cette formule', CTA, vedette ? null : 'is-style-outline')),
+])]);
+add('abonnements', 'offre', 'Abonnements (mensuel ou annuel)', 'Pour les abonnements (cours, coaching, entretien, adhésion) : chaque formule a un prix au mois et un prix à l’année, et un sélecteur « Au mois / À l’année » en haut. Sans script, les deux prix restent affichés. Mêmes versions que « Formules et tarifs ». Seulement des prix réels.',
+  Section('br-formules br-formules--cartes br-abonnement', [
+    Head([Label('Abonnements'), H('Choisissez votre rythme', 2), Lead('Une phrase sur ce que l’on gagne à l’année, si c’est vrai.')]),
+    Cols([abo('Première formule', '[prix] €', '[prix] €'), abo('Formule la plus choisie', '[prix] €', '[prix] €', true), abo('Formule complète', '[prix] €', '[prix] €')], 'br-prices'),
+  ], { backgroundColor: 'nuance' }));
+
 const out = {}; for (const k in S) out[k] = { cat: S[k].cat, title: S[k].title, desc: S[k].desc, markup: S[k].markup };
 require('fs').mkdirSync(require('path').join(__dirname, 'build'), { recursive: true });
 require('fs').writeFileSync(require('path').join(__dirname, 'build', 'br_sections.json'), JSON.stringify(out, null, 1));
-module.exports = { confiance, VERSIONS_ENGAGEMENTS, galerieSection, VERSIONS_GALERIE, logosSection, VERSIONS_LOGOS, avantApresSection, VERSIONS_AVANT_APRES, avisSection, temoin, VERSIONS_AVIS, chiffresSection, VERSIONS_CHIFFRES, comparaison, VERSIONS_COMPARAISON, services, serviceItem, VERSIONS_SERVICES, ouverture, VERSIONS_OUVERTURE, deuxPortes, situations, choixSeance, eventail, lieux, faitsIcones, etapesImages, ctaPhoto, avisCourt, tarifLigne, ETOILES, Row, ImgFond, Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
+module.exports = { situations, VERSIONS_OUENETES, confiance, VERSIONS_ENGAGEMENTS, galerieSection, VERSIONS_GALERIE, logosSection, VERSIONS_LOGOS, avantApresSection, VERSIONS_AVANT_APRES, avisSection, temoin, VERSIONS_AVIS, chiffresSection, VERSIONS_CHIFFRES, comparaison, VERSIONS_COMPARAISON, services, serviceItem, VERSIONS_SERVICES, ouverture, VERSIONS_OUVERTURE, deuxPortes, situations, choixSeance, eventail, lieux, faitsIcones, etapesImages, ctaPhoto, avisCourt, tarifLigne, ETOILES, Row, ImgFond, Mark, heroPhoto, confiance, tuiles, zoneSchema, S, cb, serialize, P, H, Label, Lead, Muted, Section, Box, Head, Short, MainBtns, List, fr, CTA, CTA_LABEL, URL, Img, Btn, Btns, Cols, Col, Arrow, Table, Num, teteSplit, teteMosaique, benefices, modeles, etapesPhotos, avantApres, etapesFrise, etapesFil, prixCarte, compris, zoneListe, qualifs, ImgFond };
 console.log(Object.keys(S).length, 'sections');

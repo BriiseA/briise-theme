@@ -12,41 +12,41 @@ $briise = briise_theme_entreprise();
 <div class="wp-block-group alignfull br-confiance-zone br-engagements br-engagements--chevauche"><!-- wp:group {"className":"br-confiance","layout":{"type":"default"}} -->
 <div class="wp-block-group br-confiance"><!-- wp:group {"className":"br-confiance-item is-icone-garantie","layout":{"type":"default"}} -->
 <div class="wp-block-group br-confiance-item is-icone-garantie"><!-- wp:paragraph {"className":"br-confiance-titre"} -->
-<p class="br-confiance-titre">Garantie décennale</p>
+<p class="br-confiance-titre">Votre premier engagement</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-confiance-sous"} -->
-<p class="br-confiance-sous">Attestation jointe au devis</p>
+<p class="br-confiance-sous">Ce qui le prouve, en quelques mots</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
-<!-- wp:group {"className":"br-confiance-item is-icone-devis","layout":{"type":"default"}} -->
-<div class="wp-block-group br-confiance-item is-icone-devis"><!-- wp:paragraph {"className":"br-confiance-titre"} -->
-<p class="br-confiance-titre">Devis gratuit</p>
+<!-- wp:group {"className":"br-confiance-item is-icone-delai","layout":{"type":"default"}} -->
+<div class="wp-block-group br-confiance-item is-icone-delai"><!-- wp:paragraph {"className":"br-confiance-titre"} -->
+<p class="br-confiance-titre">Une réponse rapide</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-confiance-sous"} -->
-<p class="br-confiance-sous">Sous 5 jours ouvrés</p>
+<p class="br-confiance-sous">Sous [délai], par écrit ou par téléphone</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
 <!-- wp:group {"className":"br-confiance-item is-icone-local","layout":{"type":"default"}} -->
 <div class="wp-block-group br-confiance-item is-icone-local"><!-- wp:paragraph {"className":"br-confiance-titre"} -->
-<p class="br-confiance-titre">Une équipe locale</p>
+<p class="br-confiance-titre">Près de chez vous</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-confiance-sous"} -->
-<p class="br-confiance-sous">À votre ville et alentour</p>
+<p class="br-confiance-sous">À [ville] et alentour</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
 <!-- wp:group {"className":"br-confiance-item is-icone-avis","layout":{"type":"default"}} -->
 <div class="wp-block-group br-confiance-item is-icone-avis"><!-- wp:paragraph {"className":"br-confiance-titre"} -->
-<p class="br-confiance-titre">Note Google</p>
+<p class="br-confiance-titre">Votre note</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-confiance-sous"} -->
-<p class="br-confiance-sous">À n’afficher que si elle est réelle</p>
+<p class="br-confiance-sous">Uniquement si elle est réelle</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group --></div>
 <!-- /wp:group --></div>

@@ -357,6 +357,14 @@ function briise_onglet_identite( $o, $v ) {
 		?>
 	</table>
 
+	<h2 class="title">Avis Google</h2>
+	<table class="form-table" role="presentation">
+		<?php
+		briise_texte( $o, $v, 'avis_note', 'Note moyenne', 'Votre vraie note Google, par exemple 4,8. Vide : aucune note n’est affichée. À mettre à jour de temps en temps.', 'style="width:6em"' );
+		briise_texte( $o, $v, 'avis_nombre', 'Nombre d’avis', 'Le nombre d’avis Google réels.', 'style="width:6em" inputmode="numeric"' );
+		?>
+	</table>
+
 	<h2 class="title">Personne mise en avant</h2>
 	<table class="form-table" role="presentation">
 		<?php

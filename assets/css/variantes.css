@@ -459,3 +459,58 @@ body.br-sur-photo .br-smart-header.br-scrolled .br-header--bandeau { background:
 /* Avec « contain », un titre posé dans une rangée flexible (titre et lien) n'a plus de largeur propre
    et tombait à zéro (un mot par ligne) : on lui donne une largeur de départ. */
 .br-capitales--oui .is-layout-flex > :is(h1, h2) { flex: 1 1 min(100%, 22rem); }
+
+/* ----- En-tête « Menu plein écran » : le bouton « Menu » remplace la liste, même sur ordinateur. ----- */
+.br-header--menu-plein .wp-block-navigation__responsive-container-open {
+	display: inline-flex !important;
+	align-items: center;
+	min-height: 44px;
+	padding: 0 1.1rem;
+	border: 1px solid currentColor;
+	border-radius: var(--wp--custom--rayon--bouton, 999px);
+	font-weight: 600;
+	text-transform: none;
+}
+.br-header--menu-plein .wp-block-navigation__responsive-container.is-menu-open {
+	background: var(--wp--preset--color--sombre) !important;
+	color: var(--wp--preset--color--fond) !important;
+	padding: clamp(1.5rem, 5vw, 4rem) !important;
+}
+.br-header--menu-plein .is-menu-open .wp-block-navigation__responsive-container-content { align-items: flex-start !important; }
+.br-header--menu-plein .is-menu-open .wp-block-navigation__container { gap: .4rem !important; align-items: flex-start !important; }
+.br-header--menu-plein .is-menu-open .wp-block-navigation-item__content { font-family: var(--wp--preset--font-family--titres); font-size: clamp(1.8rem, 5vw, 3.4rem) !important; line-height: 1.1; }
+.br-header--menu-plein .is-menu-open .wp-block-navigation-item__content:hover { color: var(--wp--preset--color--accent); }
+
+/* ----- En-tête « Deux étages » : logo centré, menu centré dessous entre deux filets. ----- */
+@media (min-width: 782px) {
+	.br-header--deux-etages .br-header-inner { flex-wrap: wrap !important; justify-content: center !important; row-gap: .9rem; }
+	.br-header--deux-etages .br-header-inner > :is(.wp-block-site-logo, .wp-block-site-title) { flex-basis: 100%; text-align: center; display: flex; justify-content: center; }
+	.br-header--deux-etages .br-header-right { flex-basis: 100%; justify-content: center !important; padding: .55rem 0; border-top: 1px solid color-mix(in srgb, currentColor 14%, transparent); border-bottom: 1px solid color-mix(in srgb, currentColor 14%, transparent); }
+	.br-header--deux-etages .br-nav .wp-block-navigation-item__content { text-transform: uppercase; letter-spacing: .08em; font-size: .85rem; }
+}
+
+/* ----- Pied « Centré » ----- */
+.br-ft--centre { background: var(--wp--preset--color--sombre); color: var(--wp--preset--color--fond); padding: clamp(3rem, 6vw, 4.5rem) 0 2rem !important; text-align: center; }
+.br-ft--centre .br-ft-nom { margin: 0; font-family: var(--wp--preset--font-family--titres); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; }
+.br-ft--centre .br-ft-nom a { color: inherit; text-decoration: none; }
+.br-ft--centre .br-ft-zone { margin: .4rem 0 0; opacity: .8; font-size: .95rem; }
+.br-ft--centre .br-footer-liens { display: flex; flex-wrap: wrap; justify-content: center; gap: .2rem 1.5rem; list-style: none; padding: 0; margin: 1.75rem 0 0; }
+.br-ft--centre .br-footer-liens a { color: inherit; display: inline-flex; min-height: 44px; align-items: center; }
+.br-ft--centre .br-ft-actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem 1.5rem; margin-top: 1.5rem; }
+.br-ft--centre .br-ft-tel { color: inherit; font-family: var(--wp--preset--font-family--titres); font-size: 1.4rem; font-weight: 700; text-decoration: none; }
+.br-ft--centre .br-ft-bas { justify-content: center; text-align: center; }
+
+/* ----- Pied « Clair » ----- */
+.br-ft--clair { background: var(--wp--preset--color--surface); color: var(--wp--preset--color--texte); padding: clamp(2.5rem, 5vw, 3.5rem) 0 2rem !important; }
+.br-ft--clair a { color: inherit; }
+.br-ft--clair .br-ft-haut { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem 2rem; padding-bottom: 1.75rem; border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent); }
+.br-ft--clair .br-ft-zone { margin: .3rem 0 0; color: var(--wp--preset--color--texte-doux); font-size: .92rem; }
+.br-ft--clair .br-ft-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr)); gap: 1.5rem 2.5rem; padding: 1.75rem 0; }
+.br-ft--clair .br-ft-grille .br-label { margin: 0 0 .6rem; }
+.br-ft--clair .br-footer-liens { list-style: none; padding: 0; margin: 0; display: grid; gap: .1rem; }
+.br-ft--clair .br-footer-liens a { display: inline-flex; min-height: 44px; align-items: center; }
+.br-ft--clair .br-ft-logo { max-height: 48px; width: auto; }
+.br-ft--centre .br-ft-bouton { background: var(--wp--preset--color--fond) !important; color: var(--wp--preset--color--sombre) !important; }
+.br-header--menu-plein .is-menu-open .wp-block-navigation__responsive-container-content,
+.br-header--menu-plein .is-menu-open .wp-block-navigation__container,
+.br-header--menu-plein .is-menu-open .wp-block-navigation-item { align-items: flex-start !important; justify-content: flex-start !important; text-align: left; width: 100%; }

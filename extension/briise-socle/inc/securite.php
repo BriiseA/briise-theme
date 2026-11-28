@@ -3,7 +3,7 @@
  * Sécurité : protections de base, actives par défaut (Mon entreprise > Fonctions > Protections de sécurité),
  * et points à vérifier affichés dans l'onglet Contrôle.
  *
- * Ce que fait l'extension : identifiants de connexion cachés, XML-RPC fermé, en-têtes de sécurité,
+ * Ce que fait l'extension : identifiants de connexion cachés, tentatives de connexion limitées, XML-RPC fermé, en-têtes de sécurité,
  * éditeur de fichiers désactivé, message d'erreur de connexion neutre, version de WordPress cachée.
  * Ce qu'elle ne fait pas (hébergeur et réglages du site) : HTTPS, sauvegardes, double authentification.
  *
@@ -63,6 +63,27 @@ if ( briise_fonction( 'securite' ) ) {
 	add_filter( 'oembed_response_data', function ( $data ) {
 		unset( $data['author_name'], $data['author_url'] );
 		return $data;
+	} );
+
+	// Tentatives de connexion : après 5 échecs depuis la même adresse, la connexion est refusée pendant
+	// 15 minutes. L'adresse vient de REMOTE_ADDR (un en-tête « X-Forwarded-For » se falsifie) et n'est
+	// gardée que sous forme d'empreinte. Une connexion réussie remet le compteur à zéro.
+	$briise_cle_connexion = function () {
+		$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+		return 'br_connexion_' . substr( hash( 'sha256', $ip . wp_salt( 'auth' ) ), 0, 24 );
+	};
+	add_filter( 'authenticate', function ( $user ) use ( $briise_cle_connexion ) {
+		if ( (int) get_transient( $briise_cle_connexion() ) >= 5 ) {
+			return new WP_Error( 'briise_trop_de_tentatives', '<strong>Erreur :</strong> trop de tentatives de connexion. Réessayez dans 15 minutes.' );
+		}
+		return $user;
+	}, 30 );
+	add_action( 'wp_login_failed', function () use ( $briise_cle_connexion ) {
+		$cle = $briise_cle_connexion();
+		set_transient( $cle, (int) get_transient( $cle ) + 1, 15 * MINUTE_IN_SECONDS );
+	} );
+	add_action( 'wp_login', function () use ( $briise_cle_connexion ) {
+		delete_transient( $briise_cle_connexion() );
 	} );
 
 	// Connexion : le message ne dit plus si c'est l'identifiant ou le mot de passe qui est faux.

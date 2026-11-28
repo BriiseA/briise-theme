@@ -110,6 +110,8 @@ function briise_defauts( $option ) {
 				'cta_url'     => '',
 				'person_name' => '',
 				'person_job'  => '',
+				'avis_note'   => '',
+				'avis_nombre' => 0,
 				'person_page' => 0,
 				'faq_page'    => 0,
 				'logo_clair'  => 0,
@@ -338,6 +340,9 @@ function briise_nettoie_entreprise( $in ) {
 		'cta_url'     => esc_url_raw( $in['cta_url'] ?? '' ),
 		'person_name' => sanitize_text_field( $in['person_name'] ?? '' ),
 		'person_job'  => sanitize_text_field( $in['person_job'] ?? '' ),
+		// Note Google réelle (1 à 5, une décimale) et nombre d'avis : affichés seulement s'ils sont remplis.
+		'avis_note'   => preg_match( '/^[1-5]([.,]\d)?$/', trim( (string) ( $in['avis_note'] ?? '' ) ) ) ? str_replace( '.', ',', trim( $in['avis_note'] ) ) : '',
+		'avis_nombre' => absint( $in['avis_nombre'] ?? 0 ),
 		'person_page' => absint( $in['person_page'] ?? 0 ),
 		'faq_page'    => absint( $in['faq_page'] ?? 0 ),
 		'logo_clair'  => absint( $in['logo_clair'] ?? 0 ),

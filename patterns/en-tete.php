@@ -18,7 +18,8 @@ $centre  = in_array( $v, array( 'logo-centre', 'medaillon' ), true );
 // Sur un fond sombre (capsule, médaillon, bandeau), le logo pour fond foncé de Mon entreprise, sinon le nom en texte.
 $sombre  = in_array( $v, array( 'capsule', 'medaillon', 'bandeau' ), true );
 $logo    = $sombre ? '<!-- wp:site-title {"level":0,"className":"br-logo br-logo--pied"} /-->' : '<!-- wp:site-logo {"width":220,"shouldSyncIcon":false,"className":"br-logo-img"} /-->' . "\n\n" . '<!-- wp:site-title {"level":0,"className":"br-logo"} /-->';
-$nav     = '<!-- wp:navigation {"overlayMenu":"mobile","className":"br-nav","layout":{"type":"flex","justifyContent":"' . ( $centre ? 'left' : 'right' ) . '"}} /-->';
+// « Menu plein écran » : le menu reste derrière le bouton « Menu », même sur ordinateur.
+$nav     = '<!-- wp:navigation {"overlayMenu":"' . ( 'menu-plein' === $v ? 'always' : 'mobile' ) . '",' . ( 'menu-plein' === $v ? '"hasIcon":false,' : '' ) . '"className":"br-nav","layout":{"type":"flex","justifyContent":"' . ( $centre ? 'left' : 'right' ) . '"}} /-->';
 $tel_html = '';
 if ( $tel ) {
 	$tel_html = '<!-- wp:html -->' . "\n" . '<a class="br-header-tel" href="tel:' . esc_attr( $tel_url ) . '" aria-label="' . esc_attr( 'Appeler ' . $e['name'] . ' au ' . briise_theme_telephone( $tel ) ) . '"><span class="br-header-tel-icone" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span><span class="br-header-tel-num" aria-hidden="true">' . esc_html( briise_theme_telephone( $tel ) ) . '</span></a>' . "\n" . '<!-- /wp:html -->';

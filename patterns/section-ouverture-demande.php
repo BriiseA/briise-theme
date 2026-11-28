@@ -20,20 +20,20 @@ $briise = briise_theme_entreprise();
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"className":"br-lead"} -->
-<p class="br-lead">Laissez votre numéro : nous vous rappelons dans la journée ouvrée pour fixer la visite.</p>
+<p class="br-lead">Laissez votre numéro : nous vous rappelons dans la journée ouvrée pour fixer un rendez-vous.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:list {"className":"br-coches"} -->
 <ul class="wp-block-list br-coches"><!-- wp:list-item -->
-<li>Visite gratuite</li>
+<li>Premier échange gratuit</li>
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->
-<li>Devis sous 5 jours</li>
+<li>Réponse sous [délai]</li>
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->
-<li>Garantie décennale</li>
+<li>Votre engagement</li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list --></div>
 <!-- /wp:column -->

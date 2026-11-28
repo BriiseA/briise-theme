@@ -1,15 +1,15 @@
 <?php
 /**
- * Title: Parcours : Étapes en frise
+ * Title: Parcours : Étapes (4 versions)
  * Slug: briise/etapes
  * Categories: briise-parcours
- * Description: Rassurer sur le déroulé : du premier contact au résultat. Une frise numérotée qui se remplit au défilement, avec la durée de chaque étape. Idéale sur l’accueil.
+ * Description: Rassurer sur le déroulé : du premier contact au résultat, avec la durée de chaque étape. Forme au choix dans le panneau « Version » : frise qui se remplit au défilement, fil vertical, cartes numérotées, zigzag de part et d’autre d’une ligne, cartes empilées au défilement.
  * Viewport Width: 1400
  */
 $briise = briise_theme_entreprise();
 ?>
-<!-- wp:group {"backgroundColor":"nuance","align":"full","className":"br-section br-etapes","layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull br-section br-etapes has-nuance-background-color has-background"><!-- wp:group {"className":"br-head","layout":{"type":"default"}} -->
+<!-- wp:group {"backgroundColor":"nuance","align":"full","className":"br-section br-etapes br-deroule br-deroule\u002d\u002dfrise","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull br-section br-etapes br-deroule br-deroule--frise has-nuance-background-color has-background"><!-- wp:group {"className":"br-head","layout":{"type":"default"}} -->
 <div class="wp-block-group br-head"><!-- wp:paragraph {"className":"br-label"} -->
 <p class="br-label">Comment ça se passe</p>
 <!-- /wp:paragraph -->
@@ -48,11 +48,11 @@ $briise = briise_theme_entreprise();
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"className":"br-fil-texte"} -->
-<p class="br-fil-texte">Un échange pour comprendre votre besoin, puis un devis clair et détaillé.</p>
+<p class="br-fil-texte">Un échange pour comprendre votre besoin, puis une proposition claire et détaillée.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-duree"} -->
-<p class="br-duree">Devis gratuit</p>
+<p class="br-duree">Premier échange offert</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -70,7 +70,7 @@ $briise = briise_theme_entreprise();
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"br-duree"} -->
-<p class="br-duree">Délai annoncé au devis</p>
+<p class="br-duree">Délai annoncé à l’avance</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group --></div>
 <!-- /wp:group -->

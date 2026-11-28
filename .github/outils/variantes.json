@@ -9,7 +9,9 @@
       "medaillon": "existe",
       "encadre": "existe",
       "bandeau": "existe",
-      "barre-infos": "existe"
+      "barre-infos": "existe",
+      "menu-plein": "existe",
+      "deux-etages": "existe"
     },
     "ouverture": {
       "cote": "existe",
@@ -47,7 +49,9 @@
       "logo-geant": "existe",
       "grand-appel": "existe",
       "carte": "existe",
-      "compact": "existe"
+      "compact": "existe",
+      "centre": "existe",
+      "clair": "existe"
     },
     "mobile": {
       "bouton": "existe",
